@@ -1,0 +1,32 @@
+{
+  "resolvedId": "/home/elvis/Code/anchors-project/anchors-web/src/components/Counter.css",
+  "transforms": [
+    {
+      "name": "__load__",
+      "result": ".increment {\n  font-family: inherit;\n  font-size: inherit;\n  padding: 1em 2em;\n  color: #335d92;\n  background-color: rgba(68, 107, 158, 0.1);\n  border-radius: 2em;\n  border: 2px solid rgba(68, 107, 158, 0);\n  outline: none;\n  width: 200px;\n  font-variant-numeric: tabular-nums;\n}\n\n.increment:focus {\n  border: 2px solid #335d92;\n}\n\n.increment:active {\n  background-color: rgba(68, 107, 158, 0.2);\n}",
+      "start": 1684673771189,
+      "end": 1684673771189
+    },
+    {
+      "name": "vite:css",
+      "result": ".increment {\n  font-family: inherit;\n  font-size: inherit;\n  padding: 1em 2em;\n  color: #335d92;\n  background-color: rgba(68, 107, 158, 0.1);\n  border-radius: 2em;\n  border: 2px solid rgba(68, 107, 158, 0);\n  outline: none;\n  width: 200px;\n  font-variant-numeric: tabular-nums;\n}\n\n.increment:focus {\n  border: 2px solid #335d92;\n}\n\n.increment:active {\n  background-color: rgba(68, 107, 158, 0.2);\n}",
+      "start": 1684673771189,
+      "end": 1684673771189,
+      "order": "normal"
+    },
+    {
+      "name": "vite:css-post",
+      "result": "import { updateStyle as __vite__updateStyle, removeStyle as __vite__removeStyle } from \"/@vite/client\"\nconst __vite__id = \"/home/elvis/Code/anchors-project/anchors-web/src/components/Counter.css\"\nconst __vite__css = \".increment {\\n  font-family: inherit;\\n  font-size: inherit;\\n  padding: 1em 2em;\\n  color: #335d92;\\n  background-color: rgba(68, 107, 158, 0.1);\\n  border-radius: 2em;\\n  border: 2px solid rgba(68, 107, 158, 0);\\n  outline: none;\\n  width: 200px;\\n  font-variant-numeric: tabular-nums;\\n}\\n\\n.increment:focus {\\n  border: 2px solid #335d92;\\n}\\n\\n.increment:active {\\n  background-color: rgba(68, 107, 158, 0.2);\\n}\"\n__vite__updateStyle(__vite__id, __vite__css)\nimport.meta.hot.accept()\nexport default __vite__css\nimport.meta.hot.prune(() => __vite__removeStyle(__vite__id))",
+      "start": 1684673771189,
+      "end": 1684673771189,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-analysis",
+      "result": "import { createHotContext as __vite__createHotContext } from \"/@vite/client\";import.meta.hot = __vite__createHotContext(\"/src/components/Counter.css\");import { updateStyle as __vite__updateStyle, removeStyle as __vite__removeStyle } from \"/@vite/client\"\nconst __vite__id = \"/home/elvis/Code/anchors-project/anchors-web/src/components/Counter.css\"\nconst __vite__css = \".increment {\\n  font-family: inherit;\\n  font-size: inherit;\\n  padding: 1em 2em;\\n  color: #335d92;\\n  background-color: rgba(68, 107, 158, 0.1);\\n  border-radius: 2em;\\n  border: 2px solid rgba(68, 107, 158, 0);\\n  outline: none;\\n  width: 200px;\\n  font-variant-numeric: tabular-nums;\\n}\\n\\n.increment:focus {\\n  border: 2px solid #335d92;\\n}\\n\\n.increment:active {\\n  background-color: rgba(68, 107, 158, 0.2);\\n}\"\n__vite__updateStyle(__vite__id, __vite__css)\nimport.meta.hot.accept()\nexport default __vite__css\nimport.meta.hot.prune(() => __vite__removeStyle(__vite__id))",
+      "start": 1684673771189,
+      "end": 1684673771189,
+      "order": "normal"
+    }
+  ]
+}

@@ -1,2 +1,3 @@
-# anchors-web
-A web Nostr client aimed at creating a network of explorable connections among ideas
+# Anchors::web
+
+The web version of the anchors client aimed at creating an explorable network of connected ideas on Nostr.

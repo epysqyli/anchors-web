@@ -1,0 +1,25 @@
+{
+  "resolvedId": "/home/elvis/Code/anchors-project/anchors-web/src/entry-client.tsx",
+  "transforms": [
+    {
+      "name": "__load__",
+      "result": "import { mount, StartClient } from \"solid-start/entry-client\";\n\nmount(() => <StartClient />, document);\n",
+      "start": 1684673770778,
+      "end": 1684673770778
+    },
+    {
+      "name": "solid",
+      "result": "import { createComponent as _$createComponent } from \"solid-js/web\";\nimport { mount, StartClient } from \"solid-start/entry-client\";\nmount(() => _$createComponent(StartClient, {}), document);",
+      "start": 1684673770778,
+      "end": 1684673770782,
+      "order": "pre"
+    },
+    {
+      "name": "vite:import-analysis",
+      "result": "import { createComponent as _$createComponent } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { mount, StartClient } from \"/node_modules/solid-start/entry-client/index.tsx?v=3f0dab4b\";\nmount(() => _$createComponent(StartClient, {}), document);",
+      "start": 1684673770782,
+      "end": 1684673770783,
+      "order": "normal"
+    }
+  ]
+}

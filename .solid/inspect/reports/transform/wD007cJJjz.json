@@ -1,0 +1,25 @@
+{
+  "resolvedId": "/home/elvis/Code/anchors-project/anchors-web/src/components/Counter.tsx",
+  "transforms": [
+    {
+      "name": "__load__",
+      "result": "import { createSignal } from \"solid-js\";\nimport \"./Counter.css\";\n\nexport default function Counter() {\n  const [count, setCount] = createSignal(0);\n\n  return (\n    <button class=\"increment\" onClick={() => setCount(count() + 1)}>\n      Clicks: {count()}\n    </button>\n  );\n}\n",
+      "start": 1684673771183,
+      "end": 1684673771183
+    },
+    {
+      "name": "solid",
+      "result": "import { template as _$template } from \"solid-js/web\";\nimport { delegateEvents as _$delegateEvents } from \"solid-js/web\";\nimport { getNextElement as _$getNextElement } from \"solid-js/web\";\nimport { runHydrationEvents as _$runHydrationEvents } from \"solid-js/web\";\nimport { getNextMarker as _$getNextMarker } from \"solid-js/web\";\nimport { insert as _$insert } from \"solid-js/web\";\nimport { $$component as _$$component } from \"solid-refresh\";\nimport { $$refresh as _$$refresh } from \"solid-refresh\";\nimport { $$registry as _$$registry } from \"solid-refresh\";\nconst _REGISTRY = _$$registry();\nconst _tmpl$ = /*#__PURE__*/_$template(`<button class=\"increment\">Clicks: <!#><!/>`);\nimport { createSignal } from \"solid-js\";\nimport \"./Counter.css\";\nexport default _$$component(_REGISTRY, \"Counter\", function Counter() {\n  const [count, setCount] = createSignal(0);\n  return (() => {\n    const _el$ = _$getNextElement(_tmpl$),\n      _el$2 = _el$.firstChild,\n      _el$3 = _el$2.nextSibling,\n      [_el$4, _co$] = _$getNextMarker(_el$3.nextSibling);\n    _el$.$$click = () => setCount(count() + 1);\n    _$insert(_el$, count, _el$4, _co$);\n    _$runHydrationEvents();\n    return _el$;\n  })();\n}, {\n  location: \"src/components/Counter.tsx:4:15\"\n});\nif (import.meta.hot) {\n  _$$refresh(\"vite\", import.meta.hot, _REGISTRY);\n  import.meta.hot.accept();\n}\n_$delegateEvents([\"click\"]);",
+      "start": 1684673771183,
+      "end": 1684673771188,
+      "order": "pre"
+    },
+    {
+      "name": "vite:import-analysis",
+      "result": "import { createHotContext as __vite__createHotContext } from \"/@vite/client\";import.meta.hot = __vite__createHotContext(\"/src/components/Counter.tsx\");import { template as _$template } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { delegateEvents as _$delegateEvents } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { getNextElement as _$getNextElement } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { runHydrationEvents as _$runHydrationEvents } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { getNextMarker as _$getNextMarker } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { insert as _$insert } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { $$component as _$$component } from \"/@solid-refresh\";\nimport { $$refresh as _$$refresh } from \"/@solid-refresh\";\nimport { $$registry as _$$registry } from \"/@solid-refresh\";\nconst _REGISTRY = _$$registry();\nconst _tmpl$ = /*#__PURE__*/_$template(`<button class=\"increment\">Clicks: <!#><!/>`);\nimport { createSignal } from \"/node_modules/.vite/deps/solid-js.js?v=c3d8af5e\";\nimport \"/src/components/Counter.css\";\nexport default _$$component(_REGISTRY, \"Counter\", function Counter() {\n  const [count, setCount] = createSignal(0);\n  return (() => {\n    const _el$ = _$getNextElement(_tmpl$),\n      _el$2 = _el$.firstChild,\n      _el$3 = _el$2.nextSibling,\n      [_el$4, _co$] = _$getNextMarker(_el$3.nextSibling);\n    _el$.$$click = () => setCount(count() + 1);\n    _$insert(_el$, count, _el$4, _co$);\n    _$runHydrationEvents();\n    return _el$;\n  })();\n}, {\n  location: \"src/components/Counter.tsx:4:15\"\n});\nif (import.meta.hot) {\n  _$$refresh(\"vite\", import.meta.hot, _REGISTRY);\n  import.meta.hot.accept();\n}\n_$delegateEvents([\"click\"]);",
+      "start": 1684673771188,
+      "end": 1684673771188,
+      "order": "normal"
+    }
+  ]
+}

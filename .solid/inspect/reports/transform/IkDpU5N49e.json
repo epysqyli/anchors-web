@@ -1,0 +1,32 @@
+{
+  "resolvedId": "/home/elvis/Code/anchors-project/anchors-web/src/routes/index.tsx",
+  "transforms": [
+    {
+      "name": "__load__",
+      "result": "import \"./index.css\";\nimport { Component } from \"solid-js\";\nimport Counter from \"~/components/Counter\";\n\nconst Home: Component<{}> = () => {\n  return (\n    <main>\n      <h1>Hello world!</h1>\n      <Counter />\n      <p>\n        Visit{\" \"}\n        <a href=\"https://solidjs.com\" target=\"_blank\">\n          solidjs.com\n        </a>{\" \"}\n        to learn how to build Solid apps.\n      </p>\n    </main>\n  );\n};\n\nexport default Home;\n",
+      "start": 1684673771168,
+      "end": 1684673771168
+    },
+    {
+      "name": "solid-start-file-system-router",
+      "result": "import { template as _$template } from \"solid-js/web\";\nimport { getNextElement as _$getNextElement } from \"solid-js/web\";\nimport { getNextMarker as _$getNextMarker } from \"solid-js/web\";\nimport { insert as _$insert } from \"solid-js/web\";\nimport { createComponent as _$createComponent } from \"solid-js/web\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Hello world!</h1><!#><!/><p>Visit <a href=\"https://solidjs.com\" target=\"_blank\">solidjs.com</a> to learn how to build Solid apps.`);\nimport \"./index.css\";\nimport Counter from \"~/components/Counter\";\nconst Home = () => {\n  return (() => {\n    const _el$ = _$getNextElement(_tmpl$),\n      _el$2 = _el$.firstChild,\n      _el$4 = _el$2.nextSibling,\n      [_el$5, _co$] = _$getNextMarker(_el$4.nextSibling),\n      _el$3 = _el$5.nextSibling;\n    _$insert(_el$, _$createComponent(Counter, {}), _el$5, _co$);\n    return _el$;\n  })();\n};\nexport default Home;",
+      "start": 1684673771168,
+      "end": 1684673771174,
+      "order": "pre"
+    },
+    {
+      "name": "solid",
+      "result": "import { $$component as _$$component } from \"solid-refresh\";\nimport { $$refresh as _$$refresh } from \"solid-refresh\";\nimport { $$registry as _$$registry } from \"solid-refresh\";\nconst _REGISTRY = _$$registry();\nimport { template as _$template } from \"solid-js/web\";\nimport { getNextElement as _$getNextElement } from \"solid-js/web\";\nimport { getNextMarker as _$getNextMarker } from \"solid-js/web\";\nimport { insert as _$insert } from \"solid-js/web\";\nimport { createComponent as _$createComponent } from \"solid-js/web\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Hello world!</h1><!#><!/><p>Visit <a href=\"https://solidjs.com\" target=\"_blank\">solidjs.com</a> to learn how to build Solid apps.`);\nimport \"./index.css\";\nimport Counter from \"~/components/Counter\";\nconst Home = _$$component(_REGISTRY, \"Home\", () => {\n  return (() => {\n    const _el$ = _$getNextElement(_tmpl$),\n      _el$2 = _el$.firstChild,\n      _el$4 = _el$2.nextSibling,\n      [_el$5, _co$] = _$getNextMarker(_el$4.nextSibling),\n      _el$3 = _el$5.nextSibling;\n    _$insert(_el$, _$createComponent(Counter, {}), _el$5, _co$);\n    return _el$;\n  })();\n}, {\n  location: \"src/routes/index.tsx:9:13\"\n});\nexport default Home;\nif (import.meta.hot) {\n  _$$refresh(\"vite\", import.meta.hot, _REGISTRY);\n  import.meta.hot.accept();\n}",
+      "start": 1684673771174,
+      "end": 1684673771180,
+      "order": "pre"
+    },
+    {
+      "name": "vite:import-analysis",
+      "result": "import { createHotContext as __vite__createHotContext } from \"/@vite/client\";import.meta.hot = __vite__createHotContext(\"/src/routes/index.tsx\");import { $$component as _$$component } from \"/@solid-refresh\";\nimport { $$refresh as _$$refresh } from \"/@solid-refresh\";\nimport { $$registry as _$$registry } from \"/@solid-refresh\";\nconst _REGISTRY = _$$registry();\nimport { template as _$template } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { getNextElement as _$getNextElement } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { getNextMarker as _$getNextMarker } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { insert as _$insert } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nimport { createComponent as _$createComponent } from \"/node_modules/.vite/deps/solid-js_web.js?v=c3d8af5e\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Hello world!</h1><!#><!/><p>Visit <a href=\"https://solidjs.com\" target=\"_blank\">solidjs.com</a> to learn how to build Solid apps.`);\nimport \"/src/routes/index.css\";\nimport Counter from \"/src/components/Counter.tsx\";\nconst Home = _$$component(_REGISTRY, \"Home\", () => {\n  return (() => {\n    const _el$ = _$getNextElement(_tmpl$),\n      _el$2 = _el$.firstChild,\n      _el$4 = _el$2.nextSibling,\n      [_el$5, _co$] = _$getNextMarker(_el$4.nextSibling),\n      _el$3 = _el$5.nextSibling;\n    _$insert(_el$, _$createComponent(Counter, {}), _el$5, _co$);\n    return _el$;\n  })();\n}, {\n  location: \"src/routes/index.tsx:9:13\"\n});\nexport default Home;\nif (import.meta.hot) {\n  _$$refresh(\"vite\", import.meta.hot, _REGISTRY);\n  import.meta.hot.accept();\n}",
+      "start": 1684673771180,
+      "end": 1684673771181,
+      "order": "normal"
+    }
+  ]
+}

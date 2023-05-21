@@ -1,0 +1,32 @@
+{
+  "resolvedId": "/home/elvis/Code/anchors-project/anchors-web/src/routes/index.css",
+  "transforms": [
+    {
+      "name": "__load__",
+      "result": "body {\n  font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell,\n    'Open Sans', 'Helvetica Neue', sans-serif;\n}\n\nmain {\n  text-align: center;\n  padding: 1em;\n  margin: 0 auto;\n}\n\nh1 {\n  color: #335d92;\n  text-transform: uppercase;\n  font-size: 4rem;\n  font-weight: 100;\n  line-height: 1.1;\n  margin: 4rem auto;\n  max-width: 14rem;\n}\n\np {\n  max-width: 14rem;\n  margin: 2rem auto;\n  line-height: 1.35;\n}\n\n@media (min-width: 480px) {\n  h1 {\n    max-width: none;\n  }\n\n  p {\n    max-width: none;\n  }\n}",
+      "start": 1684673771183,
+      "end": 1684673771183
+    },
+    {
+      "name": "vite:css",
+      "result": "body {\n  font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell,\n    'Open Sans', 'Helvetica Neue', sans-serif;\n}\n\nmain {\n  text-align: center;\n  padding: 1em;\n  margin: 0 auto;\n}\n\nh1 {\n  color: #335d92;\n  text-transform: uppercase;\n  font-size: 4rem;\n  font-weight: 100;\n  line-height: 1.1;\n  margin: 4rem auto;\n  max-width: 14rem;\n}\n\np {\n  max-width: 14rem;\n  margin: 2rem auto;\n  line-height: 1.35;\n}\n\n@media (min-width: 480px) {\n  h1 {\n    max-width: none;\n  }\n\n  p {\n    max-width: none;\n  }\n}",
+      "start": 1684673771183,
+      "end": 1684673771183,
+      "order": "normal"
+    },
+    {
+      "name": "vite:css-post",
+      "result": "import { updateStyle as __vite__updateStyle, removeStyle as __vite__removeStyle } from \"/@vite/client\"\nconst __vite__id = \"/home/elvis/Code/anchors-project/anchors-web/src/routes/index.css\"\nconst __vite__css = \"body {\\n  font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell,\\n    'Open Sans', 'Helvetica Neue', sans-serif;\\n}\\n\\nmain {\\n  text-align: center;\\n  padding: 1em;\\n  margin: 0 auto;\\n}\\n\\nh1 {\\n  color: #335d92;\\n  text-transform: uppercase;\\n  font-size: 4rem;\\n  font-weight: 100;\\n  line-height: 1.1;\\n  margin: 4rem auto;\\n  max-width: 14rem;\\n}\\n\\np {\\n  max-width: 14rem;\\n  margin: 2rem auto;\\n  line-height: 1.35;\\n}\\n\\n@media (min-width: 480px) {\\n  h1 {\\n    max-width: none;\\n  }\\n\\n  p {\\n    max-width: none;\\n  }\\n}\"\n__vite__updateStyle(__vite__id, __vite__css)\nimport.meta.hot.accept()\nexport default __vite__css\nimport.meta.hot.prune(() => __vite__removeStyle(__vite__id))",
+      "start": 1684673771183,
+      "end": 1684673771183,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-analysis",
+      "result": "import { createHotContext as __vite__createHotContext } from \"/@vite/client\";import.meta.hot = __vite__createHotContext(\"/src/routes/index.css\");import { updateStyle as __vite__updateStyle, removeStyle as __vite__removeStyle } from \"/@vite/client\"\nconst __vite__id = \"/home/elvis/Code/anchors-project/anchors-web/src/routes/index.css\"\nconst __vite__css = \"body {\\n  font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell,\\n    'Open Sans', 'Helvetica Neue', sans-serif;\\n}\\n\\nmain {\\n  text-align: center;\\n  padding: 1em;\\n  margin: 0 auto;\\n}\\n\\nh1 {\\n  color: #335d92;\\n  text-transform: uppercase;\\n  font-size: 4rem;\\n  font-weight: 100;\\n  line-height: 1.1;\\n  margin: 4rem auto;\\n  max-width: 14rem;\\n}\\n\\np {\\n  max-width: 14rem;\\n  margin: 2rem auto;\\n  line-height: 1.35;\\n}\\n\\n@media (min-width: 480px) {\\n  h1 {\\n    max-width: none;\\n  }\\n\\n  p {\\n    max-width: none;\\n  }\\n}\"\n__vite__updateStyle(__vite__id, __vite__css)\nimport.meta.hot.accept()\nexport default __vite__css\nimport.meta.hot.prune(() => __vite__removeStyle(__vite__id))",
+      "start": 1684673771183,
+      "end": 1684673771183,
+      "order": "normal"
+    }
+  ]
+}
