@@ -4,28 +4,28 @@
     {
       "name": "__load__",
       "result": "import { StartServer, createHandler, renderAsync } from \"solid-start/entry-server\";\n\nexport default createHandler(renderAsync(event => <StartServer event={event} />));\n",
-      "start": 1684673770081,
-      "end": 1684673770081
+      "start": 1684674439922,
+      "end": 1684674439922
     },
     {
       "name": "solid",
       "result": "import { createComponent as _$createComponent } from \"solid-js/web\";\nimport { StartServer, createHandler, renderAsync } from \"solid-start/entry-server\";\nexport default createHandler(renderAsync(event => _$createComponent(StartServer, {\n  event: event\n})));",
-      "start": 1684673770081,
-      "end": 1684673770119,
+      "start": 1684674439922,
+      "end": 1684674439931,
       "order": "pre"
     },
     {
       "name": "vite:define",
       "result": "import { createComponent as _$createComponent } from \"solid-js/web\";\nimport { StartServer, createHandler, renderAsync } from \"solid-start/entry-server\";\nexport default createHandler(renderAsync(event => _$createComponent(StartServer, {\n  event: event\n})));",
-      "start": 1684673770120,
-      "end": 1684673770121,
+      "start": 1684674439931,
+      "end": 1684674439931,
       "order": "normal"
     },
     {
       "name": "vite:import-analysis",
       "result": "import { createComponent as _$createComponent } from \"solid-js/web\";\nimport { StartServer, createHandler, renderAsync } from \"/node_modules/solid-start/entry-server/index.ts\";\nexport default createHandler(renderAsync(event => _$createComponent(StartServer, {\n  event: event\n})));",
-      "start": 1684673770121,
-      "end": 1684673770124,
+      "start": 1684674439931,
+      "end": 1684674439931,
       "order": "normal"
     }
   ]

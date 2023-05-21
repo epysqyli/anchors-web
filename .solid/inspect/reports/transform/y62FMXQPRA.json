@@ -1,0 +1,32 @@
+{
+  "resolvedId": "/home/elvis/Code/anchors-project/anchors-web/node_modules/solid-start/root/FileRoutes.tsx?v=70e6e0af",
+  "transforms": [
+    {
+      "name": "__load__",
+      "result": "/// <reference path=\"../server/types.tsx\" />\n\n// @ts-expect-error\nvar fileRoutes = $FILE_ROUTES;\n\n/**\n * Routes are the file system based routes, used by Solid App Router to show the current page according to the URL.\n */\n\nconst FileRoutes = () => {\n  return fileRoutes;\n};\n\nexport default FileRoutes;\nexport { fileRoutes };\n",
+      "start": 1684674440067,
+      "end": 1684674440067
+    },
+    {
+      "name": "solid-start-file-system-router",
+      "result": "/// <reference path=\"../server/types.tsx\" />\n\n// @ts-expect-error\n\n  import { lazy } from 'solid-js';\n  \n  const fileRoutes = /*#__PURE__*/ [\n{\ncomponent: lazy(() => import('/home/elvis/Code/anchors-project/anchors-web/src/routes/index.tsx')),\n path: \"/\" \n}\n];\n\n/**\n * Routes are the file system based routes, used by Solid App Router to show the current page according to the URL.\n */\n\nconst FileRoutes = () => {\n  return fileRoutes;\n};\n\nexport default FileRoutes;\nexport { fileRoutes };\n",
+      "start": 1684674440067,
+      "end": 1684674440068,
+      "order": "pre"
+    },
+    {
+      "name": "solid",
+      "result": "/// <reference path=\"../server/types.tsx\" />\n\n// @ts-expect-error\n\nimport { lazy } from 'solid-js';\nconst fileRoutes = /*#__PURE__*/[{\n  component: lazy(() => import('/home/elvis/Code/anchors-project/anchors-web/src/routes/index.tsx')),\n  path: \"/\"\n}];\n\n/**\n * Routes are the file system based routes, used by Solid App Router to show the current page according to the URL.\n */\n\nconst FileRoutes = () => {\n  return fileRoutes;\n};\nexport default FileRoutes;\nexport { fileRoutes };",
+      "start": 1684674440068,
+      "end": 1684674440070,
+      "order": "pre"
+    },
+    {
+      "name": "vite:import-analysis",
+      "result": "/// <reference path=\"../server/types.tsx\" />\n\n// @ts-expect-error\n\nimport { lazy } from \"/node_modules/.vite/deps/solid-js.js?v=70e6e0af\";\nconst fileRoutes = /*#__PURE__*/[{\n  component: lazy(() => import(\"/src/routes/index.tsx?t=1684674438845\")),\n  path: \"/\"\n}];\n\n/**\n * Routes are the file system based routes, used by Solid App Router to show the current page according to the URL.\n */\n\nconst FileRoutes = () => {\n  return fileRoutes;\n};\nexport default FileRoutes;\nexport { fileRoutes };",
+      "start": 1684674440070,
+      "end": 1684674440070,
+      "order": "normal"
+    }
+  ]
+}

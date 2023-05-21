@@ -4,28 +4,28 @@
     {
       "name": "__load__",
       "result": "// isomorphic exports\n\nexport { Body, Head, Html } from \"./Document\";\nexport { default as Links } from \"./Links\";\nexport { default as Meta } from \"./Meta\";\nexport { default as Scripts } from \"./Scripts\";\n\n",
-      "start": 1684673770467,
-      "end": 1684673770467
+      "start": 1684674422194,
+      "end": 1684674422194
     },
     {
       "name": "solid",
       "result": "// isomorphic exports\n\nexport { Body, Head, Html } from \"./Document\";\nexport { default as Links } from \"./Links\";\nexport { default as Meta } from \"./Meta\";\nexport { default as Scripts } from \"./Scripts\";",
-      "start": 1684673770467,
-      "end": 1684673770469,
+      "start": 1684674422194,
+      "end": 1684674422197,
       "order": "pre"
     },
     {
       "name": "vite:define",
       "result": "// isomorphic exports\n\nexport { Body, Head, Html } from \"./Document\";\nexport { default as Links } from \"./Links\";\nexport { default as Meta } from \"./Meta\";\nexport { default as Scripts } from \"./Scripts\";",
-      "start": 1684673770469,
-      "end": 1684673770469,
+      "start": 1684674422197,
+      "end": 1684674422197,
       "order": "normal"
     },
     {
       "name": "vite:import-analysis",
       "result": "// isomorphic exports\n\nexport { Body, Head, Html } from \"/node_modules/solid-start/root/Document.tsx\";\nexport { default as Links } from \"/node_modules/solid-start/root/Links.tsx\";\nexport { default as Meta } from \"/node_modules/solid-start/root/Meta.tsx\";\nexport { default as Scripts } from \"/node_modules/solid-start/root/Scripts.tsx\";",
-      "start": 1684673770469,
-      "end": 1684673770470,
+      "start": 1684674422197,
+      "end": 1684674422198,
       "order": "normal"
     }
   ]
