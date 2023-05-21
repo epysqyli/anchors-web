@@ -11,6 +11,7 @@ import {
   Scripts,
   Title,
 } from "solid-start";
+import "./root.css";
 
 export default function Root() {
   return (

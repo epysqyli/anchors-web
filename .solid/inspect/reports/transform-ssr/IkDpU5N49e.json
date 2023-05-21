@@ -3,36 +3,36 @@
   "transforms": [
     {
       "name": "__load__",
-      "result": "import \"./index.css\";\nimport { Component } from \"solid-js\";\n\nconst Home: Component<{}> = () => {\n  return (\n    <main>\n      <h1>Anchors</h1>\n    </main>\n  );\n};\n\nexport default Home;\n",
-      "start": 1684674440007,
-      "end": 1684674440007
+      "result": "import { Component } from \"solid-js\";\n\nconst Home: Component<{}> = () => {\n  return (\n    <main>\n      <h1>Anchors</h1>\n    </main>\n  );\n};\n\nexport default Home;\n",
+      "start": 1684675266116,
+      "end": 1684675266116
     },
     {
       "name": "solid-start-file-system-router",
-      "result": "import { ssr as _$ssr } from \"solid-js/web\";\nimport { ssrHydrationKey as _$ssrHydrationKey } from \"solid-js/web\";\nconst _tmpl$ = [\"<main\", \"><h1>Anchors</h1></main>\"];\nimport \"./index.css\";\nconst Home = () => {\n  return _$ssr(_tmpl$, _$ssrHydrationKey());\n};\nexport default Home;",
-      "start": 1684674440007,
-      "end": 1684674440012,
+      "result": "import { ssr as _$ssr } from \"solid-js/web\";\nimport { ssrHydrationKey as _$ssrHydrationKey } from \"solid-js/web\";\nconst _tmpl$ = [\"<main\", \"><h1>Anchors</h1></main>\"];\nconst Home = () => {\n  return _$ssr(_tmpl$, _$ssrHydrationKey());\n};\nexport default Home;",
+      "start": 1684675266116,
+      "end": 1684675266120,
       "order": "pre"
     },
     {
       "name": "solid",
-      "result": "import { ssr as _$ssr } from \"solid-js/web\";\nimport { ssrHydrationKey as _$ssrHydrationKey } from \"solid-js/web\";\nconst _tmpl$ = [\"<main\", \"><h1>Anchors</h1></main>\"];\nimport \"./index.css\";\nconst Home = () => {\n  return _$ssr(_tmpl$, _$ssrHydrationKey());\n};\nexport default Home;",
-      "start": 1684674440012,
-      "end": 1684674440014,
+      "result": "import { ssr as _$ssr } from \"solid-js/web\";\nimport { ssrHydrationKey as _$ssrHydrationKey } from \"solid-js/web\";\nconst _tmpl$ = [\"<main\", \"><h1>Anchors</h1></main>\"];\nconst Home = () => {\n  return _$ssr(_tmpl$, _$ssrHydrationKey());\n};\nexport default Home;",
+      "start": 1684675266120,
+      "end": 1684675266122,
       "order": "pre"
     },
     {
       "name": "vite:define",
-      "result": "import { ssr as _$ssr } from \"solid-js/web\";\nimport { ssrHydrationKey as _$ssrHydrationKey } from \"solid-js/web\";\nconst _tmpl$ = [\"<main\", \"><h1>Anchors</h1></main>\"];\nimport \"./index.css\";\nconst Home = () => {\n  return _$ssr(_tmpl$, _$ssrHydrationKey());\n};\nexport default Home;",
-      "start": 1684674440014,
-      "end": 1684674440014,
+      "result": "import { ssr as _$ssr } from \"solid-js/web\";\nimport { ssrHydrationKey as _$ssrHydrationKey } from \"solid-js/web\";\nconst _tmpl$ = [\"<main\", \"><h1>Anchors</h1></main>\"];\nconst Home = () => {\n  return _$ssr(_tmpl$, _$ssrHydrationKey());\n};\nexport default Home;",
+      "start": 1684675266122,
+      "end": 1684675266122,
       "order": "normal"
     },
     {
       "name": "vite:import-analysis",
-      "result": "import { ssr as _$ssr } from \"solid-js/web\";\nimport { ssrHydrationKey as _$ssrHydrationKey } from \"solid-js/web\";\nconst _tmpl$ = [\"<main\", \"><h1>Anchors</h1></main>\"];\nimport \"/src/routes/index.css\";\nconst Home = () => {\n  return _$ssr(_tmpl$, _$ssrHydrationKey());\n};\nexport default Home;",
-      "start": 1684674440014,
-      "end": 1684674440014,
+      "result": "import { ssr as _$ssr } from \"solid-js/web\";\nimport { ssrHydrationKey as _$ssrHydrationKey } from \"solid-js/web\";\nconst _tmpl$ = [\"<main\", \"><h1>Anchors</h1></main>\"];\nconst Home = () => {\n  return _$ssr(_tmpl$, _$ssrHydrationKey());\n};\nexport default Home;",
+      "start": 1684675266122,
+      "end": 1684675266122,
       "order": "normal"
     }
   ]

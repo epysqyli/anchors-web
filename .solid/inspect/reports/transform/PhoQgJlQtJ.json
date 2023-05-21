@@ -1,0 +1,25 @@
+{
+  "resolvedId": "/home/elvis/Code/anchors-project/anchors-web/node_modules/solid-start/data/index.ts?v=621b5873",
+  "transforms": [
+    {
+      "name": "__load__",
+      "result": "export { useRouteData } from \"@solidjs/router\";\nexport { createRouteAction, createRouteMultiAction } from \"./createRouteAction\";\nexport { createRouteData, refetchRouteData } from \"./createRouteData\";\nexport type { FormAction, FormMethod, FormProps, SubmitOptions } from \"./Form\";\nexport { FormError, ServerError } from \"./FormError\";\n\n",
+      "start": 1684675148865,
+      "end": 1684675148865
+    },
+    {
+      "name": "vite:esbuild",
+      "result": "export { useRouteData } from \"@solidjs/router\";\nexport { createRouteAction, createRouteMultiAction } from \"./createRouteAction\";\nexport { createRouteData, refetchRouteData } from \"./createRouteData\";\nexport { FormError, ServerError } from \"./FormError\";\n",
+      "start": 1684675148865,
+      "end": 1684675148889,
+      "order": "normal"
+    },
+    {
+      "name": "vite:import-analysis",
+      "result": "export { useRouteData } from \"/node_modules/@solidjs/router/dist/index.jsx?v=621b5873\";\nexport { createRouteAction, createRouteMultiAction } from \"/node_modules/solid-start/data/createRouteAction.tsx?v=621b5873\";\nexport { createRouteData, refetchRouteData } from \"/node_modules/solid-start/data/createRouteData.tsx?v=621b5873\";\nexport { FormError, ServerError } from \"/node_modules/solid-start/data/FormError.tsx?v=621b5873\";\n",
+      "start": 1684675148889,
+      "end": 1684675148889,
+      "order": "normal"
+    }
+  ]
+}

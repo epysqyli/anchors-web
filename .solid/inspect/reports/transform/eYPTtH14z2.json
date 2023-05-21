@@ -4,21 +4,21 @@
     {
       "name": "__load__",
       "result": "import { mount, StartClient } from \"solid-start/entry-client\";\n\nmount(() => <StartClient />, document);\n",
-      "start": 1684674440040,
-      "end": 1684674440040
+      "start": 1684675266155,
+      "end": 1684675266155
     },
     {
       "name": "solid",
       "result": "import { createComponent as _$createComponent } from \"solid-js/web\";\nimport { mount, StartClient } from \"solid-start/entry-client\";\nmount(() => _$createComponent(StartClient, {}), document);",
-      "start": 1684674440040,
-      "end": 1684674440043,
+      "start": 1684675266155,
+      "end": 1684675266158,
       "order": "pre"
     },
     {
       "name": "vite:import-analysis",
-      "result": "import { createComponent as _$createComponent } from \"/node_modules/.vite/deps/solid-js_web.js?v=70e6e0af\";\nimport { mount, StartClient } from \"/node_modules/solid-start/entry-client/index.tsx?t=1684674438845&v=70e6e0af\";\nmount(() => _$createComponent(StartClient, {}), document);",
-      "start": 1684674440043,
-      "end": 1684674440044,
+      "result": "import { createComponent as _$createComponent } from \"/node_modules/.vite/deps/solid-js_web.js?v=621b5873\";\nimport { mount, StartClient } from \"/node_modules/solid-start/entry-client/index.tsx?t=1684675266024&v=621b5873\";\nmount(() => _$createComponent(StartClient, {}), document);",
+      "start": 1684675266158,
+      "end": 1684675266159,
       "order": "normal"
     }
   ]

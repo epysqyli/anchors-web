@@ -3,29 +3,29 @@
   "transforms": [
     {
       "name": "__load__",
-      "result": "import \"./index.css\";\nimport { Component } from \"solid-js\";\n\nconst Home: Component<{}> = () => {\n  return (\n    <main>\n      <h1>Anchors</h1>\n    </main>\n  );\n};\n\nexport default Home;\n",
-      "start": 1684674440253,
-      "end": 1684674440253
+      "result": "import { Component } from \"solid-js\";\n\nconst Home: Component<{}> = () => {\n  return (\n    <main>\n      <h1>Anchors</h1>\n    </main>\n  );\n};\n\nexport default Home;\n",
+      "start": 1684675264110,
+      "end": 1684675264110
     },
     {
       "name": "solid-start-file-system-router",
-      "result": "import { template as _$template } from \"solid-js/web\";\nimport { getNextElement as _$getNextElement } from \"solid-js/web\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Anchors`);\nimport \"./index.css\";\nconst Home = () => {\n  return _$getNextElement(_tmpl$);\n};\nexport default Home;",
-      "start": 1684674440253,
-      "end": 1684674440257,
+      "result": "import { template as _$template } from \"solid-js/web\";\nimport { getNextElement as _$getNextElement } from \"solid-js/web\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Anchors`);\nconst Home = () => {\n  return _$getNextElement(_tmpl$);\n};\nexport default Home;",
+      "start": 1684675264110,
+      "end": 1684675264116,
       "order": "pre"
     },
     {
       "name": "solid",
-      "result": "import { $$component as _$$component } from \"solid-refresh\";\nimport { $$refresh as _$$refresh } from \"solid-refresh\";\nimport { $$registry as _$$registry } from \"solid-refresh\";\nconst _REGISTRY = _$$registry();\nimport { template as _$template } from \"solid-js/web\";\nimport { getNextElement as _$getNextElement } from \"solid-js/web\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Anchors`);\nimport \"./index.css\";\nconst Home = _$$component(_REGISTRY, \"Home\", () => {\n  return _$getNextElement(_tmpl$);\n}, {\n  location: \"src/routes/index.tsx:5:13\"\n});\nexport default Home;\nif (import.meta.hot) {\n  _$$refresh(\"vite\", import.meta.hot, _REGISTRY);\n  import.meta.hot.accept();\n}",
-      "start": 1684674440257,
-      "end": 1684674440261,
+      "result": "import { $$component as _$$component } from \"solid-refresh\";\nimport { $$refresh as _$$refresh } from \"solid-refresh\";\nimport { $$registry as _$$registry } from \"solid-refresh\";\nconst _REGISTRY = _$$registry();\nimport { template as _$template } from \"solid-js/web\";\nimport { getNextElement as _$getNextElement } from \"solid-js/web\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Anchors`);\nconst Home = _$$component(_REGISTRY, \"Home\", () => {\n  return _$getNextElement(_tmpl$);\n}, {\n  location: \"src/routes/index.tsx:4:13\"\n});\nexport default Home;\nif (import.meta.hot) {\n  _$$refresh(\"vite\", import.meta.hot, _REGISTRY);\n  import.meta.hot.accept();\n}",
+      "start": 1684675264116,
+      "end": 1684675264120,
       "order": "pre"
     },
     {
       "name": "vite:import-analysis",
-      "result": "import { createHotContext as __vite__createHotContext } from \"/@vite/client\";import.meta.hot = __vite__createHotContext(\"/src/routes/index.tsx\");import { $$component as _$$component } from \"/@solid-refresh\";\nimport { $$refresh as _$$refresh } from \"/@solid-refresh\";\nimport { $$registry as _$$registry } from \"/@solid-refresh\";\nconst _REGISTRY = _$$registry();\nimport { template as _$template } from \"/node_modules/.vite/deps/solid-js_web.js?v=70e6e0af\";\nimport { getNextElement as _$getNextElement } from \"/node_modules/.vite/deps/solid-js_web.js?v=70e6e0af\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Anchors`);\nimport \"/src/routes/index.css?t=1684674438845\";\nconst Home = _$$component(_REGISTRY, \"Home\", () => {\n  return _$getNextElement(_tmpl$);\n}, {\n  location: \"src/routes/index.tsx:5:13\"\n});\nexport default Home;\nif (import.meta.hot) {\n  _$$refresh(\"vite\", import.meta.hot, _REGISTRY);\n  import.meta.hot.accept();\n}",
-      "start": 1684674440261,
-      "end": 1684674440261,
+      "result": "import { createHotContext as __vite__createHotContext } from \"/@vite/client\";import.meta.hot = __vite__createHotContext(\"/src/routes/index.tsx\");import { $$component as _$$component } from \"/@solid-refresh\";\nimport { $$refresh as _$$refresh } from \"/@solid-refresh\";\nimport { $$registry as _$$registry } from \"/@solid-refresh\";\nconst _REGISTRY = _$$registry();\nimport { template as _$template } from \"/node_modules/.vite/deps/solid-js_web.js?v=621b5873\";\nimport { getNextElement as _$getNextElement } from \"/node_modules/.vite/deps/solid-js_web.js?v=621b5873\";\nconst _tmpl$ = /*#__PURE__*/_$template(`<main><h1>Anchors`);\nconst Home = _$$component(_REGISTRY, \"Home\", () => {\n  return _$getNextElement(_tmpl$);\n}, {\n  location: \"src/routes/index.tsx:4:13\"\n});\nexport default Home;\nif (import.meta.hot) {\n  _$$refresh(\"vite\", import.meta.hot, _REGISTRY);\n  import.meta.hot.accept();\n}",
+      "start": 1684675264120,
+      "end": 1684675264121,
       "order": "normal"
     }
   ]
