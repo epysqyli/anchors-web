@@ -23,7 +23,7 @@ const useMediaQuery = (query: string, setFn: Setter<boolean>): void => {
  * then wrap into <Show when={isNarrow() !== undefined}>
  */
 const useIsNarrow = (setFn: Setter<boolean>): void => {
-  useMediaQuery("(max-width: 1024px)", setFn);
+  useMediaQuery("(max-width: 768px)", setFn);
 };
 
 export { useIsNarrow };
