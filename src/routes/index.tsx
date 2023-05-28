@@ -1,11 +1,7 @@
 import { Component } from "solid-js";
 
 const Home: Component<{}> = () => {
-  return (
-    <main>
-      <h1>Anchors</h1>
-    </main>
-  );
+  return <></>;
 };
 
 export default Home;

@@ -1,5 +1,5 @@
 // @refresh reload
-import { Suspense } from "solid-js";
+import { Component, Suspense } from "solid-js";
 import { Routes } from "@solidjs/router";
 import { ErrorBoundary } from "solid-start/error-boundary";
 import {
@@ -13,7 +13,7 @@ import {
 } from "solid-start";
 import "./root.css";
 
-export default function Root() {
+const Root: Component<{}> = () => {
   return (
     <Html lang="en">
       <Head>
@@ -33,4 +33,6 @@ export default function Root() {
       </Body>
     </Html>
   );
-}
+};
+
+export default Root;
