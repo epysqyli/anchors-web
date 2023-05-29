@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@motionone/solid": "^10.16.2",
-    "nostr-tools": "^1.11.1"
+    "nostr-tools": "^1.11.1",
+    "solid-icons": "^1.0.4"
   }
 }

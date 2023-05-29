@@ -21,7 +21,7 @@ const Root: Component<{}> = () => {
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Body>
+      <Body class="h-screen bg-slate-900">
         <Suspense>
           <ErrorBoundary>
             <Routes>
