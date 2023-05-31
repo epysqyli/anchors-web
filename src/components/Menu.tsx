@@ -9,56 +9,31 @@ const Menu: Component<{ isNarrow: boolean | undefined }> = (props) => {
                      via-slate-700 via-20% to-gray-900 to-90% relative
                      overflow-y-auto h-full pt-10`;
 
+  const actionStyle = `text-slate-50 w-5/6 mx-auto my-2 select-none
+                       bg-gradient-to-r from-slate-800 to-gray-700
+                       hover:bg-slate-600 p-4 rounded-md text-center lg:text-left
+                       transition cursor-pointer hover:scale-95 active:scale-90`;
+
   return (
     <>
       <Show when={props.isNarrow !== undefined}>
         <div class={props.isNarrow ? narrowStyle : wideStyle}>
-          <div
-            class="flex items-center gap-x-10 text-slate-50 w-5/6 mx-auto my-2
-            hover:bg-slate-600 p-4 rounded-md transition cursor-pointer
-            hover:scale-95 active:scale-90"
-          >
-            <IoCaretForward />
+          <div class={actionStyle}>
             <div>write</div>
           </div>
-          <div
-            class="flex items-center gap-x-10 text-slate-50 w-5/6 mx-auto my-2
-            hover:bg-slate-600 p-4 rounded-md transition cursor-pointer
-            hover:scale-95 active:scale-90"
-          >
-            <IoCaretForward />
+          <div class={actionStyle}>
             <div>search posts</div>
           </div>
-          <div
-            class="flex items-center gap-x-10 text-slate-50 w-5/6 mx-auto my-2
-            hover:bg-slate-600 p-4 rounded-md transition cursor-pointer
-            hover:scale-95 active:scale-90"
-          >
-            <IoCaretForward />
+          <div class={actionStyle}>
             <div>update profile</div>
           </div>
-          <div
-            class="flex items-center gap-x-10 text-slate-50 w-5/6 mx-auto my-2
-            hover:bg-slate-600 p-4 rounded-md transition cursor-pointer
-            hover:scale-95 active:scale-90"
-          >
-            <IoCaretForward />
+          <div class={actionStyle}>
             <div>manage relays</div>
           </div>
-          <div
-            class="flex items-center gap-x-10 text-slate-50 w-5/6 mx-auto my-2
-            hover:bg-slate-600 p-4 rounded-md transition cursor-pointer
-            hover:scale-95 active:scale-90"
-          >
-            <IoCaretForward />
+          <div class={actionStyle}>
             <div>manage following</div>
           </div>
-          <div
-            class="flex items-center gap-x-10 text-slate-50 w-5/6 mx-auto my-2
-            hover:bg-slate-600 p-4 rounded-md transition cursor-pointer
-            hover:scale-95 active:scale-90"
-          >
-            <IoCaretForward />
+          <div class={actionStyle}>
             <div>chats</div>
           </div>
         </div>
