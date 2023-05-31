@@ -1,8 +1,14 @@
-import { Motion, Presence } from "@motionone/solid";
-import { Component, Show, createSignal } from "solid-js";
 import Menu from "./Menu";
+import { Event } from "nostr-tools";
+import { Motion, Presence } from "@motionone/solid";
+import { Component, For, Show, createSignal } from "solid-js";
 
-const Main: Component<{ isNarrow: boolean | undefined }> = (props) => {
+interface Props {
+  isNarrow: boolean | undefined;
+  events: Event[];
+}
+
+const Main: Component<Props> = (props) => {
   const [showMenu, setShowMenu] = createSignal<boolean>(false);
 
   const toggleMenu = (): void => {
@@ -21,30 +27,13 @@ const Main: Component<{ isNarrow: boolean | undefined }> = (props) => {
                via-slate-700 via-20% to-gray-800 to-80% relative"
         >
           <div class="snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[100vh]">
-            <div class="snap-start h-[100vh] text-white text-xl pt-10 mx-auto w-4/5">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi vero
-              iusto totam dolores suscipit similique quis placeat et ipsam
-              neque. Necessitatibus adipisci consequuntur quidem iure vero
-              repudiandae assumenda quia et?
-            </div>
-            <div class="snap-start h-[100vh] text-white text-xl pt-10 mx-auto w-4/5">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima
-              optio, a suscipit iusto laborum beatae ipsum veniam expedita
-              obcaecati soluta officia in dolores, et voluptatum omnis similique
-              neque! Maiores, temporibus!
-            </div>
-            <div class="snap-start h-[100vh] text-white text-xl pt-10 mx-auto w-4/5">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Provident molestias sunt aut. Maiores, ullam ex! Vitae non a in
-              magnam accusantium soluta adipisci aspernatur alias, ut molestias,
-              architecto perferendis id!
-            </div>
-            <div class="snap-start h-[100vh] text-white text-xl pt-10 mx-auto w-4/5">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa
-              dignissimos repellendus excepturi nihil sit veritatis suscipit,
-              dolores vero provident tempore nobis, aperiam beatae reprehenderit
-              culpa quasi. Eum iure doloremque fugit?
-            </div>
+            <For each={props.events}>
+              {(nostrEvent) => (
+                <div class="snap-start h-[100vh] text-white text-xl pt-10 mx-auto w-4/5">
+                  {nostrEvent.content}
+                </div>
+              )}
+            </For>
           </div>
 
           <Presence exitBeforeEnter>
@@ -80,38 +69,16 @@ const Main: Component<{ isNarrow: boolean | undefined }> = (props) => {
         >
           <div class="p-5">
             <div class="custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[90vh]">
-              <div class="snap-start h-[90vh] text-white text-2xl p-10 mx-auto w-4/5 2xl:w-3/5 2xl:p-16">
-                <div class="h-[80vh] rounded-md">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi
-                  vero iusto totam dolores suscipit similique quis placeat et
-                  ipsam neque. Necessitatibus adipisci consequuntur quidem iure
-                  vero repudiandae assumenda quia et?
-                </div>
-              </div>
-              <div class="snap-start h-[90vh] text-white text-2xl p-10 mx-auto w-4/5 2xl:w-3/5 2xl:p-16">
-                <div class="h-[80vh] rounded-md">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Minima optio, a suscipit iusto laborum beatae ipsum veniam
-                  expedita obcaecati soluta officia in dolores, et voluptatum
-                  omnis similique neque! Maiores, temporibus!
-                </div>
-              </div>
-              <div class="snap-start h-[90vh] text-white text-2xl p-10 mx-auto w-4/5 2xl:w-3/5 2xl:p-16">
-                <div class="h-[80vh] rounded-md">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Provident molestias sunt aut. Maiores, ullam ex! Vitae non a
-                  in magnam accusantium soluta adipisci aspernatur alias, ut
-                  molestias, architecto perferendis id!
-                </div>
-              </div>
-              <div class="snap-start h-[90vh] text-white text-2xl p-10 mx-auto w-4/5 2xl:w-3/5 2xl:p-16">
-                <div class="h-[80vh] rounded-md">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa
-                  dignissimos repellendus excepturi nihil sit veritatis
-                  suscipit, dolores vero provident tempore nobis, aperiam beatae
-                  reprehenderit culpa quasi. Eum iure doloremque fugit?
-                </div>
-              </div>
+              <For each={props.events}>
+                {(nostrEvent) => (
+                  <div
+                    class="snap-start h-[90vh] text-white text-2xl p-10
+                                mx-auto w-4/5 2xl:w-3/5 2xl:p-16 rounded-md"
+                  >
+                    {nostrEvent.content}
+                  </div>
+                )}
+              </For>
             </div>
           </div>
         </div>
