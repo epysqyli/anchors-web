@@ -1,11 +1,14 @@
 import Main from "~/components/Main";
 import Menu from "~/components/Menu";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
-import { Component, Show, createSignal } from "solid-js";
+import { Component, Show, createSignal, useContext } from "solid-js";
+import { RelayContext } from "~/contexts/relay";
 
 const Home: Component<{}> = () => {
   const [isNarrow, setIsNarrow] = createSignal<boolean | undefined>(undefined);
   useIsNarrow(setIsNarrow);
+
+  const relay = useContext(RelayContext);
 
   return (
     <>

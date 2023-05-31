@@ -12,27 +12,30 @@ import {
   Title,
 } from "solid-start";
 import "./root.css";
+import { RelayProvider } from "./contexts/relay";
 
 const Root: Component<{}> = () => {
   return (
-    <Html lang="en">
-      <Head>
-        <Title>Anchors</Title>
-        <Meta charset="utf-8" />
-        <Meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta name="theme-color" content="#319197" />
-      </Head>
-      <Body class="h-screen bg-gray-900">
-        <Suspense>
-          <ErrorBoundary>
-            <Routes>
-              <FileRoutes />
-            </Routes>
-          </ErrorBoundary>
-        </Suspense>
-        <Scripts />
-      </Body>
-    </Html>
+    <RelayProvider>
+      <Html lang="en">
+        <Head>
+          <Title>Anchors</Title>
+          <Meta charset="utf-8" />
+          <Meta name="viewport" content="width=device-width, initial-scale=1" />
+          <Meta name="theme-color" content="#319197" />
+        </Head>
+        <Body class="h-screen bg-gray-900">
+          <Suspense>
+            <ErrorBoundary>
+              <Routes>
+                <FileRoutes />
+              </Routes>
+            </ErrorBoundary>
+          </Suspense>
+          <Scripts />
+        </Body>
+      </Html>
+    </RelayProvider>
   );
 };
 
