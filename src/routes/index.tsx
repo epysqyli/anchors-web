@@ -26,7 +26,7 @@ const Home: Component<{}> = () => {
     const sub: Sub = relay.sub([filter]);
 
     sub.on("eose", () => {
-      sub.unsub();
+      // sub.unsub();
     });
 
     sub.on("event", (nostrEvent) => {
