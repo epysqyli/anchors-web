@@ -1,3 +1,4 @@
+import { A } from "@solidjs/router";
 import { FiAnchor } from "solid-icons/fi";
 import { Component, Show } from "solid-js";
 
@@ -21,21 +22,21 @@ const Menu: Component<{ isNarrow: boolean | undefined }> = (props) => {
           <div class="text-slate-100 w-fit mx-auto my-10 ">
             <FiAnchor size={40} />
           </div>
-          <div class={actionStyle}>
-            <div>feed</div>
-          </div>
-          <div class={actionStyle}>
-            <div>write</div>
-          </div>
-          <div class={actionStyle}>
-            <div>search</div>
-          </div>
-          <div class={actionStyle}>
-            <div>chats</div>
-          </div>
-          <div class={actionStyle}>
-            <div>settings</div>
-          </div>
+          <A href="/">
+            <div class={actionStyle}>feed</div>
+          </A>
+          <A href="/write">
+            <div class={actionStyle}>write</div>
+          </A>
+          <A href="/search">
+            <div class={actionStyle}>search</div>
+          </A>
+          <A href="/chats">
+            <div class={actionStyle}>chats</div>
+          </A>
+          <A href="/settings">
+            <div class={actionStyle}>settings</div>
+          </A>
         </div>
       </Show>
     </>
