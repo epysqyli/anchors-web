@@ -1,7 +1,5 @@
-import Main from "~/components/Main";
-import Menu from "~/components/Menu";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
-import { Component, Show, createSignal, onMount, useContext } from "solid-js";
+import { Component, createSignal, onMount, useContext } from "solid-js";
 import { RelayContext } from "~/contexts/relay";
 import {
   Event,
@@ -11,14 +9,16 @@ import {
   validateEvent,
   verifySignature,
 } from "nostr-tools";
+import EventWrapper from "~/components/EventWrapper";
 
 const Home: Component<{}> = () => {
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isNarrow, setIsNarrow] = createSignal<boolean | undefined>(undefined);
+  useIsNarrow(setIsNarrow);
 
   const relay = useContext(RelayContext);
 
-  // createServerData$ ?
+  // createServerData$ until eose ?
   onMount(async () => {
     await relay.connect();
 
@@ -45,29 +45,7 @@ const Home: Component<{}> = () => {
     });
   });
 
-  useIsNarrow(setIsNarrow);
-
-  return (
-    <>
-      <Show when={isNarrow() !== undefined && isNarrow()}>
-        <>
-          <Main isNarrow={isNarrow()} events={events()} />
-        </>
-      </Show>
-
-      <Show when={isNarrow() !== undefined && !isNarrow()}>
-        <div class="h-screen flex gap-x-3 px-2 2xl:gap-x-4 2xl:px-5 justify-center items-center">
-          <div class="h-[96vh] w-1/5">
-            <Menu isNarrow={isNarrow()} />
-          </div>
-
-          <div class="h-[96vh] w-4/5">
-            <Main isNarrow={isNarrow()} events={events()} />
-          </div>
-        </div>
-      </Show>
-    </>
-  );
+  return <EventWrapper isNarrow={isNarrow()} events={events()} />;
 };
 
 export default Home;

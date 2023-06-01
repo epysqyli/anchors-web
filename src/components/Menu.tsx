@@ -22,22 +22,19 @@ const Menu: Component<{ isNarrow: boolean | undefined }> = (props) => {
             <FiAnchor size={40} />
           </div>
           <div class={actionStyle}>
+            <div>feed</div>
+          </div>
+          <div class={actionStyle}>
             <div>write</div>
           </div>
           <div class={actionStyle}>
-            <div>search posts</div>
-          </div>
-          <div class={actionStyle}>
-            <div>update profile</div>
-          </div>
-          <div class={actionStyle}>
-            <div>manage relays</div>
-          </div>
-          <div class={actionStyle}>
-            <div>manage following</div>
+            <div>search</div>
           </div>
           <div class={actionStyle}>
             <div>chats</div>
+          </div>
+          <div class={actionStyle}>
+            <div>settings</div>
           </div>
         </div>
       </Show>
