@@ -1,4 +1,4 @@
-import { IoCaretForward } from "solid-icons/io";
+import { FiAnchor } from "solid-icons/fi";
 import { Component, Show } from "solid-js";
 
 const Menu: Component<{ isNarrow: boolean | undefined }> = (props) => {
@@ -18,6 +18,9 @@ const Menu: Component<{ isNarrow: boolean | undefined }> = (props) => {
     <>
       <Show when={props.isNarrow !== undefined}>
         <div class={props.isNarrow ? narrowStyle : wideStyle}>
+          <div class="text-slate-100 w-fit mx-auto my-10 ">
+            <FiAnchor size={40} />
+          </div>
           <div class={actionStyle}>
             <div>write</div>
           </div>
