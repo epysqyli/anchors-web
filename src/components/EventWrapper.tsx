@@ -28,7 +28,7 @@ const EventWrapper: Component<Props> = (props) => {
             <For each={props.events}>
               {(nostrEvent) => (
                 <div
-                  class="snap-start h-[90vh] text-white text-2xl p-10 mx-auto w-4/5 2xl:w-3/5 2xl:p-16 rounded-md"
+                  class="snap-start h-[90vh] text-white text-xl p-10 mx-auto w-4/5 2xl:w-3/5 2xl:p-16 rounded-md"
                 >
                   <div class="custom-scrollbar h-[70vh] overflow-auto pr-10 text-justify">
                     {nostrEvent.content}
