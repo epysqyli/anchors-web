@@ -29,8 +29,8 @@ const Main: Component<Props> = (props) => {
           <div class="snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[100vh]">
             <For each={props.events}>
               {(nostrEvent) => (
-                <div class="snap-start h-[100vh] text-white text-xl pt-10 mx-auto w-4/5">
-                  {nostrEvent.content}
+                <div class="snap-start h-[100vh] text-white text-xl pt-10 mx-auto w-11/12">
+                  <div class="h-[70vh] px-10 text-justify overflow-auto">{nostrEvent.content}</div>
                 </div>
               )}
             </For>
@@ -76,7 +76,9 @@ const Main: Component<Props> = (props) => {
                     class="snap-start h-[90vh] text-white text-2xl p-10
                                 mx-auto w-4/5 2xl:w-3/5 2xl:p-16 rounded-md"
                   >
-                    {nostrEvent.content}
+                    <div class="custom-scrollbar h-[70vh] overflow-auto pr-10 text-justify">
+                      {nostrEvent.content}
+                    </div>
                   </div>
                 )}
               </For>
