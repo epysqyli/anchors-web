@@ -9,11 +9,10 @@
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
   border-radius: 5px;
-  background-color: #e2e8f0;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #64748b;
+  background-color: #64748b;
   border-radius: 5px;
 }
 
