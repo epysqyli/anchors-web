@@ -18,7 +18,8 @@ const Menu: Component<Props> = (props) => {
   const actionStyle = `text-slate-50 w-5/6 mx-auto my-2 select-none
                        bg-gradient-to-r from-slate-800 to-gray-700
                        hover:bg-slate-600 p-4 rounded-md text-center lg:text-left
-                       transition cursor-pointer hover:scale-95 active:scale-90`;
+                       transition cursor-pointer hover:scale-95 active:scale-90
+                       hover:text-orange-200`;
 
   return (
     <>
