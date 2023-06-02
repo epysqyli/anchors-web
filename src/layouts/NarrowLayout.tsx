@@ -1,6 +1,6 @@
+import Menu from "~/components/Menu";
 import { Motion, Presence } from "@motionone/solid";
 import { Accessor, Component, JSX, Show } from "solid-js";
-import Menu from "~/components/Menu";
 
 interface Props {
   children: JSX.Element;

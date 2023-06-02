@@ -1,5 +1,5 @@
-import { Accessor, Component, JSX } from "solid-js";
 import Menu from "~/components/Menu";
+import { Component, JSX } from "solid-js";
 
 interface Props {
   children: JSX.Element;
