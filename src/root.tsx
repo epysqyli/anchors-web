@@ -52,7 +52,7 @@ const Root: Component<{}> = () => {
                         transition={{ easing: "ease-out" }}
                         exit={{ scale: 1.05, opacity: 0 }}
                       >
-                        <Menu isNarrow={isNarrow()} />
+                        <Menu isNarrow={isNarrow()} toggleMenu={toggleMenu} />
                       </Motion.div>
                     </Show>
                   </Presence>
@@ -80,7 +80,7 @@ const Root: Component<{}> = () => {
               <Show when={isNarrow() !== undefined && !isNarrow()}>
                 <div class="h-screen flex gap-x-3 px-2 2xl:gap-x-4 2xl:px-5 justify-center items-center">
                   <div class="h-[96vh] w-1/5">
-                    <Menu isNarrow={isNarrow()} />
+                    <Menu isNarrow={isNarrow()} toggleMenu={toggleMenu} />
                   </div>
 
                   <div
