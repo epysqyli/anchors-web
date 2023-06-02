@@ -13,7 +13,7 @@ const EventWrapper: Component<Props> = (props) => {
         <div class="snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[100vh]">
           <For each={props.events}>
             {(nostrEvent) => (
-              <div class="snap-start h-[100vh] text-white text-xl pt-10 mx-auto w-11/12">
+              <div class="snap-start h-[100vh] text-white pt-10 mx-auto w-11/12">
                 <div class="h-[70vh] px-10 text-justify overflow-auto">
                   {nostrEvent.content}
                 </div>
