@@ -20,8 +20,6 @@ const Home: Component<{}> = () => {
 
   // createServerData$ until eose ?
   onMount(async () => {
-    await relay.connect();
-
     const filter: Filter = {};
     const sub: Sub = relay.sub([filter]);
 

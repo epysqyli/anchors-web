@@ -4,6 +4,9 @@ import { Component, JSX, createContext } from "solid-js";
 
 const relay = relayInit("ws://localhost:2700");
 // const relay = relayInit("wss://nostr.wine");
+(async () => await relay.connect())();
+console.log("connecting");
+
 const RelayContext: Context<Relay> = createContext<Relay>(relay);
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
