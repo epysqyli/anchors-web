@@ -2,7 +2,7 @@ import { VsReferences } from "solid-icons/vs";
 import { RelayContext } from "~/contexts/relay";
 import { Component, createSignal, useContext } from "solid-js";
 import { AiOutlineInfoCircle, AiOutlineSend } from "solid-icons/ai";
-import { Event as NostrEvent, EventTemplate, Kind } from "nostr-tools";
+import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 
 declare global {
   interface Window {
@@ -22,17 +22,40 @@ const Write: Component<{}> = () => {
     tags: [["r", "https://www.solidjs.com/docs/latest/api#starttransition"]],
   });
 
-  const [canPublish, setCanPublish] = createSignal<boolean>(false);
-
   const updateContent = (e: Event) => {
     const textAreaContent = (e.currentTarget as HTMLInputElement).value;
     nostrEvent().content = textAreaContent;
   };
 
+  const canPublish = (): boolean => {
+    if (nostrEvent().content.trim().length == 0) {
+      return false;
+    }
+
+    if (nostrEvent().tags.filter((tag) => tag[0] == 'r').length == 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   // manage the potential non existence of window.nostr (eg. mobile)
   const signAndPublishNostrEvent = async (): Promise<void> => {
+    if (!canPublish()) {
+      console.log("no references set");
+      return;
+    }
+
     const signedEvent = await window.nostr.signEvent(nostrEvent());
-    relay.publish(signedEvent);
+    const pubResult: Pub = relay.publish(signedEvent);
+
+    pubResult.on("ok", () => {
+      console.log("ok");
+    });
+
+    pubResult.on("failed", () => {
+      console.log("failed");
+    });
   };
 
   return (
