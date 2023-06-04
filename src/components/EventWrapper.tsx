@@ -33,6 +33,27 @@ const EventWrapper: Component<Props> = (props) => {
               {nostrEvent().content}
             </div>
           </div>
+
+          <div class="flex justify-around mt-10 pt-5 gap-x-10">
+            <div
+              class="text-slate-300 text-center text-md py-3 border-opacity-50
+                        border-slate-500 border-b w-1/3"
+            >
+              like
+            </div>
+            <div
+              class="text-slate-300 text-center text-md py-3 border-opacity-50
+                        border-slate-500 border-b w-1/3"
+            >
+              dislike
+            </div>
+            <div
+              class="text-slate-300 text-center text-md py-3 border-opacity-50
+                        border-slate-500 border-b w-1/3"
+            >
+              comments
+            </div>
+          </div>
         </div>
       </Show>
     </>
