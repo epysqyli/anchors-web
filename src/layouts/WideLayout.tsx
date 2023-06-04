@@ -18,7 +18,7 @@ const WideLayout: Component<Props> = (props) => {
   );
 
   return (
-    <div class="h-screen flex gap-x-3 px-2 2xl:gap-x-4 2xl:px-5 justify-center items-center">
+    <div class="h-screen flex gap-x-3 px-2 md:gap-x-2 2xl:px-5 justify-center items-center">
       <div class="h-[96vh] w-1/5">
         <Menu isNarrow={false} toggleMenu={props.toggleMenu} />
       </div>
