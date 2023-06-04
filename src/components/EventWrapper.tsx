@@ -1,5 +1,5 @@
 import { Event } from "nostr-tools";
-import { Component, For, Show } from "solid-js";
+import { Component, Show } from "solid-js";
 
 interface Props {
   isNarrow: boolean | undefined;

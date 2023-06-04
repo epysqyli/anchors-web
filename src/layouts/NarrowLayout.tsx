@@ -1,6 +1,7 @@
 import Menu from "~/components/Menu";
 import { Motion, Presence } from "@motionone/solid";
-import { Accessor, Component, JSX, Show } from "solid-js";
+import { Accessor, Component, JSX, Show, useContext } from "solid-js";
+import OverlayContext from "~/contexts/overlay";
 
 interface Props {
   children: JSX.Element;
@@ -9,6 +10,11 @@ interface Props {
 }
 
 const NarrowLayout: Component<Props> = (props) => {
+  const overlay = useContext(OverlayContext);
+  const overlayDiv = (
+    <div class="absolute bg-slate-900 h-full w-full top-0 left-0 opacity-75 z-0"></div>
+  );
+
   return (
     <div
       class="h-[100vh] bg-gradient-to-bl from-slate-700
@@ -43,6 +49,7 @@ const NarrowLayout: Component<Props> = (props) => {
       ></Motion.button>
 
       {props.children}
+      {overlay.showOverlay() ? overlayDiv : <></>}
     </div>
   );
 };
