@@ -13,9 +13,6 @@ interface Props {
 const WideLayout: Component<Props> = (props) => {
   const isRouting = useIsRouting();
   const overlay = useContext(OverlayContext);
-  const overlayDiv = (
-    <div class="absolute bg-slate-900 h-full w-full top-0 left-0 opacity-75 z-0"></div>
-  );
 
   return (
     <div class="h-screen flex gap-x-3 px-2 md:gap-x-2 md:px-2 justify-center items-center">
@@ -33,7 +30,7 @@ const WideLayout: Component<Props> = (props) => {
           via-slate-700 via-20% to-gray-800 to-80% relative"
           >
             {props.children}
-            {overlay.showOverlay() ? overlayDiv : <></>}
+            {overlay.showOverlay() ? overlay.div : <></>}
           </Motion.div>
         </Rerun>
       </Presence>
