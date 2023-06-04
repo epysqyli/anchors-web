@@ -11,7 +11,7 @@ const WriteInfoPopover: Component<{
       <Show when={props.showPopover}>
         <Motion.div
           exit={{ opacity: [1, 0.1], transition: { duration: 0.3 } }}
-          class="w-3/4 md:w-1/2 top-1/3 md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 absolute"
+          class="w-3/4 md:w-1/2 top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 absolute"
         >
           <Motion.div
             animate={{ scale: [0.5, 1.05, 1] }}
@@ -20,9 +20,15 @@ const WriteInfoPopover: Component<{
           >
             <p class="text-slate-200 text-justify">
               The goal of Anchors (this nostr client) is not that of replicating
-              the blue bird: we strive towards providing a much needed
-              clarifying context to ideas in order to connect them together,
-              unlock new insights, and cement them in our imagination.
+              usual social network dynamics: we strive towards providing a much
+              needed clarifying context to ideas in order to connect them
+              together, unlock new insights, and cement them in our imagination.
+            </p>
+
+            <p class="text-slate-200 text-justify mt-5">
+              This is why every post should reference at least an external
+              resource, such as a youtube video, a book, a blog post, etc etc ...
+              or another idea found on Anchors.
             </p>
 
             <button
