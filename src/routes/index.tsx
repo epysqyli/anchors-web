@@ -16,6 +16,7 @@ import {
   validateEvent,
   verifySignature,
 } from "nostr-tools";
+import EventWrapper from "~/components/EventWrapper";
 
 const Home: Component<{}> = () => {
   const [events, setEvents] = createSignal<Event[]>([]);
@@ -31,6 +32,7 @@ const Home: Component<{}> = () => {
 
     sub.on("eose", () => {
       // sub.unsub();
+      // console.log(events());
     });
 
     sub.on("event", (nostrEvent) => {
@@ -69,11 +71,7 @@ const Home: Component<{}> = () => {
         <div class="custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full">
           <For each={events()}>
             {(nostrEvent) => (
-              <div class="snap-start h-full text-white text-xl px-10 pt-10 mx-auto w-4/5 2xl:w-3/5 2xl:p-16 rounded-md">
-                <div class="custom-scrollbar h-[70vh] overflow-auto pr-10 break-words text-justify">
-                  {nostrEvent.content}
-                </div>
-              </div>
+              <EventWrapper event={nostrEvent} isNarrow={isNarrow()} />
             )}
           </For>
         </div>
