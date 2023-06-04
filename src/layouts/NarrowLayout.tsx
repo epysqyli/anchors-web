@@ -11,9 +11,6 @@ interface Props {
 
 const NarrowLayout: Component<Props> = (props) => {
   const overlay = useContext(OverlayContext);
-  const overlayDiv = (
-    <div class="absolute bg-slate-900 h-full w-full top-0 left-0 opacity-75 z-0"></div>
-  );
 
   return (
     <div
@@ -49,7 +46,7 @@ const NarrowLayout: Component<Props> = (props) => {
       ></Motion.button>
 
       {props.children}
-      {overlay.showOverlay() ? overlayDiv : <></>}
+      {overlay.showOverlay() ? overlay.div : <></>}
     </div>
   );
 };
