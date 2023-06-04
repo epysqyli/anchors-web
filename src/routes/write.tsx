@@ -22,12 +22,11 @@ const Write: Component<{}> = () => {
     content: "",
     created_at: Math.floor(Date.now() / 1000),
     kind: Kind.Text,
-    tags: [],
-    // tags: [
-    //   ["r", "https://www.solidjs.com/docs/latest/api#starttransition"],
-    //   ["r", "https://www.youtube.com/watch?v=Fu3yMv0KmrE"],
-    //   ["r", "https://openlibrary.org/books/OL7506950M"],
-    // ],
+    tags: [
+      ["r", "https://www.solidjs.com/docs/latest/api#starttransition"],
+      ["r", "https://www.youtube.com/watch?v=Fu3yMv0KmrE"],
+      ["r", "https://openlibrary.org/books/OL7506950M"],
+    ],
   });
 
   const [showPopover, setShowPopover] = createSignal<boolean>(false);
@@ -56,6 +55,7 @@ const Write: Component<{}> = () => {
   };
 
   // manage the potential non existence of window.nostr (eg. mobile)
+  // manage ok and failed states once the event is published
   const signAndPublishNostrEvent = async (): Promise<void> => {
     if (!canPublish()) {
       return;
