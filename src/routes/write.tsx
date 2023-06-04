@@ -43,14 +43,12 @@ const Write: Component<{}> = () => {
 
   const canPublish = (): boolean => {
     if (nostrEvent().content.trim().length == 0) {
-      setShowPopover(true);
-      overlay.toggleOverlay();
+      togglePopover();
       return false;
     }
 
     if (nostrEvent().tags.filter((tag) => tag[0] == "r").length == 0) {
-      setShowPopover(true);
-      overlay.toggleOverlay();
+      togglePopover();
       return false;
     }
 
