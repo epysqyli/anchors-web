@@ -89,13 +89,16 @@ const Write: Component<{}> = () => {
       ></textarea>
 
       <div class="flex mx-auto text-slate-100 justify-between w-3/5 md:w-2/5 mt-20 md:mt-32">
-        <button>
+        <button class="hover:text-orange-200 active:scale-95 transition-all">
           <AiOutlineInfoCircle size={32} onClick={togglePopover} />
         </button>
-        <button>
+        <button class="hover:text-orange-200 active:scale-95 transition-all">
           <VsReferences size={32} />
         </button>
-        <button onClick={signAndPublishNostrEvent}>
+        <button
+          class="hover:text-orange-200 active:scale-95 transition-all"
+          onClick={signAndPublishNostrEvent}
+        >
           <AiOutlineSend size={32} />
         </button>
       </div>
