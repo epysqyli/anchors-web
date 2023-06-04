@@ -37,8 +37,8 @@ const Menu: Component<Props> = (props) => {
           <A onClick={props.toggleMenu} href="/search">
             <div class={actionStyle}>search</div>
           </A>
-          <A onClick={props.toggleMenu} href="/chats">
-            <div class={actionStyle}>chats</div>
+          <A onClick={props.toggleMenu} href="/my-posts">
+            <div class={actionStyle}>my posts</div>
           </A>
           <A onClick={props.toggleMenu} href="/settings">
             <div class={actionStyle}>settings</div>
