@@ -75,7 +75,7 @@ const Write: Component<{}> = () => {
 
   return (
     <>
-      <h1 class="text-slate-100 text-center py-5 md:py-12 text-lg md:text-2xl">
+      <h1 class="text-slate-100 text-center py-5 md:py-12 text-2xl md:text-3xl">
         Post a new idea
       </h1>
       <textarea
