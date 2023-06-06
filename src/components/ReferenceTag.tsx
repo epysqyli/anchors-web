@@ -4,10 +4,10 @@ interface Props {
   tag: Array<string>;
 }
 
-// each tag needs to be parsed in order to determine what source is being references
+// each tag needs to be parsed in order to determine what source is being referenced
 // open library urls will lead to having NostrTag showing author, cover, title
 // youtube urls will show a thumbnail of the video and the title (maybe more info)
-// ...
+// ... each resource should have a way of being handled
 
 const ReferenceTag: Component<Props> = (props) => {
   return (
