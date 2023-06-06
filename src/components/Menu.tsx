@@ -29,7 +29,7 @@ const Menu: Component<Props> = (props) => {
     <>
       <Show when={props.isNarrow !== undefined}>
         <div class={props.isNarrow ? narrowStyle : wideStyle}>
-          <div class="text-slate-100 w-fit mx-auto my-10 ">
+          <div class="text-slate-100 w-fit mx-auto mt-10 mb-10 md:mb-20 ">
             <FiAnchor size={40} />
           </div>
 
