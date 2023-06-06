@@ -11,11 +11,11 @@ const WriteInfoPopover: Component<{
       <Show when={props.showPopover}>
         <Motion.div
           exit={{ opacity: [1, 0.1], transition: { duration: 0.3 } }}
-          class="w-3/4 md:w-1/2 top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 absolute"
+          class="w-11/12 md:w-1/2 top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 absolute"
         >
           <Motion.div
             animate={{ scale: [0.5, 1.05, 1] }}
-            transition={{ duration: 0.3, easing: "ease-out" }}
+            transition={{ duration: 0.3, easing: "ease-in" }}
             class="bg-slate-800 py-6 px-8 rounded-md border border-orange-200"
           >
             <p class="text-slate-200 text-justify">
