@@ -1,6 +1,7 @@
 import { Event } from "nostr-tools";
 import ReferenceTag from "./ReferenceTag";
 import { Component, For, Show } from "solid-js";
+import { BiRegularBoltCircle } from "solid-icons/bi";
 
 interface Props {
   isNarrow: boolean | undefined;
@@ -14,7 +15,30 @@ const EventWrapper: Component<Props> = (props) => {
   return (
     <>
       <Show when={props.isNarrow !== undefined && props.isNarrow}>
-        <></>
+        <div class="snap-start h-[100vh] text-white pt-4 mx-auto">
+          <div class="h-[60vh] w-11/12 mx-auto py-2 pr-5 mb-10 text-justify overflow-auto break-words shadow-inner">
+            {nostrEvent().content}
+          </div>
+          <div class="mb-10 w-11/12 mx-auto pb-5 snap-x snap-mandatory overflow-scroll flex justify-start gap-x-10">
+            <For each={nostrEvent().tags}>
+              {(tag) => (
+                <div class="snap-center w-4/5 px-5 py-1 flex items-center bg-slate-300 rounded">
+                  <div class="w-1/4">
+                    <BiRegularBoltCircle size={40} color="#334155" />
+                  </div>
+                  <div class="break-words w-3/4 px-2 text-sm text-slate-700">
+                    {tag[1]}
+                  </div>
+                </div>
+              )}
+            </For>
+          </div>
+
+          <div class="flex items-center justify-between w-4/5 mx-auto">
+            <div class="border-b pb-2">comments</div>
+            <div class="border-b pb-2">reactions</div>
+          </div>
+        </div>
       </Show>
 
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
