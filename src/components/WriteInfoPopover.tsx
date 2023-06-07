@@ -16,7 +16,7 @@ const WriteInfoPopover: Component<{
           <Motion.div
             animate={{ scale: [0.5, 1.05, 1] }}
             transition={{ duration: 0.3, easing: "ease-in" }}
-            class="bg-gradient-to-br py-6 px-8 rounded border border-slate-600"
+            class="bg-gradient-to-br from-gray-950 to-slate-800 py-6 px-8 rounded border border-slate-600"
           >
             <p class="text-slate-200 text-justify">
               The goal of Anchors (this nostr client) is not that of replicating
