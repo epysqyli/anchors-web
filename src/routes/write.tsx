@@ -86,7 +86,7 @@ const Write: Component<{}> = () => {
         onInput={updateContent}
       ></textarea>
 
-      <div class="flex mx-auto text-slate-100 justify-between w-3/5 md:w-2/5 mt-20 md:mt-32">
+      <div class="flex mx-auto text-slate-100 justify-between md:justify-around w-3/5 md:w-2/5 mt-20 md:mt-28">
         <button class="hover:text-orange-200 active:scale-95 transition-all">
           <VsReferences size={32} />
         </button>
