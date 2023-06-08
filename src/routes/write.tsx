@@ -42,12 +42,12 @@ const Write: Component<{}> = () => {
 
   const canPublish = (): boolean => {
     if (nostrEvent().content.trim().length == 0) {
-      togglePopover();
+      console.log("cannot publish");
       return false;
     }
 
     if (nostrEvent().tags.filter((tag) => tag[0] == "r").length == 0) {
-      togglePopover();
+      console.log("cannot publish");
       return false;
     }
 
@@ -86,7 +86,10 @@ const Write: Component<{}> = () => {
         onInput={updateContent}
       ></textarea>
 
-      <div class="flex mx-auto text-slate-100 justify-between md:justify-around w-3/5 md:w-2/5 mt-20 md:mt-28">
+      <div class="flex mx-auto text-slate-100 justify-between md:justify-around 
+                  w-3/5 md:w-2/5 mt-20 md:mt-24 md:py-5
+                  md:border-2 md:rounded-md md:border-slate-200
+                  md:border-dotted md:border-opacity-25">
         <button class="hover:text-orange-200 active:scale-95 transition-all">
           <VsReferences size={32} />
         </button>
@@ -97,11 +100,6 @@ const Write: Component<{}> = () => {
           <AiOutlineSend size={32} />
         </button>
       </div>
-
-      <WriteInfoPopover
-        showPopover={showPopover()}
-        togglePopover={togglePopover}
-      />
     </>
   );
 };
