@@ -16,7 +16,6 @@ declare global {
 
 const Write: Component<{}> = () => {
   const relay = useContext(RelayContext);
-  const overlay = useContext(OverlayContext);
 
   const [nostrEvent] = createSignal<EventTemplate>({
     content: "",
@@ -32,7 +31,6 @@ const Write: Component<{}> = () => {
   const [showRefMenu, setShowRefMenu] = createSignal<boolean>(false);
   const toggleRefMenu = (): void => {
     setShowRefMenu(!showRefMenu());
-    overlay.toggleOverlay();
   };
 
   const updateContent = (e: Event) => {
