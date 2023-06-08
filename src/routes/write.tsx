@@ -1,9 +1,9 @@
 import { VsReferences } from "solid-icons/vs";
 import OverlayContext from "~/contexts/overlay";
 import { RelayContext } from "~/contexts/relay";
-import WriteInfoPopover from "~/components/WriteInfoPopover";
+import { AiOutlineSend } from "solid-icons/ai";
+import ReferencesMenu from "~/components/ReferencesMenu";
 import { Component, createSignal, useContext } from "solid-js";
-import { AiOutlineInfoCircle, AiOutlineSend } from "solid-icons/ai";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 
 declare global {
@@ -29,9 +29,9 @@ const Write: Component<{}> = () => {
     ],
   });
 
-  const [showPopover, setShowPopover] = createSignal<boolean>(false);
-  const togglePopover = (): void => {
-    setShowPopover(!showPopover());
+  const [showRefMenu, setShowRefMenu] = createSignal<boolean>(false);
+  const toggleRefMenu = (): void => {
+    setShowRefMenu(!showRefMenu());
     overlay.toggleOverlay();
   };
 
@@ -81,29 +81,40 @@ const Write: Component<{}> = () => {
       >
         Write a new idea
       </h1>
-      <textarea
-        placeholder="An idea that gives meaning to the world ..."
-        class="block focus:outline-none w-11/12 md:w-2/3 mx-auto bg-transparent p-5 md:p-10
+      <div class="relative">
+        <textarea
+          placeholder="An idea that gives meaning to the world ..."
+          class="block focus:outline-none w-11/12 md:w-2/3 mx-auto bg-transparent p-5 md:p-10
                text-slate-300 caret-orange-200 resize-none custom-scrollbar mt-5"
-        rows={15}
-        onInput={updateContent}
-      ></textarea>
+          rows={15}
+          onInput={updateContent}
+        ></textarea>
 
-      <div
-        class="flex mx-auto text-slate-100 justify-between md:justify-around 
+        <div
+          class="flex mx-auto text-slate-100 justify-between md:justify-around 
                   w-3/5 md:w-2/5 mt-20 md:mt-24 md:py-5
                   md:border-t-2 shadow-inner md:border-slate-200
                   md:border-dotted md:border-opacity-25"
-      >
-        <button class="hover:text-orange-200 active:scale-95 transition-all">
-          <VsReferences size={32} />
-        </button>
-        <button
-          class="hover:text-orange-200 active:scale-95 transition-all"
-          onClick={signAndPublishNostrEvent}
         >
-          <AiOutlineSend size={32} />
-        </button>
+          <button
+            class="hover:text-orange-200 active:scale-95 transition-all"
+            onclick={toggleRefMenu}
+          >
+            <VsReferences size={32} />
+          </button>
+          <button
+            class="hover:text-orange-200 active:scale-95 transition-all"
+            onClick={signAndPublishNostrEvent}
+          >
+            <AiOutlineSend size={32} />
+          </button>
+        </div>
+
+        <ReferencesMenu
+          showRefMenu={showRefMenu()}
+          tags={nostrEvent().tags}
+          toggleRefMenu={toggleRefMenu}
+        />
       </div>
     </>
   );
