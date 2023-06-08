@@ -76,7 +76,7 @@ const Write: Component<{}> = () => {
   return (
     <>
       <h1
-        class="text-slate-100 text-center py-5 md:py-10 text-2xl md:text-4xl
+        class="text-slate-100 text-center py-5 md:py-10 text-2xl md:text-4xl font-bold
                   md:bg-slate-800 md:rounded-t-md border-b border-slate-500 md:border-none"
       >
         Write a new idea
@@ -84,7 +84,7 @@ const Write: Component<{}> = () => {
       <textarea
         placeholder="An idea that gives meaning to the world ..."
         class="block focus:outline-none w-11/12 md:w-2/3 mx-auto bg-transparent p-5 md:p-10
-               text-slate-300 caret-orange-200 resize-none custom-scrollbar"
+               text-slate-300 caret-orange-200 resize-none custom-scrollbar mt-5"
         rows={15}
         onInput={updateContent}
       ></textarea>
