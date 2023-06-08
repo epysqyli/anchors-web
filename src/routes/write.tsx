@@ -84,7 +84,7 @@ const Write: Component<{}> = () => {
       <textarea
         placeholder="An idea that gives meaning to the world ..."
         class="block focus:outline-none w-11/12 md:w-2/3 mx-auto bg-transparent p-5 md:p-10
-               text-slate-300 caret-orange-200 resize-none custom-scrollbar"
+               text-slate-300 caret-orange-200 resize-none custom-scrollbar mt-5"
         rows={15}
         onInput={updateContent}
       ></textarea>
