@@ -75,8 +75,11 @@ const Write: Component<{}> = () => {
 
   return (
     <>
-      <h1 class="text-slate-100 text-center py-5 md:py-12 text-2xl md:text-3xl">
-        Post a new idea
+      <h1
+        class="text-slate-100 text-center py-5 md:py-10 text-2xl md:text-4xl
+                  md:bg-slate-800 md:rounded-t-md border-b border-slate-500 md:border-none"
+      >
+        Write a new idea
       </h1>
       <textarea
         placeholder="An idea that gives meaning to the world ..."
@@ -86,10 +89,12 @@ const Write: Component<{}> = () => {
         onInput={updateContent}
       ></textarea>
 
-      <div class="flex mx-auto text-slate-100 justify-between md:justify-around 
+      <div
+        class="flex mx-auto text-slate-100 justify-between md:justify-around 
                   w-3/5 md:w-2/5 mt-20 md:mt-24 md:py-5
-                  md:border-2 md:rounded-md md:border-slate-200
-                  md:border-dotted md:border-opacity-25">
+                  md:border-t-2 shadow-inner md:border-slate-200
+                  md:border-dotted md:border-opacity-25"
+      >
         <button class="hover:text-orange-200 active:scale-95 transition-all">
           <VsReferences size={32} />
         </button>
