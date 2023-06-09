@@ -27,18 +27,19 @@ const ReferencesMenu: Component<Props> = (props) => {
         <Motion.div
           initial={{ top: 0, left: 0, position: "absolute" }}
           animate={{
-            scale: [0.3, 1],
-            left: "50%",
-            x: "-50%",
+            scale: [0.3, 1.05, 1],
+            left: ["50%", "50%", "50%"],
+            x: ["-50%", "-50%", "-50%"],
             zIndex: 1,
           }}
-          transition={{ duration: 0.2, easing: "ease-out" }}
+          transition={{ duration: 0.4, easing: "ease-out" }}
           exit={{
-            opacity: [1, 0.1],
+            opacity: [1, 0.9, 0.1],
+            scale: [1, 1.1, 0.3],
             zIndex: 0,
-            transition: { duration: 0.3, easing: "ease-out" },
+            transition: { duration: 0.2, easing: "ease-in" },
           }}
-          onMotionComplete={overlay.toggleOverlay}
+          onMotionStart={overlay.toggleOverlay}
           class="h-[80%] w-[80%] bg-slate-700 rounded-md text-slate-200"
         >
           <div class="relative flex h-full">
