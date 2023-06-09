@@ -41,7 +41,7 @@ const NarrowLayout: Component<Props> = (props) => {
           bg-slate-200 cursor-pointer hover:bg-slate-300
           fixed left-1/2 -translate-x-1/2 bottom-10 select-none
           active:scale-95 active:border-orange-200 active:bg-orange-50
-          transition-transform shadow-lg shadow-slate-900"
+          transition-transform shadow-lg shadow-slate-900 z-10"
         onclick={props.toggleMenu}
       ></Motion.button>
 

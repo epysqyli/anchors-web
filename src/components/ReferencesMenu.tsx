@@ -1,8 +1,8 @@
-import { Motion, Presence } from "@motionone/solid";
-import { Rerun } from "@solid-primitives/keyed";
+import RefsSearch from "./RefsSearch";
 import { IoCloseCircle } from "solid-icons/io";
-import { Component, For, Show, useContext } from "solid-js";
 import OverlayContext from "~/contexts/overlay";
+import { Motion, Presence } from "@motionone/solid";
+import { Component, For, Show, useContext } from "solid-js";
 
 interface Props {
   showRefMenu: boolean;
@@ -42,8 +42,8 @@ const ReferencesMenu: Component<Props> = (props) => {
           onMotionStart={overlay.toggleOverlay}
           class="h-[80%] w-[80%] bg-slate-700 rounded-md text-slate-200"
         >
-          <div class="relative flex h-full">
-            <div class="w-1/2 py-5">
+          <div class="relative flex h-full py-3">
+            <div class="w-1/2 py-2">
               <For each={tags()}>
                 {(tag) => (
                   <div class="break-words mb-5 w-5/6 mx-auto border-b pb-3 px-2">
@@ -53,19 +53,8 @@ const ReferencesMenu: Component<Props> = (props) => {
               </For>
             </div>
 
-            <div class="w-1/2 py-5 border-l">
-              <div class="mx-auto w-1/2 py-3 border text-center mb-5 rounded">
-                search box
-              </div>
-              <div class="mx-auto w-1/2 my-4 text-center">
-                actionable reference
-              </div>
-              <div class="mx-auto w-1/2 my-4 text-center">
-                actionable reference
-              </div>
-              <div class="mx-auto w-1/2 my-4 text-center">
-                actionable reference
-              </div>
+            <div class="w-1/2 py-2 border-l-2 border-slate-400">
+              <RefsSearch />
             </div>
           </div>
 
