@@ -20,7 +20,7 @@ const NarrowLayout: Component<Props> = (props) => {
       <Presence exitBeforeEnter>
         <Show when={props.showMenu()}>
           <Motion.div
-            class="fixed top-0 left-0 w-screen"
+            class="fixed top-0 left-0 w-screen z-10"
             initial={{ scale: 1.05, opacity: 0.5 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ easing: "ease-out" }}
@@ -41,7 +41,7 @@ const NarrowLayout: Component<Props> = (props) => {
           bg-slate-200 cursor-pointer hover:bg-slate-300
           fixed left-1/2 -translate-x-1/2 bottom-10 select-none
           active:scale-95 active:border-orange-200 active:bg-orange-50
-          transition-transform shadow-lg shadow-slate-900"
+          transition-transform shadow-lg shadow-slate-900 z-10"
         onclick={props.toggleMenu}
       ></Motion.button>
 
