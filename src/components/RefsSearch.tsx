@@ -1,9 +1,8 @@
-import { BsBook } from "solid-icons/bs";
 import { RiLogosSpotifyLine } from "solid-icons/ri";
+import { RiDocumentBook2Line } from 'solid-icons/ri'
 import { BiRegularCameraMovie } from "solid-icons/bi";
-import { Component, For, JSX, createSignal, onMount } from "solid-js";
+import { Component, For, JSX, createSignal } from "solid-js";
 import { AiOutlineYoutube, AiOutlineLink } from "solid-icons/ai";
-
 interface RefType {
   url: string;
   icon: JSX.Element;
@@ -14,7 +13,7 @@ interface RefType {
 const RefsSearch: Component<{}> = (props) => {
   const [refTypes, setRefTypes] = createSignal<RefType[]>([
     {
-      icon: <BsBook size={26} />,
+      icon: <RiDocumentBook2Line size={26} />,
       selected: false,
       url: "",
       category: "books",
@@ -45,8 +44,7 @@ const RefsSearch: Component<{}> = (props) => {
     },
   ]);
 
-  const basicStyle =
-    "p-2 rounded-md cursor-pointer hover:scale-105 active:scale-95 transition";
+  const basicStyle = "p-2 rounded-xl cursor-pointer group transition";
   const selectedStyle = basicStyle + " bg-slate-50 text-slate-700";
 
   const selectRefType = (category: string) => {
@@ -79,7 +77,9 @@ const RefsSearch: Component<{}> = (props) => {
                 onClick={() => selectRefType(refType.category)}
                 class={refType.selected ? selectedStyle : basicStyle}
               >
-                {refType.icon}
+                <div class="group-hover:scale-110 group-active:scale-95 transition">
+                  {refType.icon}
+                </div>
               </div>
             );
           }}
