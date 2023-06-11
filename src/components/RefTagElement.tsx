@@ -10,7 +10,7 @@ interface Props {
   removeTag(tag: IRefTag): void;
 }
 
-const RefSearchTagView: Component<Props> = (props) => {
+const RefTagElement: Component<Props> = (props) => {
   const icon = (category: string): JSX.Element => {
     switch (category) {
       case "generic":
@@ -45,4 +45,4 @@ const RefSearchTagView: Component<Props> = (props) => {
   );
 };
 
-export default RefSearchTagView;
+export default RefTagElement;

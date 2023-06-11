@@ -1,7 +1,7 @@
 import { Event } from "nostr-tools";
-import ReferenceTag from "./ReferenceTag";
 import { Component, For, Show } from "solid-js";
 import { BiRegularBoltCircle } from "solid-icons/bi";
+import RefTagFeedElement from "./RefTagFeedElement";
 
 interface Props {
   isNarrow: boolean | undefined;
@@ -46,7 +46,7 @@ const EventWrapper: Component<Props> = (props) => {
           <div class="flex justify-center gap-x-5">
             <div class="w-1/4">
               <For each={referenceTags}>
-                {(tag) => <ReferenceTag tag={tag} />}
+                {(tag) => <RefTagFeedElement tag={tag} />}
               </For>
             </div>
 

@@ -17,7 +17,7 @@ interface Props {
   addNostrTag(nostrTag: IRefTag): void;
 }
 
-const RefsSearch: Component<Props> = (props) => {
+const RefTagsSearchPanel: Component<Props> = (props) => {
   const [refTypes, setRefTypes] = createSignal<RefType[]>([
     {
       icon: <RiDocumentBook2Line size={26} />,
@@ -139,4 +139,4 @@ const RefsSearch: Component<Props> = (props) => {
   );
 };
 
-export default RefsSearch;
+export default RefTagsSearchPanel;

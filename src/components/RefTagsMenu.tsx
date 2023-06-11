@@ -1,10 +1,10 @@
-import RefsSearch from "./RefsSearch";
+import IRefTag from "~/interfaces/RefTag";
+import RefTagElement from "./RefTagElement";
 import { IoCloseCircle } from "solid-icons/io";
 import OverlayContext from "~/contexts/overlay";
 import { Motion, Presence } from "@motionone/solid";
+import RefTagsSearchPanel from "./RefTagsSearchPanel";
 import { Component, For, Show, useContext } from "solid-js";
-import IRefTag from "~/interfaces/RefTag";
-import RefSearchTagView from "./RefSearchTagView";
 
 interface Props {
   showRefMenu: boolean;
@@ -14,11 +14,8 @@ interface Props {
   removeTag(tag: IRefTag): void;
 }
 
-// provides two submenus to manage and add new refs to the event
-// popups clicking VsReferences on write page
-// submenus are snap-x scrollable on mobile
-// side by side on wide layout with search on the right
-const ReferencesMenu: Component<Props> = (props) => {
+// snap-x scrollable on mobile, side by side on wide view
+const RefTagsMenu: Component<Props> = (props) => {
   const tags = () => props.tags;
   const showRefMenu = () => props.showRefMenu;
   const toggleRefMenu = () => props.toggleRefMenu();
@@ -51,14 +48,14 @@ const ReferencesMenu: Component<Props> = (props) => {
               <For each={tags()}>
                 {(tag) => (
                   <div class="break-words mb-5 w-5/6 mx-auto border-b pb-3 px-2">
-                    <RefSearchTagView tag={tag} removeTag={props.removeTag} />
+                    <RefTagElement tag={tag} removeTag={props.removeTag} />
                   </div>
                 )}
               </For>
             </div>
 
             <div class="w-1/2 py-2 border-l-2 border-slate-400">
-              <RefsSearch addNostrTag={props.addNostrTag} />
+              <RefTagsSearchPanel addNostrTag={props.addNostrTag} />
             </div>
           </div>
 
@@ -74,4 +71,4 @@ const ReferencesMenu: Component<Props> = (props) => {
   );
 };
 
-export default ReferencesMenu;
+export default RefTagsMenu;

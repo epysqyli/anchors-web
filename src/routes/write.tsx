@@ -1,10 +1,10 @@
+import IRefTag from "~/interfaces/RefTag";
 import { VsReferences } from "solid-icons/vs";
 import { RelayContext } from "~/contexts/relay";
 import { AiOutlineSend } from "solid-icons/ai";
-import ReferencesMenu from "~/components/ReferencesMenu";
+import RefTagsMenu from "~/components/RefTagsMenu";
 import { Component, createSignal, useContext } from "solid-js";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
-import IRefTag from "~/interfaces/RefTag";
 
 declare global {
   interface Window {
@@ -140,7 +140,7 @@ const Write: Component<{}> = () => {
           </button>
         </div>
 
-        <ReferencesMenu
+        <RefTagsMenu
           showRefMenu={showRefMenu()}
           tags={refTags()}
           toggleRefMenu={toggleRefMenu}
