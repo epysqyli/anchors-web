@@ -4,6 +4,7 @@ import { BiRegularCameraMovie } from "solid-icons/bi";
 import { Component, For, JSX, Show, createSignal } from "solid-js";
 import { AiOutlineYoutube, AiOutlineLink } from "solid-icons/ai";
 import { VsAdd } from "solid-icons/vs";
+import IRefTag from "~/interfaces/RefTag";
 
 interface RefType {
   url: string;
@@ -14,7 +15,7 @@ interface RefType {
 }
 
 interface Props {
-  addNostrTag(nostrTag: string[]): void;
+  addNostrTag(nostrTag: IRefTag): void;
 }
 
 const RefsSearch: Component<Props> = (props) => {
@@ -56,7 +57,10 @@ const RefsSearch: Component<Props> = (props) => {
     },
   ]);
 
-  const [refValue, setRefValue] = createSignal<string>("");
+  const [refTag, setRefTag] = createSignal<IRefTag>({
+    category: "generic",
+    value: "",
+  });
 
   const basicStyle = "p-2 rounded-xl cursor-pointer group transition";
   const selectedStyle = basicStyle + " bg-slate-50 text-slate-700";
@@ -84,18 +88,23 @@ const RefsSearch: Component<Props> = (props) => {
 
   const updateRefValue = (e: Event) => {
     const inputValue = (e.currentTarget as HTMLInputElement).value;
-    setRefValue(inputValue);
+    const updatedRefTag: IRefTag = {
+      category: refTag().category,
+      value: inputValue,
+    };
+    setRefTag(updatedRefTag);
   };
 
   const sendForm = (e: Event) => {
     e.preventDefault();
-    if (refValue().trim() == "") {
+    if (refTag().value.trim() == "") {
       console.log("show a visual error here");
       return;
     }
 
-    props.addNostrTag(["r", refValue()]);
-    setRefValue("");
+    props.addNostrTag(refTag());
+    const defaultRefTag: IRefTag = { category: refTag().category, value: "" };
+    setRefTag(defaultRefTag);
   };
 
   return (
@@ -122,7 +131,7 @@ const RefsSearch: Component<Props> = (props) => {
           <input
             placeholder="add an external resource's URL"
             type="text"
-            value={refValue()}
+            value={refTag().value}
             onChange={updateRefValue}
             class="block focus:outline-none mx-auto mt-10 rounded py-2 caret-slate-600
                placeholder:text-center placeholder:text-sm text-slate-500 text-center

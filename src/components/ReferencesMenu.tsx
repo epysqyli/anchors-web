@@ -3,12 +3,14 @@ import { IoCloseCircle } from "solid-icons/io";
 import OverlayContext from "~/contexts/overlay";
 import { Motion, Presence } from "@motionone/solid";
 import { Component, For, Show, useContext } from "solid-js";
+import IRefTag from "~/interfaces/RefTag";
+import RefSearchTagView from "./RefSearchTagView";
 
 interface Props {
   showRefMenu: boolean;
   toggleRefMenu(): void;
-  tags: string[][];
-  addNostrTag(nostrTag: string[]): void;
+  tags: IRefTag[];
+  addNostrTag(nostrTag: IRefTag): void;
 }
 
 // provides two submenus to manage and add new refs to the event
@@ -48,7 +50,7 @@ const ReferencesMenu: Component<Props> = (props) => {
               <For each={tags()}>
                 {(tag) => (
                   <div class="break-words mb-5 w-5/6 mx-auto border-b pb-3 px-2">
-                    {tag[1]}
+                    <RefSearchTagView tag={tag} />
                   </div>
                 )}
               </For>

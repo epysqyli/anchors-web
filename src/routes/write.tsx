@@ -4,6 +4,7 @@ import { AiOutlineSend } from "solid-icons/ai";
 import ReferencesMenu from "~/components/ReferencesMenu";
 import { Component, createSignal, useContext } from "solid-js";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
+import IRefTag from "~/interfaces/RefTag";
 
 declare global {
   interface Window {
@@ -25,6 +26,8 @@ const Write: Component<{}> = () => {
     },
     { equals: false }
   );
+
+  const [refTags, setRefTags] = createSignal<IRefTag[]>([]);
 
   const [showRefMenu, setShowRefMenu] = createSignal<boolean>(false);
   const toggleRefMenu = (): void => {
@@ -50,10 +53,14 @@ const Write: Component<{}> = () => {
     return true;
   };
 
-  const addNostrTag = (nostrTag: string[]): void => {
+  const addNostrTag = (nostrTag: IRefTag): void => {
     const newNostrEvent = nostrEvent();
-    newNostrEvent.tags = [...nostrEvent().tags, nostrTag];
+    newNostrEvent.tags = [...nostrEvent().tags, ["r", nostrTag.value]];
     setNostrEvent(newNostrEvent);
+
+    // add to refTags for RefSearchTagView as well
+    const newRefTags = [...refTags(), nostrTag];
+    setRefTags(newRefTags);
   };
 
   // manage the potential non existence of window.nostr (eg. mobile)
@@ -114,7 +121,7 @@ const Write: Component<{}> = () => {
 
         <ReferencesMenu
           showRefMenu={showRefMenu()}
-          tags={nostrEvent().tags}
+          tags={refTags()}
           toggleRefMenu={toggleRefMenu}
           addNostrTag={addNostrTag}
         />
