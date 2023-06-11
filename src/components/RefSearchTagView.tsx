@@ -7,6 +7,7 @@ import { RiDocumentBook2Line, RiLogosSpotifyLine } from "solid-icons/ri";
 
 interface Props {
   tag: IRefTag;
+  removeTag(tag: IRefTag): void;
 }
 
 const RefSearchTagView: Component<Props> = (props) => {
@@ -33,8 +34,12 @@ const RefSearchTagView: Component<Props> = (props) => {
     <div class="flex items-center justify-between gap-x-5">
       <div class="w-1/6">{icon(props.tag.category)}</div>
       <div class="text break-words w-2/3">{props.tag.value}</div>
-      <div class="w-1/6">
-        <FiTrash class="mx-auto" />
+      <div
+        class="w-1/6 cursor-pointer hover:scale-95 transition
+              hover:bg-orange-100 py-3 rounded-xl hover:text-slate-600"
+        onClick={() => props.removeTag(props.tag)}
+      >
+        <FiTrash size={22} class="mx-auto" />
       </div>
     </div>
   );

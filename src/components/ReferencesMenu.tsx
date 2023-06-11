@@ -11,6 +11,7 @@ interface Props {
   toggleRefMenu(): void;
   tags: IRefTag[];
   addNostrTag(nostrTag: IRefTag): void;
+  removeTag(tag: IRefTag): void;
 }
 
 // provides two submenus to manage and add new refs to the event
@@ -50,7 +51,7 @@ const ReferencesMenu: Component<Props> = (props) => {
               <For each={tags()}>
                 {(tag) => (
                   <div class="break-words mb-5 w-5/6 mx-auto border-b pb-3 px-2">
-                    <RefSearchTagView tag={tag} />
+                    <RefSearchTagView tag={tag} removeTag={props.removeTag} />
                   </div>
                 )}
               </For>

@@ -27,7 +27,7 @@ const Write: Component<{}> = () => {
     { equals: false }
   );
 
-  const [refTags, setRefTags] = createSignal<IRefTag[]>([]);
+  const [refTags, setRefTags] = createSignal<IRefTag[]>([], { equals: false });
 
   const [showRefMenu, setShowRefMenu] = createSignal<boolean>(false);
   const toggleRefMenu = (): void => {
@@ -58,9 +58,30 @@ const Write: Component<{}> = () => {
     newNostrEvent.tags = [...nostrEvent().tags, ["r", nostrTag.value]];
     setNostrEvent(newNostrEvent);
 
-    // add to refTags for RefSearchTagView as well
+    // add to refTags for RefSearchTagView
     const newRefTags = [...refTags(), nostrTag];
     setRefTags(newRefTags);
+  };
+
+  const removeNostrTag = (nostrTag: IRefTag): void => {
+    const indexOfTagToRemove = nostrEvent().tags.findIndex(
+      (t) => t[1] === nostrTag.value
+    );
+
+    const currentTags = nostrEvent().tags;
+    currentTags.splice(indexOfTagToRemove, 1);
+    const newNostrEvent = nostrEvent();
+    newNostrEvent.tags = currentTags;
+    setNostrEvent(newNostrEvent);
+
+    // remove from refTags for RefSearchTagView
+    const indexOfRefTagToRemove = refTags().findIndex(
+      (rf) => rf.value == nostrTag.value
+    );
+
+    const currentRefTags = refTags();
+    currentRefTags.splice(indexOfRefTagToRemove, 1);
+    setRefTags(currentRefTags);
   };
 
   // manage the potential non existence of window.nostr (eg. mobile)
@@ -124,6 +145,7 @@ const Write: Component<{}> = () => {
           tags={refTags()}
           toggleRefMenu={toggleRefMenu}
           addNostrTag={addNostrTag}
+          removeTag={removeNostrTag}
         />
       </div>
     </>
