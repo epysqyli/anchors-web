@@ -1,5 +1,4 @@
 import { VsReferences } from "solid-icons/vs";
-import OverlayContext from "~/contexts/overlay";
 import { RelayContext } from "~/contexts/relay";
 import { AiOutlineSend } from "solid-icons/ai";
 import ReferencesMenu from "~/components/ReferencesMenu";
@@ -17,16 +16,15 @@ declare global {
 const Write: Component<{}> = () => {
   const relay = useContext(RelayContext);
 
-  const [nostrEvent] = createSignal<EventTemplate>({
-    content: "",
-    created_at: Math.floor(Date.now() / 1000),
-    kind: Kind.Text,
-    tags: [
-      ["r", "https://www.solidjs.com/docs/latest/api#starttransition"],
-      ["r", "https://www.youtube.com/watch?v=Fu3yMv0KmrE"],
-      ["r", "https://openlibrary.org/books/OL7506950M"],
-    ],
-  });
+  const [nostrEvent, setNostrEvent] = createSignal<EventTemplate>(
+    {
+      content: "",
+      created_at: Math.floor(Date.now() / 1000),
+      kind: Kind.Text,
+      tags: [],
+    },
+    { equals: false }
+  );
 
   const [showRefMenu, setShowRefMenu] = createSignal<boolean>(false);
   const toggleRefMenu = (): void => {
@@ -50,6 +48,12 @@ const Write: Component<{}> = () => {
     }
 
     return true;
+  };
+
+  const addNostrTag = (nostrTag: string[]): void => {
+    const newNostrEvent = nostrEvent();
+    newNostrEvent.tags = [...nostrEvent().tags, nostrTag];
+    setNostrEvent(newNostrEvent);
   };
 
   // manage the potential non existence of window.nostr (eg. mobile)
@@ -112,6 +116,7 @@ const Write: Component<{}> = () => {
           showRefMenu={showRefMenu()}
           tags={nostrEvent().tags}
           toggleRefMenu={toggleRefMenu}
+          addNostrTag={addNostrTag}
         />
       </div>
     </>

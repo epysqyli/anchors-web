@@ -8,6 +8,7 @@ interface Props {
   showRefMenu: boolean;
   toggleRefMenu(): void;
   tags: string[][];
+  addNostrTag(nostrTag: string[]): void;
 }
 
 // provides two submenus to manage and add new refs to the event
@@ -43,7 +44,7 @@ const ReferencesMenu: Component<Props> = (props) => {
           class="h-[80%] w-[80%] bg-slate-700 rounded-md text-slate-200"
         >
           <div class="relative flex h-full py-3">
-            <div class="w-1/2 py-2">
+            <div class="w-1/2 py-2 overflow-y-auto custom-scrollbar">
               <For each={tags()}>
                 {(tag) => (
                   <div class="break-words mb-5 w-5/6 mx-auto border-b pb-3 px-2">
@@ -54,7 +55,7 @@ const ReferencesMenu: Component<Props> = (props) => {
             </div>
 
             <div class="w-1/2 py-2 border-l-2 border-slate-400">
-              <RefsSearch />
+              <RefsSearch addNostrTag={props.addNostrTag} />
             </div>
           </div>
 
