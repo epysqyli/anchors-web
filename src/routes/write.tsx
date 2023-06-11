@@ -1,4 +1,4 @@
-import IRefTag from "~/interfaces/RefTag";
+import IRefTag from "~/interfaces/IRefTag";
 import { VsReferences } from "solid-icons/vs";
 import { RelayContext } from "~/contexts/relay";
 import { AiOutlineSend } from "solid-icons/ai";

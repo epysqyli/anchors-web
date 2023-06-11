@@ -1,5 +1,5 @@
 import { Component, JSX } from "solid-js";
-import IRefTag from "~/interfaces/RefTag";
+import IRefTag from "~/interfaces/IRefTag";
 import { FiTrash } from "solid-icons/fi";
 import { BiRegularCameraMovie } from "solid-icons/bi";
 import { AiOutlineLink, AiOutlineYoutube } from "solid-icons/ai";

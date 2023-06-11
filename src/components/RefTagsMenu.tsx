@@ -1,4 +1,4 @@
-import IRefTag from "~/interfaces/RefTag";
+import IRefTag from "~/interfaces/IRefTag";
 import RefTagElement from "./RefTagElement";
 import { IoCloseCircle } from "solid-icons/io";
 import OverlayContext from "~/contexts/overlay";
