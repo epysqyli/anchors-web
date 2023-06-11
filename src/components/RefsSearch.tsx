@@ -11,7 +11,6 @@ interface RefType {
   icon: JSX.Element;
   selected: boolean;
   category: string;
-  mode: "search" | "direct";
 }
 
 interface Props {
@@ -25,35 +24,30 @@ const RefsSearch: Component<Props> = (props) => {
       selected: false,
       url: "",
       category: "books",
-      mode: "search",
     },
     {
       icon: <AiOutlineYoutube size={26} />,
       selected: false,
       url: "",
       category: "videos",
-      mode: "search",
     },
     {
       icon: <BiRegularCameraMovie size={26} />,
       selected: false,
       url: "",
       category: "movies",
-      mode: "search",
     },
     {
       icon: <RiLogosSpotifyLine size={26} />,
       selected: false,
       url: "",
       category: "songs",
-      mode: "search",
     },
     {
       icon: <AiOutlineLink size={26} />,
       selected: true,
       url: "",
       category: "generic",
-      mode: "direct",
     },
   ]);
 
@@ -72,7 +66,6 @@ const RefsSearch: Component<Props> = (props) => {
         selected: rt.selected,
         url: rt.url,
         category: rt.category,
-        mode: rt.mode,
       };
 
       return reftype;
@@ -126,7 +119,7 @@ const RefsSearch: Component<Props> = (props) => {
         </For>
       </div>
 
-      <Show when={refTypes().find((rt) => rt.selected)?.mode == "direct"}>
+      <Show when={refTypes().find((rt) => rt.selected)?.category == "generic"}>
         <form onSubmit={sendForm}>
           <input
             placeholder="add an external resource's URL"
