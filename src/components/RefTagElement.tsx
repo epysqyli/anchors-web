@@ -1,4 +1,4 @@
-import { VsClose } from 'solid-icons/vs'
+import { VsClose } from "solid-icons/vs";
 import { Component, JSX } from "solid-js";
 import IRefTag from "~/interfaces/IRefTag";
 import { BiRegularCameraMovie } from "solid-icons/bi";
@@ -35,7 +35,7 @@ const RefTagElement: Component<Props> = (props) => {
       <div class="w-1/6">{icon(props.tag.category)}</div>
       <div class="text break-words w-2/3">{props.tag.value}</div>
       <div
-        class="w-1/6 cursor-pointer hover:scale-95 transition
+        class="w-1/6 cursor-pointer hover:scale-90 transition active:bg-orange-200
               hover:bg-orange-100 hover:text-slate-600 rounded py-2 mr-1"
         onClick={() => props.removeTag(props.tag)}
       >
