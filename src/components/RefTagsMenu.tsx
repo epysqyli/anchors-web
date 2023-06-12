@@ -41,7 +41,7 @@ const RefTagsMenu: Component<Props> = (props) => {
             transition: { duration: 0.2, easing: "ease-in" },
           }}
           onMotionStart={overlay.toggleOverlay}
-          class="h-[80%] w-[80%] bg-slate-700 rounded-md text-slate-200"
+          class="h-[100%] w-[80%] bg-slate-700 rounded-md text-slate-200"
         >
           <div class="relative flex h-full py-3">
             <div class="w-1/2 py-2 overflow-y-auto custom-scrollbar">
