@@ -111,18 +111,18 @@ const Write: Component<{}> = () => {
       >
         Write a new idea
       </h1>
-      <div class="relative">
+      <div class="relative flex-col justify-between h-[65vh]">
         <textarea
           placeholder="An idea that gives meaning to the world ..."
           class="block focus:outline-none w-11/12 md:w-2/3 mx-auto bg-transparent p-5 md:p-10
-               text-slate-300 caret-orange-200 resize-none custom-scrollbar mt-5"
+               text-slate-300 caret-orange-200 resize-none custom-scrollbar mt-5 grow-1 h-full"
           rows={15}
           onInput={updateContent}
         ></textarea>
 
         <div
           class="flex mx-auto text-slate-100 justify-between md:justify-around 
-                  w-3/5 md:w-2/5 mt-20 md:mt-24 md:py-5
+                  w-3/5 md:w-2/5 md:py-5
                   md:border-t-2 shadow-inner md:border-slate-200
                   md:border-dotted md:border-opacity-25"
         >
