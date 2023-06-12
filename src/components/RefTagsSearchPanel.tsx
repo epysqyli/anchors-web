@@ -120,7 +120,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       </div>
 
       <Show when={refTypes().find((rt) => rt.selected)?.category == "generic"}>
-        <form onSubmit={sendForm}>
+        <form onSubmit={sendForm} class="mt-16">
           <input
             placeholder="add an external resource's URL"
             type="text"
@@ -130,8 +130,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                placeholder:text-center placeholder:text-sm text-slate-500 text-center
                focus:placeholder-none"
           />
-          <button class="block mx-auto w-fit mt-10">
-            <VsAdd size={32} />
+          <button class="block mx-auto w-fit mt-5 group rounded-full hover:bg-slate-600 active:bg-slate-800 p-3">
+            <VsAdd size={32} class="group-hover:scale-90" />
           </button>
         </form>
       </Show>
