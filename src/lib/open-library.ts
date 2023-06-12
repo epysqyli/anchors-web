@@ -1,6 +1,8 @@
 import axios from "axios";
 
 interface OpenLibraryResult {
+  key: string;
+  url: string;
   title: string;
   author_name: string[];
   author_key: string[];
@@ -20,7 +22,10 @@ const searchBook = async (
     url: `https://openlibrary.org/search.json?title=${title}`,
   });
 
-  return resp.data.docs as OpenLibraryResult[];
+  return (resp.data.docs as OpenLibraryResult[]).map((res) => {
+    res.url = `https://openlibrary.org${res.key}`;
+    return res;
+  });
 };
 
 export { searchBook };
