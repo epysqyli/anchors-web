@@ -88,7 +88,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     setRefTag(updatedRefTag);
   };
 
-  const sendForm = (e: Event) => {
+  const addTag = (e: Event) => {
     e.preventDefault();
     if (refTag().value.trim() == "") {
       console.log("show a visual error here");
@@ -120,7 +120,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       </div>
 
       <Show when={refTypes().find((rt) => rt.selected)?.category == "generic"}>
-        <form onSubmit={sendForm} class="mt-16">
+        <form onSubmit={addTag} class="mt-16">
           <input
             placeholder="add an external resource's URL"
             type="text"
