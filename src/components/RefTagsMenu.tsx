@@ -47,9 +47,12 @@ const RefTagsMenu: Component<Props> = (props) => {
             <div class="w-1/2 py-2 overflow-y-auto custom-scrollbar">
               <For each={tags()}>
                 {(tag) => (
-                  <div class="break-words mb-5 w-5/6 mx-auto border-b pb-3 px-2">
+                  <Motion.div
+                    animate={{ scale: [0.5, 1] }}
+                    class="mb-3 w-11/12 mx-auto"
+                  >
                     <RefTagElement tag={tag} removeTag={props.removeTag} />
-                  </div>
+                  </Motion.div>
                 )}
               </For>
             </div>

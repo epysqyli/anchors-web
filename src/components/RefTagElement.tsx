@@ -1,6 +1,6 @@
+import { VsClose } from 'solid-icons/vs'
 import { Component, JSX } from "solid-js";
 import IRefTag from "~/interfaces/IRefTag";
-import { FiTrash } from "solid-icons/fi";
 import { BiRegularCameraMovie } from "solid-icons/bi";
 import { AiOutlineLink, AiOutlineYoutube } from "solid-icons/ai";
 import { RiDocumentBook2Line, RiLogosSpotifyLine } from "solid-icons/ri";
@@ -31,15 +31,15 @@ const RefTagElement: Component<Props> = (props) => {
   };
 
   return (
-    <div class="flex items-center justify-between gap-x-5">
+    <div class="flex items-center justify-between gap-x-5 bg-slate-600 rounded">
       <div class="w-1/6">{icon(props.tag.category)}</div>
       <div class="text break-words w-2/3">{props.tag.value}</div>
       <div
         class="w-1/6 cursor-pointer hover:scale-95 transition
-              hover:bg-orange-100 py-3 rounded-xl hover:text-slate-600"
+              hover:bg-orange-100 hover:text-slate-600 rounded py-2 mr-1"
         onClick={() => props.removeTag(props.tag)}
       >
-        <FiTrash size={22} class="mx-auto" />
+        <VsClose size={20} class="mx-auto" />
       </div>
     </div>
   );
