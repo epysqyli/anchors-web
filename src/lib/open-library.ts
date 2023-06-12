@@ -10,6 +10,7 @@ interface OpenLibraryResult {
   has_fulltext: boolean;
   first_publish_year: number;
   cover_i: number;
+  cover_url: string;
 }
 
 const searchBook = async (
@@ -24,6 +25,7 @@ const searchBook = async (
 
   return (resp.data.docs as OpenLibraryResult[]).map((res) => {
     res.url = `https://openlibrary.org${res.key}`;
+    res.cover_url = `https://covers.openlibrary.org/b/id/${res.cover_i}-M.jpg`;
     return res;
   });
 };
