@@ -41,7 +41,7 @@ const RefTagsMenu: Component<Props> = (props) => {
             transition: { duration: 0.2, easing: "ease-in" },
           }}
           onMotionStart={overlay.toggleOverlay}
-          class="h-[100%] w-[80%] bg-slate-700 rounded-md text-slate-200"
+          class="h-[70vh] w-[80%] bg-slate-700 rounded-md text-slate-200"
         >
           <div class="relative flex h-full py-3">
             <div class="w-1/2 py-2 overflow-y-auto custom-scrollbar">
@@ -57,7 +57,7 @@ const RefTagsMenu: Component<Props> = (props) => {
               </For>
             </div>
 
-            <div class="w-1/2 py-2 border-l-2 border-slate-400">
+            <div class="w-1/2 py-2 border-l-2 border-slate-400 h-full">
               <RefTagsSearchPanel addNostrTag={props.addNostrTag} />
             </div>
           </div>

@@ -4,10 +4,10 @@ import { RiLogosSpotifyLine } from "solid-icons/ri";
 import { RiDocumentBook2Line } from "solid-icons/ri";
 import { BiRegularCameraMovie } from "solid-icons/bi";
 import { AiOutlineYoutube, AiOutlineLink } from "solid-icons/ai";
-import { Component, For, JSX, Show, createSignal, onMount } from "solid-js";
+import { Component, For, JSX, Show, createSignal } from "solid-js";
+import RefTagsSearch from "./RefTagsSearch";
 
 interface RefType {
-  url: string;
   icon: JSX.Element;
   selected: boolean;
   category: string;
@@ -22,38 +22,33 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     {
       icon: <RiDocumentBook2Line size={26} />,
       selected: false,
-      url: "",
-      category: "books",
+      category: "books"
     },
     {
       icon: <AiOutlineYoutube size={26} />,
       selected: false,
-      url: "",
-      category: "videos",
+      category: "videos"
     },
     {
       icon: <BiRegularCameraMovie size={26} />,
       selected: false,
-      url: "",
-      category: "movies",
+      category: "movies"
     },
     {
       icon: <RiLogosSpotifyLine size={26} />,
       selected: false,
-      url: "",
-      category: "songs",
+      category: "songs"
     },
     {
       icon: <AiOutlineLink size={26} />,
       selected: true,
-      url: "",
-      category: "generic",
-    },
+      category: "generic"
+    }
   ]);
 
   const [refTag, setRefTag] = createSignal<IRefTag>({
     category: "generic",
-    value: "",
+    value: ""
   });
 
   const basicStyle =
@@ -65,8 +60,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       const reftype: RefType = {
         icon: rt.icon,
         selected: rt.selected,
-        url: rt.url,
-        category: rt.category,
+        category: rt.category
       };
 
       return reftype;
@@ -84,7 +78,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     const inputValue = (e.currentTarget as HTMLInputElement).value;
     const updatedRefTag: IRefTag = {
       category: refTag().category,
-      value: inputValue,
+      value: inputValue
     };
     setRefTag(updatedRefTag);
   };
@@ -102,8 +96,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   };
 
   return (
-    <div>
-      <div class="flex items-center justify-around w-5/6 mx-auto">
+    <>
+      <div class='flex items-center justify-around w-5/6 mx-auto'>
         <For each={refTypes()}>
           {(refType) => {
             return (
@@ -111,9 +105,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                 onClick={() => selectRefType(refType.category)}
                 class={refType.selected ? selectedStyle : basicStyle}
               >
-                <div class="group-hover:scale-110 group-active:scale-95 transition">
-                  {refType.icon}
-                </div>
+                <div class='group-hover:scale-110 group-active:scale-95 transition'>{refType.icon}</div>
               </div>
             );
           }}
@@ -121,22 +113,26 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       </div>
 
       <Show when={refTypes().find((rt) => rt.selected)?.category == "generic"}>
-        <form onSubmit={addTag} class="mt-16">
+        <form onSubmit={addTag} class='mt-16'>
           <input
             placeholder="add an external resource's URL"
-            type="text"
+            type='text'
             value={refTag().value}
             onChange={updateRefValue}
-            class="block focus:outline-none mx-auto mt-10 rounded py-2 caret-slate-600
+            class='block focus:outline-none mx-auto mt-10 rounded py-2 caret-slate-600
                placeholder:text-center placeholder:text-sm text-slate-500 text-center
-               focus:placeholder-none"
+               focus:placeholder-none'
           />
-          <button class="block mx-auto w-fit mt-5 group rounded-full hover:bg-slate-600 active:bg-slate-800 p-3">
-            <VsAdd size={32} class="group-hover:scale-90" />
+          <button class='block mx-auto w-fit mt-5 group rounded-full hover:bg-slate-600 active:bg-slate-800 p-3'>
+            <VsAdd size={32} class='group-hover:scale-90' />
           </button>
         </form>
       </Show>
-    </div>
+
+      <Show when={refTypes().find((rt) => rt.selected)?.category != "generic"}>
+        <RefTagsSearch category={refTypes().find((rt) => rt.selected)!.category} />
+      </Show>
+    </>
   );
 };
 

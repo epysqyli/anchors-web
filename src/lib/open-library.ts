@@ -4,13 +4,10 @@ interface OpenLibraryResult {
   key: string;
   url: string;
   title: string;
-  author_name: string[];
-  author_key: string[];
-  edition_count: number;
-  has_fulltext: boolean;
-  first_publish_year: number;
   cover_i: number;
   cover_url: string;
+  author_name: string[];
+  first_publish_year: number;
 }
 
 const searchBook = async (searchString: string): Promise<OpenLibraryResult[]> => {
@@ -23,7 +20,10 @@ const searchBook = async (searchString: string): Promise<OpenLibraryResult[]> =>
 
   return (resp.data.docs as OpenLibraryResult[]).map((res) => {
     res.url = `https://openlibrary.org${res.key}`;
-    res.cover_url = `https://covers.openlibrary.org/b/id/${res.cover_i}-M.jpg`;
+    res.cover_url = `https://covers.openlibrary.org/b/id/${res.cover_i}-S.jpg`;
+    res.author_name = res.author_name == undefined ? [] : res.author_name;
+    res.first_publish_year = res.first_publish_year == undefined ? 0 : res.first_publish_year;
+
     return res;
   });
 };
