@@ -56,7 +56,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     value: "",
   });
 
-  const basicStyle = "p-2 rounded-xl cursor-pointer group transition";
+  const basicStyle =
+    "p-2 rounded-xl cursor-pointer group transition-scale hover:bg-slate-400 hover:text-slate-700";
   const selectedStyle = basicStyle + " bg-slate-50 text-slate-700";
 
   const selectRefType = (category: string) => {
