@@ -1,7 +1,7 @@
 import { Event } from "nostr-tools";
 import { Component, For, Show } from "solid-js";
 import { BiRegularBoltCircle } from "solid-icons/bi";
-import RefTagFeedElement from "../RefTagFeedElement";
+import RefTagFeedElement from "./RefTagFeedElement";
 
 interface Props {
   isNarrow: boolean | undefined;
