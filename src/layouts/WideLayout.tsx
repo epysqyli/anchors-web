@@ -1,4 +1,4 @@
-import Menu from "~/components/Menu";
+import Menu from "~/components/shared/Menu";
 import { Component, JSX, useContext } from "solid-js";
 import { Rerun } from "@solid-primitives/keyed";
 import { Motion, Presence } from "@motionone/solid";

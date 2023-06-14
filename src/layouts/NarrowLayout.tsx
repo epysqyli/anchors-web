@@ -1,4 +1,4 @@
-import Menu from "~/components/Menu";
+import Menu from "~/components/shared/Menu";
 import { Motion, Presence } from "@motionone/solid";
 import { Accessor, Component, JSX, Show, useContext } from "solid-js";
 import OverlayContext from "~/contexts/overlay";

@@ -1,4 +1,4 @@
-import { searchBook } from "../lib/open-library";
+import { searchBook } from "../../lib/open-library";
 import { BiRegularSearchAlt2 } from "solid-icons/bi";
 import { Component, For, createSignal } from "solid-js";
 

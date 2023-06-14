@@ -16,7 +16,7 @@ import {
   validateEvent,
   verifySignature,
 } from "nostr-tools";
-import EventWrapper from "~/components/EventWrapper";
+import EventWrapper from "~/components/feed/EventWrapper";
 
 const Home: Component<{}> = () => {
   const [events, setEvents] = createSignal<Event[]>([]);
