@@ -5,6 +5,7 @@ import { AiOutlineSearch } from "solid-icons/ai";
 import { FiAnchor, FiEdit } from "solid-icons/fi";
 import { IoSettingsOutline } from "solid-icons/io";
 import { BiRegularCollection } from "solid-icons/bi";
+import { useLocation } from "solid-start";
 
 interface Props {
   isNarrow: boolean | undefined;
@@ -12,6 +13,8 @@ interface Props {
 }
 
 const Menu: Component<Props> = (props) => {
+  const location = useLocation();
+
   const narrowStyle = `text-lg bg-gradient-to-br from-slate-600 via-slate-700
                        via-20% to-gray-900 to-90% pt-10 h-[100vh]`;
 
@@ -25,6 +28,9 @@ const Menu: Component<Props> = (props) => {
                        transition cursor-pointer group active:scale-90
                        hover:text-orange-200 flex items-center justify-between`;
 
+  const selectedActionStyle = actionStyle + " border border-slate-200";
+  const active = (path: string) => path == location.pathname;
+
   return (
     <>
       <Show when={props.isNarrow !== undefined}>
@@ -34,35 +40,35 @@ const Menu: Component<Props> = (props) => {
           </div>
 
           <A onClick={props.toggleMenu} href="/">
-            <div class={actionStyle}>
+            <div class={active("/feed") ? selectedActionStyle : actionStyle}>
               <CgFeed size={26} />
               <div class="group-hover:scale-95">feed</div>
             </div>
           </A>
 
           <A onClick={props.toggleMenu} href="/write">
-            <div class={actionStyle}>
+            <div class={active("/write") ? selectedActionStyle : actionStyle}>
               <FiEdit size={26} />
               <div class="group-hover:scale-95">write</div>
             </div>
           </A>
 
           <A onClick={props.toggleMenu} href="/search">
-            <div class={actionStyle}>
+            <div class={active("/search") ? selectedActionStyle : actionStyle}>
               <AiOutlineSearch size={26} />
               <div class="group-hover:scale-95">search</div>
             </div>
           </A>
 
           <A onClick={props.toggleMenu} href="/my-posts">
-            <div class={actionStyle}>
+            <div class={active("/my-posts") ? selectedActionStyle : actionStyle}>
               <BiRegularCollection size={26} />
               <div class="group-hover:scale-95">my posts</div>
             </div>
           </A>
 
           <A onClick={props.toggleMenu} href="/settings">
-            <div class={actionStyle}>
+            <div class={active("/settings") ? selectedActionStyle : actionStyle}>
               <IoSettingsOutline size={26} />
               <div class="group-hover:scale-95">settings</div>
             </div>
