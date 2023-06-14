@@ -13,14 +13,12 @@ interface OpenLibraryResult {
   cover_url: string;
 }
 
-const searchBook = async (
-  searchString: string
-): Promise<OpenLibraryResult[]> => {
+const searchBook = async (searchString: string): Promise<OpenLibraryResult[]> => {
   const title = searchString.split(" ").reduce((acc, s) => `${acc}+${s}`);
 
   const resp = await axios({
     method: "GET",
-    url: `https://openlibrary.org/search.json?title=${title}`,
+    url: `https://openlibrary.org/search.json?title=${title}`
   });
 
   return (resp.data.docs as OpenLibraryResult[]).map((res) => {
