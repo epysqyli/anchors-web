@@ -39,7 +39,7 @@ const Menu: Component<Props> = (props) => {
           </div>
 
           <A onClick={props.toggleMenu} href="/">
-            <div class={active("/feed") ? selectedActionStyle : actionStyle}>
+            <div class={active("/") ? selectedActionStyle : actionStyle}>
               <CgFeed size={26} />
               <div class="group-hover:scale-95">feed</div>
             </div>
