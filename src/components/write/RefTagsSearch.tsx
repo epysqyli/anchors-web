@@ -1,5 +1,5 @@
+import { BsSearch } from "solid-icons/bs";
 import { searchBook } from "../../lib/open-library";
-import { BiRegularSearchAlt2 } from "solid-icons/bi";
 import { Component, For, createSignal } from "solid-js";
 
 interface Props {
@@ -59,7 +59,7 @@ const RefTagsSearch: Component<Props> = (props) => {
             focus:placeholder-none'
           />
           <button>
-            <BiRegularSearchAlt2 size={30} class='hover:scale-105 active:scale-95 cursor-pointer' />
+            <BsSearch size={22} class='hover:scale-105 active:scale-95 cursor-pointer' />
           </button>
         </form>
       </div>
