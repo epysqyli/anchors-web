@@ -1,9 +1,9 @@
 import { VsClose } from "solid-icons/vs";
 import { Component, JSX } from "solid-js";
-import IRefTag from "~/interfaces/IRefTag";
 import { BiRegularCameraMovie } from "solid-icons/bi";
 import { AiOutlineLink, AiOutlineYoutube } from "solid-icons/ai";
 import { RiDocumentBook2Line, RiLogosSpotifyLine } from "solid-icons/ri";
+import { IRefTag } from "~/interfaces/IRefTag";
 
 interface Props {
   tag: IRefTag;

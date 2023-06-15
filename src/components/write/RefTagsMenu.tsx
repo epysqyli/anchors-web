@@ -1,4 +1,4 @@
-import IRefTag from "~/interfaces/IRefTag";
+import { IRefTag } from "~/interfaces/IRefTag";
 import RefTagElement from "./RefTagElement";
 import OverlayContext from "~/contexts/overlay";
 import { Motion, Presence } from "@motionone/solid";

@@ -1,9 +1,9 @@
 import { VsAdd } from "solid-icons/vs";
-import { FiLink } from 'solid-icons/fi'
-import IRefTag from "~/interfaces/IRefTag";
+import { FiLink } from "solid-icons/fi";
+import { IRefTag } from "~/interfaces/IRefTag";
 import RefTagsSearch from "./RefTagsSearch";
-import { RiMediaMovie2Line } from 'solid-icons/ri'
-import { RiLogosYoutubeLine } from 'solid-icons/ri'
+import { RiMediaMovie2Line } from "solid-icons/ri";
+import { RiLogosYoutubeLine } from "solid-icons/ri";
 import { RiLogosSpotifyLine } from "solid-icons/ri";
 import { RiDocumentBook2Line } from "solid-icons/ri";
 import { Component, For, JSX, Show, createSignal } from "solid-js";
@@ -86,6 +86,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const addTag = (e: Event) => {
     e.preventDefault();
+
     if (refTag().value.trim() == "") {
       console.log("show a visual error here");
       return;
@@ -131,7 +132,10 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       </Show>
 
       <Show when={refTypes().find((rt) => rt.selected)?.category != "generic"}>
-        <RefTagsSearch category={refTypes().find((rt) => rt.selected)!.category} />
+        <RefTagsSearch
+          category={refTypes().find((rt) => rt.selected)!.category}
+          addNostrTag={props.addNostrTag}
+        />
       </Show>
     </>
   );

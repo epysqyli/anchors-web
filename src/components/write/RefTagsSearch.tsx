@@ -1,20 +1,18 @@
 import { BsSearch } from "solid-icons/bs";
 import { searchBook } from "../../lib/open-library";
 import { Component, For, createSignal } from "solid-js";
+import IRefTagResult from "~/interfaces/IRefTagResult";
+import RefTagResult from "./RefTagResult";
+import { IRefTag } from "~/interfaces/IRefTag";
 
 interface Props {
   category: string;
-}
-
-interface SearchResult {
-  refIdentifier: string;
-  imageUrl: string;
-  info: { main: string; secondary: string; optional: string };
+  addNostrTag(nostrTag: IRefTag): void;
 }
 
 const RefTagsSearch: Component<Props> = (props) => {
   const [searchTerms, setSearchTerms] = createSignal<string>("");
-  const [searchResults, setSearchResults] = createSignal<SearchResult[]>([]);
+  const [searchResults, setSearchResults] = createSignal<IRefTagResult[]>([]);
 
   const updateSearchTerms = (e: Event) => {
     setSearchTerms((e.currentTarget as HTMLInputElement).value);
@@ -28,22 +26,7 @@ const RefTagsSearch: Component<Props> = (props) => {
       return;
     }
 
-    // manage all empty result fields
-    // setup a proper function to structure data in this generic way
-    // setup a more general design that returns, for all resource types, a result T[]
-    const results: SearchResult[] = (await searchBook(searchTerms())).map((r) => {
-      return {
-        refIdentifier: r.url,
-        imageUrl: r.cover_url,
-        info: {
-          main: r.title,
-          secondary: r.author_name.length != 0 ? r.author_name[0] : "",
-          optional: r.first_publish_year.toString()
-        }
-      };
-    });
-
-    setSearchResults(results);
+    setSearchResults(await searchBook(searchTerms()));
   };
 
   return (
@@ -65,16 +48,7 @@ const RefTagsSearch: Component<Props> = (props) => {
       </div>
 
       <div class='w-5/6 mx-auto my-5 h-3/4 custom-scrollbar overflow-y-auto'>
-        <For each={searchResults()}>
-          {(res) => {
-            return (
-              <div class='flex items-center justify-between my-2 p-1'>
-                <img src={res.imageUrl} loading='lazy' class='rounded border' />
-                <div>{res.info.main}</div>
-              </div>
-            );
-          }}
-        </For>
+        <For each={searchResults()}>{(res) => <RefTagResult result={res} addTag={props.addNostrTag} />}</For>
       </div>
     </div>
   );
