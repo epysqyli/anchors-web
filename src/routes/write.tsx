@@ -1,7 +1,7 @@
+import { VsSend } from 'solid-icons/vs'
 import IRefTag from "~/interfaces/IRefTag";
 import { VsReferences } from "solid-icons/vs";
 import { RelayContext } from "~/contexts/relay";
-import { AiOutlineSend } from "solid-icons/ai";
 import RefTagsMenu from "~/components/write/RefTagsMenu";
 import { Component, createSignal, useContext } from "solid-js";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
@@ -136,7 +136,7 @@ const Write: Component<{}> = () => {
             class="hover:text-orange-200 active:scale-95 transition-all"
             onClick={signAndPublishNostrEvent}
           >
-            <AiOutlineSend size={32} />
+            <VsSend size={32} />
           </button>
         </div>
 

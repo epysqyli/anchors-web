@@ -1,11 +1,10 @@
 import { A } from "@solidjs/router";
 import { Component, Show } from "solid-js";
 import { CgFeed } from "solid-icons/cg";
-import { AiOutlineSearch } from "solid-icons/ai";
 import { FiAnchor, FiEdit } from "solid-icons/fi";
 import { IoSettingsOutline } from "solid-icons/io";
-import { BiRegularCollection } from "solid-icons/bi";
 import { useLocation } from "solid-start";
+import { BsStack, BsSearch } from 'solid-icons/bs'
 
 interface Props {
   isNarrow: boolean | undefined;
@@ -55,14 +54,14 @@ const Menu: Component<Props> = (props) => {
 
           <A onClick={props.toggleMenu} href="/search">
             <div class={active("/search") ? selectedActionStyle : actionStyle}>
-              <AiOutlineSearch size={26} />
+              <BsSearch size={26} />
               <div class="group-hover:scale-95">search</div>
             </div>
           </A>
 
           <A onClick={props.toggleMenu} href="/my-posts">
             <div class={active("/my-posts") ? selectedActionStyle : actionStyle}>
-              <BiRegularCollection size={26} />
+              <BsStack size={26} />
               <div class="group-hover:scale-95">my posts</div>
             </div>
           </A>

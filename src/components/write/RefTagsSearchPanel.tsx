@@ -1,11 +1,12 @@
 import { VsAdd } from "solid-icons/vs";
+import { FiLink } from 'solid-icons/fi'
 import IRefTag from "~/interfaces/IRefTag";
+import RefTagsSearch from "./RefTagsSearch";
+import { RiMediaMovie2Line } from 'solid-icons/ri'
+import { RiLogosYoutubeLine } from 'solid-icons/ri'
 import { RiLogosSpotifyLine } from "solid-icons/ri";
 import { RiDocumentBook2Line } from "solid-icons/ri";
-import { BiRegularCameraMovie } from "solid-icons/bi";
-import { AiOutlineYoutube, AiOutlineLink } from "solid-icons/ai";
 import { Component, For, JSX, Show, createSignal } from "solid-js";
-import RefTagsSearch from "./RefTagsSearch";
 
 interface RefType {
   icon: JSX.Element;
@@ -25,12 +26,12 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       category: "books"
     },
     {
-      icon: <AiOutlineYoutube size={26} />,
+      icon: <RiLogosYoutubeLine size={26} />,
       selected: false,
       category: "videos"
     },
     {
-      icon: <BiRegularCameraMovie size={26} />,
+      icon: <RiMediaMovie2Line size={26} />,
       selected: false,
       category: "movies"
     },
@@ -40,7 +41,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       category: "songs"
     },
     {
-      icon: <AiOutlineLink size={26} />,
+      icon: <FiLink size={26} />,
       selected: true,
       category: "generic"
     }

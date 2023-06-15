@@ -1,9 +1,9 @@
 import IRefTag from "~/interfaces/IRefTag";
 import RefTagElement from "./RefTagElement";
-import { IoCloseCircle } from "solid-icons/io";
 import OverlayContext from "~/contexts/overlay";
 import { Motion, Presence } from "@motionone/solid";
 import RefTagsSearchPanel from "./RefTagsSearchPanel";
+import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import { Component, For, Show, useContext } from "solid-js";
 
 interface Props {
@@ -31,42 +31,39 @@ const RefTagsMenu: Component<Props> = (props) => {
             scale: [0.3, 1.05, 1],
             left: ["50%", "50%", "50%"],
             x: ["-50%", "-50%", "-50%"],
-            zIndex: 1,
+            zIndex: 1
           }}
           transition={{ duration: 0.4, easing: "ease-out" }}
           exit={{
             opacity: [1, 0.9, 0.1],
             scale: [1, 1.1, 0.3],
             zIndex: 0,
-            transition: { duration: 0.2, easing: "ease-in" },
+            transition: { duration: 0.2, easing: "ease-in" }
           }}
           onMotionStart={overlay.toggleOverlay}
-          class="h-[70vh] w-[80%] bg-slate-700 rounded-md text-slate-200"
+          class='h-[70vh] w-[80%] bg-slate-700 rounded-md text-slate-200'
         >
-          <div class="relative flex h-full py-3">
-            <div class="w-1/2 py-2 overflow-y-auto custom-scrollbar">
+          <div class='relative flex h-full py-3'>
+            <div class='w-1/2 py-2 overflow-y-auto custom-scrollbar'>
               <For each={tags()}>
                 {(tag) => (
-                  <Motion.div
-                    animate={{ scale: [0.5, 1] }}
-                    class="mb-3 w-11/12 mx-auto"
-                  >
+                  <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
                     <RefTagElement tag={tag} removeTag={props.removeTag} />
                   </Motion.div>
                 )}
               </For>
             </div>
 
-            <div class="w-1/2 py-2 border-l-2 border-slate-400 h-full">
+            <div class='w-1/2 py-2 border-l-2 border-slate-400 h-full'>
               <RefTagsSearchPanel addNostrTag={props.addNostrTag} />
             </div>
           </div>
 
           <button
-            class="absolute -top-3 -right-3 cursor-pointer transition hover:scale-95"
+            class='absolute -top-3 -right-3 cursor-pointer transition hover:scale-95'
             onClick={toggleRefMenu}
           >
-            <IoCloseCircle size={30} />
+            <RiSystemCloseCircleFill size={30} />
           </button>
         </Motion.div>
       </Show>
