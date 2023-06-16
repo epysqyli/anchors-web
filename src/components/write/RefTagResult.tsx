@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
 import { IRefTag } from "~/interfaces/IRefTag";
-import IRefTagResult from "~/interfaces/IRefTagResult";
+
 
 interface Props {
-  result: IRefTagResult;
+  result: IRefTag;
   addTag(tag: IRefTag): void;
 }
 
@@ -12,7 +12,7 @@ const RefTagResult: Component<Props> = (props) => {
 
   return (
     <div
-      onClick={() => props.addTag({ category: result().category, value: result().url })}
+      onClick={() => props.addTag(result())}
       class='flex justify-between py-2 px-2 my-2 bg-slate-800 rounded mx-2 gap-x-5'
     >
       <div class='w-1/5'>

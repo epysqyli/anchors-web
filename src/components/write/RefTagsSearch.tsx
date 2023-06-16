@@ -1,7 +1,6 @@
 import { BsSearch } from "solid-icons/bs";
 import { searchBook } from "../../lib/open-library";
 import { Component, For, createSignal } from "solid-js";
-import IRefTagResult from "~/interfaces/IRefTagResult";
 import RefTagResult from "./RefTagResult";
 import { IRefTag } from "~/interfaces/IRefTag";
 
@@ -12,7 +11,7 @@ interface Props {
 
 const RefTagsSearch: Component<Props> = (props) => {
   const [searchTerms, setSearchTerms] = createSignal<string>("");
-  const [searchResults, setSearchResults] = createSignal<IRefTagResult[]>([]);
+  const [searchResults, setSearchResults] = createSignal<IRefTag[]>([]);
 
   const updateSearchTerms = (e: Event) => {
     setSearchTerms((e.currentTarget as HTMLInputElement).value);

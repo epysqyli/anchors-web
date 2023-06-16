@@ -1,8 +1,10 @@
 type RefTagCategory = "book" | "video" | "movie" | "song" | "generic";
-
 interface IRefTag {
-  value: string;
+  preview: string;
+  title: string;
+  creator: string;
+  url: string;
   category: RefTagCategory;
 }
 
-export { IRefTag, RefTagCategory };
+export { RefTagCategory, IRefTag };

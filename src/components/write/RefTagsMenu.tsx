@@ -1,10 +1,10 @@
-import { IRefTag } from "~/interfaces/IRefTag";
 import RefTagElement from "./RefTagElement";
 import OverlayContext from "~/contexts/overlay";
 import { Motion, Presence } from "@motionone/solid";
 import RefTagsSearchPanel from "./RefTagsSearchPanel";
 import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import { Component, For, Show, useContext } from "solid-js";
+import { IRefTag } from "~/interfaces/IRefTag";
 
 interface Props {
   showRefMenu: boolean;

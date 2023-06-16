@@ -1,12 +1,12 @@
 import { VsAdd } from "solid-icons/vs";
 import { FiLink } from "solid-icons/fi";
-import { IRefTag } from "~/interfaces/IRefTag";
 import RefTagsSearch from "./RefTagsSearch";
 import { RiMediaMovie2Line } from "solid-icons/ri";
 import { RiLogosYoutubeLine } from "solid-icons/ri";
 import { RiLogosSpotifyLine } from "solid-icons/ri";
 import { RiDocumentBook2Line } from "solid-icons/ri";
 import { Component, For, JSX, Show, createSignal } from "solid-js";
+import { IRefTag } from "~/interfaces/IRefTag";
 
 interface RefType {
   icon: JSX.Element;
@@ -49,7 +49,10 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const [refTag, setRefTag] = createSignal<IRefTag>({
     category: "generic",
-    value: ""
+    title: "",
+    url: "",
+    creator: "",
+    preview: ""
   });
 
   const basicStyle =
@@ -79,7 +82,10 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     const inputValue = (e.currentTarget as HTMLInputElement).value;
     const updatedRefTag: IRefTag = {
       category: refTag().category,
-      value: inputValue
+      title: inputValue,
+      url: inputValue,
+      preview: "",
+      creator: ""
     };
     setRefTag(updatedRefTag);
   };
@@ -87,13 +93,19 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   const addTag = (e: Event) => {
     e.preventDefault();
 
-    if (refTag().value.trim() == "") {
+    if (refTag().url.trim() == "") {
       console.log("show a visual error here");
       return;
     }
 
     props.addNostrTag(refTag());
-    const defaultRefTag: IRefTag = { category: refTag().category, value: "" };
+    const defaultRefTag: IRefTag = {
+      category: refTag().category,
+      title: "",
+      url: "",
+      creator: "",
+      preview: ""
+    };
     setRefTag(defaultRefTag);
   };
 
@@ -119,7 +131,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           <input
             placeholder="add an external resource's URL"
             type='text'
-            value={refTag().value}
+            value={refTag().url}
             onChange={updateRefValue}
             class='block focus:outline-none mx-auto mt-10 rounded py-2 caret-slate-600
                placeholder:text-center placeholder:text-sm text-slate-500 text-center
