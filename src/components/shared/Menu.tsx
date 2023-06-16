@@ -25,9 +25,10 @@ const Menu: Component<Props> = (props) => {
                        bg-gradient-to-r from-slate-800 to-gray-700
                        hover:bg-slate-600 p-4 rounded-md text-center lg:text-left
                        transition cursor-pointer group active:scale-90
-                       hover:text-orange-200 flex items-center justify-between`;
+                       hover:text-orange-200 flex items-center justify-between
+                       border border-transparent`;
 
-  const selectedActionStyle = actionStyle + " border border-slate-200";
+  const selectedActionStyle = actionStyle + "border-solid border-slate-200 border-opacity-50";
   const active = (path: string) => path == location.pathname;
 
   return (
