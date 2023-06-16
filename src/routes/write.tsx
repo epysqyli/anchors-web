@@ -55,7 +55,7 @@ const Write: Component<{}> = () => {
 
   const addNostrTag = (nostrTag: IRefTag): void => {
     const newNostrEvent = nostrEvent();
-    newNostrEvent.tags = [...nostrEvent().tags, ["r", nostrTag.value]];
+    newNostrEvent.tags = [...nostrEvent().tags, ["r", nostrTag.url]];
     setNostrEvent(newNostrEvent);
 
     // add to refTags for RefSearchTagView
@@ -64,7 +64,7 @@ const Write: Component<{}> = () => {
   };
 
   const removeNostrTag = (nostrTag: IRefTag): void => {
-    const indexOfTagToRemove = nostrEvent().tags.findIndex((t) => t[1] === nostrTag.value);
+    const indexOfTagToRemove = nostrEvent().tags.findIndex((t) => t[1] === nostrTag.url);
 
     const currentTags = nostrEvent().tags;
     currentTags.splice(indexOfTagToRemove, 1);
@@ -73,7 +73,7 @@ const Write: Component<{}> = () => {
     setNostrEvent(newNostrEvent);
 
     // remove from refTags for RefSearchTagView
-    const indexOfRefTagToRemove = refTags().findIndex((rf) => rf.value == nostrTag.value);
+    const indexOfRefTagToRemove = refTags().findIndex((rf) => rf.url == nostrTag.url);
 
     const currentRefTags = refTags();
     currentRefTags.splice(indexOfRefTagToRemove, 1);
