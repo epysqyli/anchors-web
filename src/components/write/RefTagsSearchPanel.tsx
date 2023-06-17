@@ -58,6 +58,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   const [inputTerms, setInputTerms] = createSignal<string>("");
   const [searchResults, setSearchResults] = createSignal<IRefTag[]>([]);
 
+  const [isLoading, setIsLoading] = createSignal<boolean>(false);
+
   const search = async (e: Event) => {
     e.preventDefault();
 
@@ -66,7 +68,10 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       return;
     }
 
+    setSearchResults([]);
+    setIsLoading(true);
     setSearchResults(await searchBook(inputTerms()));
+    setIsLoading(false);
   };
 
   const selectRefType = (category: string) => {
@@ -136,7 +141,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                         hover:bg-slate-400 hover:text-white
                         h-full w-1/5 relative text-slate-200 rounded`;
 
-    const selectedStyle = basicStyle + " bg-slate-50 text-slate-700";
+    const selectedStyle = basicStyle + " bg-slate-300 text-slate-700";
 
     if (selected) {
       return selectedStyle;
@@ -200,6 +205,13 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               )}
             </For>
           </Show>
+
+          <Show when={showSearch() && isLoading()}>
+            <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+            <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+            <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+            <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+          </Show>
         </div>
       </div>
 
@@ -212,8 +224,10 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                   onClick={() => selectRefType(refType.category)}
                   class={refCategoryIconStyle(refType.selected)}
                 >
-                  <div class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                              group-active:scale-90'>
+                  <div
+                    class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                              group-active:scale-90'
+                  >
                     {refType.icon}
                   </div>
                 </div>
