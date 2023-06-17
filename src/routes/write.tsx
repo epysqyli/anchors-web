@@ -1,9 +1,10 @@
-import { VsSend } from "solid-icons/vs";
+import { VsReferences, VsSend } from "solid-icons/vs";
 import { IRefTag } from "~/interfaces/IRefTag";
 import { RelayContext } from "~/contexts/relay";
-import { Component, createSignal, useContext } from "solid-js";
+import { Component, Show, createSignal, useContext } from "solid-js";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
+import menuTogglerContext from "~/contexts/menuToggle";
 
 declare global {
   interface Window {
@@ -15,6 +16,7 @@ declare global {
 
 const Write: Component<{}> = () => {
   const relay = useContext(RelayContext);
+  const menuToggle = useContext(menuTogglerContext);
 
   const [nostrEvent, setNostrEvent] = createSignal<EventTemplate>(
     {
@@ -30,6 +32,7 @@ const Write: Component<{}> = () => {
 
   const [showRefMenu, setShowRefMenu] = createSignal<boolean>(false);
   const toggleRefMenu = (): void => {
+    menuToggle.toggleMenu();
     setShowRefMenu(!showRefMenu());
   };
 
@@ -99,8 +102,8 @@ const Write: Component<{}> = () => {
   };
 
   return (
-    <div class='flex gap-x-2 h-[96vh] absolute w-[99%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
-      <div class='w-3/5 rounded h-full'>
+    <div class='flex gap-x-2 h-full md:h-[96vh] absolute w-[99%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
+      <div class='w-full md:w-3/5 rounded h-full'>
         <div class='h-[80%]'>
           <h1
             class='text-slate-100 text-center py-5 md:py-6 text-2xl md:text-4xl font-bold
@@ -109,25 +112,46 @@ const Write: Component<{}> = () => {
             Write a new idea
           </h1>
           <textarea
-            placeholder='An idea that gives meaning to the world ...'
-            class='block focus:outline-none w-11/12 md:w-3/4 mx-auto bg-transparent p-5 md:p-10
+            placeholder='Time to connect the dots'
+            class='block placeholder:text-center focus:outline-none w-11/12 md:w-3/4 mx-auto bg-transparent p-5 md:p-10
                text-slate-300 caret-orange-200 resize-none custom-scrollbar h-[85%]'
             rows={18}
             onInput={updateContent}
           ></textarea>
         </div>
 
-        <div class='relative text-slate-50 mx-auto py-10 group cursor-pointer border-t h-[20%] hover:bg-slate-600'>
+        <div class='hidden md:block relative text-slate-50 mx-auto py-10 group cursor-pointer border-t h-[20%] hover:bg-slate-600'>
           <VsSend
             size={40}
             class='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 group-active:scale-90'
           />
         </div>
+
+        <div class='md:hidden text-slate-50 h-[20%] flex items-center justify-around pt-5 '>
+          <VsSend size={32} />
+          <VsReferences size={32} onClick={toggleRefMenu} />
+        </div>
       </div>
 
-      <div class='w-2/5 h-full'>
-        <RefTagsSearchPanel tags={refTags()} addNostrTag={addNostrTag} removeNostrTag={removeNostrTag} />
+      <div class='hidden md:block w-2/5 h-full'>
+        <RefTagsSearchPanel
+          tags={refTags()}
+          addNostrTag={addNostrTag}
+          removeNostrTag={removeNostrTag}
+          toggleMenu={toggleRefMenu}
+        />
       </div>
+
+      <Show when={showRefMenu()}>
+        <div class='h-full w-full md:hidden bg-slate-700 top-0 left-0 absolute'>
+          <RefTagsSearchPanel
+            tags={refTags()}
+            addNostrTag={addNostrTag}
+            removeNostrTag={removeNostrTag}
+            toggleMenu={toggleRefMenu}
+          />
+        </div>
+      </Show>
     </div>
   );
 };

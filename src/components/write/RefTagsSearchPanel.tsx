@@ -1,6 +1,6 @@
 import { VsAdd, VsReferences } from "solid-icons/vs";
 import { FiLink } from "solid-icons/fi";
-import { RiMediaMovie2Line } from "solid-icons/ri";
+import { RiMediaMovie2Line, RiSystemCloseCircleLine } from "solid-icons/ri";
 import { RiLogosYoutubeLine } from "solid-icons/ri";
 import { RiLogosSpotifyLine } from "solid-icons/ri";
 import { RiDocumentBook2Line } from "solid-icons/ri";
@@ -12,6 +12,7 @@ import { BsSearch } from "solid-icons/bs";
 import { searchBook } from "~/lib/open-library";
 import RefTagResult from "./RefTagResult";
 import { TbDatabaseSearch } from "solid-icons/tb";
+
 interface RefType {
   icon: JSX.Element;
   selected: boolean;
@@ -22,6 +23,7 @@ interface Props {
   tags: IRefTag[];
   addNostrTag(nostrTag: IRefTag): void;
   removeNostrTag(nostrTag: IRefTag): void;
+  toggleMenu(): void;
 }
 
 const RefTagsSearchPanel: Component<Props> = (props) => {
@@ -182,6 +184,14 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                         mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
             >
               <TbDatabaseSearch size={40} />
+            </div>
+          </div>
+          <div onClick={props.toggleMenu} class={basicSelectorPanelStyle + " md:hidden"}>
+            <div
+              class='group-active:scale-95 transition w-fit 
+                        mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+            >
+              <RiSystemCloseCircleLine size={40} />
             </div>
           </div>
         </div>
