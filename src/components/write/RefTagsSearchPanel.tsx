@@ -186,7 +186,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           </div>
         </div>
 
-        <div class='py-5 overflow-y-auto custom-scrollbar h-[85%]'>
+        <div class='py-5 overflow-y-auto custom-scrollbar h-[82%] my-3'>
           <Show when={!showSearch()}>
             <For each={props.tags}>
               {(tag) => (
@@ -198,20 +198,22 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           </Show>
 
           <Show when={showSearch()}>
-            <For each={searchResults()}>
-              {(res) => (
-                <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
-                  <RefTagResult result={res} addTag={props.addNostrTag} />
-                </Motion.div>
-              )}
-            </For>
-          </Show>
+            <Show when={isLoading()}>
+              <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+              <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+              <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+              <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+            </Show>
 
-          <Show when={showSearch() && isLoading()}>
-            <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
-            <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
-            <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
-            <div class='animate-pulse w-5/6 mx-auto bg-slate-500 bg-opacity-30 h-1/5 rounded mb-5'></div>
+            <Show when={!isLoading()}>
+              <For each={searchResults()}>
+                {(res) => (
+                  <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
+                    <RefTagResult result={res} addTag={props.addNostrTag} />
+                  </Motion.div>
+                )}
+              </For>
+            </Show>
           </Show>
         </div>
       </div>
