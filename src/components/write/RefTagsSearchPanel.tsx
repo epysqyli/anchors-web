@@ -27,27 +27,27 @@ interface Props {
 const RefTagsSearchPanel: Component<Props> = (props) => {
   const [refTypes, setRefTypes] = createSignal<RefType[]>([
     {
-      icon: <RiDocumentBook2Line size={28} />,
+      icon: <RiDocumentBook2Line size={30} />,
       selected: false,
       category: "books"
     },
     {
-      icon: <RiLogosYoutubeLine size={28} />,
+      icon: <RiLogosYoutubeLine size={30} />,
       selected: false,
       category: "videos"
     },
     {
-      icon: <RiMediaMovie2Line size={28} />,
+      icon: <RiMediaMovie2Line size={30} />,
       selected: false,
       category: "movies"
     },
     {
-      icon: <RiLogosSpotifyLine size={28} />,
+      icon: <RiLogosSpotifyLine size={30} />,
       selected: false,
       category: "songs"
     },
     {
-      icon: <FiLink size={28} />,
+      icon: <FiLink size={30} />,
       selected: true,
       category: "generic"
     }
@@ -174,8 +174,10 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   };
 
   const refCategoryIconStyle = (selected: boolean): string => {
-    const basicStyle = `cursor-pointer group transition-scale hover:bg-slate-400 hover:text-slate-700
-    h-full w-1/5 relative text-slate-200`;
+    const basicStyle = `cursor-pointer group transition-scale
+                        hover:bg-slate-400 hover:text-white
+                        h-full w-1/5 relative text-slate-200`;
+
     const selectedStyle = basicStyle + " bg-slate-50 text-slate-700";
 
     if (selected) {
@@ -243,7 +245,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                   onClick={() => selectRefType(refType.category)}
                   class={refCategoryIconStyle(refType.selected)}
                 >
-                  <div class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                  <div class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group-active:scale-90'>
                     {refType.icon}
                   </div>
                 </div>
