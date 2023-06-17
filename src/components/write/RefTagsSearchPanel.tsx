@@ -134,7 +134,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   const refCategoryIconStyle = (selected: boolean): string => {
     const basicStyle = `cursor-pointer group transition-scale
                         hover:bg-slate-400 hover:text-white
-                        h-full w-1/5 relative text-slate-200`;
+                        h-full w-1/5 relative text-slate-200 rounded`;
 
     const selectedStyle = basicStyle + " bg-slate-50 text-slate-700";
 
@@ -147,14 +147,14 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const basicSelectorPanelStyle = `w-1/2 text-center border-b border-transparent 
                                    hover:border-b hover:border-slate-200 relative
-                                   group cursor-pointer transition h-full`;
+                                   group cursor-pointer transition h-full rounded`;
 
   const activeSelectorPanelStyle = basicSelectorPanelStyle + " bg-slate-600";
 
   return (
     <>
       <div class='h-[80%]'>
-        <div class='flex items-center justify-between text-slate-200 h-[15%]'>
+        <div class='flex items-center justify-between gap-x-1 text-slate-200 h-[15%]'>
           <div
             onClick={() => setShowSearch(false)}
             class={showSearch() ? basicSelectorPanelStyle : activeSelectorPanelStyle}
@@ -203,8 +203,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         </div>
       </div>
 
-      <div class='h-[20%] border-t'>
-        <div class='flex items-center justify-around h-1/2'>
+      <div class='h-[20%] border-t py-1'>
+        <div class='flex items-center gap-x-1 justify-around h-1/2'>
           <For each={refTypes()}>
             {(refType) => {
               return (
@@ -212,7 +212,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                   onClick={() => selectRefType(refType.category)}
                   class={refCategoryIconStyle(refType.selected)}
                 >
-                  <div class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group-active:scale-90'>
+                  <div class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                              group-active:scale-90'>
                     {refType.icon}
                   </div>
                 </div>
@@ -221,7 +222,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           </For>
         </div>
 
-        <form onSubmit={handleSubmit} class='flex items-center h-1/2'>
+        <form onSubmit={handleSubmit} class='flex items-center gap-x-1 h-1/2 mt-1'>
           <input
             placeholder={placeholder()}
             type='text'
@@ -229,11 +230,11 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             onChange={handleOnChange}
             class='block focus:outline-none py-2 caret-slate-600
                placeholder:text-center placeholder:text text-slate-500 text-center
-               focus:placeholder-none h-full w-4/5'
+               focus:placeholder-none h-full w-4/5 rounded'
           />
           <button
             class='block group text-slate-50 hover:bg-slate-600
-                     active:bg-slate-800 p-3 h-full w-1/5'
+                     active:bg-slate-800 p-3 h-full rounded w-1/5'
           >
             {icon()}
           </button>
