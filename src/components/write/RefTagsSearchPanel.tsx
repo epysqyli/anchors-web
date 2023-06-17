@@ -140,7 +140,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   const refCategoryIconStyle = (selected: boolean): string => {
     const basicStyle = `cursor-pointer group transition-scale
                         hover:bg-slate-400 hover:text-white
-                        h-full w-1/5 relative text-slate-200 rounded`;
+                        h-3/5 w-1/5 relative text-slate-200 rounded`;
 
     const selectedStyle = basicStyle + " bg-slate-300 text-slate-700";
 
@@ -219,7 +219,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       </div>
 
       <div class='h-[20%] border-t py-1'>
-        <div class='flex items-center gap-x-1 justify-around h-1/2'>
+        <div class='flex items-center gap-x-1 justify-around h-3/5'>
           <For each={refTypes()}>
             {(refType) => {
               return (
@@ -239,7 +239,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           </For>
         </div>
 
-        <form onSubmit={handleSubmit} class='flex items-center gap-x-1 h-1/2 mt-1'>
+        <form onSubmit={handleSubmit} class='flex items-center gap-x-1 h-2/5 mt-1'>
           <input
             placeholder={placeholder()}
             type='text'
