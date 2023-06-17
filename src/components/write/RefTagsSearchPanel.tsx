@@ -1,6 +1,5 @@
 import { VsAdd } from "solid-icons/vs";
 import { FiLink } from "solid-icons/fi";
-import RefTagsSearch from "./RefTagsSearch";
 import { RiMediaMovie2Line } from "solid-icons/ri";
 import { RiLogosYoutubeLine } from "solid-icons/ri";
 import { RiLogosSpotifyLine } from "solid-icons/ri";
@@ -9,6 +8,9 @@ import { Component, For, JSX, Show, createSignal } from "solid-js";
 import { IRefTag } from "~/interfaces/IRefTag";
 import { Motion } from "@motionone/solid";
 import RefTagElement from "./RefTagElement";
+import { BsSearch } from "solid-icons/bs";
+import { searchBook } from "~/lib/open-library";
+import RefTagResult from "./RefTagResult";
 
 interface RefType {
   icon: JSX.Element;
@@ -25,27 +27,27 @@ interface Props {
 const RefTagsSearchPanel: Component<Props> = (props) => {
   const [refTypes, setRefTypes] = createSignal<RefType[]>([
     {
-      icon: <RiDocumentBook2Line size={26} />,
+      icon: <RiDocumentBook2Line size={28} />,
       selected: false,
       category: "books"
     },
     {
-      icon: <RiLogosYoutubeLine size={26} />,
+      icon: <RiLogosYoutubeLine size={28} />,
       selected: false,
       category: "videos"
     },
     {
-      icon: <RiMediaMovie2Line size={26} />,
+      icon: <RiMediaMovie2Line size={28} />,
       selected: false,
       category: "movies"
     },
     {
-      icon: <RiLogosSpotifyLine size={26} />,
+      icon: <RiLogosSpotifyLine size={28} />,
       selected: false,
       category: "songs"
     },
     {
-      icon: <FiLink size={26} />,
+      icon: <FiLink size={28} />,
       selected: true,
       category: "generic"
     }
@@ -59,9 +61,22 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     preview: ""
   });
 
-  const basicStyle = `cursor-pointer group transition-scale hover:bg-slate-400 hover:text-slate-700
-      h-full w-1/5 relative text-slate-200`;
-  const selectedStyle = basicStyle + " bg-slate-50 text-slate-700";
+  const [showSearch, setShowSearch] = createSignal<boolean>(false);
+
+  const [searchTerms, setSearchTerms] = createSignal<string>("");
+  const [searchResults, setSearchResults] = createSignal<IRefTag[]>([]);
+
+  const search = async (e: Event) => {
+    e.preventDefault();
+
+    if (searchTerms().trim() == "") {
+      console.log("visual hint: no search without terms");
+      return;
+    }
+
+    setSearchResults(await searchBook(searchTerms()));
+    console.log(searchResults());
+  };
 
   const selectRefType = (category: string) => {
     const currentRefTypes = refTypes().map((rt) => {
@@ -84,6 +99,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const updateRefValue = (e: Event) => {
     const inputValue = (e.currentTarget as HTMLInputElement).value;
+
     const updatedRefTag: IRefTag = {
       category: refTag().category,
       title: inputValue,
@@ -91,6 +107,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       preview: "",
       creator: ""
     };
+
     setRefTag(updatedRefTag);
   };
 
@@ -110,19 +127,111 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       creator: "",
       preview: ""
     };
+
     setRefTag(defaultRefTag);
   };
 
+  const handleSubmit = (e: Event) => {
+    const currentRefCategory = refTypes().find((rt) => rt.selected)?.category;
+
+    if (currentRefCategory == "generic") {
+      addTag(e);
+      return;
+    }
+
+    setShowSearch(true);
+    if (currentRefCategory == "books") {
+      search(e);
+    }
+  };
+
+  const handleOnChange = (e: Event) => {
+    const currentRefCategory = refTypes().find((rt) => rt.selected)?.category;
+
+    if (currentRefCategory == "generic") {
+      updateRefValue(e);
+    }
+
+    if (currentRefCategory == "books") {
+      setSearchTerms((e.currentTarget as HTMLInputElement).value);
+    }
+  };
+
+  const placeholder = (): string => {
+    if (refTypes().find((rt) => rt.selected)?.category == "generic") {
+      return "add an external resource's URL";
+    }
+
+    return `search for ${refTypes().find((rt) => rt.selected)?.category}`;
+  };
+
+  const icon = (): JSX.Element => {
+    if (refTypes().find((rt) => rt.selected)?.category == "generic") {
+      return <VsAdd size={32} class='group-hover:scale-90 w-fit mx-auto' />;
+    }
+
+    return <BsSearch size={32} class='group-hover:scale-90 w-fit mx-auto' />;
+  };
+
+  const refCategoryIconStyle = (selected: boolean): string => {
+    const basicStyle = `cursor-pointer group transition-scale hover:bg-slate-400 hover:text-slate-700
+    h-full w-1/5 relative text-slate-200`;
+    const selectedStyle = basicStyle + " bg-slate-50 text-slate-700";
+
+    if (selected) {
+      return selectedStyle;
+    }
+
+    return basicStyle;
+  };
+
+  const basicSelectorPanelStyle = `w-1/2 text-center border-b border-transparent py-2 
+                                   hover:border-b hover:border-slate-200
+                                   group cursor-pointer transition`;
+
+  const activeSelectorPanelStyle = basicSelectorPanelStyle + " bg-slate-600";
+
   return (
     <>
-      <div class='py-2 overflow-y-auto custom-scrollbar h-[80%]'>
-        <For each={props.tags}>
-          {(tag) => (
-            <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
-              <RefTagElement tag={tag} removeTag={props.removeNostrTag} />
-            </Motion.div>
-          )}
-        </For>
+      <div class='overflow-y-auto custom-scrollbar h-[80%]'>
+        <div class='flex items-center justify-between text-slate-200'>
+          <div
+            onClick={() => setShowSearch(false)}
+            class={showSearch() ? basicSelectorPanelStyle : activeSelectorPanelStyle}
+          >
+            <div class='group-active:scale-95 transition w-fit mx-auto'>current references</div>
+          </div>
+          <div
+            onClick={() => setShowSearch(true)}
+            class={showSearch() ? activeSelectorPanelStyle : basicSelectorPanelStyle}
+          >
+            <div class='group-active:scale-95 transition w-fit mx-auto'>search results</div>
+          </div>
+        </div>
+
+        <Show when={!showSearch()}>
+          <div class='py-5'>
+            <For each={props.tags}>
+              {(tag) => (
+                <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
+                  <RefTagElement tag={tag} removeTag={props.removeNostrTag} />
+                </Motion.div>
+              )}
+            </For>
+          </div>
+        </Show>
+
+        <Show when={showSearch()}>
+          <div class='py-5'>
+            <For each={searchResults()}>
+              {(res) => (
+                <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
+                  <RefTagResult result={res} addTag={props.addNostrTag} />
+                </Motion.div>
+              )}
+            </For>
+          </div>
+        </Show>
       </div>
 
       <div class='h-[20%] border-t'>
@@ -132,7 +241,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               return (
                 <div
                   onClick={() => selectRefType(refType.category)}
-                  class={refType.selected ? selectedStyle : basicStyle}
+                  class={refCategoryIconStyle(refType.selected)}
                 >
                   <div class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
                     {refType.icon}
@@ -143,32 +252,23 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           </For>
         </div>
 
-        <Show when={refTypes().find((rt) => rt.selected)?.category == "generic"}>
-          <form onSubmit={addTag} class='flex items-center h-1/2'>
-            <input
-              placeholder="add an external resource's URL"
-              type='text'
-              value={refTag().url}
-              onChange={updateRefValue}
-              class='block focus:outline-none py-2 caret-slate-600
+        <form onSubmit={handleSubmit} class='flex items-center h-1/2'>
+          <input
+            placeholder={placeholder()}
+            type='text'
+            value={refTag().title}
+            onChange={handleOnChange}
+            class='block focus:outline-none py-2 caret-slate-600
                placeholder:text-center placeholder:text text-slate-500 text-center
                focus:placeholder-none h-full w-4/5'
-            />
-            <button
-              class='block group text-slate-50 hover:bg-slate-600
-                     active:bg-slate-800 p-3 h-full w-1/5'
-            >
-              <VsAdd size={32} class='group-hover:scale-90 w-fit mx-auto' />
-            </button>
-          </form>
-        </Show>
-
-        <Show when={refTypes().find((rt) => rt.selected)?.category != "generic"}>
-          <RefTagsSearch
-            category={refTypes().find((rt) => rt.selected)!.category}
-            addNostrTag={props.addNostrTag}
           />
-        </Show>
+          <button
+            class='block group text-slate-50 hover:bg-slate-600
+                     active:bg-slate-800 p-3 h-full w-1/5'
+          >
+            {icon()}
+          </button>
+        </form>
       </div>
     </>
   );
