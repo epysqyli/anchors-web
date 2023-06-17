@@ -63,11 +63,6 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   const search = async (e: Event) => {
     e.preventDefault();
 
-    if (inputTerms().trim() == "") {
-      console.log("visual hint: no search without terms");
-      return;
-    }
-
     setSearchResults([]);
     setIsLoading(true);
     setSearchResults(await searchBook(inputTerms()));
@@ -95,6 +90,12 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const handleSubmit = (e: Event) => {
     e.preventDefault();
+
+    if (inputTerms().trim() == "") {
+      console.log("visual hint: input is empty");
+      return;
+    }
+
     const currentRefCategory = refTypes().find((rt) => rt.selected)?.category;
 
     if (currentRefCategory == "generic") {
@@ -122,7 +123,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const placeholder = (): string => {
     if (refTypes().find((rt) => rt.selected)?.category == "generic") {
-      return "add an external resource's URL";
+      return "add an external resource URL";
     }
 
     return `search for ${refTypes().find((rt) => rt.selected)?.category}`;
@@ -244,7 +245,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             onChange={handleOnChange}
             class='block focus:outline-none py-2 caret-slate-600
                placeholder:text-center placeholder:text text-slate-500 text-center
-               focus:placeholder-none h-full w-4/5 rounded'
+               focus:placeholder-none h-full w-4/5 rounded bg-slate-200'
           />
           <button
             class='block group text-slate-50 hover:bg-slate-600
