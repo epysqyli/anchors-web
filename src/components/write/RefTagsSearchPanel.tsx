@@ -53,28 +53,20 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     }
   ]);
 
-  const [refTag, setRefTag] = createSignal<IRefTag>({
-    category: "generic",
-    title: "",
-    url: "",
-    creator: "",
-    preview: ""
-  });
-
   const [showSearch, setShowSearch] = createSignal<boolean>(false);
 
-  const [searchTerms, setSearchTerms] = createSignal<string>("");
+  const [inputTerms, setInputTerms] = createSignal<string>("");
   const [searchResults, setSearchResults] = createSignal<IRefTag[]>([]);
 
   const search = async (e: Event) => {
     e.preventDefault();
 
-    if (searchTerms().trim() == "") {
+    if (inputTerms().trim() == "") {
       console.log("visual hint: no search without terms");
       return;
     }
 
-    setSearchResults(await searchBook(searchTerms()));
+    setSearchResults(await searchBook(inputTerms()));
   };
 
   const selectRefType = (category: string) => {
@@ -96,45 +88,20 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     setRefTypes(updatedRefTypes);
   };
 
-  const updateRefValue = (e: Event) => {
-    const inputValue = (e.currentTarget as HTMLInputElement).value;
-
-    const updatedRefTag: IRefTag = {
-      category: refTag().category,
-      title: inputValue,
-      url: inputValue,
-      preview: "",
-      creator: ""
-    };
-
-    setRefTag(updatedRefTag);
-  };
-
-  const addTag = (e: Event) => {
-    e.preventDefault();
-
-    if (refTag().url.trim() == "") {
-      console.log("show a visual error here");
-      return;
-    }
-
-    props.addNostrTag(refTag());
-    const defaultRefTag: IRefTag = {
-      category: refTag().category,
-      title: "",
-      url: "",
-      creator: "",
-      preview: ""
-    };
-
-    setRefTag(defaultRefTag);
-  };
-
   const handleSubmit = (e: Event) => {
+    e.preventDefault();
     const currentRefCategory = refTypes().find((rt) => rt.selected)?.category;
 
     if (currentRefCategory == "generic") {
-      addTag(e);
+      const refTag: IRefTag = {
+        category: currentRefCategory,
+        title: inputTerms(),
+        url: inputTerms(),
+        creator: "",
+        preview: ""
+      };
+
+      props.addNostrTag(refTag);
       return;
     }
 
@@ -145,15 +112,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   };
 
   const handleOnChange = (e: Event) => {
-    const currentRefCategory = refTypes().find((rt) => rt.selected)?.category;
-
-    if (currentRefCategory == "generic") {
-      updateRefValue(e);
-    }
-
-    if (currentRefCategory == "books") {
-      setSearchTerms((e.currentTarget as HTMLInputElement).value);
-    }
+    setInputTerms((e.currentTarget as HTMLInputElement).value);
   };
 
   const placeholder = (): string => {
@@ -266,7 +225,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           <input
             placeholder={placeholder()}
             type='text'
-            value={refTag().title}
+            value={inputTerms()}
             onChange={handleOnChange}
             class='block focus:outline-none py-2 caret-slate-600
                placeholder:text-center placeholder:text text-slate-500 text-center
