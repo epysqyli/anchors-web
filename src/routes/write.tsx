@@ -100,26 +100,32 @@ const Write: Component<{}> = () => {
 
   return (
     <div class='flex gap-x-2 h-[96vh] absolute w-[99%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
-      <div class='w-3/5 rounded'>
-        <h1
-          class='text-slate-100 text-center py-5 md:py-10 text-2xl md:text-4xl font-bold
-                  md:bg-slate-800 rounded border-b border-slate-500 md:border-none'
-        >
-          Write a new idea
-        </h1>
-        <textarea
-          placeholder='An idea that gives meaning to the world ...'
-          class='block focus:outline-none w-11/12 md:w-3/4 mx-auto bg-transparent p-5 md:p-10
-               text-slate-300 caret-orange-200 resize-none custom-scrollbar mt-5 border-b'
-          rows={18}
-          onInput={updateContent}
-        ></textarea>
-        <div class='text-slate-50 mx-auto w-fit mt-20 cursor-pointer'>
-          <VsSend size={40} />
+      <div class='w-3/5 rounded h-full'>
+        <div class='h-[80%]'>
+          <h1
+            class='text-slate-100 text-center py-5 md:py-6 text-2xl md:text-4xl font-bold
+                  md:bg-slate-800 rounded border-b border-slate-500 md:border-none h-[15%]'
+          >
+            Write a new idea
+          </h1>
+          <textarea
+            placeholder='An idea that gives meaning to the world ...'
+            class='block focus:outline-none w-11/12 md:w-3/4 mx-auto bg-transparent p-5 md:p-10
+               text-slate-300 caret-orange-200 resize-none custom-scrollbar h-[85%]'
+            rows={18}
+            onInput={updateContent}
+          ></textarea>
+        </div>
+
+        <div class='relative text-slate-50 mx-auto py-10 group cursor-pointer border-t h-[20%] hover:bg-slate-600'>
+          <VsSend
+            size={40}
+            class='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 group-active:scale-90'
+          />
         </div>
       </div>
 
-      <div class='w-2/5 border h-full'>
+      <div class='w-2/5 h-full'>
         <RefTagsSearchPanel tags={refTags()} addNostrTag={addNostrTag} removeNostrTag={removeNostrTag} />
       </div>
     </div>

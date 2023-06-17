@@ -1,4 +1,4 @@
-import { VsAdd } from "solid-icons/vs";
+import { VsAdd, VsReferences } from "solid-icons/vs";
 import { FiLink } from "solid-icons/fi";
 import { RiMediaMovie2Line } from "solid-icons/ri";
 import { RiLogosYoutubeLine } from "solid-icons/ri";
@@ -11,7 +11,7 @@ import RefTagElement from "./RefTagElement";
 import { BsSearch } from "solid-icons/bs";
 import { searchBook } from "~/lib/open-library";
 import RefTagResult from "./RefTagResult";
-
+import { TbDatabaseSearch } from "solid-icons/tb";
 interface RefType {
   icon: JSX.Element;
   selected: boolean;
@@ -75,7 +75,6 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     }
 
     setSearchResults(await searchBook(searchTerms()));
-    console.log(searchResults());
   };
 
   const selectRefType = (category: string) => {
@@ -187,32 +186,43 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     return basicStyle;
   };
 
-  const basicSelectorPanelStyle = `w-1/2 text-center border-b border-transparent py-2 
-                                   hover:border-b hover:border-slate-200
-                                   group cursor-pointer transition`;
+  const basicSelectorPanelStyle = `w-1/2 text-center border-b border-transparent 
+                                   hover:border-b hover:border-slate-200 relative
+                                   group cursor-pointer transition h-full`;
 
   const activeSelectorPanelStyle = basicSelectorPanelStyle + " bg-slate-600";
 
   return (
     <>
-      <div class='overflow-y-auto custom-scrollbar h-[80%]'>
-        <div class='flex items-center justify-between text-slate-200'>
+      <div class='h-[80%]'>
+        <div class='flex items-center justify-between text-slate-200 h-[15%]'>
           <div
             onClick={() => setShowSearch(false)}
             class={showSearch() ? basicSelectorPanelStyle : activeSelectorPanelStyle}
           >
-            <div class='group-active:scale-95 transition w-fit mx-auto'>current references</div>
+            <div
+              class='group-active:scale-95 transition w-fit 
+                        mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+            >
+              <VsReferences size={40} />
+              <div class='absolute -top-3 -right-3'>{props.tags.length}</div>
+            </div>
           </div>
           <div
             onClick={() => setShowSearch(true)}
             class={showSearch() ? activeSelectorPanelStyle : basicSelectorPanelStyle}
           >
-            <div class='group-active:scale-95 transition w-fit mx-auto'>search results</div>
+            <div
+              class='group-active:scale-95 transition w-fit 
+                        mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+            >
+              <TbDatabaseSearch size={40} />
+            </div>
           </div>
         </div>
 
-        <Show when={!showSearch()}>
-          <div class='py-5'>
+        <div class='py-5 overflow-y-auto custom-scrollbar h-[85%]'>
+          <Show when={!showSearch()}>
             <For each={props.tags}>
               {(tag) => (
                 <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
@@ -220,11 +230,9 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                 </Motion.div>
               )}
             </For>
-          </div>
-        </Show>
+          </Show>
 
-        <Show when={showSearch()}>
-          <div class='py-5'>
+          <Show when={showSearch()}>
             <For each={searchResults()}>
               {(res) => (
                 <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
@@ -232,8 +240,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                 </Motion.div>
               )}
             </For>
-          </div>
-        </Show>
+          </Show>
+        </div>
       </div>
 
       <div class='h-[20%] border-t'>
