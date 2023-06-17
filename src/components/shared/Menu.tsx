@@ -21,14 +21,13 @@ const Menu: Component<Props> = (props) => {
                      via-slate-700 via-20% to-gray-900 to-90% relative
                      overflow-y-auto h-full pt-10`;
 
-  const actionStyle = `text-slate-50 w-5/6 mx-auto my-2 select-none
+  const actionStyle = `text-slate-50 w-5/6 mx-auto my-3 select-none
                        bg-gradient-to-r from-slate-800 to-gray-700
                        hover:bg-slate-600 p-4 rounded-md text-center lg:text-left
                        transition cursor-pointer group active:scale-90
-                       hover:text-orange-200 flex items-center justify-between
-                       border border-transparent`;
+                       hover:text-orange-200 flex items-center justify-between`;
 
-  const selectedActionStyle = actionStyle + "border-solid border-slate-200 border-opacity-50";
+  const selectedActionStyle = actionStyle + " text-orange-200";
   const active = (path: string) => path == location.pathname;
 
   return (
