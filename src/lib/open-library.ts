@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import IRefTagResult from "~/interfaces/IRefTagResult";
+import { IRefTag } from "~/interfaces/IRefTag";
 
 interface OpenLibraryQueryResult {
   docs: {
@@ -13,7 +13,7 @@ interface OpenLibraryQueryResult {
   }[];
 }
 
-const searchBook = async (searchString: string): Promise<IRefTagResult[]> => {
+const searchBook = async (searchString: string): Promise<IRefTag[]> => {
   const title = searchString.split(" ").reduce((acc, s) => `${acc}+${s}`);
 
   const resp: AxiosResponse<OpenLibraryQueryResult> = await axios({
@@ -22,7 +22,7 @@ const searchBook = async (searchString: string): Promise<IRefTagResult[]> => {
   });
 
   return resp.data.docs.map((res) => {
-    const refTagResult: IRefTagResult = {
+    const refTagResult: IRefTag = {
       title: res.title,
       url: `https://openlibrary.org${res.key}`,
       creator: res.author_name != undefined && res.author_name.length != 0 ? res.author_name[0] : "",
