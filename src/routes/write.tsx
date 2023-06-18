@@ -129,7 +129,10 @@ const Write: Component<{}> = () => {
 
         <div class='md:hidden text-slate-50 h-[20%] flex items-center justify-around pt-5 '>
           <VsSend size={32} />
-          <VsReferences size={32} onClick={toggleRefMenu} />
+          <div class="relative">
+            <VsReferences size={32} onClick={toggleRefMenu} />
+            <div class='absolute -top-3 -right-3'>{refTags().length}</div>
+          </div>
         </div>
       </div>
 
