@@ -161,7 +161,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   return (
     <>
-      <div class='h-[80%]'>
+      <div class='h-[70%] md:h-[80%]'>
         <div class='flex items-center justify-between gap-x-1 text-slate-200 h-[15%]'>
           <div
             onClick={() => setShowSearch(false)}
@@ -228,7 +228,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         </div>
       </div>
 
-      <div class='h-[20%] border-t py-1'>
+      <div class='h-[20%] w-11/12 mx-auto md:w-full border-t py-1'>
         <div class='flex items-center gap-x-1 justify-around h-3/5'>
           <For each={refTypes()}>
             {(refType) => {
