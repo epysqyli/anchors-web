@@ -102,11 +102,12 @@ const Write: Component<{}> = () => {
   };
 
   return (
-    <div class='flex gap-x-2 h-full md:h-[96vh] absolute w-[99%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
+    <div class='md:flex md:gap-x-2 xl:gap-x-10 2xl:w-5/6 mx-auto h-full md:h-[96vh] absolute w-[99%] 
+                top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
       <div class='w-full md:w-3/5 rounded h-full'>
         <div class='h-[70%] md:h-[80%]'>
           <h1
-            class='text-slate-100 text-center py-5 md:py-6 text-2xl md:text-4xl font-bold
+            class='text-slate-100 text-center py-5 md:py-7 text-2xl md:text-4xl font-bold
                   md:bg-slate-800 rounded border-b border-slate-500 md:border-none h-[15%]'
           >
             Write a new idea
