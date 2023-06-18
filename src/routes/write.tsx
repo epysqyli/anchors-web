@@ -102,8 +102,10 @@ const Write: Component<{}> = () => {
   };
 
   return (
-    <div class='md:flex md:gap-x-2 xl:gap-x-10 2xl:w-5/6 mx-auto h-full md:h-[96vh] absolute w-[99%] 
-                top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
+    <div
+      class='md:flex md:gap-x-2 xl:gap-x-10 2xl:w-5/6 mx-auto h-full md:h-[96vh] absolute w-[99%] 
+                top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'
+    >
       <div class='w-full md:w-3/5 rounded h-full'>
         <div class='h-[70%] md:h-[80%]'>
           <h1
@@ -121,7 +123,10 @@ const Write: Component<{}> = () => {
           ></textarea>
         </div>
 
-        <div class='hidden md:block relative text-slate-50 mx-auto py-10 group cursor-pointer border-t h-[20%] hover:bg-slate-600'>
+        <div
+          onClick={signAndPublishNostrEvent}
+          class='hidden md:block relative text-slate-50 mx-auto py-10 group cursor-pointer border-t h-[20%] hover:bg-slate-600'
+        >
           <VsSend
             size={40}
             class='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 group-active:scale-90'
@@ -129,8 +134,8 @@ const Write: Component<{}> = () => {
         </div>
 
         <div class='md:hidden text-slate-50 h-[20%] flex items-center justify-around pt-5 '>
-          <VsSend size={32} />
-          <div class="relative">
+          <VsSend size={32} onClick={signAndPublishNostrEvent} />
+          <div class='relative'>
             <VsReferences size={32} onClick={toggleRefMenu} />
             <div class='absolute -top-3 -right-3'>{refTags().length}</div>
           </div>
