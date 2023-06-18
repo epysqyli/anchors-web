@@ -12,6 +12,7 @@ import { BsSearch } from "solid-icons/bs";
 import { searchBook } from "~/lib/open-library";
 import RefTagResult from "./RefTagResult";
 import { TbDatabaseSearch } from "solid-icons/tb";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
 
 interface RefType {
   icon: JSX.Element;
@@ -153,6 +154,9 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     return basicStyle;
   };
 
+  const [isNarrow, setIsNarrow] = createSignal<boolean>(false);
+  useIsNarrow(setIsNarrow);
+
   const basicSelectorPanelStyle = `w-1/2 text-center border-b border-transparent 
                                    hover:border-b hover:border-slate-200 relative
                                    group cursor-pointer transition h-full rounded`;
@@ -171,7 +175,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               class='group-active:scale-95 transition w-fit 
                         mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
             >
-              <VsReferences size={40} />
+              <VsReferences size={isNarrow() ? 30 : 40} />
               <div class='absolute -top-3 -right-3'>{props.tags.length}</div>
             </div>
           </div>
@@ -183,7 +187,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               class='group-active:scale-95 transition w-fit 
                         mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
             >
-              <TbDatabaseSearch size={40} />
+              <TbDatabaseSearch size={isNarrow() ? 30 : 40} />
             </div>
           </div>
           <div onClick={props.toggleMenu} class={basicSelectorPanelStyle + " md:hidden"}>
@@ -191,7 +195,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               class='group-active:scale-95 transition w-fit 
                         mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
             >
-              <RiSystemCloseCircleLine size={40} />
+              <RiSystemCloseCircleLine size={isNarrow() ? 30 : 40} />
             </div>
           </div>
         </div>
@@ -257,6 +261,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             onChange={handleOnChange}
             class='block focus:outline-none py-2 caret-slate-600
                placeholder:text-center placeholder:text text-slate-500 text-center
+               placeholder:text-sm md:placeholder:text-lg
                focus:placeholder-none h-full w-4/5 rounded bg-slate-200'
           />
           <button

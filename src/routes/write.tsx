@@ -5,6 +5,7 @@ import { Component, Show, createSignal, useContext } from "solid-js";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import menuTogglerContext from "~/contexts/menuToggle";
+import { Motion, Presence } from "@motionone/solid";
 
 declare global {
   interface Window {
@@ -135,8 +136,8 @@ const Write: Component<{}> = () => {
 
         <div class='md:hidden text-slate-50 h-[20%] flex items-center justify-around pt-5 '>
           <VsSend size={32} onClick={signAndPublishNostrEvent} />
-          <div class='relative'>
-            <VsReferences size={32} onClick={toggleRefMenu} />
+          <div onClick={toggleRefMenu} class='relative active:scale-90 transition'>
+            <VsReferences size={32} />
             <div class='absolute -top-3 -right-3'>{refTags().length}</div>
           </div>
         </div>
@@ -151,16 +152,24 @@ const Write: Component<{}> = () => {
         />
       </div>
 
-      <Show when={showRefMenu()}>
-        <div class='h-full w-full md:hidden bg-slate-700 top-0 left-0 absolute'>
-          <RefTagsSearchPanel
-            tags={refTags()}
-            addNostrTag={addNostrTag}
-            removeNostrTag={removeNostrTag}
-            toggleMenu={toggleRefMenu}
-          />
-        </div>
-      </Show>
+      <Presence exitBeforeEnter>
+        <Show when={showRefMenu()}>
+          <Motion.div
+            class='fixed top-0 left-0 h-full w-full bg-slate-700'
+            initial={{ scale: 1.05, opacity: 0.5 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ easing: "ease-out" }}
+            exit={{ scale: 1.05, opacity: 0 }}
+          >
+            <RefTagsSearchPanel
+              tags={refTags()}
+              addNostrTag={addNostrTag}
+              removeNostrTag={removeNostrTag}
+              toggleMenu={toggleRefMenu}
+            />
+          </Motion.div>
+        </Show>
+      </Presence>
     </div>
   );
 };
