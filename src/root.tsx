@@ -18,8 +18,6 @@ import NarrowLayout from "./layouts/NarrowLayout";
 import { useIsNarrow } from "./hooks/useMediaQuery";
 
 const Root: Component<{}> = () => {
-  useIsNarrow();
-
   const [showMenu, setShowMenu] = createSignal<boolean>(false);
   const toggleMenu = (): void => {
     setShowMenu(!showMenu());
