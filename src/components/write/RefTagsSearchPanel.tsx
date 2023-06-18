@@ -154,9 +154,6 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     return basicStyle;
   };
 
-  const [isNarrow, setIsNarrow] = createSignal<boolean>(false);
-  useIsNarrow(setIsNarrow);
-
   const basicSelectorPanelStyle = `w-1/2 text-center border-b border-transparent 
                                    hover:border-b hover:border-slate-200 relative
                                    group cursor-pointer transition h-full rounded`;
@@ -175,7 +172,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               class='group-active:scale-95 transition w-fit 
                         mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
             >
-              <VsReferences size={isNarrow() ? 30 : 40} />
+              <VsReferences size={useIsNarrow() ? 30 : 40} />
               <div class='absolute -top-3 -right-3'>{props.tags.length}</div>
             </div>
           </div>
@@ -187,7 +184,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               class='group-active:scale-95 transition w-fit 
                         mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
             >
-              <TbDatabaseSearch size={isNarrow() ? 30 : 40} />
+              <TbDatabaseSearch size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
           <div onClick={props.toggleMenu} class={basicSelectorPanelStyle + " md:hidden"}>
@@ -195,7 +192,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               class='group-active:scale-95 transition w-fit 
                         mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
             >
-              <RiSystemCloseCircleLine size={isNarrow() ? 30 : 40} />
+              <RiSystemCloseCircleLine size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
         </div>

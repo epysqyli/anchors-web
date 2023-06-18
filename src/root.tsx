@@ -18,8 +18,7 @@ import NarrowLayout from "./layouts/NarrowLayout";
 import { useIsNarrow } from "./hooks/useMediaQuery";
 
 const Root: Component<{}> = () => {
-  const [isNarrow, setIsNarrow] = createSignal<boolean | undefined>(undefined);
-  useIsNarrow(setIsNarrow);
+  useIsNarrow();
 
   const [showMenu, setShowMenu] = createSignal<boolean>(false);
   const toggleMenu = (): void => {
@@ -38,7 +37,7 @@ const Root: Component<{}> = () => {
         <Body class="h-screen bg-gray-900">
           <Suspense>
             <ErrorBoundary>
-              <Show when={isNarrow() !== undefined && isNarrow()}>
+              <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
                 <NarrowLayout showMenu={showMenu} toggleMenu={toggleMenu}>
                   <Routes>
                     <FileRoutes />
@@ -46,7 +45,7 @@ const Root: Component<{}> = () => {
                 </NarrowLayout>
               </Show>
 
-              <Show when={isNarrow() !== undefined && !isNarrow()}>
+              <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
                 <WideLayout toggleMenu={toggleMenu}>
                   <Routes>
                     <FileRoutes />

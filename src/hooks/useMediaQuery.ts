@@ -1,6 +1,8 @@
-import { Setter, createEffect, createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 
-const useMediaQuery = (query: string, setFn: Setter<boolean>): void => {
+const [isNarrow, setIsNarrow] = createSignal<boolean | undefined>(undefined);
+
+const useMediaQuery = (query: string): void => {
   const [isMatch, setIsMatch] = createSignal<boolean>(false);
 
   createEffect(() => {
@@ -11,19 +13,14 @@ const useMediaQuery = (query: string, setFn: Setter<boolean>): void => {
     }
 
     window.addEventListener("resize", () => setIsMatch(media.matches));
-    setFn(isMatch());
+    setIsNarrow(isMatch());
   });
 };
 
 
-/**
- * set signals and call useIsNarrow from components as follows
- * const [isNarrow, setIsNarrow] = createSignal<boolean | undefined>();
- * useIsNarrow(setIsNarrow);
- * then wrap into <Show when={isNarrow() !== undefined}>
- */
-const useIsNarrow = (setFn: Setter<boolean>): void => {
-  useMediaQuery("(max-width: 768px)", setFn);
+const useIsNarrow = (): boolean | undefined => {
+  useMediaQuery("(max-width: 768px)");
+  return isNarrow();
 };
 
 export { useIsNarrow };
