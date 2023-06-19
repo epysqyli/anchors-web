@@ -110,10 +110,12 @@ const Write: Component<{}> = () => {
       <div class='w-full md:w-3/5 rounded h-full'>
         <div class='h-[70%] md:h-[80%]'>
           <h1
-            class='text-slate-100 text-center py-5 md:py-7 text-2xl md:text-4xl font-bold
+            class='relative text-slate-100 text-center text-2xl md:text-4xl font-bold
                   md:bg-slate-800 rounded border-b border-slate-500 md:border-none h-[15%]'
           >
-            Write a new idea
+            <span class='absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+              Write a new idea
+            </span>
           </h1>
           <textarea
             placeholder='Time to connect the dots'
