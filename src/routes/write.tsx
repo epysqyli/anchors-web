@@ -107,11 +107,11 @@ const Write: Component<{}> = () => {
       class='md:flex md:gap-x-2 xl:gap-x-2 2xl:w-[98%] mx-auto h-full md:h-[96vh] absolute w-[99%] 
                 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'
     >
-      <div class='w-full md:w-3/5 rounded h-full border-slate-500 border-opacity-25 border'>
+      <div class='w-full md:w-3/5 rounded h-full md:border-slate-500 md:border-opacity-25 md:border'>
         <div class='h-[70%] md:h-[80%]'>
           <h1
             class='relative text-slate-100 text-center text-2xl md:text-4xl font-bold
-                  md:bg-slate-800 rounded border-b border-slate-500 md:border-none h-[15%]'
+                   border-b md:rounded-tr md:rounded-tl border-slate-500 h-[15%]'
           >
             <span class='absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               Write a new idea
@@ -133,7 +133,8 @@ const Write: Component<{}> = () => {
         >
           <VsSend
             size={40}
-            class='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 group-active:scale-90'
+            class='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2
+                   group-hover:scale-110 group-active:scale-90 transition'
           />
         </div>
 
