@@ -158,7 +158,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                                    hover:border-b hover:border-slate-200 relative
                                    group cursor-pointer transition h-full rounded`;
 
-  const activeSelectorPanelStyle = basicSelectorPanelStyle + " bg-slate-600";
+  const activeSelectorPanelStyle = basicSelectorPanelStyle + " bg-slate-800 bg-opacity-50";
 
   return (
     <>
