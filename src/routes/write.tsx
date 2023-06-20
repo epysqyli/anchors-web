@@ -119,8 +119,8 @@ const Write: Component<{}> = () => {
           </h1>
           <textarea
             placeholder='Time to connect the dots'
-            class='block placeholder:text-center focus:outline-none w-11/12 md:w-3/4 mx-auto bg-transparent p-5 md:p-10
-               text-slate-300 caret-orange-200 resize-none custom-scrollbar h-[85%]'
+            class='block placeholder:text-center placeholder:text-lg text-lg focus:outline-none w-11/12 md:w-3/4 mx-auto
+                  bg-transparent p-5 md:p-10 text-slate-300 caret-orange-200 resize-none custom-scrollbar h-[85%]'
             rows={18}
             onInput={updateContent}
           ></textarea>
