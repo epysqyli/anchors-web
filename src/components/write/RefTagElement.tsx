@@ -32,7 +32,8 @@ const RefTagElement: Component<Props> = (props) => {
   };
 
   return (
-    <div class='flex items-center justify-between gap-x-5 py-2 bg-slate-600 rounded-sm text-slate-100'>
+    <div class='flex items-center justify-between gap-x-5 py-2
+               bg-slate-600 rounded text-slate-100 border border-orange-300'>
       <div class='w-1/6'>{icon(props.tag.category)}</div>
       <div class='text break-all w-2/3'>{props.tag.title}</div>
       <div
