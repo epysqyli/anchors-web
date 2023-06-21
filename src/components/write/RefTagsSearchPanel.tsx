@@ -5,7 +5,7 @@ import { RiLogosYoutubeLine } from "solid-icons/ri";
 import { RiLogosSpotifyLine } from "solid-icons/ri";
 import { RiDocumentBook2Line } from "solid-icons/ri";
 import { Component, For, JSX, Show, createSignal } from "solid-js";
-import { IRefTag } from "~/interfaces/IRefTag";
+import { IRefTag, RefTagCategory } from "~/interfaces/IRefTag";
 import { Motion } from "@motionone/solid";
 import RefTagElement from "./RefTagElement";
 import { BsSearch } from "solid-icons/bs";
@@ -17,7 +17,8 @@ import { useIsNarrow } from "~/hooks/useMediaQuery";
 interface RefType {
   icon: JSX.Element;
   selected: boolean;
-  category: string;
+  category: RefTagCategory;
+  placeholder: string;
 }
 
 interface Props {
@@ -32,27 +33,32 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     {
       icon: <RiDocumentBook2Line size={30} />,
       selected: false,
-      category: "books"
+      category: "book",
+      placeholder: "search for books on openlibrary"
     },
     {
       icon: <RiLogosYoutubeLine size={30} />,
       selected: false,
-      category: "videos"
+      category: "video",
+      placeholder: "add a video url as to this post"
     },
     {
       icon: <RiMediaMovie2Line size={30} />,
       selected: false,
-      category: "movies"
+      category: "movie",
+      placeholder: "search for a movie on TMDB"
     },
     {
       icon: <RiLogosSpotifyLine size={30} />,
       selected: false,
-      category: "songs"
+      category: "song",
+      placeholder: "search for a song on spotify"
     },
     {
       icon: <FiLink size={30} />,
       selected: true,
-      category: "generic"
+      category: "generic",
+      placeholder: "add a generic url to this post"
     }
   ]);
 
@@ -77,7 +83,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       const reftype: RefType = {
         icon: rt.icon,
         selected: rt.selected,
-        category: rt.category
+        category: rt.category,
+        placeholder: rt.placeholder
       };
 
       return reftype;
@@ -99,9 +106,9 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       return;
     }
 
-    const currentRefCategory = refTypes().find((rt) => rt.selected)?.category;
+    const currentRefCategory: RefTagCategory = refTypes().find((rt) => rt.selected)?.category!;
 
-    if (currentRefCategory == "generic") {
+    if (currentRefCategory == "generic" || currentRefCategory == "video") {
       const refTag: IRefTag = {
         category: currentRefCategory,
         title: inputTerms(),
@@ -115,7 +122,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     }
 
     setShowSearch(true);
-    if (currentRefCategory == "books") {
+    if (currentRefCategory == "book") {
       search(e);
     }
   };
@@ -125,11 +132,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   };
 
   const placeholder = (): string => {
-    if (refTypes().find((rt) => rt.selected)?.category == "generic") {
-      return "add an external resource URL";
-    }
-
-    return `search for ${refTypes().find((rt) => rt.selected)?.category}`;
+    return refTypes().find((rt) => rt.selected)?.placeholder!;
   };
 
   const icon = (): JSX.Element => {
