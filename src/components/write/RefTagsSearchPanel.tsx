@@ -19,6 +19,7 @@ interface RefType {
   selected: boolean;
   category: RefTagCategory;
   placeholder: string;
+  searchButton: JSX.Element;
 }
 
 interface Props {
@@ -34,31 +35,36 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       icon: <RiDocumentBook2Line size={30} />,
       selected: false,
       category: "book",
-      placeholder: "search for books on openlibrary"
+      placeholder: "search for books on openlibrary",
+      searchButton: <BsSearch size={32} class='group-hover:scale-90 w-fit mx-auto' />
     },
     {
       icon: <RiLogosYoutubeLine size={30} />,
       selected: false,
       category: "video",
-      placeholder: "add a video url as to this post"
+      placeholder: "add a video url as to this post",
+      searchButton: <VsAdd size={32} class='group-hover:scale-90 w-fit mx-auto' />
     },
     {
       icon: <RiMediaMovie2Line size={30} />,
       selected: false,
       category: "movie",
-      placeholder: "search for a movie on TMDB"
+      placeholder: "search for a movie on TMDB",
+      searchButton: <BsSearch size={32} class='group-hover:scale-90 w-fit mx-auto' />
     },
     {
       icon: <RiLogosSpotifyLine size={30} />,
       selected: false,
       category: "song",
-      placeholder: "search for a song on spotify"
+      placeholder: "search for a song on spotify",
+      searchButton: <BsSearch size={32} class='group-hover:scale-90 w-fit mx-auto' />
     },
     {
       icon: <FiLink size={30} />,
       selected: true,
       category: "generic",
-      placeholder: "add a generic url to this post"
+      placeholder: "add a generic url to this post",
+      searchButton: <VsAdd size={32} class='group-hover:scale-90 w-fit mx-auto' />
     }
   ]);
 
@@ -84,7 +90,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         icon: rt.icon,
         selected: rt.selected,
         category: rt.category,
-        placeholder: rt.placeholder
+        placeholder: rt.placeholder,
+        searchButton: rt.searchButton
       };
 
       return reftype;
@@ -136,11 +143,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   };
 
   const icon = (): JSX.Element => {
-    if (refTypes().find((rt) => rt.selected)?.category == "generic") {
-      return <VsAdd size={32} class='group-hover:scale-90 w-fit mx-auto' />;
-    }
-
-    return <BsSearch size={32} class='group-hover:scale-90 w-fit mx-auto' />;
+    return refTypes().find((rt) => rt.selected)?.searchButton!;
   };
 
   const refCategoryIconStyle = (selected: boolean): string => {
