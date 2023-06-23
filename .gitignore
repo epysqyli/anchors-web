@@ -1,2 +1,3 @@
 .solid/
 node_modules
+.env*
