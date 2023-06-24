@@ -1,13 +1,8 @@
 import axios, { AxiosResponse } from "axios";
+import SpotifyTokenResp from "~/interfaces/ISpotifyTokenResp";
 
-interface SpotifyTokenResp {
-  access_token: string;
-  expires_in: number;
-  token_type: string;
-}
-
-const getAccessToken = async (): Promise<AxiosResponse<SpotifyTokenResp>> => {
-  return await axios({
+const getAccessToken = async (): Promise<void> => {
+  const resp: AxiosResponse<SpotifyTokenResp> = await axios({
     method: "POST",
     url: "https://accounts.spotify.com/api/token",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -17,6 +12,29 @@ const getAccessToken = async (): Promise<AxiosResponse<SpotifyTokenResp>> => {
       client_secret: import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
     }
   });
+
+  const message: SpotifyTokenResp = { ...resp.data, tokenOp: "set", tokenProvider: "spotify" };
+  navigator.serviceWorker.controller?.postMessage(message);
 };
 
-export { getAccessToken };
+const searchSongs = async (query: string): Promise<void> => {
+  const queryParams = query.split(" ").reduce((acc, s) => `${acc}+${s}`);
+  const url = `https://api.spotify.com/v1/search?q=${queryParams}&type=track`;
+
+  let resp;
+
+  try {
+    resp = await fetch(url);
+
+    if (resp.status !== 200) {
+      throw new Error("invalid or expired token");
+    }
+  } catch (error) {
+    await getAccessToken();
+    resp = await fetch(url);
+  }
+
+  console.log(await resp.json());
+};
+
+export { searchSongs };
