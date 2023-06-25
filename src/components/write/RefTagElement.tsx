@@ -2,8 +2,7 @@ import { FiTrash2 } from "solid-icons/fi";
 import { Component, JSX } from "solid-js";
 import { IRefTag } from "~/interfaces/IRefTag";
 import { FiLink, FiYoutube } from "solid-icons/fi";
-import { BiRegularCameraMovie } from "solid-icons/bi";
-import { RiDocumentBook2Line, RiLogosSpotifyLine } from "solid-icons/ri";
+import { RiDocumentBook2Line, RiLogosSpotifyLine, RiMediaMovie2Line } from "solid-icons/ri";
 
 interface Props {
   tag: IRefTag;
@@ -23,7 +22,7 @@ const RefTagElement: Component<Props> = (props) => {
         return <FiYoutube size={32} class='mx-auto text-red-500' stroke-width={1.5} />;
 
       case "movie":
-        return <BiRegularCameraMovie size={32} class='mx-auto' />;
+        return <RiMediaMovie2Line size={32} class='mx-auto text-blue-400' />;
 
       case "song":
         return <RiLogosSpotifyLine size={32} class='mx-auto text-green-500' />;
