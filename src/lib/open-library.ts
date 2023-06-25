@@ -28,7 +28,7 @@ const searchBook = async (searchString: string): Promise<IRefTag[]> => {
       creator: res.author_name != undefined && res.author_name.length != 0 ? res.author_name[0] : "",
       preview: res.cover_i != undefined ? `https://covers.openlibrary.org/b/id/${res.cover_i}-M.jpg` : "",
       category: "book",
-      additionalInfoOne: res.author_name.map((authorName) => authorName).join(", ")
+      additionalInfoOne: res.author_name?.map((authorName) => authorName).join(", ")
     };
 
     return refTagResult;
