@@ -57,8 +57,8 @@ const searchSongs = async (query: string): Promise<IRefTag[]> => {
       url: item.external_urls.spotify,
       preview: item.album.images[1].url,
       title: item.name,
-      creator: item.artists.map((artist) => artist.name).join(", "),
-      additionalInfoOne: item.album.name
+      additionalInfoOne: item.album.name,
+      additionalInfoTwo: item.artists.map((artist) => artist.name).join(", ")
     };
   });
 };

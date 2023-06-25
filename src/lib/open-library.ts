@@ -25,10 +25,10 @@ const searchBook = async (searchString: string): Promise<IRefTag[]> => {
     const refTagResult: IRefTag = {
       title: res.title,
       url: `https://openlibrary.org${res.key}`,
-      creator: res.author_name?.map((authorName) => authorName).join(", "),
       preview: res.cover_i != undefined ? `https://covers.openlibrary.org/b/id/${res.cover_i}-M.jpg` : "",
       category: "book",
-      additionalInfoOne: res.author_name?.map((authorName) => authorName).join(", ")
+      additionalInfoOne: res.author_name?.map((authorName) => authorName).join(", "),
+      additionalInfoTwo: "",
     };
 
     return refTagResult;

@@ -14,6 +14,7 @@ import RefTagResult from "./RefTagResult";
 import { TbDatabaseSearch } from "solid-icons/tb";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { searchSongs } from "~/lib/spotify";
+import { searchMovies } from "~/lib/tmdb";
 
 interface RefType {
   icon: JSX.Element;
@@ -93,7 +94,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         setSearchResults(await searchSongs(inputTerms()));
         break;
       case "movie":
-        // setSearchResults(await searchSongs(inputTerms()));
+        setSearchResults(await searchMovies(inputTerms()));
         break;
       default:
         break;
@@ -138,9 +139,9 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         category: currentRefCategory,
         title: inputTerms(),
         url: inputTerms(),
-        creator: "",
         preview: "",
-        additionalInfoOne: ""
+        additionalInfoOne: "",
+        additionalInfoTwo: "",
       };
 
       props.addNostrTag(refTag);

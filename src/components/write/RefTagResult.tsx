@@ -26,7 +26,8 @@ const RefTagResult: Component<Props> = (props) => {
 
       <div class='text-right w-4/5'>
         <div class='text-sm md:text-base text-slate-100'>{result().title}</div>
-        <div class='text-xs md:text-sm text-slate-400 mt-2'>{result().creator}</div>
+        <div class='text-xs md:text-sm text-slate-400 mt-2'>{result().additionalInfoOne}</div>
+        <div class='text-xs md:text-sm text-slate-400 mt-2'>{result().additionalInfoTwo}</div>
       </div>
 
       <BsBookmarkPlusFill
