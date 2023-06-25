@@ -9,6 +9,7 @@ interface SpotifyTracksResponse {
       artists: { name: string }[];
       external_urls: { spotify: string };
       album: {
+        name: string;
         images: { height: number; width: number; url: string }[];
       };
     }[];
@@ -56,7 +57,8 @@ const searchSongs = async (query: string): Promise<IRefTag[]> => {
       url: item.external_urls.spotify,
       preview: item.album.images[1].url,
       title: item.name,
-      creator: item.artists.map((artist) => artist.name).join(", ")
+      creator: item.artists.map((artist) => artist.name).join(", "),
+      additionalInfoOne: item.album.name
     };
   });
 };

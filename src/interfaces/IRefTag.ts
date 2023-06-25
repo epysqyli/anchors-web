@@ -5,6 +5,7 @@ interface IRefTag {
   creator: string;
   url: string;
   category: RefTagCategory;
+  additionalInfoOne: string;
 }
 
 export { RefTagCategory, IRefTag };
