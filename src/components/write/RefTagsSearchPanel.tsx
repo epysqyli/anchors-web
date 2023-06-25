@@ -252,7 +252,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         </div>
       </div>
 
-      <div class='h-[20%] w-11/12 mx-auto md:w-full border-t border-orange-500 border-opacity-40 py-1'>
+      <div class='h-[20%] w-11/12 mx-auto md:w-full border-t border-orange-500 border-opacity-40 py-1 px-2'>
         <div class='flex items-center gap-x-1 justify-around h-3/5'>
           <For each={refTypes()}>
             {(refType) => {
