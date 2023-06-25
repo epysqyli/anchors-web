@@ -139,7 +139,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         title: inputTerms(),
         url: inputTerms(),
         creator: "",
-        preview: ""
+        preview: "",
+        additionalInfoOne: ""
       };
 
       props.addNostrTag(refTag);
