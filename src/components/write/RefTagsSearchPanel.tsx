@@ -13,6 +13,7 @@ import { searchBook } from "~/lib/open-library";
 import RefTagResult from "./RefTagResult";
 import { TbDatabaseSearch } from "solid-icons/tb";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
+import { searchSongs } from "~/lib/spotify";
 
 interface RefType {
   icon: JSX.Element;
@@ -78,9 +79,26 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   const search = async (e: Event) => {
     e.preventDefault();
 
+    // make it into a signal (or memo?)
+    const currentRefCategory: RefTagCategory = refTypes().find((rt) => rt.selected)?.category!;
+
     setSearchResults([]);
     setIsLoading(true);
-    setSearchResults(await searchBook(inputTerms()));
+
+    switch (currentRefCategory) {
+      case "book":
+        setSearchResults(await searchBook(inputTerms()));
+        break;
+      case "song":
+        setSearchResults(await searchSongs(inputTerms()));
+        break;
+      case "movie":
+        // setSearchResults(await searchSongs(inputTerms()));
+        break;
+      default:
+        break;
+    }
+
     setIsLoading(false);
   };
 
@@ -129,9 +147,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     }
 
     setShowSearch(true);
-    if (currentRefCategory == "book") {
-      search(e);
-    }
+    search(e);
   };
 
   const handleOnChange = (e: Event) => {

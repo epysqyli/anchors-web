@@ -1,5 +1,19 @@
 import axios, { AxiosResponse } from "axios";
+import { IRefTag } from "~/interfaces/IRefTag";
 import SpotifyTokenResp from "~/interfaces/ISpotifyTokenResp";
+
+interface SpotifyTracksResponse {
+  tracks: {
+    items: {
+      name: string;
+      artists: { name: string }[];
+      external_urls: { spotify: string };
+      album: {
+        images: { height: number; width: number; url: string }[];
+      };
+    }[];
+  };
+}
 
 const getAccessToken = async (): Promise<void> => {
   const resp: AxiosResponse<SpotifyTokenResp> = await axios({
@@ -17,7 +31,7 @@ const getAccessToken = async (): Promise<void> => {
   navigator.serviceWorker.controller?.postMessage(message);
 };
 
-const searchSongs = async (query: string): Promise<void> => {
+const searchSongs = async (query: string): Promise<IRefTag[]> => {
   const queryParams = query.split(" ").reduce((acc, s) => `${acc}+${s}`);
   const url = `https://api.spotify.com/v1/search?q=${queryParams}&type=track`;
 
@@ -34,7 +48,17 @@ const searchSongs = async (query: string): Promise<void> => {
     resp = await fetch(url);
   }
 
-  console.log(await resp.json());
+  const results: SpotifyTracksResponse = await resp.json();
+
+  return results.tracks.items.map((item) => {
+    return {
+      category: "song",
+      url: item.external_urls.spotify,
+      preview: item.album.images[1].url,
+      title: item.name,
+      creator: item.artists.map((artist) => artist.name).join(", ")
+    };
+  });
 };
 
 export { searchSongs };
