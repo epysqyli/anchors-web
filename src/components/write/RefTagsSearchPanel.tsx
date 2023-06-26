@@ -197,7 +197,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                         mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
             >
               <VsReferences size={useIsNarrow() ? 30 : 40} />
-              <div class='absolute -top-3 -right-3'>{props.tags.length}</div>
+              <div class='absolute -top-5 -right-10'>{props.tags.length}</div>
             </div>
           </div>
           <div
