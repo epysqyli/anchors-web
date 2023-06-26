@@ -30,7 +30,7 @@ const RefTagElement: Component<Props> = (props) => {
   };
 
   return (
-    <div class='flex items-center px-2 justify-between bg-slate-600 rounded text-slate-100 border border-orange-300'>
+    <div class='flex items-center px-2 justify-between bg-slate-700 text-slate-100 border-x border-orange-300'>
       <div class='p-3 rounded-xl'>{icon(props.tag.category)}</div>
       <div class='text break-all w-2/3 px-3 py-6'>
         <div>{props.tag.title}</div>
