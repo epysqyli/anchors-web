@@ -13,8 +13,8 @@ const RefTagResult: Component<Props> = (props) => {
   return (
     <div
       onClick={() => props.addTag(result())}
-      class='flex justify-between py-2 px-2 my-2 bg-slate-800 rounded group border-orange-400 border-b
-             mx-2 gap-x-5 hover:bg-slate-900 transition cursor-pointer active:scale-95'
+      class='flex justify-between py-2 px-2 my-2 group border-orange-400 border-opacity-40 border-b
+             mx-2 gap-x-5 transition cursor-pointer active:scale-95 active:bg-slate-500 hover:border-opacity-100'
     >
       <div class='w-1/5'>
         {result().preview != "" ? (
