@@ -221,7 +221,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           </div>
         </div>
 
-        <div class='py-5 overflow-y-auto custom-scrollbar h-[82%] my-3'>
+        <div class='py-5 overflow-y-auto custom-scrollbar h-[82%] my-3 mr-2'>
           <Show when={!showSearch()}>
             <For each={props.tags}>
               {(tag) => (
