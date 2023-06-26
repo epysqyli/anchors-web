@@ -147,7 +147,8 @@ const Write: Component<{}> = () => {
         </div>
       </div>
 
-      <div class='hidden md:block w-2/5 h-full md:h-[98%] md:py-5 md:my-auto md:bg-slate-800 md:rounded-md'>
+      <div class='hidden md:block w-2/5 h-full md:h-[98%] md:py-5 md:my-auto
+                 md:bg-slate-800 md:rounded-md md:border md:border-neutral-600 md:border-opacity-50'>
         <RefTagsSearchPanel
           tags={refTags()}
           addNostrTag={addNostrTag}
