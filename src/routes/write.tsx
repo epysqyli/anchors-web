@@ -107,11 +107,11 @@ const Write: Component<{}> = () => {
       class='md:flex md:gap-x-2 xl:gap-x-2 2xl:w-[98%] mx-auto h-full md:h-[96vh] absolute w-[99%] 
                 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'
     >
-      <div class='w-full md:w-3/5 rounded h-full md:border-slate-500 md:border-opacity-25 md:border'>
+      <div class='w-full md:w-3/5 h-full'>
         <div class='h-[70%] md:h-[80%]'>
           <h1
             class='relative text-slate-100 text-center text-2xl md:text-4xl font-bold
-                   md:rounded-tr md:rounded-tl h-[15%] border-b border-orange-500 border-opacity-40'
+                   md:rounded-tr md:rounded-tl h-[15%]'
           >
             <span class='absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               Write a new idea
@@ -128,8 +128,8 @@ const Write: Component<{}> = () => {
 
         <div
           onClick={signAndPublishNostrEvent}
-          class='hidden md:block relative text-orange-300 mx-auto py-10 group cursor-pointer border-t
-                 border-orange-500 border-opacity-40 h-[20%] hover:bg-slate-600'
+          class='hidden md:block relative text-orange-300 mx-auto py-10 group cursor-pointer h-[20%]
+               md:h-[15%] md:w-2/3 md:mx-auto md:mt-5 hover:bg-slate-600 rounded-md'
         >
           <VsSend
             size={40}
@@ -147,7 +147,7 @@ const Write: Component<{}> = () => {
         </div>
       </div>
 
-      <div class='hidden md:block w-2/5 h-full border-slate-500 border-opacity-25 border'>
+      <div class='hidden md:block w-2/5 h-full md:h-[98%] md:py-5 md:my-auto md:bg-slate-800 md:rounded-md'>
         <RefTagsSearchPanel
           tags={refTags()}
           addNostrTag={addNostrTag}

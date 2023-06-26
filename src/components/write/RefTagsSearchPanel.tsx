@@ -44,7 +44,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       icon: <RiLogosYoutubeLine size={30} />,
       selected: false,
       category: "video",
-      placeholder: "add a video url as to this post",
+      placeholder: "add a video url to this post",
       searchButton: <VsAdd size={32} class='group-hover:scale-90 w-fit mx-auto' />
     },
     {
@@ -141,7 +141,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         url: inputTerms(),
         preview: "",
         additionalInfoOne: "",
-        additionalInfoTwo: "",
+        additionalInfoTwo: ""
       };
 
       props.addNostrTag(refTag);
@@ -178,16 +178,16 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     return basicStyle;
   };
 
-  const basicSelectorPanelStyle = `w-1/2 text-center border-b border-transparent 
-                                   hover:border-b hover:border-slate-200 relative
-                                   group cursor-pointer transition h-full rounded`;
+  const basicSelectorPanelStyle = `w-1/2 relative h-full text-center border-b border-transparent 
+                                   hover:border-b hover:border-slate-200 group cursor-pointer transition`;
 
-  const activeSelectorPanelStyle = basicSelectorPanelStyle + " bg-slate-800 bg-opacity-50";
+  const activeSelectorPanelStyle =
+    basicSelectorPanelStyle + " bg-slate-800 bg-opacity-50 md:bg-transparent md:border-b md:border-slate-50";
 
   return (
     <>
       <div class='h-[70%] md:h-[80%]'>
-        <div class='flex items-center justify-between gap-x-1 text-slate-200 h-[15%]'>
+        <div class='flex items-center justify-between gap-x-1 md:px-5 md:gap-x-10 text-slate-200 h-[15%]'>
           <div
             onClick={() => setShowSearch(false)}
             class={showSearch() ? basicSelectorPanelStyle : activeSelectorPanelStyle}
@@ -253,7 +253,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         </div>
       </div>
 
-      <div class='h-[20%] w-11/12 mx-auto md:w-full border-t border-orange-500 border-opacity-40 py-1 px-2'>
+      <div class='h-[20%] w-11/12 mx-auto md:w-full py-1 px-2'>
         <div class='flex items-center gap-x-1 justify-around h-3/5'>
           <For each={refTypes()}>
             {(refType) => {
@@ -274,16 +274,20 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           </For>
         </div>
 
-        <form onSubmit={handleSubmit} class='flex items-center gap-x-1 h-2/5 mt-1'>
+        <form
+          onSubmit={handleSubmit}
+          class='flex items-center justify-center gap-x-1
+                                             h-2/5 mt-1 mx-auto md:px-5 md:gap-x-5'
+        >
           <input
             placeholder={placeholder()}
             type='text'
             value={inputTerms()}
             onChange={handleOnChange}
-            class='block focus:outline-none py-2 caret-slate-600
-               placeholder:text-center placeholder:text text-slate-500 text-center
+            class='block focus:outline-none py-2 caret-slate-200
+               placeholder:text-center placeholder:text text-slate-200 text-center
                placeholder:text-sm md:placeholder:text-[13pt] md:text-[13pt]
-               focus:placeholder-none h-full w-4/5 rounded bg-slate-200'
+               focus:placeholder-none h-full w-4/5 rounded bg-slate-600'
           />
           <button
             class='block group text-slate-50 hover:bg-slate-600
