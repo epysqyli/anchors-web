@@ -18,7 +18,7 @@ const RefTagResult: Component<Props> = (props) => {
     >
       <div class='w-1/5'>
         {result().preview != "" ? (
-          <img src={result().preview} />
+          <img src={result().preview} loading="lazy" />
         ) : (
           <div class='bg-slate-500 h-full rounded'></div>
         )}
