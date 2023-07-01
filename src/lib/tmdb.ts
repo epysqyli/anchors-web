@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import { IRefTag } from "~/interfaces/IRefTag";
 
 interface TMDBMoviesSearchResponse {
@@ -9,6 +10,11 @@ interface TMDBMoviesSearchResponse {
     release_date: string;
     id: number;
   }[];
+}
+
+interface TMBDMovieFetchResponse {
+  title: string;
+  poster_path: string;
 }
 
 const searchMovies = async (query: string): Promise<IRefTag[]> => {
@@ -35,4 +41,22 @@ const searchMovies = async (query: string): Promise<IRefTag[]> => {
   });
 };
 
-export { searchMovies };
+const fetchMovie = async (id: number, url: string): Promise<IFeedRefTag> => {
+  const resp: AxiosResponse<TMBDMovieFetchResponse> = await axios({
+    method: "GET",
+    url: `https://api.themoviedb.org/3/movie/${id}`,
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
+      "Content-Type": "application/json"
+    }
+  });
+
+  return {
+    primaryInfo: resp.data.title,
+    secondaryInfo: "",
+    preview: resp.data.poster_path,
+    url: url
+  };
+};
+
+export { searchMovies, fetchMovie };
