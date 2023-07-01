@@ -169,7 +169,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                         h-3/5 w-1/5 relative border-b border-transparent
                         hover:border-slate-400 text-slate-300`;
 
-    const selectedStyle = basicStyle + " border-b border-slate-200";
+    const selectedStyle = basicStyle + " border-b border-slate-50";
 
     if (selected) {
       return selectedStyle;
@@ -262,10 +262,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                   onClick={() => selectRefType(refType.category)}
                   class={refCategoryIconStyle(refType.selected)}
                 >
-                  <div
-                    class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                              group-active:scale-90'
-                  >
+                  <div class='w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group-active:scale-90'>
                     {refType.icon}
                   </div>
                 </div>
