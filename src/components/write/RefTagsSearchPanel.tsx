@@ -70,6 +70,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     }
   ]);
 
+  const [currentRefType, setCurrentRefType] = createSignal<RefType>(refTypes()[0]);
+
   const [showSearch, setShowSearch] = createSignal<boolean>(false);
 
   const [inputTerms, setInputTerms] = createSignal<string>("");
@@ -80,13 +82,10 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
   const search = async (e: Event) => {
     e.preventDefault();
 
-    // make it into a signal (or memo?)
-    const currentRefCategory: RefTagCategory = refTypes().find((rt) => rt.selected)?.category!;
-
     setSearchResults([]);
     setIsLoading(true);
 
-    switch (currentRefCategory) {
+    switch (currentRefType().category) {
       case "book":
         setSearchResults(await searchBook(inputTerms()));
         break;
@@ -118,6 +117,11 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
     const updatedRefTypes: RefType[] = currentRefTypes.map((rt) => {
       rt.selected = rt.category == category ? true : false;
+
+      if (rt.selected) {
+        setCurrentRefType(rt);
+      }
+
       return rt;
     });
 
@@ -132,11 +136,9 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       return;
     }
 
-    const currentRefCategory: RefTagCategory = refTypes().find((rt) => rt.selected)?.category!;
-
-    if (currentRefCategory == "generic" || currentRefCategory == "video") {
+    if (currentRefType().category == "generic" || currentRefType().category == "video") {
       const refTag: IRefTag = {
-        category: currentRefCategory,
+        category: currentRefType().category,
         title: inputTerms(),
         url: inputTerms(),
         preview: "",
@@ -154,14 +156,6 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const handleOnChange = (e: Event) => {
     setInputTerms((e.currentTarget as HTMLInputElement).value);
-  };
-
-  const placeholder = (): string => {
-    return refTypes().find((rt) => rt.selected)?.placeholder!;
-  };
-
-  const icon = (): JSX.Element => {
-    return refTypes().find((rt) => rt.selected)?.searchButton!;
   };
 
   const refCategoryIconStyle = (selected: boolean): string => {
@@ -192,10 +186,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             onClick={() => setShowSearch(false)}
             class={showSearch() ? basicSelectorPanelStyle : activeSelectorPanelStyle}
           >
-            <div
-              class='group-active:scale-95 transition w-fit 
-                        mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-            >
+            <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <VsReferences size={useIsNarrow() ? 30 : 40} />
               <div class='absolute -top-5 -right-10'>{props.tags.length}</div>
             </div>
@@ -204,18 +195,12 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             onClick={() => setShowSearch(true)}
             class={showSearch() ? activeSelectorPanelStyle : basicSelectorPanelStyle}
           >
-            <div
-              class='group-active:scale-95 transition w-fit 
-                        mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-            >
+            <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <TbDatabaseSearch size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
           <div onClick={props.toggleMenu} class={basicSelectorPanelStyle + " md:hidden"}>
-            <div
-              class='group-active:scale-95 transition w-fit 
-                        mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-            >
+            <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <RiSystemCloseCircleLine size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
@@ -277,7 +262,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                                              h-2/5 mt-1 mx-auto md:px-5 md:gap-x-5'
         >
           <input
-            placeholder={placeholder()}
+            placeholder={currentRefType().placeholder}
             type='text'
             value={inputTerms()}
             onChange={handleOnChange}
@@ -290,7 +275,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             class='block group text-slate-50 hover:bg-slate-600
                      active:bg-slate-800 p-3 h-full rounded w-1/5'
           >
-            {icon()}
+            {currentRefType().searchButton}
           </button>
         </form>
       </div>
