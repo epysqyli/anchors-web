@@ -70,7 +70,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     }
   ]);
 
-  const [currentRefType, setCurrentRefType] = createSignal<RefType>(refTypes()[0]);
+  const [currentRefType, setCurrentRefType] = createSignal<RefType>(refTypes()[4]);
 
   const [showSearch, setShowSearch] = createSignal<boolean>(false);
 
@@ -160,10 +160,10 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const refCategoryIconStyle = (selected: boolean): string => {
     const basicStyle = `cursor-pointer group transition-scale
-                        h-3/5 w-1/5 relative border-b border-transparent
+                        h-3/5 w-1/5 relative border-y border-transparent
                         hover:border-slate-400 text-slate-300`;
 
-    const selectedStyle = basicStyle + " border-b border-slate-50";
+    const selectedStyle = basicStyle + " bg-slate-600 border-orange-200 ";
 
     if (selected) {
       return selectedStyle;
@@ -271,10 +271,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                placeholder:text-sm md:placeholder:text-[13pt] md:text-[13pt]
                focus:placeholder-none h-full w-4/5 rounded bg-slate-600'
           />
-          <button
-            class='block group text-slate-50 hover:bg-slate-600
-                     active:bg-slate-800 p-3 h-full rounded w-1/5'
-          >
+          <button class='block group text-slate-50 hover:bg-slate-600 active:bg-slate-800 p-3 h-full rounded w-1/5'>
             {currentRefType().searchButton}
           </button>
         </form>
