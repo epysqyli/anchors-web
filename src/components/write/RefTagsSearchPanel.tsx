@@ -269,7 +269,8 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             class='block focus:outline-none py-2 caret-slate-200
                placeholder:text-center placeholder:text text-slate-200 text-center
                placeholder:text-sm md:placeholder:text-[13pt] md:text-[13pt]
-               focus:placeholder-none h-full w-4/5 rounded bg-slate-600'
+               focus:placeholder-none h-full w-4/5 bg-slate-600
+               border-y border-transparent focus:border-orange-200'
           />
           <button class='block group text-slate-50 hover:bg-slate-600 active:bg-slate-800 p-3 h-full rounded w-1/5'>
             {currentRefType().searchButton}
