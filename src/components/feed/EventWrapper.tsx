@@ -7,6 +7,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchMovie } from "~/lib/external-services/tmdb";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { fetchSong } from "~/lib/external-services/spotify";
+import { Motion } from "@motionone/solid";
 
 interface Props {
   event: Event;
@@ -98,7 +99,13 @@ const EventWrapper: Component<Props> = (props) => {
         <div class='snap-start h-full text-white text-lg px-10 pt-10 mx-auto w-4/5 md:w-11/12 2xl:p-16 rounded-md'>
           <div class='flex justify-center gap-x-10'>
             <div class='w-1/4 custom-scrollbar h-[70vh] overflow-auto pt-2 pr-5'>
-              <For each={eventRefTags()}>{(tag) => <RefTagFeedElement tag={tag} isLoading={isLoading} />}</For>
+              <For each={eventRefTags()}>
+                {(tag) => (
+                  <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
+                    <RefTagFeedElement tag={tag} isLoading={isLoading} />
+                  </Motion.div>
+                )}
+              </For>
             </div>
 
             <div class='custom-scrollbar h-[70vh] overflow-auto px-10 break-words text-justify whitespace-pre-line w-3/4'>
