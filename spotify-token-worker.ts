@@ -24,7 +24,7 @@ self.addEventListener("message", (ev) => {
 });
 
 self.addEventListener("fetch", (ev) => {
-  if (ev.request.url.includes("api.spotify.com/v1/search")) {
+  if (ev.request.url.includes("api.spotify.com/v1/")) {
     const searchRequest = new Request(ev.request, {
       method: "GET",
       headers: new Headers({

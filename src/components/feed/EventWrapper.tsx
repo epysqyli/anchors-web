@@ -6,6 +6,7 @@ import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import { parseReferenceType } from "~/lib/references";
 import { fetchMovie } from "~/lib/tmdb";
 import { fetchBook } from "~/lib/open-library";
+import { fetchSong } from "~/lib/spotify";
 
 interface Props {
   event: Event;
@@ -32,6 +33,9 @@ const EventWrapper: Component<Props> = (props) => {
           break;
 
         case "song":
+          const songID = refTag[1].split("/")[refTag[1].split("/").length - 1];
+          setEventRefTags([...eventRefTags(), await fetchSong(songID, refTag[1])]);
+          break;
 
         case "video":
         case "generic":

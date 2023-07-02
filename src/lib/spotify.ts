@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import { IRefTag } from "~/interfaces/IRefTag";
 import SpotifyTokenResp from "~/interfaces/ISpotifyTokenResp";
 
@@ -14,6 +15,15 @@ interface SpotifyTracksResponse {
       };
     }[];
   };
+}
+
+interface SpotifySingleTrackResponse {
+  name: string;
+  album: {
+    name: string;
+    images: { height: number; width: number; url: string }[];
+  };
+  artists: { name: string }[];
 }
 
 const getAccessToken = async (): Promise<void> => {
@@ -63,4 +73,28 @@ const searchSongs = async (query: string): Promise<IRefTag[]> => {
   });
 };
 
-export { searchSongs };
+const fetchSong = async (id: string, url: string): Promise<IFeedRefTag> => {
+  const requestUrl = `https://api.spotify.com/v1/tracks/${id}`;
+  let resp;
+
+  try {
+    resp = await fetch(requestUrl);
+    if (resp.status !== 200) {
+      throw new Error("invalid or expired token");
+    }
+  } catch (error) {
+    await getAccessToken();
+    resp = await fetch(requestUrl);
+  }
+
+  const track: SpotifySingleTrackResponse = await resp.json();
+
+  return {
+    preview: track.album.images[1].url,
+    primaryInfo: track.name,
+    secondaryInfo: track.artists.map((artist) => artist.name).join(", "),
+    url: url
+  };
+};
+
+export { searchSongs, fetchSong };
