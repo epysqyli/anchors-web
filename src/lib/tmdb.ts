@@ -54,8 +54,9 @@ const fetchMovie = async (id: string, url: string): Promise<IFeedRefTag> => {
   return {
     primaryInfo: resp.data.title,
     secondaryInfo: "",
-    preview: resp.data.poster_path,
-    url: url
+    preview: resp.data.poster_path ? `https://image.tmdb.org/t/p/w200${resp.data.poster_path}` : "",
+    url: url,
+    category: "movie"
   };
 };
 

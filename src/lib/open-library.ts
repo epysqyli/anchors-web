@@ -52,7 +52,8 @@ const fetchBook = async (bookID: string, url: string): Promise<IFeedRefTag> => {
       resp.data.covers.length != 0 ? `https://covers.openlibrary.org/b/id/${resp.data.covers[0]}-M.jpg` : "",
     primaryInfo: resp.data.title,
     secondaryInfo: "",
-    url: url
+    url: url,
+    category: "book"
   };
 };
 

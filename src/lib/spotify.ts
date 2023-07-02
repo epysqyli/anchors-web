@@ -93,7 +93,8 @@ const fetchSong = async (id: string, url: string): Promise<IFeedRefTag> => {
     preview: track.album.images[1].url,
     primaryInfo: track.name,
     secondaryInfo: track.artists.map((artist) => artist.name).join(", "),
-    url: url
+    url: url,
+    category: "song"
   };
 };
 

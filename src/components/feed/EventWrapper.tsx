@@ -38,17 +38,27 @@ const EventWrapper: Component<Props> = (props) => {
           break;
 
         case "video":
+          const videoRefTag: IFeedRefTag = {
+            preview: "",
+            primaryInfo: "",
+            secondaryInfo: "",
+            url: refTag[1],
+            category: "video"
+          };
+
+          setEventRefTags([...eventRefTags(), videoRefTag]);
+          break;
+
         case "generic":
           const genericRefTag: IFeedRefTag = {
             preview: "",
             primaryInfo: "",
             secondaryInfo: "",
-            url: refTag[1]
+            url: refTag[1],
+            category: "generic"
           };
-          
-          setEventRefTags([...eventRefTags(), genericRefTag]);
 
-        default:
+          setEventRefTags([...eventRefTags(), genericRefTag]);
           break;
       }
     }
@@ -83,8 +93,8 @@ const EventWrapper: Component<Props> = (props) => {
 
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
         <div class='snap-start h-full text-white text-lg px-10 pt-10 mx-auto w-4/5 md:w-11/12 2xl:p-16 rounded-md'>
-          <div class='flex justify-center gap-x-5'>
-            <div class='w-1/4'>
+          <div class='flex justify-center gap-x-10'>
+            <div class='w-1/4 custom-scrollbar h-[70vh] overflow-auto pt-2 pr-5'>
               <For each={eventRefTags()}>{(tag) => <RefTagFeedElement tag={tag} />}</For>
             </div>
 
