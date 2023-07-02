@@ -98,7 +98,7 @@ const EventWrapper: Component<Props> = (props) => {
               <For each={eventRefTags()}>{(tag) => <RefTagFeedElement tag={tag} />}</For>
             </div>
 
-            <div class='custom-scrollbar h-[70vh] overflow-auto pr-10 break-words text-justify whitespace-pre-line w-3/4'>
+            <div class='custom-scrollbar h-[70vh] overflow-auto px-10 break-words text-justify whitespace-pre-line w-3/4'>
               {nostrEvent().content}
             </div>
           </div>
