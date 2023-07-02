@@ -31,9 +31,18 @@ const EventWrapper: Component<Props> = (props) => {
           setEventRefTags([...eventRefTags(), await fetchBook(bookID, refTag[1])]);
           break;
 
-        case "video":
         case "song":
+
+        case "video":
         case "generic":
+          const genericRefTag: IFeedRefTag = {
+            preview: "",
+            primaryInfo: "",
+            secondaryInfo: "",
+            url: refTag[1]
+          };
+          
+          setEventRefTags([...eventRefTags(), genericRefTag]);
 
         default:
           break;
