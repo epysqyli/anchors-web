@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import { IRefTag } from "~/interfaces/IRefTag";
 
 interface OpenLibraryQueryResult {
@@ -11,6 +12,11 @@ interface OpenLibraryQueryResult {
     author_name: string[];
     first_publish_year: number;
   }[];
+}
+
+interface OpenLIbraryFetchResult {
+  title: string;
+  covers: string[];
 }
 
 const searchBook = async (searchString: string): Promise<IRefTag[]> => {
@@ -28,11 +34,26 @@ const searchBook = async (searchString: string): Promise<IRefTag[]> => {
       preview: res.cover_i != undefined ? `https://covers.openlibrary.org/b/id/${res.cover_i}-M.jpg` : "",
       category: "book",
       additionalInfoOne: res.author_name?.map((authorName) => authorName).join(", "),
-      additionalInfoTwo: "",
+      additionalInfoTwo: ""
     };
 
     return refTagResult;
   });
 };
 
-export { searchBook };
+const fetchBook = async (bookID: string, url: string): Promise<IFeedRefTag> => {
+  const resp: AxiosResponse<OpenLIbraryFetchResult> = await axios({
+    method: "GET",
+    url: `https://openlibrary.org/works/${bookID}.json`
+  });
+
+  return {
+    preview:
+      resp.data.covers.length != 0 ? `https://covers.openlibrary.org/b/id/${resp.data.covers[0]}-M.jpg` : "",
+    primaryInfo: resp.data.title,
+    secondaryInfo: "",
+    url: url
+  };
+};
+
+export { searchBook, fetchBook };

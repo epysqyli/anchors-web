@@ -1,7 +1,7 @@
 import { VsReferences, VsSend } from "solid-icons/vs";
 import { IRefTag } from "~/interfaces/IRefTag";
 import { RelayContext } from "~/contexts/relay";
-import { Component, Show, createSignal, useContext } from "solid-js";
+import { Component, Show, createEffect, createSignal, useContext } from "solid-js";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import menuTogglerContext from "~/contexts/menuToggle";

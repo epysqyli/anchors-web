@@ -5,6 +5,7 @@ import RefTagFeedElement from "./RefTagFeedElement";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import { parseReferenceType } from "~/lib/references";
 import { fetchMovie } from "~/lib/tmdb";
+import { fetchBook } from "~/lib/open-library";
 
 interface Props {
   event: Event;
@@ -27,6 +28,10 @@ const EventWrapper: Component<Props> = (props) => {
           break;
 
         case "book":
+          const bookID = refTag[1].split("/")[refTag[1].split("/").length - 1];
+          setEventRefTags([...eventRefTags(), await fetchBook(bookID, refTag[1])]);
+          break;
+
         case "video":
         case "song":
         case "generic":
