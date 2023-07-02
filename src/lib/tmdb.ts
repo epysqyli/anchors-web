@@ -41,7 +41,7 @@ const searchMovies = async (query: string): Promise<IRefTag[]> => {
   });
 };
 
-const fetchMovie = async (id: number, url: string): Promise<IFeedRefTag> => {
+const fetchMovie = async (id: string, url: string): Promise<IFeedRefTag> => {
   const resp: AxiosResponse<TMBDMovieFetchResponse> = await axios({
     method: "GET",
     url: `https://api.themoviedb.org/3/movie/${id}`,

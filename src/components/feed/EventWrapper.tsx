@@ -23,8 +23,7 @@ const EventWrapper: Component<Props> = (props) => {
       switch (parseReferenceType(refTag[1])) {
         case "movie":
           const movieID = refTag[1].split("/")[refTag[1].split("/").length - 1];
-          const feedRefTag = await fetchMovie(Number(movieID), refTag[1]);
-          setEventRefTags([...eventRefTags(), feedRefTag]);
+          setEventRefTags([...eventRefTags(), await fetchMovie(movieID, refTag[1])]);
           break;
 
         case "book":
