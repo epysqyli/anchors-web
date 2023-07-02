@@ -28,24 +28,22 @@ const RefTagFeedElement: Component<Props> = (props) => {
 
   return (
     <Show when={!props.isLoading()} fallback={fallback}>
-      <div class='text-slate-300 break-words mb-5 border border-slate-400 rounded border-opacity-25'>
-        <div class='border-b bg-slate-700 rounded-t border-opacity-25 border-slate-400 py-3'>
-          {refTagIcon(props.tag.category)}
-        </div>
+      <div class='text-slate-300 bg-slate-700 break-words mb-5 py-1 relative border-x border-orange-200 border-opacity-40'>
         <div class='my-3'>{preview(props.tag.preview)}</div>
 
-        <div class='text-center text-base text-slate-300 py-3 border-b border-slate-400 border-opacity-25 px-5'>
+        <div class='text-center text-base text-slate-300 py-3 px-5'>
           {props.tag.primaryInfo == "" ? props.tag.url : props.tag.primaryInfo}
         </div>
 
         <div class='flex items-center justify-between py-3'>
-          <a class='w-1/2 cursor-pointer' href={props.tag.url} target='_blank'>
+          <div class='w-1/3'>{refTagIcon(props.tag.category)}</div>
+          <a class='w-1/3 cursor-pointer' href={props.tag.url} target='_blank'>
             <FiExternalLink
               size={28}
               class='mx-auto text-slate-400 hover:scale-110 active:scale-95 transition'
             />
           </a>
-          <div class='w-1/2'>
+          <div class='w-1/3'>
             <VsReferences
               size={28}
               class='mx-auto cursor-pointer text-slate-400 hover:scale-110 active:scale-95 transition'

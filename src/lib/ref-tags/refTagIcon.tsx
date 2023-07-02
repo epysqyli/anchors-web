@@ -5,19 +5,19 @@ import { JSX } from "solid-js";
 const refTagIcon = (category: string): JSX.Element => {
   switch (category) {
     case "generic":
-      return <FiLink size={38} class='mx-auto' />;
+      return <FiLink size={32} class='mx-auto' />;
 
     case "book":
-      return <RiDocumentBook2Line size={38} class='mx-auto text-amber-300' />;
+      return <RiDocumentBook2Line size={32} class='mx-auto text-amber-300' />;
 
     case "video":
-      return <FiYoutube size={38} class='mx-auto text-red-500' stroke-width={1.5} />;
+      return <FiYoutube size={32} class='mx-auto text-red-500' stroke-width={1.5} />;
 
     case "movie":
-      return <RiMediaMovie2Line size={38} class='mx-auto text-blue-400' />;
+      return <RiMediaMovie2Line size={32} class='mx-auto text-blue-400' />;
 
     case "song":
-      return <RiLogosSpotifyLine size={38} class='mx-auto text-green-500' />;
+      return <RiLogosSpotifyLine size={32} class='mx-auto text-green-500' />;
   }
 };
 
