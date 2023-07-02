@@ -1,20 +1,23 @@
-import { VsAdd, VsReferences } from "solid-icons/vs";
 import { FiLink } from "solid-icons/fi";
-import { RiMediaMovie2Line, RiSystemCloseCircleLine } from "solid-icons/ri";
-import { RiLogosYoutubeLine } from "solid-icons/ri";
-import { RiLogosSpotifyLine } from "solid-icons/ri";
-import { RiDocumentBook2Line } from "solid-icons/ri";
-import { Component, For, JSX, Show, createSignal } from "solid-js";
-import { IRefTag, RefTagCategory } from "~/interfaces/IRefTag";
 import { Motion } from "@motionone/solid";
-import RefTagElement from "./RefTagElement";
 import { BsSearch } from "solid-icons/bs";
-import { searchBook } from "~/lib/open-library";
 import RefTagResult from "./RefTagResult";
+import RefTagElement from "./RefTagElement";
 import { TbDatabaseSearch } from "solid-icons/tb";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
-import { searchSongs } from "~/lib/spotify";
-import { searchMovies } from "~/lib/tmdb";
+import { VsAdd, VsReferences } from "solid-icons/vs";
+import { searchMovies } from "~/lib/external-services/tmdb";
+import { searchSongs } from "~/lib/external-services/spotify";
+import { IRefTag, RefTagCategory } from "~/interfaces/IRefTag";
+import { searchBook } from "~/lib/external-services/open-library";
+import { Component, For, JSX, Show, createSignal } from "solid-js";
+import {
+  RiMediaMovie2Line,
+  RiSystemCloseCircleLine,
+  RiDocumentBook2Line,
+  RiLogosSpotifyLine,
+  RiLogosYoutubeLine
+} from "solid-icons/ri";
 
 interface RefType {
   icon: JSX.Element;

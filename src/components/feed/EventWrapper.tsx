@@ -4,9 +4,9 @@ import { BiRegularBoltCircle } from "solid-icons/bi";
 import RefTagFeedElement from "./RefTagFeedElement";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import { parseReferenceType } from "~/lib/references";
-import { fetchMovie } from "~/lib/tmdb";
-import { fetchBook } from "~/lib/open-library";
-import { fetchSong } from "~/lib/spotify";
+import { fetchMovie } from "~/lib/external-services/tmdb";
+import { fetchBook } from "~/lib/external-services/open-library";
+import { fetchSong } from "~/lib/external-services/spotify";
 
 interface Props {
   event: Event;
