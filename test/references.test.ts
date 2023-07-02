@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { parseReferenceType } from "~/lib/references";
+import { parseReferenceType } from "~/lib/ref-tags/references";
 
 test("parseReferenceType parses urls into correct RefTagCategory", () => {
   expect(parseReferenceType("https://www.themoviedb.org/movie/311")).toEqual("movie");
