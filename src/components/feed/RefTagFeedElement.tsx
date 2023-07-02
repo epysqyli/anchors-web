@@ -1,33 +1,14 @@
-import { Component, JSX } from "solid-js";
+import { Component } from "solid-js";
 import { VsReferences } from "solid-icons/vs";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
-import { FiLink, FiYoutube, FiExternalLink } from "solid-icons/fi";
-import { RiDocumentBook2Line, RiLogosSpotifyLine, RiMediaMovie2Line } from "solid-icons/ri";
+import { FiExternalLink } from "solid-icons/fi";
+import refTagIcon from "~/lib/ref-tags/refTagIcon";
 
 interface Props {
   tag: IFeedRefTag;
 }
 
 const RefTagFeedElement: Component<Props> = (props) => {
-  const icon = (category: string): JSX.Element => {
-    switch (category) {
-      case "generic":
-        return <FiLink size={38} class='mx-auto' />;
-
-      case "book":
-        return <RiDocumentBook2Line size={38} class='mx-auto text-amber-300' />;
-
-      case "video":
-        return <FiYoutube size={38} class='mx-auto text-red-500' stroke-width={1.5} />;
-
-      case "movie":
-        return <RiMediaMovie2Line size={38} class='mx-auto text-blue-400' />;
-
-      case "song":
-        return <RiLogosSpotifyLine size={38} class='mx-auto text-green-500' />;
-    }
-  };
-
   const preview = (previewUrl: string) => {
     if (previewUrl != "") {
       return <img src={props.tag.preview} loading='lazy' class='rounded mx-auto w-2/5' />;
@@ -39,7 +20,7 @@ const RefTagFeedElement: Component<Props> = (props) => {
   return (
     <div class='text-slate-300 break-words mb-5 border border-slate-400 rounded border-opacity-25'>
       <div class='border-b bg-slate-700 rounded-t border-opacity-25 border-slate-400 py-3'>
-        {icon(props.tag.category)}
+        {refTagIcon(props.tag.category)}
       </div>
       <div class='my-3'>{preview(props.tag.preview)}</div>
 

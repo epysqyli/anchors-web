@@ -1,8 +1,7 @@
 import { FiTrash2 } from "solid-icons/fi";
-import { Component, JSX } from "solid-js";
+import { Component } from "solid-js";
 import { IRefTag } from "~/interfaces/IRefTag";
-import { FiLink, FiYoutube } from "solid-icons/fi";
-import { RiDocumentBook2Line, RiLogosSpotifyLine, RiMediaMovie2Line } from "solid-icons/ri";
+import refTagIcon from "~/lib/ref-tags/refTagIcon";
 
 interface Props {
   tag: IRefTag;
@@ -10,28 +9,9 @@ interface Props {
 }
 
 const RefTagElement: Component<Props> = (props) => {
-  const icon = (category: string): JSX.Element => {
-    switch (category) {
-      case "generic":
-        return <FiLink size={32} class='mx-auto' />;
-
-      case "book":
-        return <RiDocumentBook2Line size={32} class='mx-auto text-amber-300' />;
-
-      case "video":
-        return <FiYoutube size={32} class='mx-auto text-red-500' stroke-width={1.5} />;
-
-      case "movie":
-        return <RiMediaMovie2Line size={32} class='mx-auto text-blue-400' />;
-
-      case "song":
-        return <RiLogosSpotifyLine size={32} class='mx-auto text-green-500' />;
-    }
-  };
-
   return (
     <div class='flex items-center px-2 justify-between bg-slate-700 text-slate-100 border-x border-orange-300'>
-      <div class='p-3 rounded-xl'>{icon(props.tag.category)}</div>
+      <div class='p-3 rounded-xl'>{refTagIcon(props.tag.category)}</div>
       <div class='text break-all w-2/3 px-3 py-6'>
         <div>{props.tag.title}</div>
         <div class='text-slate-400 text-sm'>{props.tag.additionalInfoOne}</div>
