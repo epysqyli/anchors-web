@@ -70,7 +70,7 @@ const EventWrapper: Component<Props> = (props) => {
     setIsLoading(false);
   });
 
-  const scroll = (e: MouseEvent, direction: 'up' | 'down') => {
+  const scroll = (e: MouseEvent, direction: "up" | "down") => {
     refTagsContainer()!.scrollBy({
       top: direction == "up" ? -250 : 250,
       behavior: "smooth"
@@ -105,14 +105,14 @@ const EventWrapper: Component<Props> = (props) => {
       </Show>
 
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
-        <div class='snap-start h-full text-white text-lg px-10 pt-10 mx-auto w-4/5 md:w-11/12 2xl:p-16 rounded-md'>
+        <div class='snap-start h-full text-white text-lg px-10 mx-auto w-4/5 md:w-11/12 2xl:p-10 rounded-md'>
           <div class='flex justify-center gap-x-10'>
             <div class='w-1/4'>
-              <div onClick={(e) => scroll(e, 'up')} class='cursor-pointer hover:bg-slate-700 group rounded'>
+              <div onClick={(e) => scroll(e, "up")} class='cursor-pointer hover:bg-slate-700 group rounded'>
                 <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
               </div>
 
-              <div ref={el => setRefTagsContainer(el)} class='h-[65vh] overflow-hidden pt-2 my-2'>
+              <div ref={(el) => setRefTagsContainer(el)} class='h-[65vh] overflow-hidden pt-2 my-2'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
@@ -122,12 +122,12 @@ const EventWrapper: Component<Props> = (props) => {
                 </For>
               </div>
 
-              <div onClick={(e) => scroll(e, 'down')} class='cursor-pointer hover:bg-slate-700 group rounded'>
+              <div onClick={(e) => scroll(e, "down")} class='cursor-pointer hover:bg-slate-700 group rounded'>
                 <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
               </div>
             </div>
 
-            <div class='custom-scrollbar h-[70vh] overflow-auto px-10 break-words text-justify whitespace-pre-line w-3/4'>
+            <div class='custom-scrollbar h-[70vh] overflow-auto px-10 pt-10 break-words text-justify whitespace-pre-line w-3/4'>
               {nostrEvent().content}
             </div>
           </div>
