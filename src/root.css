@@ -21,3 +21,16 @@ html {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
 }
+
+@layer utilities {
+  @variants responsive {
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
+}

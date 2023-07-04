@@ -112,7 +112,7 @@ const EventWrapper: Component<Props> = (props) => {
                 <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
               </div>
 
-              <div ref={(el) => setRefTagsContainer(el)} class='h-[65vh] overflow-hidden pt-2 my-2'>
+              <div ref={(el) => setRefTagsContainer(el)} class='h-[65vh] overflow-auto no-scrollbar pt-2 my-2'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
