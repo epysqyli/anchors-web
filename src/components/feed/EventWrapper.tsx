@@ -72,7 +72,7 @@ const EventWrapper: Component<Props> = (props) => {
 
   const scroll = (e: MouseEvent, direction: "up" | "down") => {
     refTagsContainer()!.scrollBy({
-      top: direction == "up" ? -250 : 250,
+      top: direction == "up" ? -400 : 400,
       behavior: "smooth"
     });
   };
@@ -105,14 +105,22 @@ const EventWrapper: Component<Props> = (props) => {
       </Show>
 
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
-        <div class='snap-start h-full text-white text-lg px-10 mx-auto w-4/5 md:w-11/12 p-5 2xl:p-10 rounded-md'>
-          <div class='flex justify-center gap-x-10'>
-            <div class='w-1/4'>
-              <div onClick={(e) => scroll(e, "up")} class='cursor-pointer hover:bg-slate-700 group rounded'>
-                <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
+        <div class='snap-start h-full text-white text-lg mx-auto p-5 2xl:p-10 rounded-md'>
+          <div class='flex justify-center gap-x-5'>
+            <div class='flex w-1/4 items-center gap-x-2'>
+              <div class='mr-10 text-slate-400'>
+                <div onClick={(e) => scroll(e, "up")} class='cursor-pointer hover:bg-slate-700 group mb-10 rounded'>
+                  <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
+                </div>
+                <div
+                  onClick={(e) => scroll(e, "down")}
+                  class='cursor-pointer hover:bg-slate-700 group rounded'
+                >
+                  <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
+                </div>
               </div>
 
-              <div ref={(el) => setRefTagsContainer(el)} class='h-[65vh] overflow-auto no-scrollbar pt-2 my-2'>
+              <div ref={(el) => setRefTagsContainer(el)} class='h-[65vh] overflow-auto no-scrollbar'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
@@ -121,26 +129,22 @@ const EventWrapper: Component<Props> = (props) => {
                   )}
                 </For>
               </div>
-
-              <div onClick={(e) => scroll(e, "down")} class='cursor-pointer hover:bg-slate-700 group rounded'>
-                <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
-              </div>
             </div>
 
-            <div class='custom-scrollbar h-[70vh] overflow-auto px-10 pt-10 break-words text-justify whitespace-pre-line w-3/4'>
+            <div class='custom-scrollbar h-[70vh] overflow-auto px-20 break-words text-justify whitespace-pre-line w-3/4'>
               {nostrEvent().content}
             </div>
           </div>
 
-          <div class='flex justify-around mt-10 pt-5 gap-x-10'>
-            <div class='text-slate-300 text-center text-md py-3 border-opacity-50 border-slate-500 border-b w-1/3'>
-              like
+          <div class='flex justify-around mt-10'>
+            <div class='border p-5'>
+              <div>reactions</div>
+              <div>comments</div>
             </div>
-            <div class='text-slate-300 text-center text-md py-3 border-opacity-50 border-slate-500 border-b w-1/3'>
-              dislike
-            </div>
-            <div class='text-slate-300 text-center text-md py-3 border-opacity-50 border-slate-500 border-b w-1/3'>
-              comments
+            <div class='border p-5'>other actions</div>
+            <div class='border p-5 flex items-center gap-x-5'>
+              <div>previous</div>
+              <div>next</div>
             </div>
           </div>
         </div>
