@@ -106,7 +106,7 @@ const EventWrapper: Component<Props> = (props) => {
 
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
         <div class='snap-start h-full text-white text-lg mx-auto p-5 2xl:p-10 rounded-md'>
-          <div class='flex justify-center gap-x-5'>
+          <div class='flex justify-center'>
             <div class='flex w-1/4 items-center gap-x-2'>
               <div class='mr-10 text-slate-400'>
                 <div onClick={(e) => scroll(e, "up")} class='cursor-pointer hover:bg-slate-700 group mb-10 rounded'>
