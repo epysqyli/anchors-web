@@ -71,7 +71,7 @@ const EventWrapper: Component<Props> = (props) => {
     setIsLoading(false);
   });
 
-  const scroll = (e: MouseEvent, direction: "up" | "down") => {
+  const scrollRefTags = (e: MouseEvent, direction: "up" | "down") => {
     refTagsContainer()!.scrollBy({
       top: direction == "up" ? -400 : 400,
       behavior: "smooth"
@@ -111,13 +111,13 @@ const EventWrapper: Component<Props> = (props) => {
             <div class='flex w-1/4 items-center gap-x-2'>
               <div class='mr-10 text-slate-400'>
                 <div
-                  onClick={(e) => scroll(e, "up")}
+                  onClick={(e) => scrollRefTags(e, "up")}
                   class='cursor-pointer hover:bg-slate-700 group mb-10 rounded'
                 >
                   <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
                 </div>
                 <div
-                  onClick={(e) => scroll(e, "down")}
+                  onClick={(e) => scrollRefTags(e, "down")}
                   class='cursor-pointer hover:bg-slate-700 group rounded'
                 >
                   <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
