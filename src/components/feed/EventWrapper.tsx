@@ -9,6 +9,7 @@ import { fetchBook } from "~/lib/external-services/open-library";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { Motion } from "@motionone/solid";
 import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
+import { IoArrowDown, IoArrowUp } from "solid-icons/io";
 
 interface Props {
   event: Event;
@@ -140,7 +141,7 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='flex justify-around mt-10 border-t pt-10'>
+          <div class='flex justify-around mt-16 border-y border-orange-100 border-opacity-25 w-5/6 mx-auto py-5 bg-slate-800 bg-opacity-30'>
             <div class='border p-5'>
               <div>creator</div>
               <div>info</div>
@@ -150,9 +151,19 @@ const EventWrapper: Component<Props> = (props) => {
               <div>comments</div>
             </div>
             <div class='border p-5'>other actions</div>
-            <div class='border p-5 flex items-center gap-x-5'>
-              <div onClick={() => props.scrollPage!("up")}>previous</div>
-              <div onClick={() => props.scrollPage!("down")}>next</div>
+            <div class='p-5 flex items-center gap-x-1 text-slate-100'>
+              <div
+                onClick={() => props.scrollPage!("up")}
+                class='cursor-pointer hover:scale-105 active:scale-90'
+              >
+                <IoArrowUp size={40} />
+              </div>
+              <div
+                onClick={() => props.scrollPage!("down")}
+                class='cursor-pointer hover:scale-105 active:scale-90'
+              >
+                <IoArrowDown size={40} />
+              </div>
             </div>
           </div>
         </div>
