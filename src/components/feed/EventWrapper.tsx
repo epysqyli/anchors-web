@@ -140,7 +140,7 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='flex justify-around mt-10 border-t pt-10'>
-            <div class="border p-5">
+            <div class='border p-5'>
               <div>creator</div>
               <div>info</div>
             </div>
