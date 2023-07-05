@@ -13,6 +13,7 @@ import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
 interface Props {
   event: Event;
   isNarrow: boolean | undefined;
+  scrollPage?(direction: "up" | "down"): void;
 }
 
 const EventWrapper: Component<Props> = (props) => {
@@ -150,8 +151,8 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
             <div class='border p-5'>other actions</div>
             <div class='border p-5 flex items-center gap-x-5'>
-              <div>previous</div>
-              <div>next</div>
+              <div onClick={() => props.scrollPage!("up")}>previous</div>
+              <div onClick={() => props.scrollPage!("down")}>next</div>
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { Event, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-
 const Home: Component<{}> = () => {
   const [events, setEvents] = createSignal<Event[]>([]);
   const relay = useContext(RelayContext);
+  const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
   // createServerData$ until eose ?
   onMount(async () => {
@@ -30,6 +31,13 @@ const Home: Component<{}> = () => {
     });
   });
 
+  const scrollPage = (direction: "up" | "down"): void => {
+    eventWrapperContainer()!.scrollBy({
+      behavior: "smooth",
+      top: direction == "up" ? -1000 : 1000
+    });
+  };
+
   return (
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
@@ -41,9 +49,14 @@ const Home: Component<{}> = () => {
       </Show>
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
-        <div class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'>
+        <div
+          ref={(el) => setEventWrapperContainer(el)}
+          class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
+        >
           <For each={events()}>
-            {(nostrEvent) => <EventWrapper event={nostrEvent} isNarrow={useIsNarrow()} />}
+            {(nostrEvent) => (
+              <EventWrapper event={nostrEvent} isNarrow={useIsNarrow()} scrollPage={scrollPage} />
+            )}
           </For>
         </div>
       </Show>
