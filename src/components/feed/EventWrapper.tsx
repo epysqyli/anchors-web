@@ -109,23 +109,24 @@ const EventWrapper: Component<Props> = (props) => {
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
         <div class='snap-start h-full text-white text-lg mx-auto p-5 2xl:p-10 rounded-md'>
           <div class='flex justify-center'>
-            <div class='flex w-1/4 items-center gap-x-2'>
-              <div class='mr-10 text-slate-400'>
+            <div class='flex w-1/4 items-center'>
+              <div class='mr-5 text-slate-400 flex-col justify-between h-full'>
                 <div
                   onClick={(e) => scrollRefTags(e, "up")}
-                  class='cursor-pointer hover:bg-slate-700 group mb-10 rounded'
+                  class='cursor-pointer hover:bg-slate-700 group rounded h-[10%] py-3'
                 >
                   <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
                 </div>
+                <div class='flex-grow h-[80%]'></div>
                 <div
                   onClick={(e) => scrollRefTags(e, "down")}
-                  class='cursor-pointer hover:bg-slate-700 group rounded'
+                  class='cursor-pointer hover:bg-slate-700 group rounded h-[10%] py-5'
                 >
                   <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
                 </div>
               </div>
 
-              <div ref={(el) => setRefTagsContainer(el)} class='h-[65vh] w-3/4 overflow-auto no-scrollbar'>
+              <div ref={(el) => setRefTagsContainer(el)} class='h-[69vh] w-3/4 overflow-auto no-scrollbar'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
@@ -136,7 +137,7 @@ const EventWrapper: Component<Props> = (props) => {
               </div>
             </div>
 
-            <div class='custom-scrollbar h-[70vh] overflow-auto px-20 break-words text-justify whitespace-pre-line w-3/4'>
+            <div class='custom-scrollbar h-[70vh] overflow-auto px-14 break-words text-justify whitespace-pre-line w-3/4'>
               {nostrEvent().content}
             </div>
           </div>
