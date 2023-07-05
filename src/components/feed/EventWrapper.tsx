@@ -109,7 +109,10 @@ const EventWrapper: Component<Props> = (props) => {
           <div class='flex justify-center'>
             <div class='flex w-1/4 items-center gap-x-2'>
               <div class='mr-10 text-slate-400'>
-                <div onClick={(e) => scroll(e, "up")} class='cursor-pointer hover:bg-slate-700 group mb-10 rounded'>
+                <div
+                  onClick={(e) => scroll(e, "up")}
+                  class='cursor-pointer hover:bg-slate-700 group mb-10 rounded'
+                >
                   <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
                 </div>
                 <div
@@ -136,7 +139,11 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='flex justify-around mt-10'>
+          <div class='flex justify-around mt-10 border-t pt-10'>
+            <div class="border p-5">
+              <div>creator</div>
+              <div>info</div>
+            </div>
             <div class='border p-5'>
               <div>reactions</div>
               <div>comments</div>
