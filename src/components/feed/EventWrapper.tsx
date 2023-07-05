@@ -123,7 +123,7 @@ const EventWrapper: Component<Props> = (props) => {
                 </div>
               </div>
 
-              <div ref={(el) => setRefTagsContainer(el)} class='h-[65vh] overflow-auto no-scrollbar'>
+              <div ref={(el) => setRefTagsContainer(el)} class='h-[65vh] w-3/4 overflow-auto no-scrollbar'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
