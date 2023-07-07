@@ -143,16 +143,16 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='flex justify-around mt-16 border-y border-orange-100 border-opacity-25 w-5/6 mx-auto py-5 bg-slate-800 bg-opacity-30'>
-            <div class='border p-5'>
+            <div class='border p-2'>
               <div>creator</div>
               <div>info</div>
             </div>
-            <div class='border p-5'>
+            <div class='border p-2'>
               <div>reactions</div>
               <div>comments</div>
             </div>
-            <div class='border p-5'>other actions</div>
-            <div class='p-5 flex items-center gap-x-1 text-slate-100'>
+            <div class='border p-2'>other actions</div>
+            <div class='p-2 flex items-center gap-x-1 text-slate-100'>
               <div
                 onClick={() => props.scrollPage!("up")}
                 class='cursor-pointer hover:scale-105 active:scale-90'
