@@ -107,10 +107,24 @@ const EventWrapper: Component<Props> = (props) => {
       </Show>
 
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
-        <div class='snap-start h-full text-white text-lg mx-auto p-5 2xl:p-10 rounded-md'>
-          <div class='flex justify-center'>
+        <div class='snap-start h-full text-white text-lg mx-auto p-5 2xl:px-20 2xl:py-10 rounded-md'>
+          <div class='flex justify-around py-2'>
+            <div class='custom-scrollbar text-slate-100 tracking-tighter px-10 h-[70vh] overflow-auto break-words text-justify whitespace-pre-line w-3/5'>
+              {nostrEvent().content}
+            </div>
+
             <div class='flex w-1/4 items-center'>
-              <div class='mr-5 text-slate-400 flex-col justify-between h-full'>
+              <div ref={(el) => setRefTagsContainer(el)} class='h-[69vh] w-3/4 overflow-auto no-scrollbar'>
+                <For each={eventRefTags()}>
+                  {(tag) => (
+                    <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
+                      <RefTagFeedElement tag={tag} isLoading={isLoading} />
+                    </Motion.div>
+                  )}
+                </For>
+              </div>
+
+              <div class='ml-5 text-slate-600 hover:text-slate-400 flex-col justify-between h-full'>
                 <div
                   onClick={(e) => scrollRefTags(e, "up")}
                   class='cursor-pointer hover:bg-slate-700 group rounded h-[10%] py-3'
@@ -125,20 +139,6 @@ const EventWrapper: Component<Props> = (props) => {
                   <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
                 </div>
               </div>
-
-              <div ref={(el) => setRefTagsContainer(el)} class='h-[69vh] w-3/4 overflow-auto no-scrollbar'>
-                <For each={eventRefTags()}>
-                  {(tag) => (
-                    <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
-                      <RefTagFeedElement tag={tag} isLoading={isLoading} />
-                    </Motion.div>
-                  )}
-                </For>
-              </div>
-            </div>
-
-            <div class='custom-scrollbar h-[70vh] overflow-auto px-14 break-words text-justify whitespace-pre-line w-3/4'>
-              {nostrEvent().content}
             </div>
           </div>
 
