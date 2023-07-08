@@ -153,16 +153,16 @@ const EventWrapper: Component<Props> = (props) => {
               pubKey={nostrEvent().pubkey}
             />
 
-            <div class='p-2 flex items-center gap-x-1 text-slate-100'>
+            <div class='p-2 flex items-center gap-x-1 text-slate-400'>
               <div
                 onClick={() => props.scrollPage!("up")}
-                class='cursor-pointer hover:scale-105 active:scale-90'
+                class='cursor-pointer hover:scale-105 hover:text-slate-200 active:scale-90'
               >
                 <IoArrowUp size={40} />
               </div>
               <div
                 onClick={() => props.scrollPage!("down")}
-                class='cursor-pointer hover:scale-105 active:scale-90'
+                class='cursor-pointer hover:scale-105 hover:text-slate-200 active:scale-90'
               >
                 <IoArrowDown size={40} />
               </div>
