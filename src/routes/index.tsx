@@ -1,11 +1,13 @@
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
+import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
+import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 import { Event, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 
 const Home: Component<{}> = () => {
-  const [events, setEvents] = createSignal<Event[]>([]);
+  const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
   const relay = useContext(RelayContext);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
@@ -16,17 +18,30 @@ const Home: Component<{}> = () => {
 
     sub.on("eose", () => {
       // sub.unsub();
-      // console.log(events());
     });
 
     sub.on("event", (nostrEvent) => {
       const currentEvent = nostrEvent as Event;
-      if (currentEvent.content.startsWith("Another")) {
-        currentEvent.content = "Fake stuff being introduced.";
-      }
 
       if (currentEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
-        setEvents([...events(), currentEvent]);
+        const metaDataFilter: Filter = {
+          authors: [currentEvent.pubkey],
+          kinds: [Kind.Metadata]
+        };
+
+        let userMetadata: IUserMetadata;
+        const metadataSub: Sub = relay.sub([metaDataFilter]);
+
+        metadataSub.on("event", (metadataEvent) => {
+          userMetadata = JSON.parse(metadataEvent.content);
+
+          const enrichedEvent: IEnrichedEvent = {
+            ...currentEvent,
+            ...userMetadata
+          };
+
+          setEvents([...events(), enrichedEvent]);
+        });
       }
     });
   });

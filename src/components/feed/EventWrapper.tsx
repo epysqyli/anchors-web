@@ -10,9 +10,10 @@ import { fetchSong } from "~/lib/external-services/spotify";
 import { Motion } from "@motionone/solid";
 import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
 import { IoArrowDown, IoArrowUp } from "solid-icons/io";
+import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 
 interface Props {
-  event: Event;
+  event: IEnrichedEvent;
   isNarrow: boolean | undefined;
   scrollPage?(direction: "up" | "down"): void;
 }
