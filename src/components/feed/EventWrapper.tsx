@@ -11,6 +11,7 @@ import { Motion } from "@motionone/solid";
 import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
 import { IoArrowDown, IoArrowUp } from "solid-icons/io";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
+import EventAuthor from "./EventAuthor";
 
 interface Props {
   event: IEnrichedEvent;
@@ -144,16 +145,14 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='flex justify-around mt-16 border-y border-orange-100 border-opacity-25 w-5/6 mx-auto py-5 bg-slate-800 bg-opacity-30'>
-            <div class='border p-2'>
-              <div>creator</div>
-              <div>info</div>
-            </div>
-            <div class='border p-2'>
-              <div>reactions</div>
-              <div>comments</div>
-            </div>
-            <div class='border p-2'>other actions</div>
+          <div class='flex justify-around mt-16 rounded w-5/6 mx-auto py-5 bg-neutral-900 bg-opacity-30'>
+            <EventAuthor
+              name={nostrEvent().name}
+              about={nostrEvent().about}
+              picture={nostrEvent().picture}
+              pubKey={nostrEvent().pubkey}
+            />
+
             <div class='p-2 flex items-center gap-x-1 text-slate-100'>
               <div
                 onClick={() => props.scrollPage!("up")}
