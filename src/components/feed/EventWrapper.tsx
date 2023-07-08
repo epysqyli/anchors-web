@@ -109,7 +109,10 @@ const EventWrapper: Component<Props> = (props) => {
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
         <div class='snap-start h-full text-white text-lg mx-auto p-5 2xl:px-20 2xl:py-10 rounded-md'>
           <div class='flex justify-around py-2'>
-            <div class='custom-scrollbar text-slate-100 tracking-tighter px-10 h-[70vh] overflow-auto break-words text-justify whitespace-pre-line w-3/5'>
+            <div
+              class='py-5 bg-gray-800 custom-scrollbar text-slate-200 tracking-tighter px-10 h-[70vh] 
+                     overflow-auto break-words text-justify whitespace-pre-line w-3/5 border-y border-slate-600'
+            >
               {nostrEvent().content}
             </div>
 
