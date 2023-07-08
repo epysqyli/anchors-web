@@ -117,8 +117,15 @@ const EventWrapper: Component<Props> = (props) => {
               {nostrEvent().content}
             </div>
 
-            <div class='flex w-1/4 items-center'>
-              <div ref={(el) => setRefTagsContainer(el)} class='h-[69vh] w-3/4 overflow-auto no-scrollbar'>
+            <div class='w-1/5 h-[69vh]'>
+              <div
+                onClick={(e) => scrollRefTags(e, "up")}
+                class='text-slate-500 hover:text-slate-200 hover:scale-110 group cursor-pointer'
+              >
+                <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
+              </div>
+
+              <div ref={(el) => setRefTagsContainer(el)} class='h-5/6 overflow-auto no-scrollbar my-5'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
@@ -128,20 +135,11 @@ const EventWrapper: Component<Props> = (props) => {
                 </For>
               </div>
 
-              <div class='ml-5 text-slate-600 hover:text-slate-400 flex-col justify-between h-full'>
-                <div
-                  onClick={(e) => scrollRefTags(e, "up")}
-                  class='cursor-pointer hover:bg-slate-700 group rounded h-[10%] py-3'
-                >
-                  <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
-                </div>
-                <div class='flex-grow h-[80%]'></div>
-                <div
-                  onClick={(e) => scrollRefTags(e, "down")}
-                  class='cursor-pointer hover:bg-slate-700 group rounded h-[10%] py-5'
-                >
-                  <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
-                </div>
+              <div
+                onClick={(e) => scrollRefTags(e, "down")}
+                class='text-slate-500 hover:text-slate-200 hover:scale-110 group cursor-pointer'
+              >
+                <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
               </div>
             </div>
           </div>
