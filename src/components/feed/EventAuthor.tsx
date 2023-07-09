@@ -18,7 +18,7 @@ const EventAuthor: Component<IUserMetadata & { pubKey: string }> = (props) => {
             class='h-7 rounded-full'
           />
         )}
-        <span>{props.name}</span>
+        <span>{props.name == "" ? "npub" : props.name}</span>
       </div>
     </>
   );
