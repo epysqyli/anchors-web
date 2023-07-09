@@ -20,10 +20,13 @@ const Home: Component<{}> = () => {
   onMount(async () => {
     const eventsSub: Sub = relay.sub([{}]);
 
-    eventsSub.on("event", (nostrEvent) => {
-      const currentEvent = nostrEvent as Event;
-      if (currentEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
-        setEvents([...events(), { ...currentEvent, name: "", picture: "", about: "" }]);
+    eventsSub.on("event", (nostrEvent: Event) => {
+      if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
+        setEvents(
+          [...events(), { ...nostrEvent, name: "", picture: "", about: "" }].sort((e1, e2) => {
+            return e1.created_at > e2.created_at ? -1 : 1;
+          })
+        );
       }
     });
 
@@ -50,7 +53,12 @@ const Home: Component<{}> = () => {
           });
 
         const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
-        setEvents([...remainingEvents, ...newEnrichedEvents]);
+
+        setEvents(
+          [...remainingEvents, ...newEnrichedEvents].sort((e1, e2) =>
+            e1.created_at > e2.created_at ? -1 : 1
+          )
+        );
       });
     });
   });
