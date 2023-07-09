@@ -17,6 +17,7 @@ interface Props {
   event: IEnrichedEvent;
   isNarrow: boolean | undefined;
   scrollPage?(direction: "up" | "down"): void;
+  assignTopEventRef(ref: HTMLDivElement, eventID: string): void;
 }
 
 const EventWrapper: Component<Props> = (props) => {
@@ -109,7 +110,10 @@ const EventWrapper: Component<Props> = (props) => {
       </Show>
 
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
-        <div class='snap-start h-full text-white text-lg mx-auto p-5 2xl:px-20 2xl:py-10 rounded-md'>
+        <div
+          ref={(el) => props.assignTopEventRef(el, props.event.id)}
+          class='snap-start h-full text-white text-lg mx-auto p-5 2xl:px-20 2xl:py-10 rounded-md'
+        >
           <div class='flex justify-around py-2'>
             <div
               class='py-5 bg-gray-800 custom-scrollbar text-slate-200 tracking-tighter px-10 h-[70vh] 

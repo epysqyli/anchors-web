@@ -3,8 +3,9 @@ import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
-import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 import { Event, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
+import NewEventsPopup from "~/components/feed/NewEventsPopup";
 
 const Home: Component<{}> = () => {
   const relay = useContext(RelayContext);
@@ -14,6 +15,8 @@ const Home: Component<{}> = () => {
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [eoseRecv, setEoseRecv] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
+  const [topEventRef, setTopEventRef] = createSignal<HTMLDivElement>();
+  const [topEventID, setTopEventID] = createSignal<string>("");
 
   const sortByCreatedAt = (evt1: Event, evt2: Event) => {
     return evt1.created_at > evt2.created_at ? -1 : 1;
@@ -102,26 +105,59 @@ const Home: Component<{}> = () => {
     });
   };
 
+  const assignTopEventRef = (ref: HTMLDivElement, eventID: string): void => {
+    if (eventID == topEventID()) {
+      setTopEventRef(ref);
+    }
+  };
+
+  createEffect(() => {
+    if (events().length !== 0) {
+      setTopEventID(events()[0].id);
+    }
+  });
+
   return (
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
         <div class='snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[100vh]'>
           <For each={events()}>
-            {(nostrEvent) => <EventWrapper event={nostrEvent} isNarrow={useIsNarrow()} />}
+            {(nostrEvent) => (
+              <EventWrapper
+                assignTopEventRef={assignTopEventRef}
+                event={nostrEvent}
+                isNarrow={useIsNarrow()}
+              />
+            )}
           </For>
         </div>
       </Show>
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow() && !isLoading()}>
-        <div
-          ref={(el) => setEventWrapperContainer(el)}
-          class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
-        >
-          <For each={events()}>
-            {(nostrEvent) => (
-              <EventWrapper event={nostrEvent} isNarrow={useIsNarrow()} scrollPage={scrollPage} />
-            )}
-          </For>
+        <div class='relative h-full'>
+          {showPopup() ? (
+            <div class='absolute top-3 left-3'>
+              <NewEventsPopup topEventRef={topEventRef} setShowPopup={setShowPopup} />
+            </div>
+          ) : (
+            <></>
+          )}
+
+          <div
+            ref={(el) => setEventWrapperContainer(el)}
+            class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
+          >
+            <For each={events()}>
+              {(nostrEvent) => (
+                <EventWrapper
+                  assignTopEventRef={assignTopEventRef}
+                  event={nostrEvent}
+                  isNarrow={useIsNarrow()}
+                  scrollPage={scrollPage}
+                />
+              )}
+            </For>
+          </div>
         </div>
       </Show>
 
