@@ -12,7 +12,7 @@ const Home: Component<{}> = () => {
   const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
-  // TODO: manage incoming events after EOSE
+
   onMount(async () => {
     const eventsSub: Sub = relay.sub([{}]);
 

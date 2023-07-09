@@ -49,7 +49,9 @@ const fetchBook = async (bookID: string, url: string): Promise<IFeedRefTag> => {
 
   return {
     preview:
-      resp.data.covers.length != 0 ? `https://covers.openlibrary.org/b/id/${resp.data.covers[0]}-M.jpg` : "",
+      resp.data.covers != undefined && resp.data.covers.length != 0
+        ? `https://covers.openlibrary.org/b/id/${resp.data.covers[0]}-M.jpg`
+        : "",
     primaryInfo: resp.data.title,
     secondaryInfo: "",
     url: url,
