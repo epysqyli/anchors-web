@@ -11,13 +11,16 @@ const Home: Component<{}> = () => {
 
   const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
+  const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   /**
    * TODO: manage incoming events after EOSE
    * - add event to events signal
    * - fetch metadata for the event and create the enrichedEvent
+   * - show popup that new events are available
    */
   onMount(async () => {
+    setIsLoading(true);
     const eventsSub: Sub = relay.sub([{}]);
 
     eventsSub.on("event", (nostrEvent: Event) => {
@@ -60,6 +63,10 @@ const Home: Component<{}> = () => {
           )
         );
       });
+
+      metadataSub.on("eose", () => {
+        setIsLoading(false);
+      });
     });
   });
 
@@ -80,7 +87,7 @@ const Home: Component<{}> = () => {
         </div>
       </Show>
 
-      <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
+      <Show when={useIsNarrow() !== undefined && !useIsNarrow() && !isLoading()}>
         <div
           ref={(el) => setEventWrapperContainer(el)}
           class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
@@ -90,6 +97,17 @@ const Home: Component<{}> = () => {
               <EventWrapper event={nostrEvent} isNarrow={useIsNarrow()} scrollPage={scrollPage} />
             )}
           </For>
+        </div>
+      </Show>
+
+      <Show when={useIsNarrow() !== undefined && !useIsNarrow() && isLoading()}>
+        <div class='w-5/6 mx-auto h-full py-20 px-10'>
+          <div class='flex items-center gap-x-10 justify-around h-5/6'>
+            <div class='w-3/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
+            <div class='w-2/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
+          </div>
+
+          <div class='h-1/6 mt-5 rounded-md bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
         </div>
       </Show>
     </>
