@@ -12,24 +12,52 @@ const Home: Component<{}> = () => {
   const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
+  const [eoseRecv, setEoseRecv] = createSignal<boolean>(false);
+  const [showPopup, setShowPopup] = createSignal<boolean>(false);
 
-  /**
-   * TODO: manage incoming events after EOSE
-   * - add event to events signal
-   * - fetch metadata for the event and create the enrichedEvent
-   * - show popup that new events are available
-   */
+  const sortByCreatedAt = (evt1: Event, evt2: Event) => {
+    return evt1.created_at > evt2.created_at ? -1 : 1;
+  };
+
+  // TODO: refactor into nostr utils
   onMount(async () => {
     setIsLoading(true);
     const eventsSub: Sub = relay.sub([{}]);
 
     eventsSub.on("event", (nostrEvent: Event) => {
       if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
-        setEvents(
-          [...events(), { ...nostrEvent, name: "", picture: "", about: "" }].sort((e1, e2) => {
-            return e1.created_at > e2.created_at ? -1 : 1;
-          })
-        );
+        setEvents([...events(), { ...nostrEvent, name: "", picture: "", about: "" }].sort(sortByCreatedAt));
+      }
+
+      if (eoseRecv()) {
+        const metadataFilter: Filter = {
+          authors: [nostrEvent.pubkey],
+          kinds: [Kind.Metadata]
+        };
+
+        const metadataSub: Sub = relay.sub([metadataFilter]);
+        metadataSub.on("event", (metadataEvent) => {
+          const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
+
+          const newEnrichedEvents = events()
+            .filter((ev) => ev.pubkey === metadataEvent.pubkey)
+            .map((ev) => {
+              return {
+                ...ev,
+                about: userMetadata.about,
+                name: userMetadata.name,
+                picture: userMetadata.picture
+              };
+            });
+
+          const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
+
+          setEvents([...remainingEvents, ...newEnrichedEvents].sort(sortByCreatedAt));
+        });
+
+        metadataSub.on("eose", () => {
+          setShowPopup(true);
+        });
       }
     });
 
@@ -57,14 +85,11 @@ const Home: Component<{}> = () => {
 
         const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
 
-        setEvents(
-          [...remainingEvents, ...newEnrichedEvents].sort((e1, e2) =>
-            e1.created_at > e2.created_at ? -1 : 1
-          )
-        );
+        setEvents([...remainingEvents, ...newEnrichedEvents].sort(sortByCreatedAt));
       });
 
       metadataSub.on("eose", () => {
+        setEoseRecv(true);
         setIsLoading(false);
       });
     });
