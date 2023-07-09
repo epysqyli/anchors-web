@@ -135,13 +135,9 @@ const Home: Component<{}> = () => {
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow() && !isLoading()}>
         <div class='relative h-full'>
-          {showPopup() ? (
-            <div class='absolute top-3 left-3'>
-              <NewEventsPopup topEventRef={topEventRef} setShowPopup={setShowPopup} />
-            </div>
-          ) : (
-            <></>
-          )}
+          <div class='absolute top-3 left-3'>
+            <NewEventsPopup topEventRef={topEventRef} showPopup={showPopup} setShowPopup={setShowPopup} />
+          </div>
 
           <div
             ref={(el) => setEventWrapperContainer(el)}
