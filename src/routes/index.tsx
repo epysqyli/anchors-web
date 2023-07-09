@@ -133,39 +133,41 @@ const Home: Component<{}> = () => {
         </div>
       </Show>
 
-      <Show when={useIsNarrow() !== undefined && !useIsNarrow() && !isLoading()}>
-        <div class='relative h-full'>
-          <div class='absolute top-3 left-3'>
-            <NewEventsPopup topEventRef={topEventRef} showPopup={showPopup} setShowPopup={setShowPopup} />
-          </div>
+      <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
+        <Show when={!isLoading()}>
+          <div class='relative h-full'>
+            <div class='absolute top-3 left-3'>
+              <NewEventsPopup topEventRef={topEventRef} showPopup={showPopup} setShowPopup={setShowPopup} />
+            </div>
 
-          <div
-            ref={(el) => setEventWrapperContainer(el)}
-            class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
-          >
-            <For each={events()}>
-              {(nostrEvent) => (
-                <EventWrapper
-                  assignTopEventRef={assignTopEventRef}
-                  event={nostrEvent}
-                  isNarrow={useIsNarrow()}
-                  scrollPage={scrollPage}
-                />
-              )}
-            </For>
+            <div
+              ref={(el) => setEventWrapperContainer(el)}
+              class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
+            >
+              <For each={events()}>
+                {(nostrEvent) => (
+                  <EventWrapper
+                    assignTopEventRef={assignTopEventRef}
+                    event={nostrEvent}
+                    isNarrow={useIsNarrow()}
+                    scrollPage={scrollPage}
+                  />
+                )}
+              </For>
+            </div>
           </div>
-        </div>
-      </Show>
+        </Show>
 
-      <Show when={useIsNarrow() !== undefined && !useIsNarrow() && isLoading()}>
-        <div class='w-5/6 mx-auto h-full py-20 px-10'>
-          <div class='flex items-center gap-x-10 justify-around h-5/6'>
-            <div class='w-3/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
-            <div class='w-2/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
+        <Show when={isLoading()}>
+          <div class='w-5/6 mx-auto h-full py-20 px-10'>
+            <div class='flex items-center gap-x-10 justify-around h-5/6'>
+              <div class='w-3/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
+              <div class='w-2/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
+            </div>
+
+            <div class='h-1/6 mt-5 rounded-md bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
           </div>
-
-          <div class='h-1/6 mt-5 rounded-md bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
-        </div>
+        </Show>
       </Show>
     </>
   );
