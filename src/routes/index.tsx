@@ -6,6 +6,7 @@ import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 import { Event, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
+import { createMetadataFilter, enrichEvent, sortByCreatedAt } from "~/lib/nostr-utils";
 
 const Home: Component<{}> = () => {
   const relay = useContext(RelayContext);
@@ -18,11 +19,6 @@ const Home: Component<{}> = () => {
   const [topEventRef, setTopEventRef] = createSignal<HTMLDivElement>();
   const [topEventID, setTopEventID] = createSignal<string>("");
 
-  const sortByCreatedAt = (evt1: Event, evt2: Event) => {
-    return evt1.created_at > evt2.created_at ? -1 : 1;
-  };
-
-  // TODO: refactor into nostr utils
   onMount(async () => {
     setIsLoading(true);
     const eventsSub: Sub = relay.sub([{}]);
@@ -33,25 +29,15 @@ const Home: Component<{}> = () => {
       }
 
       if (eoseRecv()) {
-        const metadataFilter: Filter = {
-          authors: [nostrEvent.pubkey],
-          kinds: [Kind.Metadata]
-        };
-
+        const metadataFilter: Filter = createMetadataFilter([nostrEvent.pubkey]);
         const metadataSub: Sub = relay.sub([metadataFilter]);
-        metadataSub.on("event", (metadataEvent) => {
+
+        metadataSub.on("event", (metadataEvent: Event) => {
           const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
 
           const newEnrichedEvents = events()
             .filter((ev) => ev.pubkey === metadataEvent.pubkey)
-            .map((ev) => {
-              return {
-                ...ev,
-                about: userMetadata.about,
-                name: userMetadata.name,
-                picture: userMetadata.picture
-              };
-            });
+            .map((ev) => enrichEvent(ev, userMetadata));
 
           const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
 
@@ -65,26 +51,15 @@ const Home: Component<{}> = () => {
     });
 
     eventsSub.on("eose", () => {
-      const metadataFilter: Filter = {
-        authors: [...new Set(events().map((e) => e.pubkey))],
-        kinds: [Kind.Metadata]
-      };
-
+      const metadataFilter: Filter = createMetadataFilter(events().map((e) => e.pubkey));
       const metadataSub: Sub = relay.sub([metadataFilter]);
 
-      metadataSub.on("event", (metadataEvent) => {
+      metadataSub.on("event", (metadataEvent: Event) => {
         const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
 
         const newEnrichedEvents = events()
           .filter((ev) => ev.pubkey === metadataEvent.pubkey)
-          .map((ev) => {
-            return {
-              ...ev,
-              about: userMetadata.about,
-              name: userMetadata.name,
-              picture: userMetadata.picture
-            };
-          });
+          .map((ev) => enrichEvent(ev, userMetadata));
 
         const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
 
