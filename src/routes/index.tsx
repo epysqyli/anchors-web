@@ -3,10 +3,10 @@ import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
-import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
-import { Event, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
-import { createMetadataFilter, enrichEvent, sortByCreatedAt } from "~/lib/nostr-utils";
+import { Event, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
+import { createMetadataFilter, enrichEvent, sortByCreatedAt } from "~/lib/nostr/nostr-utils";
+import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const Home: Component<{}> = () => {
   const relay = useContext(RelayContext);
