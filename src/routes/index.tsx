@@ -134,13 +134,13 @@ const Home: Component<{}> = () => {
         </Show>
 
         <Show when={isLoading()}>
-          <div class='w-5/6 mx-auto h-full py-20 px-10'>
-            <div class='flex items-center gap-x-10 justify-around h-5/6'>
+          <div class='h-full py-14 px-10'>
+            <div class='w-11/12 mx-auto flex items-center justify-around h-[80%]'>
               <div class='w-3/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
-              <div class='w-2/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
+              <div class='w-1/5 rounded-md h-full bg-slate-200 bg-opacity-5 animate-pulse'></div>
             </div>
 
-            <div class='h-1/6 mt-5 rounded-md bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
+            <div class='w-4/5 mx-auto h-[12%] mt-16 rounded-md bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
           </div>
         </Show>
       </Show>
