@@ -103,10 +103,7 @@ const Write: Component<{}> = () => {
   };
 
   return (
-    <div
-      class='md:flex md:gap-x-2 xl:gap-x-2 2xl:w-[98%] mx-auto h-full md:h-[96vh] absolute w-[99%] 
-                top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'
-    >
+    <div class='md:flex md:gap-x-2 xl:gap-x-2 2xl:w-[98%] mx-auto h-full md:h-[96vh] absolute w-[99%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
       <div class='w-full md:w-3/5 h-full'>
         <div class='h-[70%] md:h-[80%]'>
           <h1
@@ -147,8 +144,7 @@ const Write: Component<{}> = () => {
         </div>
       </div>
 
-      <div class='hidden md:block w-2/5 h-full md:h-[98%] md:py-5 md:my-auto
-                 md:bg-slate-800 md:rounded-md md:border md:border-neutral-600 md:border-opacity-50'>
+      <div class='hidden md:block w-2/5 h-full md:py-5 md:my-auto md:bg-slate-800 md:rounded '>
         <RefTagsSearchPanel
           tags={refTags()}
           addNostrTag={addNostrTag}
