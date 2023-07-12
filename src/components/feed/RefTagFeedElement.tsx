@@ -2,7 +2,7 @@ import { Accessor, Component, JSX, Show } from "solid-js";
 import { VsReferences } from "solid-icons/vs";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import { FiExternalLink } from "solid-icons/fi";
-import refTagIcon from "~/lib/ref-tags/refTagIcon";
+import RefTagIcon from "../shared/RefTagIcon";
 
 interface Props {
   tag: IFeedRefTag;
@@ -36,7 +36,9 @@ const RefTagFeedElement: Component<Props> = (props) => {
         </div>
 
         <div class='flex items-center justify-between py-3'>
-          <div class='w-1/3'>{refTagIcon(props.tag.category)}</div>
+          <div class='w-1/3'>
+            <RefTagIcon category={props.tag.category} />
+          </div>
           <a class='w-1/3 cursor-pointer' href={props.tag.url} target='_blank'>
             <FiExternalLink
               size={28}

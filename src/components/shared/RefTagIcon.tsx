@@ -1,10 +1,10 @@
 import { FiLink, FiYoutube } from "solid-icons/fi";
 import { RiDocumentBook2Line, RiLogosSpotifyLine, RiMediaMovie2Line } from "solid-icons/ri";
-import { JSX } from "solid-js";
+import { Component, JSX } from "solid-js";
 
 // TODO: make into a component?
-const refTagIcon = (category: string): JSX.Element => {
-  switch (category) {
+const RefTagIcon: Component<{ category: string }> = (props): JSX.Element => {
+  switch (props.category) {
     case "generic":
       return <FiLink size={32} class='mx-auto' />;
 
@@ -22,4 +22,4 @@ const refTagIcon = (category: string): JSX.Element => {
   }
 };
 
-export default refTagIcon;
+export default RefTagIcon;
