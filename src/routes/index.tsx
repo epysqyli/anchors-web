@@ -7,6 +7,8 @@ import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import { Event, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 import { createMetadataFilter, enrichEvent, sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
+import { Motion } from "@motionone/solid";
+import { VsLoading } from "solid-icons/vs";
 
 const Home: Component<{}> = () => {
   const relay = useContext(RelayContext);
@@ -110,7 +112,7 @@ const Home: Component<{}> = () => {
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
         <Show when={!isLoading()}>
-          <div class='relative h-full'>
+          <Motion.div animate={{ opacity: [0.7, 1], scale: [0.8, 1] }} class='relative h-full'>
             <div class='absolute top-3 left-3'>
               <NewEventsPopup topEventRef={topEventRef} showPopup={showPopup} setShowPopup={setShowPopup} />
             </div>
@@ -130,17 +132,12 @@ const Home: Component<{}> = () => {
                 )}
               </For>
             </div>
-          </div>
+          </Motion.div>
         </Show>
 
         <Show when={isLoading()}>
-          <div class='h-full py-14 px-10'>
-            <div class='w-11/12 mx-auto flex items-center justify-around h-[80%]'>
-              <div class='w-3/5 rounded-md h-full bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
-              <div class='w-1/5 rounded-md h-full bg-slate-200 bg-opacity-5 animate-pulse'></div>
-            </div>
-
-            <div class='w-4/5 mx-auto h-[12%] mt-16 rounded-md bg-slate-800 border border-opacity-25 border-slate-400 animate-pulse'></div>
+          <div class='animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+            <VsLoading size={100} color='white' class='animate-spin' />
           </div>
         </Show>
       </Show>
