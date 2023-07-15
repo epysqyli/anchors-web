@@ -11,15 +11,15 @@ const Settings: VoidComponent = () => {
       </h1>
       <div class='grid grid-cols-2 w-2/3 h-1/2 mx-auto gap-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <SettingsLink href='user-metadata' content='set or update your profile info'>
-          <RiBusinessProfileLine class='mx-auto' size={80} />
+          <RiBusinessProfileLine class='mx-auto' size={62} />
         </SettingsLink>
 
         <SettingsLink href='/' content='manage relays'>
-          <RiMapSignalTowerFill class='mx-auto' size={80} />
+          <RiMapSignalTowerFill class='mx-auto' size={62} />
         </SettingsLink>
 
         <SettingsLink href='/' content='set your lightning address?'>
-          <BsLightningChargeFill class='mx-auto' size={80} />
+          <BsLightningChargeFill class='mx-auto' size={62} />
         </SettingsLink>
 
         <SettingsLink href='/' content='additional options?' />
