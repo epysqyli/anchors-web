@@ -17,8 +17,7 @@ const Menu: Component<Props> = (props) => {
   const narrowStyle = `text-lg bg-gradient-to-br from-slate-600 via-slate-700
                        via-20% to-gray-900 to-90% pt-10 h-[100vh]`;
 
-  const wideStyle = `rounded-md text-lg bg-stone-700 relative
-                     overflow-y-auto h-full pt-10`;
+  const wideStyle = `rounded-md text-lg relative overflow-y-auto h-full pt-10`;
 
   const actionStyle = `text-slate-50 w-5/6 mx-auto my-3 select-none
                        bg-gradient-to-r from-slate-800 to-gray-700
