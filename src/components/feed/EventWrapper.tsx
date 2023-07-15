@@ -149,7 +149,7 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='flex justify-around mt-16 rounded w-5/6 mx-auto py-5 bg-neutral-700 bg-opacity-75'>
+          <div class='flex justify-around w-11/12 mt-16 rounded mx-auto py-5 bg-neutral-700 bg-opacity-40'>
             <EventAuthor
               name={nostrEvent().name}
               about={nostrEvent().about}
