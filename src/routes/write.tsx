@@ -7,14 +7,6 @@ import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import menuTogglerContext from "~/contexts/menuToggle";
 import { Motion, Presence } from "@motionone/solid";
 
-declare global {
-  interface Window {
-    nostr: {
-      signEvent(unsignedEvent: EventTemplate): Promise<NostrEvent>;
-    };
-  }
-}
-
 const Write: Component<{}> = () => {
   const relay = useContext(RelayContext);
   const menuToggle = useContext(menuTogglerContext);
