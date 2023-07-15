@@ -1,14 +1,14 @@
+import { Motion } from "@motionone/solid";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
+import LoadingFallback from "~/components/feed/LoadingFallback";
 import { Event, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 import { createMetadataFilter, enrichEvent, sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
-import { Motion } from "@motionone/solid";
-import { VsLoading } from "solid-icons/vs";
 
 const Home: Component<{}> = () => {
   const relay = useContext(RelayContext);
@@ -110,36 +110,31 @@ const Home: Component<{}> = () => {
         </div>
       </Show>
 
-      <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
-        <Show when={!isLoading()}>
-          <Motion.div animate={{ opacity: [0.7, 1], scale: [0.8, 1] }} class='relative h-full'>
-            <div class='absolute top-3 left-3'>
-              <NewEventsPopup topEventRef={topEventRef} showPopup={showPopup} setShowPopup={setShowPopup} />
-            </div>
-
-            <div
-              ref={(el) => setEventWrapperContainer(el)}
-              class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
-            >
-              <For each={events()}>
-                {(nostrEvent) => (
-                  <EventWrapper
-                    assignTopEventRef={assignTopEventRef}
-                    event={nostrEvent}
-                    isNarrow={useIsNarrow()}
-                    scrollPage={scrollPage}
-                  />
-                )}
-              </For>
-            </div>
-          </Motion.div>
-        </Show>
-
-        <Show when={isLoading()}>
-          <div class='animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
-            <VsLoading size={100} color='white' class='animate-spin' />
+      <Show
+        when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()}
+        fallback={<LoadingFallback />}
+      >
+        <Motion.div animate={{ opacity: [0.7, 1], scale: [0.8, 1] }} class='relative h-full'>
+          <div class='absolute top-3 left-3'>
+            <NewEventsPopup topEventRef={topEventRef} showPopup={showPopup} setShowPopup={setShowPopup} />
           </div>
-        </Show>
+
+          <div
+            ref={(el) => setEventWrapperContainer(el)}
+            class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
+          >
+            <For each={events()}>
+              {(nostrEvent) => (
+                <EventWrapper
+                  assignTopEventRef={assignTopEventRef}
+                  event={nostrEvent}
+                  isNarrow={useIsNarrow()}
+                  scrollPage={scrollPage}
+                />
+              )}
+            </For>
+          </div>
+        </Motion.div>
       </Show>
     </>
   );
