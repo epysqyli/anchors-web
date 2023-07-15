@@ -3,7 +3,7 @@ import { BsLightningChargeFill } from "solid-icons/bs";
 import SettingsLink from "~/components/settings/SettingsLink";
 import { RiBusinessProfileLine, RiMapSignalTowerFill } from "solid-icons/ri";
 
-const Settings: VoidComponent = (props) => {
+const Settings: VoidComponent = () => {
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14'>
