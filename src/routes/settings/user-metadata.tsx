@@ -1,12 +1,15 @@
-import { Kind } from "nostr-tools";
 import { FiSave } from "solid-icons/fi";
+import { useIsRouting } from "solid-start";
+import { Event as NostrEvent, Kind, Sub } from "nostr-tools";
 import { RelayContext } from "~/contexts/relay";
-import { VoidComponent, createSignal, useContext } from "solid-js";
+import { IUserMetadata } from "~/interfaces/IUserMetadata";
+import { createMetadataFilter } from "~/lib/nostr/nostr-utils";
+import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const UserMetadata: VoidComponent = () => {
   const relay = useContext(RelayContext);
 
-  const [content, setContent] = createSignal<{ name: string; about: string; picture: string }>({
+  const [content, setContent] = createSignal<IUserMetadata>({
     name: "",
     about: "",
     picture: ""
@@ -40,6 +43,27 @@ const UserMetadata: VoidComponent = () => {
     });
   };
 
+  onMount(async () => {
+    let pk = "";
+
+    if (!useIsRouting()()) {
+      try {
+        pk = await window.nostr.getPublicKey();
+      } catch (error) {
+        await new Promise((_) => setTimeout(_, 500));
+        pk = await window.nostr.getPublicKey();
+      }
+    }
+
+    const metadataFilter = createMetadataFilter([pk]);
+    const metaDataSub: Sub = relay.sub([metadataFilter]);
+
+    metaDataSub.on("event", (event: NostrEvent) => {
+      const userMetadata: IUserMetadata = JSON.parse(event.content);
+      setContent(userMetadata);
+    });
+  });
+
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold my-14'>
@@ -54,6 +78,7 @@ const UserMetadata: VoidComponent = () => {
           <input
             type='text'
             name='name'
+            value={content().name}
             onChange={handleChange}
             placeholder='enter your nostr name to show to other users'
             class='p-3 rounded text-center text-lg text-slate-200 caret-slate-200 bg-neutral-600 focus:outline-none w-full'
@@ -67,6 +92,7 @@ const UserMetadata: VoidComponent = () => {
           <input
             type='text'
             name='about'
+            value={content().about}
             onChange={handleChange}
             placeholder='something about yourself'
             class='p-3 rounded text-center text-lg text-slate-200 caret-slate-200 bg-neutral-600 focus:outline-none w-full'
@@ -80,13 +106,14 @@ const UserMetadata: VoidComponent = () => {
           <input
             type='text'
             name='picture'
+            value={content().picture}
             onChange={handleChange}
             placeholder='url pointing to an avatar image'
             class='p-3 rounded text-center text-lg text-slate-200 caret-slate-200 bg-neutral-600 focus:outline-none w-full'
           />
         </div>
 
-        <button class='block w-1/2 mt-16 mx-auto py-5 rounded bg-slate-500 group'>
+        <button class='block w-fit px-10 mt-16 mx-auto py-5 rounded-md bg-slate-600 group'>
           <FiSave
             class='text-slate-100 mx-auto group-hover:scale-110 group-active:scale-90 transition-transform'
             size={38}
