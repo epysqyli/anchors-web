@@ -15,8 +15,8 @@ const WideLayout: Component<Props> = (props) => {
   const overlay = useContext(OverlayContext);
 
   return (
-    <div class='h-screen flex gap-x-3 px-2 md:gap-x-2 md:px-2 justify-center items-center'>
-      <div class='h-[98vh] w-1/5'>
+    <div class='h-screen gap-x-3 px-2 md:gap-x-2 md:px-2 grid grid-cols-5 items-center'>
+      <div class='h-[98vh] col-span-1'>
         <Menu isNarrow={false} toggleMenu={props.toggleMenu} />
       </div>
 
@@ -26,7 +26,7 @@ const WideLayout: Component<Props> = (props) => {
             animate={{ opacity: [0.5, 1] }}
             transition={{ duration: 0.3 }}
             exit={{ opacity: [1, 0], transition: { duration: 0.3 } }}
-            class='h-[98vh] w-4/5 rounded-md bg-gradient-to-bl from-slate-700
+            class='h-[98vh] col-span-4 rounded-md bg-gradient-to-bl from-slate-700
                   via-slate-700 via-20% to-gray-800 to-80% relative'
           >
             {props.children}
