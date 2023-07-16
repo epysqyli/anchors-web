@@ -4,6 +4,7 @@ import { Rerun } from "@solid-primitives/keyed";
 import { Motion, Presence } from "@motionone/solid";
 import { useIsRouting } from "solid-start";
 import OverlayContext from "~/contexts/overlay";
+import { useBeforeLeave } from "@solidjs/router";
 
 interface Props {
   children: JSX.Element;
@@ -13,6 +14,10 @@ interface Props {
 const WideLayout: Component<Props> = (props) => {
   const isRouting = useIsRouting();
   const overlay = useContext(OverlayContext);
+
+  useBeforeLeave(() => {
+    overlay.showOverlay() && overlay.toggleOverlay();
+  });
 
   return (
     <div class='h-screen gap-x-3 px-2 md:gap-x-2 md:px-2 grid grid-cols-5 items-center'>
