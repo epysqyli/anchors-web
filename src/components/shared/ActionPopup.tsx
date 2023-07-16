@@ -35,7 +35,7 @@ const ActionPopup: Component<Props> = (props) => {
           <div class='w-fit mx-auto text-slate-100 mb-5'>
             {props.isActionSuccessful() ? <RiSystemCheckboxCircleFill size={44} /> : <CgDanger size={44} />}
           </div>
-          <p class='text-center leading-8 text-slate-200 w-4/5 mx-auto'>{props.message()}</p>
+          <p class='text-center leading-8 text-slate-200 px-10 mx-auto'>{props.message()}</p>
           <div onClick={props.togglePopup} class='absolute -top-2 -right-2 text-slate-100 cursor-pointer'>
             <RiSystemCloseCircleFill size={28} />
           </div>
