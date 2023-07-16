@@ -30,6 +30,7 @@ const Home: Component<{}> = () => {
   const [topEventRef, setTopEventRef] = createSignal<HTMLDivElement>();
   const [topEventID, setTopEventID] = createSignal<string>("");
 
+  // discard non kind 1 events from triggering popup
   onMount(async () => {
     setIsLoading(true);
     const eventsSub: Sub = relay.sub([{}]);
@@ -56,7 +57,9 @@ const Home: Component<{}> = () => {
         });
 
         metadataSub.on("eose", () => {
-          setShowPopup(true);
+          if (nostrEvent.kind == Kind.Text) {
+            setShowPopup(true);
+          }
         });
       }
     });
