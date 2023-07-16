@@ -3,13 +3,13 @@ import { Motion } from "@motionone/solid";
 import { BiRegularBoltCircle } from "solid-icons/bi";
 import RefTagFeedElement from "./RefTagFeedElement";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
-import { IoArrowDown, IoArrowUp } from "solid-icons/io";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { fetchMovie } from "~/lib/external-services/tmdb";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { Component, For, Show, createSignal, onMount } from "solid-js";
+import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
 
 interface Props {
   event: IEnrichedEvent;
@@ -141,13 +141,13 @@ const EventWrapper: Component<Props> = (props) => {
                 onClick={() => props.scrollPage!("up")}
                 class='cursor-pointer hover:scale-105 hover:text-slate-200 active:scale-90'
               >
-                <IoArrowUp size={40} />
+                <FiChevronUp size={40} />
               </div>
               <div
                 onClick={() => props.scrollPage!("down")}
                 class='cursor-pointer hover:scale-105 hover:text-slate-200 active:scale-90'
               >
-                <IoArrowDown size={40} />
+                <FiChevronDown size={40} />
               </div>
             </div>
           </div>
