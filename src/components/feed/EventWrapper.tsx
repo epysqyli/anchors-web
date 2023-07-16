@@ -1,17 +1,15 @@
-import { Event } from "nostr-tools";
-import { Component, For, Show, createSignal, onMount } from "solid-js";
+import EventAuthor from "./EventAuthor";
+import { Motion } from "@motionone/solid";
 import { BiRegularBoltCircle } from "solid-icons/bi";
 import RefTagFeedElement from "./RefTagFeedElement";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
-import { parseReferenceType } from "~/lib/ref-tags/references";
-import { fetchMovie } from "~/lib/external-services/tmdb";
-import { fetchBook } from "~/lib/external-services/open-library";
-import { fetchSong } from "~/lib/external-services/spotify";
-import { Motion } from "@motionone/solid";
-import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
 import { IoArrowDown, IoArrowUp } from "solid-icons/io";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
-import EventAuthor from "./EventAuthor";
+import { fetchMovie } from "~/lib/external-services/tmdb";
+import { fetchSong } from "~/lib/external-services/spotify";
+import { parseReferenceType } from "~/lib/ref-tags/references";
+import { fetchBook } from "~/lib/external-services/open-library";
+import { Component, For, Show, createSignal, onMount } from "solid-js";
 
 interface Props {
   event: IEnrichedEvent;
@@ -24,7 +22,6 @@ const EventWrapper: Component<Props> = (props) => {
   const nostrEvent = () => props.event;
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
-  const [refTagsContainer, setRefTagsContainer] = createSignal<HTMLDivElement>();
 
   onMount(async () => {
     const referenceTags = nostrEvent().tags.filter((t) => t[0] == "r");
@@ -75,13 +72,6 @@ const EventWrapper: Component<Props> = (props) => {
     setIsLoading(false);
   });
 
-  const scrollRefTags = (e: MouseEvent, direction: "up" | "down") => {
-    refTagsContainer()!.scrollBy({
-      top: direction == "up" ? -400 : 400,
-      behavior: "smooth"
-    });
-  };
-
   return (
     <>
       <Show when={props.isNarrow !== undefined && props.isNarrow}>
@@ -122,15 +112,11 @@ const EventWrapper: Component<Props> = (props) => {
               {nostrEvent().content}
             </div>
 
-            <div class='w-1/5 h-[69vh]'>
-              <div
-                onClick={(e) => scrollRefTags(e, "up")}
-                class='text-slate-500 hover:text-slate-200 hover:scale-110 group cursor-pointer'
-              >
-                <FiChevronUp size={40} class='mx-auto group-active:scale-75' />
+            <div class='w-1/5 h-[70vh]'>
+              <div class='text-center text-base text-slate-200 py-2 bg-slate-600 mb-2'>
+                {eventRefTags().length == 1 ? "1 reference" : `${eventRefTags().length} references`}
               </div>
-
-              <div ref={(el) => setRefTagsContainer(el)} class='h-5/6 overflow-auto no-scrollbar my-5'>
+              <div class='h-[90%] overflow-auto no-scrollbar my-5'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
@@ -138,13 +124,6 @@ const EventWrapper: Component<Props> = (props) => {
                     </Motion.div>
                   )}
                 </For>
-              </div>
-
-              <div
-                onClick={(e) => scrollRefTags(e, "down")}
-                class='text-slate-500 hover:text-slate-200 hover:scale-110 group cursor-pointer'
-              >
-                <FiChevronDown size={40} class='mx-auto group-active:scale-75' />
               </div>
             </div>
           </div>
