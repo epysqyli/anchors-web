@@ -30,7 +30,7 @@ const ActionPopup: Component<Props> = (props) => {
             }
           }}
           transition={{ easing: "ease-out", duration: 0.2 }}
-          class='relative py-12 px-14 bg-neutral-700 rounded-md text-lg shadow-md'
+          class='relative tracking-tight py-12 px-14 bg-neutral-700 rounded-md text-lg shadow-md'
         >
           <div class='w-fit mx-auto text-slate-100 mb-5'>
             {props.isActionSuccessful() ? <RiSystemCheckboxCircleFill size={44} /> : <CgDanger size={44} />}
