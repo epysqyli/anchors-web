@@ -35,6 +35,11 @@ const Write: Component<{}> = () => {
   };
 
   const canPublish = (): boolean => {
+    if (window.nostr == undefined) {
+      console.log("A browser nostr extension is needed to sign events, but is currently not available");
+      return false;
+    }
+
     if (nostrEvent().content.trim().length == 0) {
       console.log("cannot publish");
       return false;
