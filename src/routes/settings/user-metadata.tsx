@@ -5,9 +5,12 @@ import { RelayContext } from "~/contexts/relay";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import { createMetadataFilter } from "~/lib/nostr/nostr-utils";
 import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import ActionPopup from "~/components/shared/ActionPopup";
+import OverlayContext from "~/contexts/overlay";
 
 const UserMetadata: VoidComponent = () => {
   const relay = useContext(RelayContext);
+  const overlayContext = useContext(OverlayContext);
 
   const [content, setContent] = createSignal<IUserMetadata>({
     name: "",
@@ -35,12 +38,24 @@ const UserMetadata: VoidComponent = () => {
     const pubResult = relay.publish(signedEvent);
 
     pubResult.on("ok", () => {
-      console.log("ok");
+      setIsActionSuccessful(true);
+      setPopupMsg("Profile info updated!");
+      togglePopup();
     });
 
     pubResult.on("failed", () => {
-      console.log("failed");
+      setIsActionSuccessful(false);
+      setPopupMsg("Something did not work when publishing the post, please try again.");
+      togglePopup();
     });
+  };
+
+  const [popupMsg, setPopupMsg] = createSignal<string>("");
+  const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
+  const [showActionPopup, setShowActionPopup] = createSignal<boolean>(false);
+  const togglePopup = (): void => {
+    setShowActionPopup(!showActionPopup());
+    overlayContext.toggleOverlay();
   };
 
   onMount(async () => {
@@ -120,6 +135,15 @@ const UserMetadata: VoidComponent = () => {
           />
         </button>
       </form>
+
+      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10'>
+        <ActionPopup
+          message={popupMsg}
+          show={showActionPopup}
+          togglePopup={togglePopup}
+          isActionSuccessful={isActionSuccessful}
+        />
+      </div>
     </>
   );
 };
