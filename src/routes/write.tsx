@@ -191,7 +191,7 @@ const Write: Component<{}> = () => {
         </Presence>
       </div>
 
-      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10'>
+      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
         <ActionPopup
           message={popupMsg}
           show={showActionPopup}
