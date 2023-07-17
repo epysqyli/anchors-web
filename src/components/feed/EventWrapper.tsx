@@ -103,7 +103,7 @@ const EventWrapper: Component<Props> = (props) => {
         <div
           ref={(el) => props.assignTopEventRef(el, props.event.id)}
           class='snap-start h-full text-white text-lg mx-auto rounded-md
-                 px-3 2xl:px-10 py-2 flex flex-col justify-around'
+                 px-3 2xl:px-10 py-2 xl:py-3 gap-y-3 flex flex-col justify-between'
         >
           <div class='grid grid-cols-5 h-[85%] gap-x-3 2xl:gap-x-10'>
             <div
@@ -131,7 +131,7 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='w-full mx-auto flex justify-around rounded-md py-5 bg-slate-700 bg-opacity-60'>
+          <div class='w-full grow mx-auto flex justify-around rounded-md py-5 bg-slate-700 bg-opacity-60'>
             <EventAuthor
               name={nostrEvent().name}
               about={nostrEvent().about}
