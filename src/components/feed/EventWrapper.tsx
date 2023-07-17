@@ -102,21 +102,23 @@ const EventWrapper: Component<Props> = (props) => {
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
         <div
           ref={(el) => props.assignTopEventRef(el, props.event.id)}
-          class='snap-start h-full text-white text-lg mx-auto p-5 2xl:px-20 2xl:py-10 rounded-md'
+          class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-2 flex flex-col justify-around'
         >
-          <div class='flex justify-around py-2'>
+          <div class='grid grid-cols-5 h-[85%] gap-x-3'>
             <div
-              class='py-5 bg-gray-800 custom-scrollbar text-slate-200 tracking-tighter px-10 h-[70vh] 
-                     overflow-auto break-words text-justify whitespace-pre-line w-3/5 border-y border-slate-600'
+              class='col-span-4 bg-gradient-to-br from-slate-800 to-slate-700 custom-scrollbar
+                     text-slate-300 tracking-tighter overflow-auto break-words text-justify
+                      whitespace-pre-line rounded-md py-20'
             >
-              {nostrEvent().content}
+              <p class='w-3/5 mx-auto'>{nostrEvent().content}</p>
             </div>
 
-            <div class='w-1/5 h-[70vh]'>
-              <div class='text-center text-base text-slate-200 py-2 bg-slate-600 mb-2'>
+            <div class='col-span-1 h-full overflow-auto no-scrollbar'>
+              <div class='text-center text-base text-slate-200 mt-1 py-2 bg-slate-600 mb-2 rounded-md'>
                 {eventRefTags().length == 1 ? "1 reference" : `${eventRefTags().length} references`}
               </div>
-              <div class='h-[90%] overflow-auto no-scrollbar my-5'>
+
+              <div class='h-[90%] overflow-auto no-scrollbar py-5 px-2'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
@@ -128,7 +130,7 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='flex justify-around w-11/12 mt-16 rounded mx-auto py-5 bg-neutral-700 bg-opacity-40'>
+          <div class='w-full mx-auto flex justify-around rounded-md py-5 bg-slate-700 bg-opacity-60'>
             <EventAuthor
               name={nostrEvent().name}
               about={nostrEvent().about}
