@@ -127,7 +127,7 @@ const Home: Component<{}> = () => {
         fallback={<LoadingFallback />}
       >
         <Motion.div animate={{ opacity: [0.7, 1], scale: [0.8, 1] }} class='relative h-full'>
-          <div class='absolute top-3 left-3'>
+          <div class='absolute top-2 left-5'>
             <NewEventsPopup topEventRef={topEventRef} showPopup={showPopup} setShowPopup={setShowPopup} />
           </div>
 
