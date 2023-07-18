@@ -179,11 +179,11 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
                                    hover:border-b hover:border-slate-200 group cursor-pointer transition`;
 
   const activeSelectorPanelStyle =
-    basicSelectorPanelStyle + " bg-slate-800 bg-opacity-50 md:bg-transparent md:border-b md:border-slate-50";
+    basicSelectorPanelStyle + " bg-slate-800 bg-opacity-50 bg-transparent border-b border-slate-50";
 
   return (
     <>
-      <div class='h-[70%] md:h-[80%]'>
+      <div class='h-[80%] max-h-[80%]'>
         <div class='flex items-center justify-between gap-x-1 md:px-5 md:gap-x-10 text-slate-200 h-[15%]'>
           <div
             onClick={() => setShowSearch(false)}
@@ -194,6 +194,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               <div class='absolute -top-5 -right-10'>{props.tags.length}</div>
             </div>
           </div>
+
           <div
             onClick={() => setShowSearch(true)}
             class={showSearch() ? activeSelectorPanelStyle : basicSelectorPanelStyle}
@@ -202,6 +203,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               <TbDatabaseSearch size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
+
           <div onClick={props.toggleMenu} class={basicSelectorPanelStyle + " md:hidden"}>
             <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <RiSystemCloseCircleLine size={useIsNarrow() ? 30 : 40} />
@@ -209,7 +211,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
           </div>
         </div>
 
-        <div class='py-5 overflow-y-auto custom-scrollbar h-[82%] my-3 mr-2'>
+        <div class='py-5 overflow-auto custom-scrollbar h-[82%] my-3 mr-2'>
           <Show when={!showSearch()}>
             <For each={props.tags}>
               {(tag) => (

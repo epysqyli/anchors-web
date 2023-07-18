@@ -1,13 +1,13 @@
-import { VsReferences, VsSend } from "solid-icons/vs";
+import { VsSend } from "solid-icons/vs";
 import { IRefTag } from "~/interfaces/IRefTag";
 import { RelayContext } from "~/contexts/relay";
-import { Component, Show, createSignal, useContext } from "solid-js";
-import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
-import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
-import menuTogglerContext from "~/contexts/menuToggle";
-import { Motion, Presence } from "@motionone/solid";
-import ActionPopup from "~/components/shared/ActionPopup";
 import OverlayContext from "~/contexts/overlay";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
+import menuTogglerContext from "~/contexts/menuToggle";
+import ActionPopup from "~/components/shared/ActionPopup";
+import { Component, Show, createSignal, useContext } from "solid-js";
+import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
+import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 
 const Write: Component<{}> = () => {
   const relay = useContext(RelayContext);
@@ -121,84 +121,56 @@ const Write: Component<{}> = () => {
 
   return (
     <>
-      <div class='md:flex md:gap-x-2 xl:gap-x-2 2xl:w-[98%] mx-auto h-full md:h-[96vh] absolute w-[99%] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
-        <div class='w-full md:w-3/5 h-full'>
-          <div class='h-[70%] md:h-[80%]'>
-            <h1
-              class='relative text-slate-100 text-center text-2xl md:text-4xl font-bold
-                   md:rounded-tr md:rounded-tl h-[15%]'
-            >
-              <span class='absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+      <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
+        <> ... </>
+      </Show>
+
+      <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
+        <>
+          <div class='grid grid-cols-7 gap-x-2 h-full w-[99%] mx-auto'>
+            <div class='col-span-4 h-full rounded-md bg-slate-800'>
+              <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-10'>
                 Write a new idea
-              </span>
-            </h1>
-            <textarea
-              placeholder='Time to connect the dots'
-              class='block placeholder:text-center placeholder:text-lg text-lg focus:outline-none w-11/12 md:w-3/4 mx-auto
-                  bg-transparent p-5 md:p-10 text-slate-300 caret-orange-200 resize-none custom-scrollbar h-[85%]'
-              rows={18}
-              onInput={updateContent}
-            ></textarea>
-          </div>
+              </h1>
+              <textarea
+                placeholder='Time to connect the dots'
+                class='block w-4/5 2xl:w-2/3 placeholder:text-center placeholder:text-lg text-lg focus:outline-none bg-transparent
+                     mx-auto text-slate-300 caret-orange-200 resize-none custom-scrollbar px-5 py-2'
+                rows={18}
+                onInput={updateContent}
+              ></textarea>
 
-          <div
-            onClick={signAndPublishNostrEvent}
-            class='hidden md:block relative text-orange-300 mx-auto py-10 group cursor-pointer h-[20%]
-               md:h-[15%] md:w-2/3 md:mx-auto md:mt-5 hover:bg-slate-600 rounded-md'
-          >
-            <VsSend
-              size={40}
-              class='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2
-                   group-hover:scale-110 group-active:scale-90 transition'
-            />
-          </div>
-
-          <div class='md:hidden text-slate-50 h-[20%] flex items-center justify-around pt-5 '>
-            <VsSend size={32} onClick={signAndPublishNostrEvent} />
-            <div onClick={toggleRefMenu} class='relative active:scale-90 transition'>
-              <VsReferences size={32} />
-              <div class='absolute -top-3 -right-3'>{refTags().length}</div>
+              <div
+                onClick={signAndPublishNostrEvent}
+                class=' text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md my-10 w-4/5'
+              >
+                <VsSend
+                  size={40}
+                  class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition'
+                />
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div class='hidden md:block w-2/5 h-full md:py-5 md:my-auto md:bg-slate-800 md:rounded-md'>
-          <RefTagsSearchPanel
-            tags={refTags()}
-            addNostrTag={addNostrTag}
-            removeNostrTag={removeNostrTag}
-            toggleMenu={toggleRefMenu}
-          />
-        </div>
-
-        <Presence exitBeforeEnter>
-          <Show when={showRefMenu()}>
-            <Motion.div
-              class='fixed top-0 left-0 h-full w-full bg-slate-700'
-              initial={{ scale: 1.05, opacity: 0.5 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ easing: "ease-out" }}
-              exit={{ scale: 1.05, opacity: 0 }}
-            >
+            <div class='col-span-3 rounded-md bg-slate-800 h-full py-4 overflow-y-auto'>
               <RefTagsSearchPanel
                 tags={refTags()}
                 addNostrTag={addNostrTag}
                 removeNostrTag={removeNostrTag}
                 toggleMenu={toggleRefMenu}
               />
-            </Motion.div>
-          </Show>
-        </Presence>
-      </div>
+            </div>
+          </div>
 
-      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
-        <ActionPopup
-          message={popupMsg}
-          show={showActionPopup}
-          togglePopup={togglePopup}
-          isActionSuccessful={isActionSuccessful}
-        />
-      </div>
+          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
+            <ActionPopup
+              message={popupMsg}
+              show={showActionPopup}
+              togglePopup={togglePopup}
+              isActionSuccessful={isActionSuccessful}
+            />
+          </div>
+        </>
+      </Show>
     </>
   );
 };
