@@ -102,9 +102,9 @@ const EventWrapper: Component<Props> = (props) => {
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
         <div
           ref={(el) => props.assignTopEventRef(el, props.event.id)}
-          class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 2xl:px-10 gap-y-3 flex flex-col justify-between'
+          class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 gap-y-3 flex flex-col justify-between'
         >
-          <div class='grid grid-cols-5 h-[85%] gap-x-3 2xl:gap-x-10'>
+          <div class='grid grid-cols-5 h-[85%] gap-x-3 2xl:gap-x-5'>
             <div
               class='col-span-4 xl:col-span-3 bg-slate-700 custom-scrollbar
                      text-slate-300 tracking-tighter overflow-auto break-words text-justify
