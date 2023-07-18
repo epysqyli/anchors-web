@@ -115,7 +115,7 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
 
             <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-slate-800'>
-              <div class='text-center text-base text-slate-200 bg-slate-600 w-4/5 mx-auto mt-5 py-2 rounded-md'>
+              <div class='text-center text-base text-slate-200 bg-slate-600 w-4/5 xl:w-3/5 mx-auto mt-5 py-2 rounded-md'>
                 {eventRefTags().length == 1 ? "1 reference" : `${eventRefTags().length} references`}
               </div>
 
