@@ -107,19 +107,19 @@ const EventWrapper: Component<Props> = (props) => {
         >
           <div class='grid grid-cols-5 h-[85%] gap-x-3 2xl:gap-x-10'>
             <div
-              class='col-span-4 xl:col-span-3 bg-gradient-to-br from-slate-800 to-slate-700 custom-scrollbar
+              class='col-span-4 xl:col-span-3 bg-slate-700 custom-scrollbar
                      text-slate-300 tracking-tighter overflow-auto break-words text-justify
                       whitespace-pre-line rounded-md py-20'
             >
               <p class='w-3/5 mx-auto'>{nostrEvent().content}</p>
             </div>
 
-            <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar xl:w-4/5 mx-auto'>
-              <div class='text-center text-base text-slate-200 mt-1 py-2 bg-slate-600 mb-2 rounded-md'>
+            <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-slate-800'>
+              <div class='text-center text-base text-slate-200 bg-slate-600 w-4/5 mx-auto mt-5 py-2 rounded-md'>
                 {eventRefTags().length == 1 ? "1 reference" : `${eventRefTags().length} references`}
               </div>
 
-              <div class='h-[90%] overflow-auto no-scrollbar py-5 px-2'>
+              <div class='h-[90%] overflow-auto no-scrollbar py-5 px-2 xl:px-24 mx-auto'>
                 <For each={eventRefTags()}>
                   {(tag) => (
                     <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
@@ -131,7 +131,7 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='w-full grow mx-auto flex justify-around rounded-md py-5 bg-slate-700 bg-opacity-60'>
+          <div class='w-full grow mx-auto flex justify-around rounded-md py-5 bg-slate-600 bg-opacity-80'>
             <EventAuthor
               name={nostrEvent().name}
               about={nostrEvent().about}
