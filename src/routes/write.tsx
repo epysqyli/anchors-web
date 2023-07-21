@@ -128,7 +128,7 @@ const Write: Component<{}> = () => {
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
         <>
           <div class='grid grid-cols-7 gap-x-2 h-full w-[99%] mx-auto'>
-            <div class='col-span-4 h-full rounded-md bg-slate-800'>
+            <div class='col-span-4 rounded-md bg-slate-800'>
               <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-10'>
                 Write a new idea
               </h1>
@@ -136,13 +136,13 @@ const Write: Component<{}> = () => {
                 placeholder='Time to connect the dots'
                 class='block w-4/5 2xl:w-2/3 placeholder:text-center placeholder:text-lg text-lg focus:outline-none bg-transparent
                      mx-auto text-slate-300 caret-orange-200 resize-none custom-scrollbar px-5 py-2'
-                rows={18}
+                rows={14}
                 onInput={updateContent}
               ></textarea>
 
               <div
                 onClick={signAndPublishNostrEvent}
-                class=' text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md my-10 w-4/5'
+                class=' text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md mt-10 w-4/5'
               >
                 <VsSend
                   size={40}
