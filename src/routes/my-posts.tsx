@@ -1,6 +1,5 @@
 import { useIsRouting } from "solid-start";
 import { RelayContext } from "~/contexts/relay";
-import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
@@ -10,7 +9,7 @@ import { For, Show, VoidComponent, createSignal, onMount, useContext } from "sol
 const MyPosts: VoidComponent = () => {
   const relay = useContext(RelayContext);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
-  const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
+  const [events, setEvents] = createSignal<Event[]>([]);
 
   onMount(async () => {
     let pk = "";
@@ -28,7 +27,7 @@ const MyPosts: VoidComponent = () => {
 
     eventsSub.on("event", (nostrEvent: Event) => {
       if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
-        setEvents([...events(), { ...nostrEvent, name: "", picture: "", about: "" }].sort(sortByCreatedAt));
+        setEvents([...events(), nostrEvent].sort(sortByCreatedAt));
       }
     });
 

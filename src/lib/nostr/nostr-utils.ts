@@ -27,4 +27,9 @@ const shrinkContent = (content: string): string => {
   return content;
 };
 
-export { createMetadataFilter, sortByCreatedAt, enrichEvent, shrinkContent };
+const parseDate = (eventDate: number): string => {
+  const date = new Date(eventDate * 1000);
+  return `${date.toTimeString().split(" ")[0]} ${date.toDateString()}`;
+};
+
+export { createMetadataFilter, sortByCreatedAt, enrichEvent, shrinkContent, parseDate };
