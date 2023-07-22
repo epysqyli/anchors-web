@@ -1,14 +1,24 @@
 import { Event } from "nostr-tools";
 import { Component, JSX } from "solid-js";
+import { RiSystemDeleteBin3Line } from "solid-icons/ri";
+import { VsOpenPreview } from "solid-icons/vs";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 
 const UserNostrEvent: Component<{ nostrEvent: Event }> = (props): JSX.Element => {
   return (
-    <div class='break-all py-5 px-5 border text-slate-200'>
-      <div>{parseDate(props.nostrEvent.created_at)}</div>
-      <div>{props.nostrEvent.id}</div>
+    <div class='break-all py-5 px-5 text-slate-300 bg-neutral-700 bg-opacity-75 rounded-md hover:text-slate-200'>
+      <div class='bg-neutral-600 text-center rounded-md mx-auto w-3/4'>
+        {parseDate(props.nostrEvent.created_at)}
+      </div>
+      <div class='text-sm my-5 text-neutral-400'>{props.nostrEvent.id}</div>
       <div>{shrinkContent(props.nostrEvent.content)}</div>
-      <div class='border-t mt-2'>section with actions</div>
+      <div
+        class='flex items-center justify-around w-4/5 mx-auto border-t border-opacity-50
+                 border-neutral-100 mt-5 pt-4 text-neutral-400 transition-all'
+      >
+        <VsOpenPreview size={30} class='cursor-pointer hover:scale-110 active:scale-90 hover:text-neutral-100' />
+        <RiSystemDeleteBin3Line class='cursor-pointer hover:scale-110 active:scale-90 hover:text-red-300' size={30} />
+      </div>
     </div>
   );
 };
