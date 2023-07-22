@@ -1,9 +1,11 @@
+import { useIsRouting } from "solid-start";
 import { RelayContext } from "~/contexts/relay";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
-import { Event, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
-import { Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 import LoadingFallback from "~/components/feed/LoadingFallback";
+import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
+import { Event, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
+import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const MyPosts: VoidComponent = () => {
   const relay = useContext(RelayContext);
@@ -11,15 +13,26 @@ const MyPosts: VoidComponent = () => {
   const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
 
   onMount(async () => {
-    const eventsSub: Sub = relay.sub([
-      { authors: ["8becb32986f141b2399559e34fd31a720376f4bbbeb735ed8a3288d544cf946f"] }
-    ]);
+    let pk = "";
+
+    if (!useIsRouting()()) {
+      try {
+        pk = await window.nostr.getPublicKey();
+      } catch (error) {
+        await new Promise((_) => setTimeout(_, 500));
+        pk = await window.nostr.getPublicKey();
+      }
+    }
+
+    const eventsSub: Sub = relay.sub([{ authors: [pk] }]);
 
     eventsSub.on("event", (nostrEvent: Event) => {
       if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
         setEvents([...events(), { ...nostrEvent, name: "", picture: "", about: "" }].sort(sortByCreatedAt));
       }
     });
+
+    // enrich events with metadata
 
     eventsSub.on("eose", () => {
       setIsLoading(false);
@@ -30,7 +43,15 @@ const MyPosts: VoidComponent = () => {
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold my-14'>Your nostr posts</h1>
       <Show when={!isLoading()} fallback={<LoadingFallback />}>
-        <div class='text-center text-slate-50'>{events()[0].content}</div>
+        <div class='grid grid-cols-3 p-1 gap-x-1 gap-y-3 h-4/5 w-4/5 mx-auto rounded-md overflow-y-scroll custom-scrollbar'>
+          <For each={events()}>
+            {(nostrEvent) => (
+              <div class='col-span-1'>
+                <UserNostrEvent nostrEvent={nostrEvent} />
+              </div>
+            )}
+          </For>
+        </div>
       </Show>
     </>
   );

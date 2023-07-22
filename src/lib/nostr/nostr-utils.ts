@@ -19,4 +19,12 @@ const enrichEvent = (evt: Event, metadata: IUserMetadata): IEnrichedEvent => {
   };
 };
 
-export { createMetadataFilter, sortByCreatedAt, enrichEvent };
+const shrinkContent = (content: string): string => {
+  if (content.length > 100) {
+    return `${content.substring(0, 100)} ...`;
+  }
+
+  return content;
+};
+
+export { createMetadataFilter, sortByCreatedAt, enrichEvent, shrinkContent };
