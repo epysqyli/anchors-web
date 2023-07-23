@@ -7,7 +7,7 @@ import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 const UserNostrEvent: Component<{ nostrEvent: Event }> = (props): JSX.Element => {
   return (
     <div class='shadow-xl break-all py-5 px-5 text-slate-300 bg-neutral-700 bg-opacity-75 rounded-md hover:text-slate-200'>
-      <div class='bg-neutral-600 text-center rounded-md mx-auto w-3/4'>
+      <div class='bg-slate-600 text-center rounded-md mx-auto w-3/4'>
         {parseDate(props.nostrEvent.created_at)}
       </div>
       <div class='text-sm my-5 text-neutral-400'>{props.nostrEvent.id}</div>
