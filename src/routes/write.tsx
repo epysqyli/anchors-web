@@ -142,7 +142,7 @@ const Write: Component<{}> = () => {
 
               <div
                 onClick={signAndPublishNostrEvent}
-                class=' text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md mt-10 w-4/5'
+                class=' text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md mt-20 w-4/5'
               >
                 <VsSend
                   size={40}
