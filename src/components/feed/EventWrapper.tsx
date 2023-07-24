@@ -10,6 +10,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { Component, For, Show, createSignal, onMount } from "solid-js";
 import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
+import { A } from "@solidjs/router";
 
 interface Props {
   event: IEnrichedEvent;
@@ -130,13 +131,27 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='w-full grow mx-auto flex justify-around rounded-md py-5 bg-slate-600 bg-opacity-80'>
+          <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-80'>
             <EventAuthor
               name={nostrEvent().name}
               about={nostrEvent().about}
               picture={nostrEvent().picture}
               pubKey={nostrEvent().pubkey}
             />
+
+            <A
+              class='text-sm break-all w-1/5 text-slate-400 cursor-pointer bg-slate-600
+                     px-2 py-1 rounded hover:text-slate-200 active:scale-95 transition-all'
+              href={`/events/${nostrEvent().id}`}
+            >
+              {nostrEvent().id}
+            </A>
+
+            <div>reactions</div>
+
+            <div>repost</div>
+
+            <div>comments</div>
 
             <div class='p-2 flex items-center gap-x-1 text-slate-400'>
               <div
