@@ -3,6 +3,7 @@ import { Event, Kind } from "nostr-tools";
 import { render } from "@solidjs/testing-library";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
 import { shrinkContent } from "~/lib/nostr/nostr-utils";
+import { Router } from "@solidjs/router";
 
 describe("<UserNostrEvent />", () => {
   const nostrEvent: Event = {
@@ -16,13 +17,15 @@ describe("<UserNostrEvent />", () => {
   };
 
   it("shows the event attributes", () => {
-    const { unmount, getByText } = render(() => <UserNostrEvent nostrEvent={nostrEvent} />);
-    
+    const { unmount, getByText } = render(() => <UserNostrEvent nostrEvent={nostrEvent} />, {
+      wrapper: (props) => <Router>{props.children}</Router>
+    });
+
     const eventID = getByText(nostrEvent.id);
     const content = getByText(shrinkContent(nostrEvent.content));
 
     const date = getByText("22:15:58 Sun Jul 16 2023");
-    
+
     expect(eventID).toBeInTheDocument();
     expect(content).toBeInTheDocument();
     expect(date).toBeInTheDocument();
