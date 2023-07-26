@@ -13,6 +13,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { Component, For, Show, createSignal, onMount } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
+import { useLocation } from "solid-start";
 interface Props {
   event: IEnrichedEvent;
   isNarrow: boolean | undefined;
@@ -80,6 +81,15 @@ const EventWrapper: Component<Props> = (props) => {
     setIsLoading(false);
   });
 
+  const anchorNostrIDstyle = (): string => {
+    if (useLocation().pathname.includes(nostrEvent().id)) {
+      return "text-sm break-all w-1/5 text-slate-400 bg-slate-600 px-2 py-1 rounded cursor-default";
+    }
+
+    return `text-sm break-all w-1/5 text-slate-400 cursor-pointer bg-slate-600
+            px-2 py-1 rounded hover:text-slate-200 active:scale-95 transition-all`;
+  };
+
   return (
     <>
       <Show when={props.isNarrow !== undefined && props.isNarrow}>
@@ -146,11 +156,7 @@ const EventWrapper: Component<Props> = (props) => {
               pubKey={nostrEvent().pubkey}
             />
 
-            <A
-              class='text-sm break-all w-1/5 text-slate-400 cursor-pointer bg-slate-600
-                     px-2 py-1 rounded hover:text-slate-200 active:scale-95 transition-all'
-              href={`/events/${nostrEvent().id}`}
-            >
+            <A class={anchorNostrIDstyle()} href={`/events/${nostrEvent().id}`}>
               {nostrEvent().id}
             </A>
 
