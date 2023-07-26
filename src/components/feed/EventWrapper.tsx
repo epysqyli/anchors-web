@@ -1,8 +1,9 @@
 import { A } from "@solidjs/router";
 import EventAuthor from "./EventAuthor";
+import { useLocation } from "solid-start";
 import { Motion } from "@motionone/solid";
 import RefTagFeedElement from "./RefTagFeedElement";
-import { TbTopologyStarRing } from "solid-icons/tb";
+import { FiTrendingUp } from "solid-icons/fi";
 import { VsCommentDiscussion } from "solid-icons/vs";
 import { BiRegularBoltCircle } from "solid-icons/bi";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
@@ -13,7 +14,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { Component, For, Show, createSignal, onMount } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
-import { useLocation } from "solid-start";
+
 interface Props {
   event: IEnrichedEvent;
   isNarrow: boolean | undefined;
@@ -160,17 +161,17 @@ const EventWrapper: Component<Props> = (props) => {
               {nostrEvent().id}
             </A>
 
-            <div class='flex items-center gap-x-2 text-slate-300'>
-              <FiThumbsUp size={28} />
-              <FiThumbsDown size={28} />
+            <div class='flex items-center gap-x-2 text-slate-400'>
+              <FiThumbsUp size={26} />
+              <FiThumbsDown size={26} />
             </div>
 
             <div>
-              <TbTopologyStarRing size={28} />
+              <FiTrendingUp class="text-slate-400" size={26} />
             </div>
 
             <div>
-              <VsCommentDiscussion size={28} />
+              <VsCommentDiscussion class="text-slate-400" size={28} />
             </div>
 
             {props.scrollPage !== undefined ? (
