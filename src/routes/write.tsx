@@ -128,7 +128,7 @@ const Write: Component<{}> = () => {
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
         <>
           <div class='grid grid-cols-7 gap-x-2 h-full w-[99%] mx-auto'>
-            <div class='col-span-4 rounded-md bg-slate-800'>
+            <div class='col-span-4 rounded-md bg-slate-700 bg-opacity-80'>
               <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-10'>
                 Write a new idea
               </h1>
@@ -151,7 +151,7 @@ const Write: Component<{}> = () => {
               </div>
             </div>
 
-            <div class='col-span-3 rounded-md bg-slate-800 h-full py-4 overflow-y-auto'>
+            <div class='col-span-3 rounded-md bg-slate-800 bg-opacity-80 h-full py-4 overflow-y-auto'>
               <RefTagsSearchPanel
                 tags={refTags()}
                 addNostrTag={addNostrTag}
