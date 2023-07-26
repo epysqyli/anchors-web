@@ -175,36 +175,35 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
     return basicStyle;
   };
 
-  const basicSelectorPanelStyle = `w-1/2 relative h-full text-center border-b border-transparent 
-                                   hover:border-b hover:border-slate-200 group cursor-pointer transition`;
+  const panelSelectorStyle = (active: boolean): string => {
+    if (active) {
+      return "w-1/2 relative h-full text-center group cursor-pointer transition rounded bg-slate-600";
+    }
 
-  const activeSelectorPanelStyle =
-    basicSelectorPanelStyle + " bg-slate-800 bg-opacity-50 bg-transparent border-b border-slate-50";
+    return "w-1/2 relative h-full text-center group cursor-pointer transition rounded";
+  };
 
   return (
     <>
       <div class='h-[80%] max-h-[80%]'>
         <div class='flex items-center justify-between gap-x-1 md:px-5 md:gap-x-10 text-slate-200 h-[15%]'>
-          <div
-            onClick={() => setShowSearch(false)}
-            class={showSearch() ? basicSelectorPanelStyle : activeSelectorPanelStyle}
-          >
+          <div onClick={() => setShowSearch(false)} class={panelSelectorStyle(!showSearch())}>
             <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <VsReferences size={useIsNarrow() ? 30 : 40} />
               <div class='absolute -top-5 -right-10'>{props.tags.length}</div>
             </div>
           </div>
 
-          <div
-            onClick={() => setShowSearch(true)}
-            class={showSearch() ? activeSelectorPanelStyle : basicSelectorPanelStyle}
-          >
+          <div onClick={() => setShowSearch(true)} class={panelSelectorStyle(showSearch())}>
             <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <TbDatabaseSearch size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
 
-          <div onClick={props.toggleMenu} class={basicSelectorPanelStyle + " md:hidden"}>
+          <div
+            onClick={props.toggleMenu}
+            class='w-1/2 relative h-full text-center group cursor-pointer transition rounded md:hidden'
+          >
             <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <RiSystemCloseCircleLine size={useIsNarrow() ? 30 : 40} />
             </div>
