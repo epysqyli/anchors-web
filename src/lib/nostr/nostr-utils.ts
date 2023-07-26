@@ -1,6 +1,6 @@
-import { Event, Filter, Kind } from "nostr-tools";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
+import { Event, Filter, Kind, Pub, Relay, UnsignedEvent } from "nostr-tools";
 
 const sortByCreatedAt = (evt1: Event, evt2: Event) => {
   return evt1.created_at > evt2.created_at ? -1 : 1;
@@ -32,4 +32,27 @@ const parseDate = (eventDate: number): string => {
   return `${date.toTimeString().split(" ")[0]} ${date.toDateString()}`;
 };
 
-export { createMetadataFilter, sortByCreatedAt, enrichEvent, shrinkContent, parseDate };
+const deleteNostrEvent = async (relay: Relay, eventID: string, pubkey: string): Promise<void> => {
+  let pk = "";
+
+  const deletionEvent: UnsignedEvent = {
+    kind: Kind.EventDeletion,
+    pubkey: pk,
+    tags: [["e", eventID]],
+    created_at: Math.floor(Date.now() / 1000),
+    content: ""
+  };
+
+  const signedEvent = await window.nostr.signEvent(deletionEvent);
+  const pubRes: Pub = relay.publish(signedEvent);
+
+  pubRes.on("ok", () => {
+    console.log("event deleted");
+  });
+
+  pubRes.on("failed", () => {
+    console.log("failure");
+  });
+};
+
+export { createMetadataFilter, sortByCreatedAt, enrichEvent, shrinkContent, parseDate, deleteNostrEvent };

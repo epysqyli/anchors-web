@@ -1,10 +1,20 @@
 import { A } from "@solidjs/router";
-import { Event } from "nostr-tools";
+import { Event, Relay } from "nostr-tools";
 import { CgRemove } from "solid-icons/cg";
 import { Component, JSX } from "solid-js";
-import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
+import { deleteNostrEvent, parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 
-const UserNostrEvent: Component<{ nostrEvent: Event }> = (props): JSX.Element => {
+interface Props {
+  nostrEvent: Event;
+  relay: Relay;
+  publicKey: string;
+}
+
+const UserNostrEvent: Component<Props> = (props): JSX.Element => {
+  const handleDeletion = async (): Promise<void> => {
+    await deleteNostrEvent(props.relay, props.nostrEvent.id, props.publicKey);
+  };
+
   return (
     <div
       class='h-full flex flex-col justify-between py-5 px-5 border-y-2 border-neutral-600
@@ -22,7 +32,7 @@ const UserNostrEvent: Component<{ nostrEvent: Event }> = (props): JSX.Element =>
       >
         {props.nostrEvent.id}
       </A>
-      <div class='w-4/5 mx-auto mt-10 text-neutral-400 cursor-pointer group'>
+      <div onClick={handleDeletion} class='w-4/5 mx-auto mt-10 text-neutral-400 cursor-pointer group'>
         <CgRemove
           size={32}
           class='transition-all mx-auto group-hover:scale-105 group-hover:text-neutral-200 group-active:scale-90'

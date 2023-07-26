@@ -13,6 +13,7 @@ const MyPosts: VoidComponent = () => {
   const overlayContext = useContext(OverlayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
+  const [publicKey, setPublicKey] = createSignal<string>("");
   const [events, setEvents] = createSignal<Event[]>([]);
   const [showActionPopup, setShowActionPopup] = createSignal<boolean>(false);
   const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
@@ -30,26 +31,24 @@ const MyPosts: VoidComponent = () => {
       return;
     }
 
-    let pk = "";
-
     if (!useIsRouting()()) {
       try {
-        pk = await window.nostr.getPublicKey();
+        const pk = await window.nostr.getPublicKey();
+        setPublicKey(pk);
       } catch (error) {
         await new Promise((_) => setTimeout(_, 500));
-        pk = await window.nostr.getPublicKey();
+        const pk = await window.nostr.getPublicKey();
+        setPublicKey(pk);
       }
     }
 
-    const eventsSub: Sub = relay.sub([{ authors: [pk] }]);
+    const eventsSub: Sub = relay.sub([{ authors: [publicKey()] }]);
 
     eventsSub.on("event", (nostrEvent: Event) => {
       if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
         setEvents([...events(), nostrEvent].sort(sortByCreatedAt));
       }
     });
-
-    // enrich events with metadata
 
     eventsSub.on("eose", () => {
       setIsLoading(false);
@@ -64,7 +63,7 @@ const MyPosts: VoidComponent = () => {
           <For each={events()}>
             {(nostrEvent) => (
               <div class='col-span-1'>
-                <UserNostrEvent nostrEvent={nostrEvent} />
+                <UserNostrEvent nostrEvent={nostrEvent} relay={relay} publicKey={publicKey()} />
               </div>
             )}
           </For>
