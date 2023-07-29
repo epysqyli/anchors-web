@@ -14,6 +14,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { Component, For, Show, createSignal, onMount } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
+import { parseDate } from "~/lib/nostr/nostr-utils";
 
 interface Props {
   event: IEnrichedEvent;
@@ -150,12 +151,16 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-80'>
-            <EventAuthor
-              name={nostrEvent().name}
-              about={nostrEvent().about}
-              picture={nostrEvent().picture}
-              pubKey={nostrEvent().pubkey}
-            />
+            <div>
+              <EventAuthor
+                name={nostrEvent().name}
+                about={nostrEvent().about}
+                picture={nostrEvent().picture}
+                pubKey={nostrEvent().pubkey}
+              />
+
+              <div class='text-center text-sm text-slate-400 mt-3'>{parseDate(nostrEvent().created_at)}</div>
+            </div>
 
             <A class={anchorNostrIDstyle()} href={`/events/${nostrEvent().id}`}>
               {nostrEvent().id}
@@ -167,11 +172,11 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
 
             <div>
-              <FiTrendingUp class="text-slate-400" size={26} />
+              <FiTrendingUp class='text-slate-400' size={26} />
             </div>
 
             <div>
-              <VsCommentDiscussion class="text-slate-400" size={28} />
+              <VsCommentDiscussion class='text-slate-400' size={28} />
             </div>
 
             {props.scrollPage !== undefined ? (
