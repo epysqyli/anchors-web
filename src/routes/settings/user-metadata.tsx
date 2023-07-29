@@ -1,16 +1,16 @@
 import { FiSave } from "solid-icons/fi";
 import { useIsRouting } from "solid-start";
-import { Event as NostrEvent, Kind, Sub } from "nostr-tools";
+import { CgDanger } from "solid-icons/cg";
+import Popup from "~/components/shared/Popup";
 import { RelayContext } from "~/contexts/relay";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
+import { Event as NostrEvent, Kind, Sub } from "nostr-tools";
+import { RiSystemCheckboxCircleFill } from "solid-icons/ri";
 import { createMetadataFilter } from "~/lib/nostr/nostr-utils";
 import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
-import ActionPopup from "~/components/shared/ActionPopup";
-import OverlayContext from "~/contexts/overlay";
 
 const UserMetadata: VoidComponent = () => {
   const relay = useContext(RelayContext);
-  const overlayContext = useContext(OverlayContext);
 
   const [content, setContent] = createSignal<IUserMetadata>({
     name: "",
@@ -39,29 +39,23 @@ const UserMetadata: VoidComponent = () => {
 
     pubResult.on("ok", () => {
       setIsActionSuccessful(true);
-      setPopupMsg("Profile info updated!");
-      togglePopup();
+      setShowPopup(true);
     });
 
     pubResult.on("failed", () => {
       setIsActionSuccessful(false);
-      setPopupMsg("Something did not work when publishing the post, please try again.");
-      togglePopup();
+      setShowPopup(true);
     });
   };
 
-  const [popupMsg, setPopupMsg] = createSignal<string>("");
+  const [showPopup, setShowPopup] = createSignal<boolean>(false);
   const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
-  const [showActionPopup, setShowActionPopup] = createSignal<boolean>(false);
-  const togglePopup = (): void => {
-    setShowActionPopup(!showActionPopup());
-    overlayContext.toggleOverlay();
-  };
 
   onMount(async () => {
     let pk = "";
 
     if (!useIsRouting()()) {
+      // move into nostr-utils
       try {
         pk = await window.nostr.getPublicKey();
       } catch (error) {
@@ -137,12 +131,19 @@ const UserMetadata: VoidComponent = () => {
       </form>
 
       <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
-        <ActionPopup
-          message={popupMsg}
-          show={showActionPopup}
-          togglePopup={togglePopup}
-          isActionSuccessful={isActionSuccessful}
-        />
+        <Popup show={showPopup} setShow={setShowPopup}>
+          {isActionSuccessful() ? (
+            <>
+              <p>Nostr profile metadata successfully updated!</p>
+              <RiSystemCheckboxCircleFill class='mx-auto mt-8' size={44} />
+            </>
+          ) : (
+            <>
+              <p>Request failed</p>
+              <CgDanger class='mx-auto mt-8' size={44} />
+            </>
+          )}
+        </Popup>
       </div>
     </>
   );
