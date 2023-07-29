@@ -1,6 +1,6 @@
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
-import { Event, Filter, Kind, Pub, Relay, UnsignedEvent } from "nostr-tools";
+import { Event, EventTemplate, Filter, Kind, Pub, Relay, UnsignedEvent } from "nostr-tools";
 
 const sortByCreatedAt = (evt1: Event, evt2: Event) => {
   return evt1.created_at > evt2.created_at ? -1 : 1;
@@ -32,6 +32,11 @@ const parseDate = (eventDate: number): string => {
   return `${date.toTimeString().split(" ")[0]} ${date.toDateString()}`;
 };
 
+/**
+ * functions implemeting NIPs should probably reside somewhere else
+ * for example: delete, reactions, comments, repost ...
+ */
+
 const deleteNostrEvent = async (relay: Relay, eventID: string, pubkey: string): Promise<void> => {
   const deletionEvent: UnsignedEvent = {
     kind: Kind.EventDeletion,
@@ -53,4 +58,40 @@ const deleteNostrEvent = async (relay: Relay, eventID: string, pubkey: string): 
   });
 };
 
-export { createMetadataFilter, sortByCreatedAt, enrichEvent, shrinkContent, parseDate, deleteNostrEvent };
+const reactToEvent = async (
+  relay: Relay,
+  eventID: string,
+  eventPubkey: string,
+  reaction: "+" | "-"
+): Promise<void> => {
+  const reactionEvent: EventTemplate = {
+    kind: Kind.Reaction,
+    tags: [
+      ["e", eventID],
+      ["p", eventPubkey]
+    ],
+    content: reaction,
+    created_at: Math.floor(Date.now() / 1000)
+  };
+
+  const signedEvent = await window.nostr.signEvent(reactionEvent);
+  const pubRes: Pub = relay.publish(signedEvent);
+
+  pubRes.on("ok", () => {
+    console.log("reaction sent");
+  });
+
+  pubRes.on("failed", () => {
+    console.log("failure");
+  });
+};
+
+export {
+  createMetadataFilter,
+  sortByCreatedAt,
+  enrichEvent,
+  shrinkContent,
+  parseDate,
+  deleteNostrEvent,
+  reactToEvent
+};

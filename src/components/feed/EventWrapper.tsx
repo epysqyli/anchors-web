@@ -2,8 +2,10 @@ import { A } from "@solidjs/router";
 import EventAuthor from "./EventAuthor";
 import { useLocation } from "solid-start";
 import { Motion } from "@motionone/solid";
-import RefTagFeedElement from "./RefTagFeedElement";
 import { FiTrendingUp } from "solid-icons/fi";
+import { RelayContext } from "~/contexts/relay";
+import { parseDate, reactToEvent } from "~/lib/nostr/nostr-utils";
+import RefTagFeedElement from "./RefTagFeedElement";
 import { VsCommentDiscussion } from "solid-icons/vs";
 import { BiRegularBoltCircle } from "solid-icons/bi";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
@@ -12,9 +14,8 @@ import { fetchMovie } from "~/lib/external-services/tmdb";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
-import { Component, For, Show, createSignal, onMount } from "solid-js";
+import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
-import { parseDate } from "~/lib/nostr/nostr-utils";
 
 interface Props {
   event: IEnrichedEvent;
@@ -24,6 +25,8 @@ interface Props {
 }
 
 const EventWrapper: Component<Props> = (props) => {
+  const relay = useContext(RelayContext);
+
   const nostrEvent = () => props.event;
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
@@ -32,6 +35,10 @@ const EventWrapper: Component<Props> = (props) => {
     if (props.assignTopEventRef !== undefined) {
       props.assignTopEventRef(el, eventID);
     }
+  };
+
+  const handleReaction = async (reaction: "+" | "-"): Promise<void> => {
+    await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
   };
 
   onMount(async () => {
@@ -167,8 +174,18 @@ const EventWrapper: Component<Props> = (props) => {
             </A>
 
             <div class='flex items-center gap-x-2 text-slate-400'>
-              <FiThumbsUp size={26} />
-              <FiThumbsDown size={26} />
+              <div
+                onClick={() => handleReaction("+")}
+                class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
+              >
+                <FiThumbsUp size={26} />
+              </div>
+              <div
+                onClick={() => handleReaction("-")}
+                class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
+              >
+                <FiThumbsDown size={26} />
+              </div>
             </div>
 
             <div>
