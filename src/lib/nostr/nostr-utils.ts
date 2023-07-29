@@ -37,10 +37,9 @@ const parseDate = (eventDate: number): string => {
  * for example: delete, reactions, comments, repost ...
  */
 
-const deleteNostrEvent = async (relay: Relay, eventID: string, pubkey: string): Promise<void> => {
-  const deletionEvent: UnsignedEvent = {
+const deleteNostrEvent = async (relay: Relay, eventID: string): Promise<void> => {
+  const deletionEvent: EventTemplate = {
     kind: Kind.EventDeletion,
-    pubkey: pubkey,
     tags: [["e", eventID]],
     created_at: Math.floor(Date.now() / 1000),
     content: ""

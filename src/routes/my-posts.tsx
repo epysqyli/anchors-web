@@ -16,7 +16,7 @@ const MyPosts: VoidComponent = () => {
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
 
   const handleDeletion = async (nostrEventID: string): Promise<void> => {
-    await deleteNostrEvent(relay, nostrEventID, publicKey());
+    await deleteNostrEvent(relay, nostrEventID);
     const remainingEvents: Event[] = events().filter((evt) => evt.id != nostrEventID);
     setEvents(remainingEvents);
     setShowPopup(true);
