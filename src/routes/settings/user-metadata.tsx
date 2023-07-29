@@ -6,12 +6,13 @@ import { RelayContext } from "~/contexts/relay";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import { Event as NostrEvent, Kind, Sub } from "nostr-tools";
 import { RiSystemCheckboxCircleFill } from "solid-icons/ri";
-import { createMetadataFilter } from "~/lib/nostr/nostr-utils";
 import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import { checkAndSetPublicKey, createMetadataFilter } from "~/lib/nostr/nostr-utils";
 
 const UserMetadata: VoidComponent = () => {
   const relay = useContext(RelayContext);
 
+  const [publicKey, setPublicKey] = createSignal<string>("");
   const [content, setContent] = createSignal<IUserMetadata>({
     name: "",
     about: "",
@@ -52,19 +53,11 @@ const UserMetadata: VoidComponent = () => {
   const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
 
   onMount(async () => {
-    let pk = "";
-
     if (!useIsRouting()()) {
-      // move into nostr-utils
-      try {
-        pk = await window.nostr.getPublicKey();
-      } catch (error) {
-        await new Promise((_) => setTimeout(_, 500));
-        pk = await window.nostr.getPublicKey();
-      }
+      await checkAndSetPublicKey(setPublicKey);
     }
 
-    const metadataFilter = createMetadataFilter([pk]);
+    const metadataFilter = createMetadataFilter([publicKey()]);
     const metaDataSub: Sub = relay.sub([metadataFilter]);
 
     metaDataSub.on("event", (event: NostrEvent) => {
