@@ -180,12 +180,14 @@ const EventWrapper: Component<Props> = (props) => {
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
                 <FiThumbsUp size={26} />
+                <p class='text-center text-sm mt-1'>{nostrEvent().positive}</p>
               </div>
               <div
                 onClick={() => handleReaction("-")}
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
                 <FiThumbsDown size={26} />
+                <p class='text-center text-sm mt-1'>{nostrEvent().negative}</p>
               </div>
             </div>
 
