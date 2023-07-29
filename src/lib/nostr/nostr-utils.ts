@@ -33,11 +33,9 @@ const parseDate = (eventDate: number): string => {
 };
 
 const deleteNostrEvent = async (relay: Relay, eventID: string, pubkey: string): Promise<void> => {
-  let pk = "";
-
   const deletionEvent: UnsignedEvent = {
     kind: Kind.EventDeletion,
-    pubkey: pk,
+    pubkey: pubkey,
     tags: [["e", eventID]],
     created_at: Math.floor(Date.now() / 1000),
     content: ""
