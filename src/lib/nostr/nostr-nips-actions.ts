@@ -75,6 +75,8 @@ const fetchEvents = (
   const events: IEnrichedEvent[] = [];
 
   eventsSub.on("event", (evt: Event) => {
+    setIsLoading(true);
+
     if (!eose && evt.kind === Kind.Text && validateEvent(evt) && verifySignature(evt)) {
       events.push(makeDefaultEnrichedEvent(evt));
     }
@@ -182,6 +184,7 @@ const fetchEvents = (
 
           parsedReactionEventsCount++;
           if (parsedReactionEventsCount == eventsCount) {
+            setIsLoading(false);
             eose = true;
           }
 
