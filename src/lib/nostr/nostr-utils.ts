@@ -11,7 +11,18 @@ const createMetadataFilter = (pubkeys: string[]): Filter => {
   return { authors: [...new Set(pubkeys)], kinds: [Kind.Metadata] };
 };
 
-const enrichEvent = (evt: Event, metadata: IUserMetadata): IEnrichedEvent => {
+const makeDefaultEnrichedEvent = (evt: Event): IEnrichedEvent => {
+  return {
+    ...evt,
+    name: "",
+    about: "",
+    picture: "",
+    positive: 0,
+    negative: 0
+  };
+};
+
+const assignUserMetadata = (evt: IEnrichedEvent, metadata: IUserMetadata): IEnrichedEvent => {
   return {
     ...evt,
     about: metadata.about,
@@ -44,4 +55,12 @@ const checkAndSetPublicKey = async (setPublicKey: Setter<string>): Promise<void>
   }
 };
 
-export { createMetadataFilter, sortByCreatedAt, enrichEvent, shrinkContent, parseDate, checkAndSetPublicKey };
+export {
+  createMetadataFilter,
+  sortByCreatedAt,
+  assignUserMetadata,
+  shrinkContent,
+  parseDate,
+  checkAndSetPublicKey,
+  makeDefaultEnrichedEvent
+};

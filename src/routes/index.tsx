@@ -1,13 +1,12 @@
 import { Motion } from "@motionone/solid";
 import { RelayContext } from "~/contexts/relay";
+import { Event, EventTemplate } from "nostr-tools";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
-import { IUserMetadata } from "~/interfaces/IUserMetadata";
+import { fetchEvents } from "~/lib/nostr/nostr-nips-actions";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
-import { Event, EventTemplate, Filter, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
-import { createMetadataFilter, enrichEvent, sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 declare global {
@@ -31,60 +30,61 @@ const Home: Component<{}> = () => {
   const [topEventID, setTopEventID] = createSignal<string>("");
 
   // discard non kind 1 events from triggering popup
-  onMount(async () => {
-    setIsLoading(true);
-    const eventsSub: Sub = relay.sub([{}]);
+  onMount(() => {
+    fetchEvents(relay, setEvents, setShowPopup, setIsLoading);
 
-    eventsSub.on("event", (nostrEvent: Event) => {
-      if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
-        setEvents([...events(), { ...nostrEvent, name: "", picture: "", about: "" }].sort(sortByCreatedAt));
-      }
+    // setIsLoading(true);
+    // const eventsSub: Sub = relay.sub([{}]);
+    // eventsSub.on("event", (nostrEvent: Event) => {
+    //   if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
+    //     setEvents([...events(), { ...nostrEvent, name: "", picture: "", about: "" }].sort(sortByCreatedAt));
+    //   }
 
-      if (eoseRecv()) {
-        const metadataFilter: Filter = createMetadataFilter([nostrEvent.pubkey]);
-        const metadataSub: Sub = relay.sub([metadataFilter]);
+    //   if (eoseRecv()) {
+    //     const metadataFilter: Filter = createMetadataFilter([nostrEvent.pubkey]);
+    //     const metadataSub: Sub = relay.sub([metadataFilter]);
 
-        metadataSub.on("event", (metadataEvent: Event) => {
-          const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
+    //     metadataSub.on("event", (metadataEvent: Event) => {
+    //       const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
 
-          const newEnrichedEvents = events()
-            .filter((ev) => ev.pubkey === metadataEvent.pubkey)
-            .map((ev) => enrichEvent(ev, userMetadata));
+    //       const newEnrichedEvents = events()
+    //         .filter((ev) => ev.pubkey === metadataEvent.pubkey)
+    //         .map((ev) => enrichEvent(ev, userMetadata));
 
-          const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
+    //       const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
 
-          setEvents([...remainingEvents, ...newEnrichedEvents].sort(sortByCreatedAt));
-        });
+    //       setEvents([...remainingEvents, ...newEnrichedEvents].sort(sortByCreatedAt));
+    //     });
 
-        metadataSub.on("eose", () => {
-          if (nostrEvent.kind == Kind.Text) {
-            setShowPopup(true);
-          }
-        });
-      }
-    });
+    //     metadataSub.on("eose", () => {
+    //       if (nostrEvent.kind == Kind.Text) {
+    //         setShowPopup(true);
+    //       }
+    //     });
+    //   }
+    // });
 
-    eventsSub.on("eose", () => {
-      const metadataFilter: Filter = createMetadataFilter(events().map((e) => e.pubkey));
-      const metadataSub: Sub = relay.sub([metadataFilter]);
+    // eventsSub.on("eose", () => {
+    //   const metadataFilter: Filter = createMetadataFilter(events().map((e) => e.pubkey));
+    //   const metadataSub: Sub = relay.sub([metadataFilter]);
 
-      metadataSub.on("event", (metadataEvent: Event) => {
-        const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
+    //   metadataSub.on("event", (metadataEvent: Event) => {
+    //     const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
 
-        const newEnrichedEvents = events()
-          .filter((ev) => ev.pubkey === metadataEvent.pubkey)
-          .map((ev) => enrichEvent(ev, userMetadata));
+    //     const newEnrichedEvents = events()
+    //       .filter((ev) => ev.pubkey === metadataEvent.pubkey)
+    //       .map((ev) => enrichEvent(ev, userMetadata));
 
-        const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
+    //     const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
 
-        setEvents([...remainingEvents, ...newEnrichedEvents].sort(sortByCreatedAt));
-      });
+    //     setEvents([...remainingEvents, ...newEnrichedEvents].sort(sortByCreatedAt));
+    //   });
 
-      metadataSub.on("eose", () => {
-        setEoseRecv(true);
-        setIsLoading(false);
-      });
-    });
+    //   metadataSub.on("eose", () => {
+    //     setEoseRecv(true);
+    //     setIsLoading(false);
+    //   });
+    // });
   });
 
   const scrollPage = (direction: "up" | "down"): void => {
