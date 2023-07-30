@@ -135,7 +135,7 @@ const EventWrapper: Component<Props> = (props) => {
         >
           <div class='grid grid-cols-5 h-[85%] gap-x-3 2xl:gap-x-5'>
             <div
-              class='col-span-4 xl:col-span-3 bg-slate-700 custom-scrollbar
+              class='col-span-4 xl:col-span-3 bg-gradient-to-br from-neutral-600 via-slate-700 via-15% to-slate-900 custom-scrollbar
                      text-slate-300 tracking-tighter overflow-auto break-words text-justify
                       whitespace-pre-line rounded-md py-20'
             >

@@ -7,8 +7,7 @@ import EventWrapper from "~/components/feed/EventWrapper";
 import { fetchEvents } from "~/lib/nostr/nostr-nips-actions";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
-import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
-import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
+import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 
 declare global {
   interface Window {
