@@ -69,15 +69,67 @@ const fetchEvents = (
   setShowPopup: Setter<boolean>,
   setIsLoading: Setter<boolean>
 ) => {
+  let eose: boolean = false;
   const filters: Filter[] = [{}];
   const eventsSub: Sub = relay.sub(filters);
-
   const events: IEnrichedEvent[] = [];
-  // let eose: boolean = false;
 
   eventsSub.on("event", (evt: Event) => {
-    if (evt.kind === Kind.Text && validateEvent(evt) && verifySignature(evt)) {
+    if (!eose && evt.kind === Kind.Text && validateEvent(evt) && verifySignature(evt)) {
       events.push(makeDefaultEnrichedEvent(evt));
+    }
+
+    /* Handle incoming events after all events have been received */
+    if (eose) {
+      const enrichedEvent: IEnrichedEvent = makeDefaultEnrichedEvent(evt);
+      const metadataSub: Sub = relay.sub([createMetadataFilter([enrichedEvent.pubkey])]);
+
+      metadataSub.on("event", (metaEvt: Event) => {
+        const userMetadata: IUserMetadata = JSON.parse(metaEvt.content);
+
+        if (evt.pubkey === metaEvt.pubkey) {
+          enrichedEvent.name = userMetadata.name;
+          enrichedEvent.about = userMetadata.about;
+          enrichedEvent.picture = userMetadata.picture;
+        }
+      });
+
+      metadataSub.on("eose", () => {
+        const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [enrichedEvent.id] }]);
+        let positive = 0;
+        let negative = 0;
+
+        reactionsSub.on("event", (reactionEvt: Event) => {
+          switch (reactionEvt.content) {
+            case "+":
+              positive++;
+              break;
+
+            case "-":
+              negative++;
+              break;
+
+            default:
+              break;
+          }
+        });
+
+        reactionsSub.on("eose", () => {
+          if (positive != 0 || negative != 0) {
+            enrichedEvent.positive = positive;
+            enrichedEvent.negative = negative;
+          }
+
+          reactionsSub.unsub();
+          events.push(enrichedEvent);
+          console.log(events);
+
+          if (enrichedEvent.kind == Kind.Text) {
+            setShowPopup(true);
+            setEvents(events.sort(sortByCreatedAt));
+          }
+        });
+      });
     }
   });
 
@@ -98,6 +150,9 @@ const fetchEvents = (
     });
 
     metadataSub.on("eose", () => {
+      let parsedReactionEventsCount = 0;
+      const eventsCount = events.length;
+
       // fetch and assign reactions
       events.forEach((evt: IEnrichedEvent) => {
         const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [evt.id] }]);
@@ -124,6 +179,11 @@ const fetchEvents = (
             evt.positive = positive;
             evt.negative = negative;
             setEvents(events.sort(sortByCreatedAt));
+          }
+
+          parsedReactionEventsCount++;
+          if (parsedReactionEventsCount == eventsCount) {
+            eose = true;
           }
 
           reactionsSub.unsub();

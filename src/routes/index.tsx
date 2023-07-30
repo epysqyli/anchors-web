@@ -21,71 +21,14 @@ declare global {
 const Home: Component<{}> = () => {
   const relay = useContext(RelayContext);
 
-  const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
+  const [events, setEvents] = createSignal<IEnrichedEvent[]>([], { equals: false });
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
-  const [eoseRecv, setEoseRecv] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
   const [topEventRef, setTopEventRef] = createSignal<HTMLDivElement>();
   const [topEventID, setTopEventID] = createSignal<string>("");
 
-  // discard non kind 1 events from triggering popup
-  onMount(() => {
-    fetchEvents(relay, setEvents, setShowPopup, setIsLoading);
-
-    // setIsLoading(true);
-    // const eventsSub: Sub = relay.sub([{}]);
-    // eventsSub.on("event", (nostrEvent: Event) => {
-    //   if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
-    //     setEvents([...events(), { ...nostrEvent, name: "", picture: "", about: "" }].sort(sortByCreatedAt));
-    //   }
-
-    //   if (eoseRecv()) {
-    //     const metadataFilter: Filter = createMetadataFilter([nostrEvent.pubkey]);
-    //     const metadataSub: Sub = relay.sub([metadataFilter]);
-
-    //     metadataSub.on("event", (metadataEvent: Event) => {
-    //       const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
-
-    //       const newEnrichedEvents = events()
-    //         .filter((ev) => ev.pubkey === metadataEvent.pubkey)
-    //         .map((ev) => enrichEvent(ev, userMetadata));
-
-    //       const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
-
-    //       setEvents([...remainingEvents, ...newEnrichedEvents].sort(sortByCreatedAt));
-    //     });
-
-    //     metadataSub.on("eose", () => {
-    //       if (nostrEvent.kind == Kind.Text) {
-    //         setShowPopup(true);
-    //       }
-    //     });
-    //   }
-    // });
-
-    // eventsSub.on("eose", () => {
-    //   const metadataFilter: Filter = createMetadataFilter(events().map((e) => e.pubkey));
-    //   const metadataSub: Sub = relay.sub([metadataFilter]);
-
-    //   metadataSub.on("event", (metadataEvent: Event) => {
-    //     const userMetadata: IUserMetadata = JSON.parse(metadataEvent.content);
-
-    //     const newEnrichedEvents = events()
-    //       .filter((ev) => ev.pubkey === metadataEvent.pubkey)
-    //       .map((ev) => enrichEvent(ev, userMetadata));
-
-    //     const remainingEvents = events().filter((ev) => ev.pubkey != metadataEvent.pubkey);
-
-    //     setEvents([...remainingEvents, ...newEnrichedEvents].sort(sortByCreatedAt));
-    //   });
-
-    //   metadataSub.on("eose", () => {
-    //     setEoseRecv(true);
-    //     setIsLoading(false);
-    //   });
-    // });
-  });
+  onMount(() => fetchEvents(relay, setEvents, setShowPopup, setIsLoading));
 
   const scrollPage = (direction: "up" | "down"): void => {
     eventWrapperContainer()!.scrollBy({
@@ -103,6 +46,7 @@ const Home: Component<{}> = () => {
   createEffect(() => {
     if (events().length !== 0) {
       setTopEventID(events()[0].id);
+      console.log(topEventID());
     }
   });
 
