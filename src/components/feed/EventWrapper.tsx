@@ -23,7 +23,7 @@ interface Props {
   event: IEnrichedEvent;
   isNarrow: boolean | undefined;
   scrollPage?(direction: "up" | "down"): void;
-  assignTopEventRef?(ref: HTMLDivElement, eventID: string): void;
+  addHtmlRef?(ref: HTMLDivElement, eventID: string, createdAt: number): void;
 }
 
 const EventWrapper: Component<Props> = (props) => {
@@ -33,9 +33,9 @@ const EventWrapper: Component<Props> = (props) => {
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
 
-  const handleTopEventRef = (el: HTMLDivElement, eventID: string): void => {
-    if (props.assignTopEventRef !== undefined) {
-      props.assignTopEventRef(el, eventID);
+  const handleEventHtmlRef = (el: HTMLDivElement): void => {
+    if (props.addHtmlRef !== undefined) {
+      props.addHtmlRef(el, nostrEvent().id, nostrEvent().created_at);
     }
   };
 
@@ -130,7 +130,7 @@ const EventWrapper: Component<Props> = (props) => {
 
       <Show when={props.isNarrow !== undefined && !props.isNarrow}>
         <div
-          ref={(el) => handleTopEventRef(el, props.event.id)}
+          ref={handleEventHtmlRef}
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3 flex flex-col justify-between'
         >
           <div class='grid grid-cols-5 h-[85%] gap-x-3 2xl:gap-x-5'>

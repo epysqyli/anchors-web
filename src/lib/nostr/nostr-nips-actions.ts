@@ -122,7 +122,6 @@ const fetchEvents = (
 
           reactionsSub.unsub();
           events.push(enrichedEvent);
-          console.log(events);
 
           if (enrichedEvent.kind == Kind.Text) {
             setShowPopup(true);

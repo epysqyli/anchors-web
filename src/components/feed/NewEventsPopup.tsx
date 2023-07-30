@@ -3,14 +3,14 @@ import { HiOutlineNewspaper } from "solid-icons/hi";
 import { Accessor, Component, Setter, Show } from "solid-js";
 
 interface Props {
-  topEventRef: Accessor<HTMLDivElement | undefined>;
+  topEventRef: { htmlRef: HTMLDivElement; eventID: string };
   showPopup: Accessor<boolean>;
   setShowPopup: Setter<boolean>;
 }
 
 const NewEventsPopup: Component<Props> = (props) => {
   const handleClick = (): void => {
-    props.topEventRef()?.scrollIntoView({ behavior: "smooth" });
+    props.topEventRef.htmlRef.scrollIntoView({ behavior: "smooth" });
     props.setShowPopup(false);
   };
 

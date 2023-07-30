@@ -8,6 +8,7 @@ import { fetchEvents } from "~/lib/nostr/nostr-nips-actions";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
+import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 
 declare global {
   interface Window {
@@ -21,12 +22,13 @@ declare global {
 const Home: Component<{}> = () => {
   const relay = useContext(RelayContext);
 
-  const [events, setEvents] = createSignal<IEnrichedEvent[]>([], { equals: false });
-  const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
-  const [topEventRef, setTopEventRef] = createSignal<HTMLDivElement>();
-  const [topEventID, setTopEventID] = createSignal<string>("");
+  const [events, setEvents] = createSignal<IEnrichedEvent[]>([], { equals: false });
+  const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
+  const [eventHtmlRefs, setEventHtmlRefs] = createSignal<
+    { htmlRef: HTMLDivElement; eventID: string; createdAt: number }[]
+  >([]);
 
   onMount(() => fetchEvents(relay, setEvents, setShowPopup, setIsLoading));
 
@@ -37,18 +39,13 @@ const Home: Component<{}> = () => {
     });
   };
 
-  const assignTopEventRef = (ref: HTMLDivElement, eventID: string): void => {
-    if (eventID == topEventID()) {
-      setTopEventRef(ref);
-    }
+  const addHtmlRef = (ref: HTMLDivElement, eventID: string, createdAt: number): void => {
+    setEventHtmlRefs(
+      [...eventHtmlRefs(), { htmlRef: ref, eventID: eventID, createdAt: createdAt }].sort((ref1, ref2) => {
+        return ref1.createdAt > ref2.createdAt ? -1 : 1;
+      })
+    );
   };
-
-  createEffect(() => {
-    if (events().length !== 0) {
-      setTopEventID(events()[0].id);
-      console.log(topEventID());
-    }
-  });
 
   return (
     <>
@@ -56,11 +53,7 @@ const Home: Component<{}> = () => {
         <div class='snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[100vh]'>
           <For each={events()}>
             {(nostrEvent) => (
-              <EventWrapper
-                assignTopEventRef={assignTopEventRef}
-                event={nostrEvent}
-                isNarrow={useIsNarrow()}
-              />
+              <EventWrapper addHtmlRef={addHtmlRef} event={nostrEvent} isNarrow={useIsNarrow()} />
             )}
           </For>
         </div>
@@ -72,7 +65,11 @@ const Home: Component<{}> = () => {
       >
         <Motion.div animate={{ opacity: [0.7, 1], scale: [0.8, 1] }} class='relative h-full'>
           <div class='absolute top-2 left-5'>
-            <NewEventsPopup topEventRef={topEventRef} showPopup={showPopup} setShowPopup={setShowPopup} />
+            <NewEventsPopup
+              topEventRef={eventHtmlRefs()[0]}
+              showPopup={showPopup}
+              setShowPopup={setShowPopup}
+            />
           </div>
 
           <div
@@ -82,10 +79,10 @@ const Home: Component<{}> = () => {
             <For each={events()}>
               {(nostrEvent) => (
                 <EventWrapper
-                  assignTopEventRef={assignTopEventRef}
                   event={nostrEvent}
                   isNarrow={useIsNarrow()}
                   scrollPage={scrollPage}
+                  addHtmlRef={addHtmlRef}
                 />
               )}
             </For>
