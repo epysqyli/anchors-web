@@ -4,6 +4,7 @@ import { useLocation } from "solid-start";
 import { Motion } from "@motionone/solid";
 import { FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
+import { Reaction } from "~/interfaces/IReaction";
 import { parseDate } from "~/lib/nostr/nostr-utils";
 import RefTagFeedElement from "./RefTagFeedElement";
 import { VsCommentDiscussion } from "solid-icons/vs";
@@ -38,7 +39,7 @@ const EventWrapper: Component<Props> = (props) => {
     }
   };
 
-  const handleReaction = async (reaction: "+" | "-"): Promise<void> => {
+  const handleReaction = async (reaction: Reaction): Promise<void> => {
     await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
   };
 

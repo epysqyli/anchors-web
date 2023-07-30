@@ -1,3 +1,4 @@
+import { Reaction } from "~/interfaces/IReaction";
 import { EventTemplate, Kind, Pub, Relay } from "nostr-tools";
 
 const deleteNostrEvent = async (relay: Relay, eventID: string): Promise<void> => {
@@ -24,7 +25,7 @@ const reactToEvent = async (
   relay: Relay,
   eventID: string,
   eventPubkey: string,
-  reaction: "+" | "-"
+  reaction: Reaction
 ): Promise<void> => {
   const reactionEvent: EventTemplate = {
     kind: Kind.Reaction,
