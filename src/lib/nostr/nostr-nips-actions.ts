@@ -75,7 +75,9 @@ const fetchEvents = (
   const events: IEnrichedEvent[] = [];
 
   eventsSub.on("event", (evt: Event) => {
-    setIsLoading(true);
+    if (!eose) {
+      setIsLoading(true);
+    }
 
     if (!eose && evt.kind === Kind.Text && validateEvent(evt) && verifySignature(evt)) {
       events.push(makeDefaultEnrichedEvent(evt));
