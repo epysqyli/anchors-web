@@ -66,12 +66,13 @@ const reactToEvent = async (
 const fetchEvents = (
   relay: Relay,
   setEvents: Setter<IEnrichedEvent[]>,
-  setShowPopup: Setter<boolean>,
-  setIsLoading: Setter<boolean>
+  setIsLoading: Setter<boolean>,
+  filter?: Filter,
+  setShowPopup?: Setter<boolean>
 ) => {
   let eose: boolean = false;
-  const filters: Filter[] = [{}];
-  const eventsSub: Sub = relay.sub(filters);
+
+  const eventsSub: Sub = relay.sub(filter ? [filter] : [{}]);
   const events: IEnrichedEvent[] = [];
 
   eventsSub.on("event", (evt: Event) => {
@@ -81,6 +82,10 @@ const fetchEvents = (
 
     if (!eose && evt.kind === Kind.Text && validateEvent(evt) && verifySignature(evt)) {
       events.push(makeDefaultEnrichedEvent(evt));
+
+      if (filter?.ids?.length == 1) {
+        setEvents(events);
+      }
     }
 
     /* Handle incoming events after all events have been received */
@@ -128,7 +133,10 @@ const fetchEvents = (
           events.push(enrichedEvent);
 
           if (enrichedEvent.kind == Kind.Text) {
-            setShowPopup(true);
+            if (setShowPopup) {
+              setShowPopup(true);
+            }
+
             setEvents(events.sort(sortByCreatedAt));
           }
         });
@@ -178,6 +186,10 @@ const fetchEvents = (
         });
 
         reactionsSub.on("eose", () => {
+          if (filter?.ids?.length == 1 && positive == 0 && negative == 0) {
+            setIsLoading(false);
+          }
+
           if (positive != 0 || negative != 0) {
             evt.positive = positive;
             evt.negative = negative;

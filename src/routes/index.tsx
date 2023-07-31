@@ -29,7 +29,7 @@ const Home: Component<{}> = () => {
     { htmlRef: HTMLDivElement; eventID: string; createdAt: number }[]
   >([]);
 
-  onMount(() => fetchEvents(relay, setEvents, setShowPopup, setIsLoading));
+  onMount(() => fetchEvents(relay, setEvents, setIsLoading, {}, setShowPopup));
 
   const scrollPage = (direction: "up" | "down"): void => {
     eventWrapperContainer()!.scrollBy({
