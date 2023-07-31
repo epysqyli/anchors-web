@@ -43,6 +43,7 @@ const EventWrapper: Component<Props> = (props) => {
     }
   };
 
+  // TODO: user should be able to remove his own reaction too
   const handleReaction = async (reaction: Reaction): Promise<void> => {
     await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
 
