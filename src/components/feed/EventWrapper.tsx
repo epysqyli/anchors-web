@@ -133,9 +133,9 @@ const EventWrapper: Component<Props> = (props) => {
           ref={handleEventHtmlRef}
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3 flex flex-col justify-between'
         >
-          <div class='grid grid-cols-5 h-[85%] gap-x-3 2xl:gap-x-5'>
+          <div class='grid grid-cols-5 h-[85%] gap-x-3'>
             <div
-              class='col-span-4 xl:col-span-3 bg-gradient-to-br from-neutral-600 via-slate-700 via-15% to-slate-900 custom-scrollbar
+              class='col-span-4 xl:col-span-3 custom-scrollbar bg-slate-600 bg-opacity-10
                      text-slate-300 tracking-tighter overflow-auto break-words text-justify
                       whitespace-pre-line rounded-md py-20'
             >
@@ -159,7 +159,7 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-80'>
+          <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-40'>
             <div>
               <EventAuthor
                 name={nostrEvent().name}
