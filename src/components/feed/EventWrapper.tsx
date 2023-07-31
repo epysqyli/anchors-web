@@ -32,6 +32,10 @@ const EventWrapper: Component<Props> = (props) => {
   const nostrEvent = () => props.event;
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
+  const [reactions, setReactions] = createSignal<{ positive: number; negative: number }>({
+    positive: nostrEvent().positive,
+    negative: nostrEvent().negative
+  });
 
   const handleEventHtmlRef = (el: HTMLDivElement): void => {
     if (props.addHtmlRef !== undefined) {
@@ -39,9 +43,14 @@ const EventWrapper: Component<Props> = (props) => {
     }
   };
 
-  // TODO: show updated state without fetching new events
   const handleReaction = async (reaction: Reaction): Promise<void> => {
     await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
+
+    if (reaction == "+") {
+      setReactions({ ...reactions(), positive: (reactions().positive += 1) });
+    } else {
+      setReactions({ ...reactions(), negative: (reactions().negative += 1) });
+    }
   };
 
   onMount(async () => {
@@ -182,14 +191,14 @@ const EventWrapper: Component<Props> = (props) => {
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
                 <FiThumbsUp size={26} />
-                <p class='text-center text-sm mt-1'>{nostrEvent().positive}</p>
+                <p class='text-center text-sm mt-1'>{reactions().positive}</p>
               </div>
               <div
                 onClick={() => handleReaction("-")}
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
                 <FiThumbsDown size={26} />
-                <p class='text-center text-sm mt-1'>{nostrEvent().negative}</p>
+                <p class='text-center text-sm mt-1'>{reactions().negative}</p>
               </div>
             </div>
 
