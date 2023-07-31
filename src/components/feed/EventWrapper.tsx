@@ -39,6 +39,7 @@ const EventWrapper: Component<Props> = (props) => {
     }
   };
 
+  // TODO: show updated state without fetching new events
   const handleReaction = async (reaction: Reaction): Promise<void> => {
     await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
   };
