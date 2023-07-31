@@ -18,10 +18,10 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
 
 interface Props {
   event: IEnrichedEvent;
-  isNarrow: boolean | undefined;
   scrollPage?(direction: "up" | "down"): void;
   addHtmlRef?(ref: HTMLDivElement, eventID: string, createdAt: number): void;
 }
@@ -113,7 +113,7 @@ const EventWrapper: Component<Props> = (props) => {
 
   return (
     <>
-      <Show when={props.isNarrow !== undefined && props.isNarrow}>
+      <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
         <div class='snap-start h-[100vh] text-white pt-4 mx-auto'>
           <div class='h-[60vh] w-11/12 mx-auto py-2 pr-5 mb-10 text-justify overflow-auto break-words shadow-inner'>
             {nostrEvent().content}
@@ -138,7 +138,7 @@ const EventWrapper: Component<Props> = (props) => {
         </div>
       </Show>
 
-      <Show when={props.isNarrow !== undefined && !props.isNarrow}>
+      <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
         <div
           ref={handleEventHtmlRef}
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3 flex flex-col justify-between'

@@ -51,9 +51,7 @@ const Home: Component<{}> = () => {
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
         <div class='snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[100vh]'>
           <For each={events()}>
-            {(nostrEvent) => (
-              <EventWrapper addHtmlRef={addHtmlRef} event={nostrEvent} isNarrow={useIsNarrow()} />
-            )}
+            {(nostrEvent) => <EventWrapper addHtmlRef={addHtmlRef} event={nostrEvent} />}
           </For>
         </div>
       </Show>
@@ -77,12 +75,7 @@ const Home: Component<{}> = () => {
           >
             <For each={events()}>
               {(nostrEvent) => (
-                <EventWrapper
-                  event={nostrEvent}
-                  isNarrow={useIsNarrow()}
-                  scrollPage={scrollPage}
-                  addHtmlRef={addHtmlRef}
-                />
+                <EventWrapper event={nostrEvent} scrollPage={scrollPage} addHtmlRef={addHtmlRef} />
               )}
             </For>
           </div>
