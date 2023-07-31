@@ -10,10 +10,10 @@ interface Props {
 
 const Popup: Component<Props> = (props) => {
   const overlayContext = useContext(OverlayContext);
-  const [overlayAlreadyApplied, setOverlayAlreadyApplied] = createSignal<boolean>(false);  
+  const [overlayAlreadyApplied, setOverlayAlreadyApplied] = createSignal<boolean>(false);
 
-  createEffect(() => { 
-    if (props.show() && !overlayAlreadyApplied()) {
+  createEffect(() => {
+    if (!overlayAlreadyApplied() && props.show()) {
       overlayContext.toggleOverlay();
       setOverlayAlreadyApplied(true);
 
@@ -21,6 +21,10 @@ const Popup: Component<Props> = (props) => {
         overlayContext.toggleOverlay();
         props.setShow(false);
       }, 2000);
+    }
+
+    if (!props.show()) {
+      setOverlayAlreadyApplied(false);
     }
   });
 
