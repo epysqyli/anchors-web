@@ -48,38 +48,30 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   const handleReaction = async (reaction: Reaction): Promise<void> => {
+    let reactionType = "";
     if (reaction == "+") {
-      const eventToDelete = reactions().positive.events.find((evt) => evt.pubkey === publicKey());
-
-      if (eventToDelete) {
-        await deleteNostrEvent(relay, eventToDelete.eventID);
-
-        const newPosReactions: IReactionFields = {
-          count: reactions().positive.count - 1,
-          events: reactions().positive.events.filter((e) => e.eventID !== eventToDelete.eventID)
-        };
-
-        setReactions({ negative: reactions().negative, positive: newPosReactions });
-      } else {
-        await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
-      }
+      reactionType = "positive";
+    } else if (reaction == "-") {
+      reactionType = "negative";
     }
 
-    if (reaction == "-") {
-      const eventToDelete = reactions().negative.events.find((evt) => evt.pubkey === publicKey());
+    const eventToDelete = reactions()[reactionType as keyof IReaction].events.find(
+      (evt) => evt.pubkey === publicKey()
+    );
 
-      if (eventToDelete) {
-        await deleteNostrEvent(relay, eventToDelete.eventID);
+    if (eventToDelete) {
+      await deleteNostrEvent(relay, eventToDelete.eventID);
 
-        const newNegReactions: IReactionFields = {
-          count: reactions().negative.count - 1,
-          events: reactions().negative.events.filter((e) => e.eventID !== eventToDelete.eventID)
-        };
+      const newReactions: IReactionFields = {
+        count: reactions()[reactionType as keyof IReaction].count - 1,
+        events: reactions()[reactionType as keyof IReaction].events.filter(
+          (e) => e.eventID !== eventToDelete.eventID
+        )
+      };
 
-        setReactions({ positive: reactions().positive, negative: newNegReactions });
-      } else {
-        await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
-      }
+      setReactions({ ...reactions(), [reactionType]: newReactions });
+    } else {
+      await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
     }
   };
 
@@ -89,30 +81,27 @@ const EventWrapper: Component<Props> = (props) => {
     const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [nostrEvent().id] }]);
 
     reactionsSub.on("event", (evt: Event) => {
+      let reactionType = "";
       if (evt.content == "+") {
-        const alreadyReacted = reactions().positive.events.find((evt) => evt.pubkey === publicKey());
-
-        if (!alreadyReacted) {
-          const newPosReactions: IReactionFields = {
-            count: reactions().positive.count + 1,
-            events: [...reactions().positive.events, { eventID: evt.id, pubkey: evt.pubkey }]
-          };
-
-          setReactions({ negative: reactions().negative, positive: newPosReactions });
-        }
+        reactionType = "positive";
+      } else if (evt.content == "-") {
+        reactionType = "negative";
       }
 
-      if (evt.content == "-") {
-        const alreadyReacted = reactions().negative.events.find((evt) => evt.pubkey === publicKey());
+      const alreadyReacted = reactions()[reactionType as keyof IReaction].events.find(
+        (evt) => evt.pubkey === publicKey()
+      );
 
-        if (!alreadyReacted) {
-          const newNegReactions: IReactionFields = {
-            count: reactions().negative.count + 1,
-            events: [...reactions().negative.events, { eventID: evt.id, pubkey: evt.pubkey }]
-          };
+      if (!alreadyReacted) {
+        const newReactions: IReactionFields = {
+          count: reactions()[reactionType as keyof IReaction].count + 1,
+          events: [
+            ...reactions()[reactionType as keyof IReaction].events,
+            { eventID: evt.id, pubkey: evt.pubkey }
+          ]
+        };
 
-          setReactions({ positive: reactions().positive, negative: newNegReactions });
-        }
+        setReactions({ ...reactions(), [reactionType]: newReactions });
       }
     });
 
