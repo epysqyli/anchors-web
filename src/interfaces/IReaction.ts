@@ -1,8 +1,13 @@
 type Reaction = "+" | "-";
 
-interface IReaction {
-  positive: number;
-  negative: number;
+interface IReactionFields {
+  count: number;
+  events: { pubkey: string; eventID: string }[];
 }
 
-export { Reaction, IReaction };
+interface IReaction {
+  positive: IReactionFields;
+  negative: IReactionFields;
+}
+
+export { Reaction, IReaction, IReactionFields };

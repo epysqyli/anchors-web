@@ -18,8 +18,8 @@ const makeDefaultEnrichedEvent = (evt: Event): IEnrichedEvent => {
     name: "",
     about: "",
     picture: "",
-    positive: 0,
-    negative: 0
+    positive: { count: 0, events: [] },
+    negative: { count: 0, events: [] }
   };
 };
 

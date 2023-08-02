@@ -1,4 +1,4 @@
-import { Reaction } from "~/interfaces/IReaction";
+import { IReactionFields, Reaction } from "~/interfaces/IReaction";
 import {
   Event,
   EventTemplate,
@@ -105,17 +105,19 @@ const fetchEvents = (
 
       metadataSub.on("eose", () => {
         const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [enrichedEvent.id] }]);
-        let positive = 0;
-        let negative = 0;
+        const positive: IReactionFields = { count: 0, events: [] };
+        const negative: IReactionFields = { count: 0, events: [] };
 
         reactionsSub.on("event", (reactionEvt: Event) => {
           switch (reactionEvt.content) {
             case "+":
-              positive++;
+              positive.count++;
+              positive.events.push({ eventID: reactionEvt.id, pubkey: reactionEvt.pubkey });
               break;
 
             case "-":
-              negative++;
+              negative.count++;
+              negative.events.push({ eventID: reactionEvt.id, pubkey: reactionEvt.pubkey });
               break;
 
             default:
@@ -124,7 +126,7 @@ const fetchEvents = (
         });
 
         reactionsSub.on("eose", () => {
-          if (positive != 0 || negative != 0) {
+          if (positive.count != 0 || negative.count != 0) {
             enrichedEvent.positive = positive;
             enrichedEvent.negative = negative;
           }
@@ -167,17 +169,19 @@ const fetchEvents = (
       // fetch and assign reactions
       events.forEach((evt: IEnrichedEvent) => {
         const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [evt.id] }]);
-        let positive = 0;
-        let negative = 0;
+        const positive: IReactionFields = { count: 0, events: [] };
+        const negative: IReactionFields = { count: 0, events: [] };
 
         reactionsSub.on("event", (reactionEvt: Event) => {
           switch (reactionEvt.content) {
             case "+":
-              positive++;
+              positive.count++;
+              positive.events.push({ eventID: reactionEvt.id, pubkey: reactionEvt.pubkey });
               break;
 
             case "-":
-              negative++;
+              negative.count++;
+              negative.events.push({ eventID: reactionEvt.id, pubkey: reactionEvt.pubkey });
               break;
 
             default:
@@ -186,11 +190,11 @@ const fetchEvents = (
         });
 
         reactionsSub.on("eose", () => {
-          if (filter?.ids?.length == 1 && positive == 0 && negative == 0) {
+          if (filter?.ids?.length == 1 && positive.count == 0 && negative.count == 0) {
             setIsLoading(false);
           }
 
-          if (positive != 0 || negative != 0) {
+          if (positive.count != 0 || negative.count != 0) {
             evt.positive = positive;
             evt.negative = negative;
             setEvents(events.sort(sortByCreatedAt));

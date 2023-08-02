@@ -4,8 +4,7 @@ import { useLocation } from "solid-start";
 import { Motion } from "@motionone/solid";
 import { FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
-import { Reaction } from "~/interfaces/IReaction";
-import { parseDate } from "~/lib/nostr/nostr-utils";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
 import RefTagFeedElement from "./RefTagFeedElement";
 import { VsCommentDiscussion } from "solid-icons/vs";
 import { BiRegularBoltCircle } from "solid-icons/bi";
@@ -13,12 +12,14 @@ import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { fetchMovie } from "~/lib/external-services/tmdb";
 import { fetchSong } from "~/lib/external-services/spotify";
-import { reactToEvent } from "~/lib/nostr/nostr-nips-actions";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
+import { checkAndSetPublicKey, parseDate } from "~/lib/nostr/nostr-utils";
+import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
+import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
-import { useIsNarrow } from "~/hooks/useMediaQuery";
+import { Event, Kind, Sub } from "nostr-tools";
 
 interface Props {
   event: IEnrichedEvent;
@@ -30,9 +31,12 @@ const EventWrapper: Component<Props> = (props) => {
   const relay = useContext(RelayContext);
 
   const nostrEvent = () => props.event;
-  const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
-  const [reactions, setReactions] = createSignal<{ positive: number; negative: number }>({
+
+  const [publicKey, setPublicKey] = createSignal<string>("");
+  const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
+
+  const [reactions, setReactions] = createSignal<IReaction>({
     positive: nostrEvent().positive,
     negative: nostrEvent().negative
   });
@@ -43,18 +47,75 @@ const EventWrapper: Component<Props> = (props) => {
     }
   };
 
-  // TODO: user should be able to remove his own reaction too
   const handleReaction = async (reaction: Reaction): Promise<void> => {
-    await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
-
     if (reaction == "+") {
-      setReactions({ ...reactions(), positive: (reactions().positive += 1) });
-    } else {
-      setReactions({ ...reactions(), negative: (reactions().negative += 1) });
+      const eventToDelete = reactions().positive.events.find((evt) => evt.pubkey === publicKey());
+
+      if (eventToDelete) {
+        await deleteNostrEvent(relay, eventToDelete.eventID);
+
+        const newPosReactions: IReactionFields = {
+          count: reactions().positive.count - 1,
+          events: reactions().positive.events.filter((e) => e.eventID !== eventToDelete.eventID)
+        };
+
+        setReactions({ negative: reactions().negative, positive: newPosReactions });
+      } else {
+        await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
+      }
+    }
+
+    if (reaction == "-") {
+      const eventToDelete = reactions().negative.events.find((evt) => evt.pubkey === publicKey());
+
+      if (eventToDelete) {
+        await deleteNostrEvent(relay, eventToDelete.eventID);
+
+        const newNegReactions: IReactionFields = {
+          count: reactions().negative.count - 1,
+          events: reactions().negative.events.filter((e) => e.eventID !== eventToDelete.eventID)
+        };
+
+        setReactions({ positive: reactions().positive, negative: newNegReactions });
+      } else {
+        await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
+      }
     }
   };
 
   onMount(async () => {
+    await checkAndSetPublicKey(setPublicKey);
+
+    const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [nostrEvent().id] }]);
+
+    reactionsSub.on("event", (evt: Event) => {
+      if (evt.content == "+") {
+        const alreadyReacted = reactions().positive.events.find((evt) => evt.pubkey === publicKey());
+
+        if (!alreadyReacted) {
+          const newPosReactions: IReactionFields = {
+            count: reactions().positive.count + 1,
+            events: [...reactions().positive.events, { eventID: evt.id, pubkey: evt.pubkey }]
+          };
+
+          setReactions({ negative: reactions().negative, positive: newPosReactions });
+        }
+      }
+
+      if (evt.content == "-") {
+        const alreadyReacted = reactions().negative.events.find((evt) => evt.pubkey === publicKey());
+
+        if (!alreadyReacted) {
+          const newNegReactions: IReactionFields = {
+            count: reactions().negative.count + 1,
+            events: [...reactions().negative.events, { eventID: evt.id, pubkey: evt.pubkey }]
+          };
+
+          setReactions({ positive: reactions().positive, negative: newNegReactions });
+        }
+      }
+    });
+
     const referenceTags = nostrEvent().tags.filter((t) => t[0] == "r");
 
     for (const refTag of referenceTags) {
@@ -192,14 +253,14 @@ const EventWrapper: Component<Props> = (props) => {
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
                 <FiThumbsUp size={26} />
-                <p class='text-center text-sm mt-1'>{reactions().positive}</p>
+                <p class='text-center text-sm mt-1'>{reactions().positive.count}</p>
               </div>
               <div
                 onClick={() => handleReaction("-")}
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
                 <FiThumbsDown size={26} />
-                <p class='text-center text-sm mt-1'>{reactions().negative}</p>
+                <p class='text-center text-sm mt-1'>{reactions().negative.count}</p>
               </div>
             </div>
 
