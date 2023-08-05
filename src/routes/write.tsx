@@ -28,6 +28,7 @@ const Write: Component<{}> = () => {
   const [popupMsg, setPopupMsg] = createSignal<string>("");
   const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
   const [showActionPopup, setShowActionPopup] = createSignal<boolean>(false);
+
   const togglePopup = (): void => {
     setShowActionPopup(!showActionPopup());
     overlayContext.toggleOverlay();
@@ -128,8 +129,8 @@ const Write: Component<{}> = () => {
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
         <>
           <div class='grid grid-cols-7 gap-x-2 h-full w-[99%] mx-auto'>
-            <div class='col-span-4 rounded-md bg-slate-600 bg-opacity-10'>
-              <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-10'>
+            <div class='flex flex-col justify-between py-10 col-span-4 rounded-md bg-slate-600 bg-opacity-10'>
+              <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold'>
                 Write a new idea
               </h1>
               <textarea
@@ -142,7 +143,7 @@ const Write: Component<{}> = () => {
 
               <div
                 onClick={signAndPublishNostrEvent}
-                class=' text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md mt-20 w-4/5'
+                class=' text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
               >
                 <VsSend
                   size={40}
