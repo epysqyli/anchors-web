@@ -21,13 +21,13 @@ const Menu: Component<Props> = (props) => {
 
   const actionStyle = `text-slate-50 w-5/6 mx-auto my-3 select-none
                        bg-gradient-to-r from-slate-800 to-gray-700
-                       md:bg-none md:px-5 md:py-8 md:rounded-none
+                       md:bg-none md:px-5 md:py-8
                        hover:bg-slate-600 p-4 rounded-md text-center lg:text-left
                        transition cursor-pointer group active:scale-90
                        hover:text-orange-200 flex items-center justify-between
                        border-transparent border-2`;
 
-  const selectedActionStyle = actionStyle + " md:border-y-orange-200 md:bg-slate-700";
+  const selectedActionStyle = actionStyle + " md:border-orange-200 md:bg-slate-700";
   const active = (path: string) => path == location.pathname;
 
   return (
