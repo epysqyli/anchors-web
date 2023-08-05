@@ -16,8 +16,8 @@ const UserNostrEvent: Component<Props> = (props): JSX.Element => {
 
   return (
     <div
-      class='min-h-2/3 flex flex-col justify-between py-5 px-5 border-y-2 border-neutral-600
-                text-slate-300 bg-slate-700 bg-opacity-90 rounded hover:text-slate-200'
+      class='flex flex-col h-full justify-between py-5 px-5 border-y-2 border-neutral-600
+                text-slate-300 bg-slate-700 bg-opacity-90 rounded-md hover:text-slate-200'
     >
       <div class='bg-slate-600 text-center rounded-md mx-auto w-3/4 break-words'>
         {parseDate(props.nostrEvent.created_at)}
