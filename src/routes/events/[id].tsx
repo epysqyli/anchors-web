@@ -13,7 +13,7 @@ const EventByID: VoidComponent = (): JSX.Element => {
 
   onMount(() => {
     const params = useParams<{ id: string }>();
-    const relay = useContext(RelayContext);
+    const relay = useContext(RelayContext).relay;
 
     fetchEvents(relay, setEvents, setIsLoading, { ids: [params.id] });
   });
@@ -24,7 +24,7 @@ const EventByID: VoidComponent = (): JSX.Element => {
         when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow() && events().length > 0}
         fallback={<LoadingFallback />}
       >
-        <EventWrapper event={events()[0]} isNarrow={false} />
+        <EventWrapper event={events()[0]} />
       </Show>
     </>
   );

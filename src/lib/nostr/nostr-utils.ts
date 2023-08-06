@@ -1,7 +1,6 @@
+import { Event, Filter, Kind } from "nostr-tools";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
-import { Event, Filter, Kind } from "nostr-tools";
-import { Setter } from "solid-js";
 
 const sortByCreatedAt = (evt1: Event, evt2: Event) => {
   return evt1.created_at > evt2.created_at ? -1 : 1;
@@ -45,23 +44,11 @@ const parseDate = (eventDate: number): string => {
   return `${date.toTimeString().split(" ")[0]} ${date.toDateString()}`;
 };
 
-const checkAndSetPublicKey = async (setPublicKey: Setter<string>): Promise<void> => {
-  try {
-    const pk = await window.nostr.getPublicKey();
-    setPublicKey(pk);
-  } catch (error) {
-    await new Promise((_) => setTimeout(_, 500));
-    const pk = await window.nostr.getPublicKey();
-    setPublicKey(pk);
-  }
-};
-
 export {
   createMetadataFilter,
   sortByCreatedAt,
   assignUserMetadata,
   shrinkContent,
   parseDate,
-  checkAndSetPublicKey,
   makeDefaultEnrichedEvent
 };

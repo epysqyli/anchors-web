@@ -4,6 +4,7 @@ import { useLocation } from "solid-start";
 import { Motion } from "@motionone/solid";
 import { FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
+import { parseDate } from "~/lib/nostr/nostr-utils";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import RefTagFeedElement from "./RefTagFeedElement";
 import { VsCommentDiscussion } from "solid-icons/vs";
@@ -14,7 +15,6 @@ import { fetchMovie } from "~/lib/external-services/tmdb";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
-import { checkAndSetPublicKey, parseDate } from "~/lib/nostr/nostr-utils";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
@@ -28,12 +28,13 @@ interface Props {
 }
 
 const EventWrapper: Component<Props> = (props) => {
-  const relay = useContext(RelayContext);
+  const relayCtx = useContext(RelayContext);
+  const relay = relayCtx.relay;
+  const publicKey = relayCtx.publicKey;
 
   const nostrEvent = () => props.event;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
 
-  const [publicKey, setPublicKey] = createSignal<string>("");
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
 
   const [reactions, setReactions] = createSignal<IReaction>({
@@ -56,7 +57,7 @@ const EventWrapper: Component<Props> = (props) => {
     }
 
     const eventToDelete = reactions()[reactionType as keyof IReaction].events.find(
-      (evt) => evt.pubkey === publicKey()
+      (evt) => evt.pubkey === publicKey
     );
 
     if (eventToDelete) {
@@ -76,8 +77,6 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   onMount(async () => {
-    await checkAndSetPublicKey(setPublicKey);
-
     const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [nostrEvent().id] }]);
 
     reactionsSub.on("event", (evt: Event) => {
@@ -89,7 +88,7 @@ const EventWrapper: Component<Props> = (props) => {
       }
 
       const alreadyReacted = reactions()[reactionType as keyof IReaction].events.find(
-        (evt) => evt.pubkey === publicKey()
+        (evt) => evt.pubkey === publicKey
       );
 
       if (!alreadyReacted) {

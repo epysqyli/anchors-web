@@ -1,18 +1,18 @@
 import { FiSave } from "solid-icons/fi";
-import { useIsRouting } from "solid-start";
 import { CgDanger } from "solid-icons/cg";
 import Popup from "~/components/shared/Popup";
 import { RelayContext } from "~/contexts/relay";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import { Event as NostrEvent, Kind, Sub } from "nostr-tools";
 import { RiSystemCheckboxCircleFill } from "solid-icons/ri";
+import { createMetadataFilter } from "~/lib/nostr/nostr-utils";
 import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
-import { checkAndSetPublicKey, createMetadataFilter } from "~/lib/nostr/nostr-utils";
 
 const UserMetadata: VoidComponent = () => {
-  const relay = useContext(RelayContext);
+  const relayCtx = useContext(RelayContext);
+  const relay = relayCtx.relay;
+  const publicKey = relayCtx.publicKey;
 
-  const [publicKey, setPublicKey] = createSignal<string>("");
   const [content, setContent] = createSignal<IUserMetadata>({
     name: "",
     about: "",
@@ -52,12 +52,14 @@ const UserMetadata: VoidComponent = () => {
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
   const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
 
-  onMount(async () => {
-    if (!useIsRouting()()) {
-      await checkAndSetPublicKey(setPublicKey);
+  onMount(() => {
+    if (publicKey == "") {
+      console.log("Your public key is not available");
+      setIsActionSuccessful(false);
+      return;
     }
 
-    const metadataFilter = createMetadataFilter([publicKey()]);
+    const metadataFilter = createMetadataFilter([publicKey]);
     const metaDataSub: Sub = relay.sub([metadataFilter]);
 
     metaDataSub.on("event", (event: NostrEvent) => {

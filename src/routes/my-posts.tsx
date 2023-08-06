@@ -1,19 +1,19 @@
-import { useIsRouting } from "solid-start";
 import Popup from "~/components/shared/Popup";
 import { RelayContext } from "~/contexts/relay";
+import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
 import { deleteNostrEvent } from "~/lib/nostr/nostr-nips-actions";
 import { Event, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
-import { checkAndSetPublicKey, sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const MyPosts: VoidComponent = () => {
-  const relay = useContext(RelayContext);
+  const relayCtx = useContext(RelayContext);
+  const relay = relayCtx.relay;
+  const publicKey = relayCtx.publicKey;
 
-  const [isLoading, setIsLoading] = createSignal<boolean>(true);
-  const [publicKey, setPublicKey] = createSignal<string>("");
   const [events, setEvents] = createSignal<Event[]>([]);
+  const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
 
   const handleDeletion = async (nostrEventID: string): Promise<void> => {
@@ -29,11 +29,13 @@ const MyPosts: VoidComponent = () => {
       return;
     }
 
-    if (!useIsRouting()()) {
-      await checkAndSetPublicKey(setPublicKey);
+    if (publicKey == "") {
+      console.log("your public key is not available");
+      setIsLoading(false);
+      return;
     }
 
-    const eventsSub: Sub = relay.sub([{ authors: [publicKey()] }]);
+    const eventsSub: Sub = relay.sub([{ authors: [publicKey] }]);
 
     eventsSub.on("event", (nostrEvent: Event) => {
       if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {

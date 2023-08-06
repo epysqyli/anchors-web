@@ -19,7 +19,8 @@ declare global {
 }
 
 const Home: Component<{}> = () => {
-  const relay = useContext(RelayContext);
+  const relayCtx = useContext(RelayContext);
+  const relay = relayCtx.relay;
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
