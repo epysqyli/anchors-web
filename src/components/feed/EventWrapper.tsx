@@ -28,9 +28,7 @@ interface Props {
 }
 
 const EventWrapper: Component<Props> = (props) => {
-  const relayCtx = useContext(RelayContext);
-  const relay = relayCtx.relay;
-  const publicKey = relayCtx.publicKey;
+  const { relay, publicKey } = useContext(RelayContext);
 
   const nostrEvent = () => props.event;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);

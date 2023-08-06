@@ -9,9 +9,7 @@ import { createMetadataFilter } from "~/lib/nostr/nostr-utils";
 import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const UserMetadata: VoidComponent = () => {
-  const relayCtx = useContext(RelayContext);
-  const relay = relayCtx.relay;
-  const publicKey = relayCtx.publicKey;
+  const { relay, publicKey } = useContext(RelayContext);
 
   const [content, setContent] = createSignal<IUserMetadata>({
     name: "",

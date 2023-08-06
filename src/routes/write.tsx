@@ -10,7 +10,7 @@ import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 
 const Write: Component<{}> = () => {
-  const relay = useContext(RelayContext);
+  const { relay } = useContext(RelayContext);
   const overlayContext = useContext(OverlayContext);
   const menuToggle = useContext(menuTogglerContext);
 

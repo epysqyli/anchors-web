@@ -8,9 +8,7 @@ import { Event, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const MyPosts: VoidComponent = () => {
-  const relayCtx = useContext(RelayContext);
-  const relay = relayCtx.relay;
-  const publicKey = relayCtx.publicKey;
+  const { relay, publicKey } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
