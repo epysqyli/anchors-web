@@ -17,7 +17,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
-import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import { Component, For, Show, createMemo, createSignal, onMount, useContext } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
 import { Event, Kind, Sub } from "nostr-tools";
 
@@ -73,6 +73,21 @@ const EventWrapper: Component<Props> = (props) => {
       await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
     }
   };
+
+  const hasUserReacted = (reactionType: "positive" | "negative"): boolean => {
+    const userReaction = reactions()[reactionType as keyof IReaction].events.find(
+      (evt) => evt.pubkey == publicKey
+    );
+
+    if (userReaction !== undefined) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const hasPositiveUserReaction = createMemo(() => hasUserReacted("positive"));
+  const hasNegativeUserReaction = createMemo(() => hasUserReacted("negative"));
 
   onMount(async () => {
     const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [nostrEvent().id] }]);
@@ -238,14 +253,22 @@ const EventWrapper: Component<Props> = (props) => {
                 onClick={() => handleReaction("+")}
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
-                <FiThumbsUp size={26} />
+                <FiThumbsUp
+                  size={26}
+                  fill={hasPositiveUserReaction() ? "white" : ""}
+                  fill-opacity={hasPositiveUserReaction() ? "0.7" : "0"}
+                />
                 <p class='text-center text-sm mt-1'>{reactions().positive.count}</p>
               </div>
               <div
                 onClick={() => handleReaction("-")}
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
-                <FiThumbsDown size={26} />
+                <FiThumbsDown
+                  size={26}
+                  fill={hasNegativeUserReaction() ? "white" : ""}
+                  fill-opacity={hasNegativeUserReaction() ? "0.7" : "0"}
+                />
                 <p class='text-center text-sm mt-1'>{reactions().negative.count}</p>
               </div>
             </div>
