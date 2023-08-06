@@ -17,7 +17,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
-import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import { Component, For, Show, createMemo, createSignal, onMount, useContext } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
 import { Event, Kind, Sub } from "nostr-tools";
 
@@ -85,6 +85,9 @@ const EventWrapper: Component<Props> = (props) => {
 
     return false;
   };
+
+  const hasPositiveUserReaction = createMemo(() => hasUserReacted("positive"));
+  const hasNegativeUserReaction = createMemo(() => hasUserReacted("negative"));
 
   onMount(async () => {
     const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [nostrEvent().id] }]);
@@ -252,8 +255,8 @@ const EventWrapper: Component<Props> = (props) => {
               >
                 <FiThumbsUp
                   size={26}
-                  fill={hasUserReacted("positive") ? "white" : ""}
-                  fill-opacity={hasUserReacted("positive") ? "0.7" : "0"}
+                  fill={hasPositiveUserReaction() ? "white" : ""}
+                  fill-opacity={hasPositiveUserReaction() ? "0.7" : "0"}
                 />
                 <p class='text-center text-sm mt-1'>{reactions().positive.count}</p>
               </div>
@@ -263,8 +266,8 @@ const EventWrapper: Component<Props> = (props) => {
               >
                 <FiThumbsDown
                   size={26}
-                  fill={hasUserReacted("negative") ? "white" : ""}
-                  fill-opacity={hasUserReacted("negative") ? "0.7" : "0"}
+                  fill={hasNegativeUserReaction() ? "white" : ""}
+                  fill-opacity={hasNegativeUserReaction() ? "0.7" : "0"}
                 />
                 <p class='text-center text-sm mt-1'>{reactions().negative.count}</p>
               </div>
