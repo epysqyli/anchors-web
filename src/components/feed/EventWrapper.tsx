@@ -74,6 +74,18 @@ const EventWrapper: Component<Props> = (props) => {
     }
   };
 
+  const hasUserReacted = (reactionType: "positive" | "negative"): boolean => {
+    const userReaction = reactions()[reactionType as keyof IReaction].events.find(
+      (evt) => evt.pubkey == publicKey
+    );
+
+    if (userReaction !== undefined) {
+      return true;
+    }
+
+    return false;
+  };
+
   onMount(async () => {
     const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [nostrEvent().id] }]);
 
@@ -238,14 +250,22 @@ const EventWrapper: Component<Props> = (props) => {
                 onClick={() => handleReaction("+")}
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
-                <FiThumbsUp size={26} />
+                <FiThumbsUp
+                  size={26}
+                  fill={hasUserReacted("positive") ? "white" : ""}
+                  fill-opacity={hasUserReacted("positive") ? "0.7" : "0"}
+                />
                 <p class='text-center text-sm mt-1'>{reactions().positive.count}</p>
               </div>
               <div
                 onClick={() => handleReaction("-")}
                 class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
               >
-                <FiThumbsDown size={26} />
+                <FiThumbsDown
+                  size={26}
+                  fill={hasUserReacted("negative") ? "white" : ""}
+                  fill-opacity={hasUserReacted("negative") ? "0.7" : "0"}
+                />
                 <p class='text-center text-sm mt-1'>{reactions().negative.count}</p>
               </div>
             </div>
