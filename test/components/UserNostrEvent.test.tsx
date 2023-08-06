@@ -17,9 +17,14 @@ describe("<UserNostrEvent />", () => {
   };
 
   it("shows the event attributes", () => {
-    const { unmount, getByText } = render(() => <UserNostrEvent nostrEvent={nostrEvent} />, {
-      wrapper: (props) => <Router>{props.children}</Router>
-    });
+    const handleDeletion = async (nostrEventID: string): Promise<void> => {};
+
+    const { unmount, getByText } = render(
+      () => <UserNostrEvent nostrEvent={nostrEvent} handleDeletion={handleDeletion} />,
+      {
+        wrapper: (props) => <Router>{props.children}</Router>
+      }
+    );
 
     const eventID = getByText(nostrEvent.id);
     const content = getByText(shrinkContent(nostrEvent.content));
