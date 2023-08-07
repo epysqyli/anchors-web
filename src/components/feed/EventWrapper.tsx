@@ -22,6 +22,7 @@ import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 import EventAnchor from "./EventAnchor";
+import EventScroller from "./EventScroller";
 
 interface Props {
   event: IEnrichedEvent;
@@ -208,25 +209,7 @@ const EventWrapper: Component<Props> = (props) => {
             <Reactions reactions={reactions} publicKey={publicKey} handleReaction={handleReaction} />
             <FiTrendingUp class='text-slate-400' size={26} />
             <VsCommentDiscussion class='text-slate-400' size={28} />
-
-            {props.scrollPage !== undefined ? (
-              <div class='p-2 flex items-center gap-x-1 text-slate-400'>
-                <div
-                  onClick={() => props.scrollPage!("up")}
-                  class='cursor-pointer hover:scale-105 hover:text-slate-200 active:scale-90'
-                >
-                  <FiChevronUp size={40} />
-                </div>
-                <div
-                  onClick={() => props.scrollPage!("down")}
-                  class='cursor-pointer hover:scale-105 hover:text-slate-200 active:scale-90'
-                >
-                  <FiChevronDown size={40} />
-                </div>
-              </div>
-            ) : (
-              <></>
-            )}
+            <EventScroller scrollPage={props.scrollPage} />
           </div>
         </div>
       </Show>
