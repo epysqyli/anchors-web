@@ -32,19 +32,12 @@ const EventWrapper: Component<Props> = (props) => {
 
   const nostrEvent = () => props.event;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
-
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
 
   const [reactions, setReactions] = createSignal<IReaction>({
     positive: nostrEvent().positive,
     negative: nostrEvent().negative
   });
-
-  const handleEventHtmlRef = (el: HTMLDivElement): void => {
-    if (props.addHtmlRef !== undefined) {
-      props.addHtmlRef(el, nostrEvent().id, nostrEvent().created_at);
-    }
-  };
 
   const handleReaction = async (reaction: Reaction): Promise<void> => {
     let reactionType = "";
@@ -71,6 +64,12 @@ const EventWrapper: Component<Props> = (props) => {
       setReactions({ ...reactions(), [reactionType]: newReactions });
     } else {
       await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
+    }
+  };
+
+  const handleEventHtmlRef = (el: HTMLDivElement): void => {
+    if (props.addHtmlRef !== undefined) {
+      props.addHtmlRef(el, nostrEvent().id, nostrEvent().created_at);
     }
   };
 
