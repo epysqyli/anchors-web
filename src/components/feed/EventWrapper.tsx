@@ -21,6 +21,7 @@ import { Component, For, Show, createMemo, createSignal, onMount, useContext } f
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
 import { Event, Kind, Sub } from "nostr-tools";
 import Reactions from "./Reactions";
+import EventContent from "./EventContent";
 
 interface Props {
   event: IEnrichedEvent;
@@ -193,13 +194,7 @@ const EventWrapper: Component<Props> = (props) => {
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3 flex flex-col justify-between'
         >
           <div class='grid grid-cols-5 h-[85%] gap-x-3'>
-            <div
-              class='col-span-4 xl:col-span-3 custom-scrollbar bg-slate-600 bg-opacity-10
-                     text-slate-300 tracking-tighter overflow-auto break-words text-justify
-                      whitespace-pre-line rounded-md py-20'
-            >
-              <p class='w-3/5 mx-auto'>{nostrEvent().content}</p>
-            </div>
+            <EventContent content={nostrEvent().content} />
 
             <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-slate-800'>
               <div class='text-center text-base text-slate-200 bg-slate-600 w-4/5 xl:w-3/5 mx-auto mt-5 py-2 rounded-md'>
