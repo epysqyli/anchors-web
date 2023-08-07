@@ -11,7 +11,7 @@ interface Props {
 const EventReferences: Component<Props> = (props): JSX.Element => {
   return (
     <>
-      <div class='text-center text-base text-slate-200 bg-slate-600 w-4/5 xl:w-3/5 mx-auto mt-5 py-2 rounded-md'>
+      <div class='text-center text-base text-slate-200 bg-slate-700 w-fit px-10 mx-auto my-5 py-2 rounded-md'>
         {props.eventRefTags().length == 1 ? "1 reference" : `${props.eventRefTags().length} references`}
       </div>
 
