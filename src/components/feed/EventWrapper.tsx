@@ -21,6 +21,7 @@ import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import EventAnchor from "./EventAnchor";
 
 interface Props {
   event: IEnrichedEvent;
@@ -151,15 +152,6 @@ const EventWrapper: Component<Props> = (props) => {
     setIsLoading(false);
   });
 
-  const anchorNostrIDstyle = (): string => {
-    if (useLocation().pathname.includes(nostrEvent().id)) {
-      return "text-sm break-all w-1/5 text-slate-400 bg-slate-600 px-2 py-1 rounded cursor-default";
-    }
-
-    return `text-sm break-all w-1/5 text-slate-400 cursor-pointer bg-slate-600
-            px-2 py-1 rounded hover:text-slate-200 active:scale-95 transition-all`;
-  };
-
   return (
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
@@ -212,19 +204,10 @@ const EventWrapper: Component<Props> = (props) => {
               <div class='text-sm text-slate-400 mt-3'>{parseDate(nostrEvent().created_at)}</div>
             </div>
 
-            <A class={anchorNostrIDstyle()} href={`/events/${nostrEvent().id}`}>
-              {nostrEvent().id}
-            </A>
-
+            <EventAnchor nostrEventID={nostrEvent().id} />
             <Reactions reactions={reactions} publicKey={publicKey} handleReaction={handleReaction} />
-
-            <div>
-              <FiTrendingUp class='text-slate-400' size={26} />
-            </div>
-
-            <div>
-              <VsCommentDiscussion class='text-slate-400' size={28} />
-            </div>
+            <FiTrendingUp class='text-slate-400' size={26} />
+            <VsCommentDiscussion class='text-slate-400' size={28} />
 
             {props.scrollPage !== undefined ? (
               <div class='p-2 flex items-center gap-x-1 text-slate-400'>
