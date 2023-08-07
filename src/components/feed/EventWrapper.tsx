@@ -1,8 +1,8 @@
 import Reactions from "./Reactions";
-import { A } from "@solidjs/router";
+import EventAnchor from "./EventAnchor";
 import EventAuthor from "./EventAuthor";
-import { useLocation } from "solid-start";
 import EventContent from "./EventContent";
+import EventScroller from "./EventScroller";
 import { FiTrendingUp } from "solid-icons/fi";
 import { Event, Kind, Sub } from "nostr-tools";
 import { RelayContext } from "~/contexts/relay";
@@ -14,15 +14,12 @@ import { BiRegularBoltCircle } from "solid-icons/bi";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { fetchMovie } from "~/lib/external-services/tmdb";
-import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
-import EventAnchor from "./EventAnchor";
-import EventScroller from "./EventScroller";
 
 interface Props {
   event: IEnrichedEvent;
