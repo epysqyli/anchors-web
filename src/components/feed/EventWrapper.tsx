@@ -1,27 +1,26 @@
+import Reactions from "./Reactions";
 import { A } from "@solidjs/router";
 import EventAuthor from "./EventAuthor";
 import { useLocation } from "solid-start";
-import { Motion } from "@motionone/solid";
+import EventContent from "./EventContent";
 import { FiTrendingUp } from "solid-icons/fi";
+import { Event, Kind, Sub } from "nostr-tools";
 import { RelayContext } from "~/contexts/relay";
+import EventReferences from "./EventReferences";
 import { parseDate } from "~/lib/nostr/nostr-utils";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
-import RefTagFeedElement from "./RefTagFeedElement";
 import { VsCommentDiscussion } from "solid-icons/vs";
 import { BiRegularBoltCircle } from "solid-icons/bi";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { fetchMovie } from "~/lib/external-services/tmdb";
+import { FiChevronDown, FiChevronUp } from "solid-icons/fi";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
-import { Component, For, Show, createMemo, createSignal, onMount, useContext } from "solid-js";
-import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
-import { Event, Kind, Sub } from "nostr-tools";
-import Reactions from "./Reactions";
-import EventContent from "./EventContent";
+import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 
 interface Props {
   event: IEnrichedEvent;
@@ -197,19 +196,7 @@ const EventWrapper: Component<Props> = (props) => {
             <EventContent content={nostrEvent().content} />
 
             <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-slate-800'>
-              <div class='text-center text-base text-slate-200 bg-slate-600 w-4/5 xl:w-3/5 mx-auto mt-5 py-2 rounded-md'>
-                {eventRefTags().length == 1 ? "1 reference" : `${eventRefTags().length} references`}
-              </div>
-
-              <div class='h-[90%] overflow-auto no-scrollbar py-5 px-2 xl:px-24 mx-auto'>
-                <For each={eventRefTags()}>
-                  {(tag) => (
-                    <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>
-                      <RefTagFeedElement tag={tag} isLoading={isLoading} />
-                    </Motion.div>
-                  )}
-                </For>
-              </div>
+              <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
             </div>
           </div>
 
