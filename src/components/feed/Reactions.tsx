@@ -23,6 +23,7 @@ const Reactions: Component<Props> = (props): JSX.Element => {
 
   const hasPositiveUserReaction = createMemo(() => hasUserReacted("positive"));
   const hasNegativeUserReaction = createMemo(() => hasUserReacted("negative"));
+
   return (
     <div class='flex items-center gap-x-2 text-slate-400'>
       <div
