@@ -20,6 +20,7 @@ import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
 import { Component, For, Show, createMemo, createSignal, onMount, useContext } from "solid-js";
 import { FiChevronDown, FiChevronUp, FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
 import { Event, Kind, Sub } from "nostr-tools";
+import Reactions from "./Reactions";
 
 interface Props {
   event: IEnrichedEvent;
@@ -73,21 +74,6 @@ const EventWrapper: Component<Props> = (props) => {
       await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
     }
   };
-
-  const hasUserReacted = (reactionType: "positive" | "negative"): boolean => {
-    const userReaction = reactions()[reactionType as keyof IReaction].events.find(
-      (evt) => evt.pubkey == publicKey
-    );
-
-    if (userReaction !== undefined) {
-      return true;
-    }
-
-    return false;
-  };
-
-  const hasPositiveUserReaction = createMemo(() => hasUserReacted("positive"));
-  const hasNegativeUserReaction = createMemo(() => hasUserReacted("negative"));
 
   onMount(async () => {
     const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [nostrEvent().id] }]);
@@ -233,7 +219,7 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-40'>
-            <div class="w-1/6 pl-5">
+            <div class='w-1/6 pl-5'>
               <EventAuthor
                 name={nostrEvent().name}
                 about={nostrEvent().about}
@@ -248,30 +234,7 @@ const EventWrapper: Component<Props> = (props) => {
               {nostrEvent().id}
             </A>
 
-            <div class='flex items-center gap-x-2 text-slate-400'>
-              <div
-                onClick={() => handleReaction("+")}
-                class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
-              >
-                <FiThumbsUp
-                  size={26}
-                  fill={hasPositiveUserReaction() ? "white" : ""}
-                  fill-opacity={hasPositiveUserReaction() ? "0.7" : "0"}
-                />
-                <p class='text-center text-sm mt-1'>{reactions().positive.count}</p>
-              </div>
-              <div
-                onClick={() => handleReaction("-")}
-                class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
-              >
-                <FiThumbsDown
-                  size={26}
-                  fill={hasNegativeUserReaction() ? "white" : ""}
-                  fill-opacity={hasNegativeUserReaction() ? "0.7" : "0"}
-                />
-                <p class='text-center text-sm mt-1'>{reactions().negative.count}</p>
-              </div>
-            </div>
+            <Reactions reactions={reactions} publicKey={publicKey} handleReaction={handleReaction} />
 
             <div>
               <FiTrendingUp class='text-slate-400' size={26} />
