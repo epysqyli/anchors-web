@@ -34,8 +34,8 @@ const WideLayout: Component<Props> = (props) => {
             class='h-[98vh] col-span-4 rounded-md bg-gradient-to-bl from-slate-700
                   via-slate-700 via-20% to-gray-800 to-80% relative py-2'
           >
-            {props.children}
             {overlay.showOverlay() ? overlay.div : <></>}
+            {props.children}
           </Motion.div>
         </Rerun>
       </Presence>

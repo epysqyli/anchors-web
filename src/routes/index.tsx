@@ -71,7 +71,7 @@ const Home: Component<{}> = () => {
 
           <div
             ref={(el) => setEventWrapperContainer(el)}
-            class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
+            class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full z-0'
           >
             <For each={events()}>
               {(nostrEvent) => (

@@ -1,5 +1,6 @@
 import OverlayContext from "~/contexts/overlay";
 import { Motion, Presence } from "@motionone/solid";
+import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import { Accessor, Component, JSX, Setter, Show, createEffect, createSignal, useContext } from "solid-js";
 
 interface Props {
@@ -29,7 +30,35 @@ const Popup: Component<Props> = (props) => {
         setOverlayAlreadyApplied(false);
       }
     });
+  } else {
+    createEffect(() => {
+      if (!overlayAlreadyApplied() && props.show()) {
+        overlayContext.toggleOverlay();
+        setOverlayAlreadyApplied(true);
+      }
+    });
   }
+
+  const closePopup = (): void => {
+    props.setShow(false);
+    overlayContext.toggleOverlay();
+    setOverlayAlreadyApplied(false);
+  };
+
+  const closeButton = (): JSX.Element => {
+    if (!props.autoClose) {
+      return (
+        <div
+          onClick={closePopup}
+          class='absolute -top-2 -right-2 text-white cursor-pointer hover:scale-105 active:scale-95'
+        >
+          <RiSystemCloseCircleFill size={28} />
+        </div>
+      );
+    }
+
+    return <></>;
+  };
 
   return (
     <Presence exitBeforeEnter>
@@ -50,8 +79,9 @@ const Popup: Component<Props> = (props) => {
           }}
           transition={{ easing: "ease-out", duration: 0.2 }}
           class='relative tracking-tight px-12 py-16 bg-neutral-700 bg-opacity-90
-                rounded-md shadow-md text-slate-200 text-center text-lg '
+                rounded-md shadow-md text-slate-200 text-center text-lg z-20'
         >
+          {closeButton()}
           {props.children}
         </Motion.div>
       </Show>

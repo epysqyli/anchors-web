@@ -1,4 +1,5 @@
 import Reactions from "./Reactions";
+import Popup from "../shared/Popup";
 import EventAnchor from "./EventAnchor";
 import EventAuthor from "./EventAuthor";
 import EventContent from "./EventContent";
@@ -33,6 +34,7 @@ const EventWrapper: Component<Props> = (props) => {
   const nostrEvent = () => props.event;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
+  const [showUserPopup, setShowUserPopup] = createSignal<boolean>(false);
 
   const [reactions, setReactions] = createSignal<IReaction>({
     positive: nostrEvent().positive,
@@ -71,6 +73,10 @@ const EventWrapper: Component<Props> = (props) => {
     if (props.addHtmlRef !== undefined) {
       props.addHtmlRef(el, nostrEvent().id, nostrEvent().created_at);
     }
+  };
+
+  const openUserPopup = (): void => {
+    setShowUserPopup(true);
   };
 
   onMount(async () => {
@@ -190,7 +196,10 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-40'>
-            <div class='w-1/6 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'>
+            <div
+              class='w-1/6 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'
+              onClick={openUserPopup}
+            >
               <EventAuthor
                 name={nostrEvent().name}
                 about={nostrEvent().about}
@@ -207,6 +216,12 @@ const EventWrapper: Component<Props> = (props) => {
             <VsCommentDiscussion class='text-slate-400' size={28} />
             <EventScroller scrollPage={props.scrollPage} />
           </div>
+        </div>
+
+        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 xl:w-1/2'>
+          <Popup autoClose={false} show={showUserPopup} setShow={setShowUserPopup}>
+            <></>
+          </Popup>
         </div>
       </Show>
     </>
