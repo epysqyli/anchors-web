@@ -62,7 +62,7 @@ const MyPosts: VoidComponent = () => {
       </Show>
 
       <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
-        <Popup show={showPopup} setShow={setShowPopup}>
+        <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
           <div>you deleted the event</div>
         </Popup>
       </div>

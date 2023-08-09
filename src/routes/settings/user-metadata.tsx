@@ -124,7 +124,7 @@ const UserMetadata: VoidComponent = () => {
       </form>
 
       <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
-        <Popup show={showPopup} setShow={setShowPopup}>
+        <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
           {isActionSuccessful() ? (
             <>
               <p>Nostr profile metadata successfully updated!</p>

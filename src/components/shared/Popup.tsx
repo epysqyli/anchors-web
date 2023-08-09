@@ -6,27 +6,30 @@ interface Props {
   children: JSX.Element;
   show: Accessor<boolean>;
   setShow: Setter<boolean>;
+  autoClose: boolean;
 }
 
 const Popup: Component<Props> = (props) => {
   const overlayContext = useContext(OverlayContext);
   const [overlayAlreadyApplied, setOverlayAlreadyApplied] = createSignal<boolean>(false);
 
-  createEffect(() => {
-    if (!overlayAlreadyApplied() && props.show()) {
-      overlayContext.toggleOverlay();
-      setOverlayAlreadyApplied(true);
-
-      setTimeout(() => {
+  if (props.autoClose) {
+    createEffect(() => {
+      if (!overlayAlreadyApplied() && props.show()) {
         overlayContext.toggleOverlay();
-        props.setShow(false);
-      }, 2000);
-    }
+        setOverlayAlreadyApplied(true);
 
-    if (!props.show()) {
-      setOverlayAlreadyApplied(false);
-    }
-  });
+        setTimeout(() => {
+          overlayContext.toggleOverlay();
+          props.setShow(false);
+        }, 2000);
+      }
+
+      if (!props.show()) {
+        setOverlayAlreadyApplied(false);
+      }
+    });
+  }
 
   return (
     <Presence exitBeforeEnter>

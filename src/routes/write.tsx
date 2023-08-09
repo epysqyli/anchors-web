@@ -1,17 +1,15 @@
 import { VsSend } from "solid-icons/vs";
+import Popup from "~/components/shared/Popup";
 import { IRefTag } from "~/interfaces/IRefTag";
 import { RelayContext } from "~/contexts/relay";
-import OverlayContext from "~/contexts/overlay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import menuTogglerContext from "~/contexts/menuToggle";
-import ActionPopup from "~/components/shared/ActionPopup";
 import { Component, Show, createSignal, useContext } from "solid-js";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 
 const Write: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
-  const overlayContext = useContext(OverlayContext);
   const menuToggle = useContext(menuTogglerContext);
 
   const [refTags, setRefTags] = createSignal<IRefTag[]>([], { equals: false });
@@ -26,13 +24,7 @@ const Write: Component<{}> = () => {
   );
 
   const [popupMsg, setPopupMsg] = createSignal<string>("");
-  const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
-  const [showActionPopup, setShowActionPopup] = createSignal<boolean>(false);
-
-  const togglePopup = (): void => {
-    setShowActionPopup(!showActionPopup());
-    overlayContext.toggleOverlay();
-  };
+  const [showPopup, setShowPopup] = createSignal<boolean>(false);
 
   const [showRefMenu, setShowRefMenu] = createSignal<boolean>(false);
   const toggleRefMenu = (): void => {
@@ -47,25 +39,22 @@ const Write: Component<{}> = () => {
 
   const canPublish = (): boolean => {
     if (window.nostr == undefined) {
-      setIsActionSuccessful(false);
+      setShowPopup(true);
       setPopupMsg("A browser nostr extension is needed to sign events, but is currently not available");
-      togglePopup();
       return false;
     }
 
     if (nostrEvent().content.trim().length == 0) {
-      setIsActionSuccessful(false);
-      setPopupMsg("There is no content, write something first :)");
-      togglePopup();
+      setPopupMsg("There is no content, write something first");
+      setShowPopup(true);
       return false;
     }
 
     if (nostrEvent().tags.filter((tag) => tag[0] == "r").length == 0) {
-      setIsActionSuccessful(false);
-      setPopupMsg(`There are no references for this post: this idea must have originated somewhere though,
-                   what could have prompted it? Let's connect the dots together!`);
+      setShowPopup(true);
+      setPopupMsg(`There are no references for this post: this idea must have originated somewhere though. 
+                  Let's connect the dots together!`);
 
-      togglePopup();
       return false;
     }
 
@@ -108,15 +97,13 @@ const Write: Component<{}> = () => {
     const pubResult: Pub = relay.publish(signedEvent);
 
     pubResult.on("ok", () => {
-      setIsActionSuccessful(true);
+      setShowPopup(true);
       setPopupMsg("Post correctly published! Find it in your 'my posts' section");
-      togglePopup();
     });
 
     pubResult.on("failed", () => {
-      setIsActionSuccessful(false);
+      setShowPopup(true);
       setPopupMsg("Something did not work when publishing the post, please try again.");
-      togglePopup();
     });
   };
 
@@ -130,9 +117,7 @@ const Write: Component<{}> = () => {
         <>
           <div class='grid grid-cols-7 gap-x-2 h-full w-[99%] mx-auto'>
             <div class='flex flex-col justify-between py-10 col-span-4 rounded-md bg-slate-600 bg-opacity-10'>
-              <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold'>
-                Write a new idea
-              </h1>
+              <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold'>Write a new idea</h1>
               <textarea
                 placeholder='Time to connect the dots'
                 class='block w-4/5 2xl:w-2/3 placeholder:text-center placeholder:text-lg text-lg focus:outline-none bg-transparent
@@ -163,12 +148,9 @@ const Write: Component<{}> = () => {
           </div>
 
           <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
-            <ActionPopup
-              message={popupMsg}
-              show={showActionPopup}
-              togglePopup={togglePopup}
-              isActionSuccessful={isActionSuccessful}
-            />
+            <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
+              <div>{popupMsg()}</div>
+            </Popup>
           </div>
         </>
       </Show>
