@@ -190,7 +190,7 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-40'>
-            <div class='w-1/6 pl-5'>
+            <div class='w-1/6 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'>
               <EventAuthor
                 name={nostrEvent().name}
                 about={nostrEvent().about}
@@ -198,7 +198,7 @@ const EventWrapper: Component<Props> = (props) => {
                 pubKey={nostrEvent().pubkey}
               />
 
-              <div class='text-sm text-slate-400 mt-3'>{parseDate(nostrEvent().created_at)}</div>
+              <div class='text-sm text-slate-400 mt-3 text-center'>{parseDate(nostrEvent().created_at)}</div>
             </div>
 
             <EventAnchor nostrEventID={nostrEvent().id} />

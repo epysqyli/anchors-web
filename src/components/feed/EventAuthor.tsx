@@ -7,7 +7,7 @@ const EventAuthor: Component<IUserMetadata & { pubKey: string }> = (props) => {
 
   return (
     <>
-      <div class='flex items-center gap-x-3 rounded-md'>
+      <div class='flex justify-center items-center gap-x-3 rounded-md'>
         {imageSrcFails() ? (
           <RiUserFacesAccountCircleFill size={30} />
         ) : (
