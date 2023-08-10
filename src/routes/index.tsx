@@ -18,16 +18,20 @@ declare global {
   }
 }
 
+interface EventHtmlRef {
+  htmlRef: HTMLDivElement;
+  eventID: string;
+  createdAt: number;
+}
+
 const Home: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
   const [events, setEvents] = createSignal<IEnrichedEvent[]>([], { equals: false });
+  const [eventHtmlRefs, setEventHtmlRefs] = createSignal<EventHtmlRef[]>([]);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
-  const [eventHtmlRefs, setEventHtmlRefs] = createSignal<
-    { htmlRef: HTMLDivElement; eventID: string; createdAt: number }[]
-  >([]);
 
   onMount(() => fetchEvents(relay, setEvents, setIsLoading, {}, setShowPopup));
 
