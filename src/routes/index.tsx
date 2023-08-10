@@ -60,7 +60,7 @@ const Home: Component<{}> = () => {
         when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()}
         fallback={<LoadingFallback />}
       >
-        <Motion.div animate={{ opacity: [0.7, 1], scale: [0.8, 1] }} class='relative h-full'>
+        <div class='relative h-full'>
           <div class='absolute top-2 left-5'>
             <NewEventsPopup
               topEventRef={eventHtmlRefs()[0]}
@@ -71,7 +71,7 @@ const Home: Component<{}> = () => {
 
           <div
             ref={(el) => setEventWrapperContainer(el)}
-            class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full z-0'
+            class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
           >
             <For each={events()}>
               {(nostrEvent) => (
@@ -79,7 +79,7 @@ const Home: Component<{}> = () => {
               )}
             </For>
           </div>
-        </Motion.div>
+        </div>
       </Show>
     </>
   );

@@ -6,7 +6,7 @@ const toggleOverlay = (): void => {
 };
 
 const overlayDiv = (
-  <div class="absolute bg-slate-900 h-full w-full top-0 left-0 bg-opacity-70 z-0"></div>
+  <div class="absolute bg-slate-900 h-full w-full top-0 left-0 bg-opacity-70"></div>
 );
 
 interface OverlayInterface {

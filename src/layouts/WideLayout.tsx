@@ -32,10 +32,10 @@ const WideLayout: Component<Props> = (props) => {
             transition={{ duration: 0.3 }}
             exit={{ opacity: [1, 0], transition: { duration: 0.3 } }}
             class='h-[98vh] col-span-4 rounded-md bg-gradient-to-bl from-slate-700
-                  via-slate-700 via-20% to-gray-800 to-80% relative py-2'
+                  via-slate-700 via-20% to-gray-800 to-80% relative py-2 z-30'
           >
-            {overlay.showOverlay() ? overlay.div : <></>}
             {props.children}
+            {overlay.showOverlay() ? overlay.div : <></>}
           </Motion.div>
         </Rerun>
       </Presence>
