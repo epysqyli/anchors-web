@@ -1,4 +1,3 @@
-import { Motion } from "@motionone/solid";
 import { RelayContext } from "~/contexts/relay";
 import { Event, EventTemplate } from "nostr-tools";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
