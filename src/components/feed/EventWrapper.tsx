@@ -189,10 +189,7 @@ const EventWrapper: Component<Props> = (props) => {
         >
           <div class='grid grid-cols-5 h-[85%] gap-x-3'>
             <EventContent content={nostrEvent().content} />
-
-            <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-slate-800'>
-              <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
-            </div>
+            <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 
           <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-40'>
