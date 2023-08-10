@@ -60,7 +60,7 @@ const Home: Component<{}> = () => {
         when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()}
         fallback={<LoadingFallback />}
       >
-        <div class='relative h-full'>
+        <div class='relative h-full animate-scale-on-load'>
           <div class='absolute top-2 left-5'>
             <NewEventsPopup
               topEventRef={eventHtmlRefs()[0]}
