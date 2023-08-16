@@ -213,4 +213,11 @@ const fetchEvents = (
   });
 };
 
+/**
+ * define optional filter to retrieve only most recent x events
+ */
+const fetchUserEvents = (relay: Relay, pubkey: string): void => {
+  return;
+}
+
 export { deleteNostrEvent, reactToEvent, fetchEvents };

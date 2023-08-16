@@ -23,6 +23,10 @@ const relay = relayInit("ws://localhost:2700");
 // const relay = relayInit("wss://nostr.wine");
 (async () => await relay.connect())();
 
+/**
+ * Should user following be defined in this context?
+ * Necessary for <UserPopup /> actions
+ */
 const RelayContext: Context<IRelayContext> = createContext<IRelayContext>({
   relay: relay,
   publicKey: pk
