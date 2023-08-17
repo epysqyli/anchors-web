@@ -2,7 +2,7 @@ import EventAuthor from "./EventAuthor";
 import { RelayContext } from "~/contexts/relay";
 import { TbUsersPlus, TbUsersMinus } from "solid-icons/tb";
 import { Component, JSX, createSignal, useContext } from "solid-js";
-import { deleteNostrEvent, followUser, isUserAlreadyFollowed } from "~/lib/nostr/nostr-nips-actions";
+import { followUser, isUserAlreadyFollowed } from "~/lib/nostr/nostr-nips-actions";
 
 interface Props {
   name: string;
@@ -12,17 +12,15 @@ interface Props {
 }
 
 const UserPopup: Component<Props> = (props): JSX.Element => {
-  const { relay, publicKey, following, setFollowing } = useContext(RelayContext);
+  const { relay, publicKey, following } = useContext(RelayContext);
 
   const handleFollow = async (): Promise<void> => {
-    await followUser(relay, props.pubkey, following, setFollowing);
+    await followUser(relay, [...following(), props.pubkey]);
     setCanFollow(false);
   };
 
   const handleUnfollow = async (): Promise<void> => {
-    const eventToDelete = following().find((evt) => evt.pubkey == props.pubkey);
-    await deleteNostrEvent(relay, eventToDelete!.eventID);
-    setFollowing(following().filter((fl) => fl.pubkey !== eventToDelete?.pubkey));
+    await followUser(relay, following().filter((fl) => fl !== props.pubkey));
     setCanFollow(true);
   };
 

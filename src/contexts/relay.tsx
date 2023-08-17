@@ -1,6 +1,5 @@
 import "websocket-polyfill";
 import { Relay, relayInit } from "nostr-tools";
-import { IFollowing } from "~/interfaces/IFollowing";
 import type { Accessor, Context, Setter } from "solid-js";
 import { fetchUserFollowing } from "~/lib/nostr/nostr-nips-actions";
 import { Component, JSX, createContext, createSignal, onMount } from "solid-js";
@@ -8,8 +7,8 @@ import { Component, JSX, createContext, createSignal, onMount } from "solid-js";
 interface IRelayContext {
   relay: Relay;
   publicKey: string;
-  following: Accessor<IFollowing[]>;
-  setFollowing: Setter<IFollowing[]>;
+  following: Accessor<string[]>;
+  setFollowing: Setter<string[]>;
 }
 
 let pk = "";
@@ -28,7 +27,7 @@ const relay = relayInit("ws://localhost:2700");
 (async () => await relay.connect())();
 
 // embed into a createRoot reactive scope to ensure memory disposal?
-const [following, setFollowing] = createSignal<IFollowing[]>([]);
+const [following, setFollowing] = createSignal<string[]>([]);
 
 const RelayContext: Context<IRelayContext> = createContext<IRelayContext>({
   relay: relay,
@@ -39,7 +38,7 @@ const RelayContext: Context<IRelayContext> = createContext<IRelayContext>({
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
   onMount(() => {
-    fetchUserFollowing(relay, pk, following, setFollowing);
+    fetchUserFollowing(relay, pk, setFollowing);
   });
 
   return (

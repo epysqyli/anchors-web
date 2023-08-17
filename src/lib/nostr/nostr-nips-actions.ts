@@ -10,7 +10,6 @@ import {
   verifySignature
 } from "nostr-tools";
 import { Accessor, Setter } from "solid-js";
-import { IFollowing } from "~/interfaces/IFollowing";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import { IReactionFields, Reaction } from "~/interfaces/IReaction";
@@ -219,50 +218,28 @@ const fetchUserEvents = (relay: Relay, pubkey: string): void => {
   return;
 };
 
-const fetchUserFollowing = (
-  relay: Relay,
-  pubkey: string,
-  following: Accessor<IFollowing[]>,
-  setFollowing: Setter<IFollowing[]>
-): void => {
+const fetchUserFollowing = (relay: Relay, pubkey: string, setFollowing: Setter<string[]>): void => {
   const followingSub: Sub = relay.sub([{ kinds: [Kind.Contacts], authors: [pubkey] }]);
   let eose: boolean = false;
-  let existingFollowing: IFollowing[] = [];
 
   followingSub.on("event", (evt: Event) => {
-    if (eose) {
-      setFollowing([...following(), { pubkey: evt.tags[0][1], eventID: evt.id }]);
-    } else {
-      existingFollowing.push({ pubkey: evt.tags[0][1], eventID: evt.id });
-    }
-  });
-
-  followingSub.on("eose", () => {
-    setFollowing(existingFollowing);
-    eose = true;
+    setFollowing(evt.tags.map((e) => e[1]));
   });
 };
 
-const followUser = async (
-  relay: Relay,
-  pubkey: string,
-  following: Accessor<IFollowing[]>,
-  setFollowing: Setter<IFollowing[]>
-): Promise<void> => {
+const followUser = async (relay: Relay, newFollowing: string[]): Promise<void> => {
   const followEvent: EventTemplate = {
     content: "",
     kind: Kind.Contacts,
     created_at: Math.floor(Date.now() / 1000),
-    tags: [["p", pubkey]]
+    tags: newFollowing.map((pk) => ["p", pk])
   };
 
   const signedEvent = await window.nostr.signEvent(followEvent);
   const pubRes: Pub = relay.publish(signedEvent);
 
   pubRes.on("ok", () => {
-    // decide whether this should happen here or in `fetchUserFollowing` after EOSE
-    // setFollowing([...following(), { pubkey: pubkey, eventID: signedEvent.id }]);
-    console.table(following());
+    // decide whether signal update should happen here or in `fetchUserFollowing` after EOSE
   });
 
   pubRes.on("failed", () => {
@@ -272,10 +249,8 @@ const followUser = async (
   return;
 };
 
-const isUserAlreadyFollowed = (pubkey: string, following: Accessor<IFollowing[]>): boolean => {
-  const followingPubkeys = following().map((fl) => fl.pubkey);
-
-  if (followingPubkeys.includes(pubkey)) {
+const isUserAlreadyFollowed = (pubkey: string, following: Accessor<string[]>): boolean => {
+  if (following().includes(pubkey)) {
     return true;
   }
 
