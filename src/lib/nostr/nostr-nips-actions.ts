@@ -260,7 +260,8 @@ const followUser = async (
   const pubRes: Pub = relay.publish(signedEvent);
 
   pubRes.on("ok", () => {
-    setFollowing([...following(), { pubkey: pubkey, eventID: signedEvent.id }]);
+    // decide whether this should happen here or in `fetchUserFollowing` after EOSE
+    // setFollowing([...following(), { pubkey: pubkey, eventID: signedEvent.id }]);
     console.table(following());
   });
 

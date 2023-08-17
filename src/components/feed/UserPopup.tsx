@@ -1,5 +1,6 @@
 import EventAuthor from "./EventAuthor";
 import { RelayContext } from "~/contexts/relay";
+import { TbUsersPlus, TbUsersMinus } from "solid-icons/tb";
 import { Component, JSX, createSignal, useContext } from "solid-js";
 import { deleteNostrEvent, followUser, isUserAlreadyFollowed } from "~/lib/nostr/nostr-nips-actions";
 
@@ -31,13 +32,23 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
     <div class='flex items-center justify-around'>
       <div class='w-1/2'>
         <EventAuthor name={props.name} about={props.about} picture={props.picture} pubKey={props.pubkey} />
-        <div class='mt-10'>
+        <div class='mt-10 mx-auto w-fit'>
           {publicKey == props.pubkey ? (
             <></>
           ) : canFollow() ? (
-            <div onClick={handleFollow}>follow</div>
+            <div
+              onClick={handleFollow}
+              class='text-neutral-300 hover:text-neutral-100 active:scale-95 cursor-pointer'
+            >
+              <TbUsersPlus size={32} />
+            </div>
           ) : (
-            <div onClick={handleUnfollow}>unfollow</div>
+            <div
+              onClick={handleUnfollow}
+              class='text-neutral-300 hover:text-neutral-100 active:scale-95 cursor-pointer'
+            >
+              <TbUsersMinus size={32} />
+            </div>
           )}
         </div>
       </div>
