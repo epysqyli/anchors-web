@@ -220,7 +220,6 @@ const fetchUserEvents = (relay: Relay, pubkey: string): void => {
 
 const fetchUserFollowing = (relay: Relay, pubkey: string, setFollowing: Setter<string[]>): void => {
   const followingSub: Sub = relay.sub([{ kinds: [Kind.Contacts], authors: [pubkey] }]);
-  let eose: boolean = false;
 
   followingSub.on("event", (evt: Event) => {
     setFollowing(evt.tags.map((e) => e[1]));
