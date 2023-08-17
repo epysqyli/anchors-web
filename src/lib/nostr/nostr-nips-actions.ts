@@ -1,4 +1,3 @@
-import { IReactionFields, Reaction } from "~/interfaces/IReaction";
 import {
   Event,
   EventTemplate,
@@ -10,10 +9,12 @@ import {
   validateEvent,
   verifySignature
 } from "nostr-tools";
+import { Accessor, Setter } from "solid-js";
+import { IFollowing } from "~/interfaces/IFollowing";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
-import { Setter } from "solid-js";
-import { createMetadataFilter, makeDefaultEnrichedEvent, sortByCreatedAt } from "./nostr-utils";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
+import { IReactionFields, Reaction } from "~/interfaces/IReaction";
+import { createMetadataFilter, makeDefaultEnrichedEvent, sortByCreatedAt } from "./nostr-utils";
 
 const deleteNostrEvent = async (relay: Relay, eventID: string): Promise<void> => {
   const deletionEvent: EventTemplate = {
@@ -213,11 +214,71 @@ const fetchEvents = (
   });
 };
 
-/**
- * define optional filter to retrieve only most recent x events
- */
+// define optional filter to retrieve only most recent x events
 const fetchUserEvents = (relay: Relay, pubkey: string): void => {
   return;
-}
+};
 
-export { deleteNostrEvent, reactToEvent, fetchEvents };
+const fetchUserFollowing = (
+  relay: Relay,
+  pubkey: string,
+  following: Accessor<IFollowing[]>,
+  setFollowing: Setter<IFollowing[]>
+): void => {
+  const followingSub: Sub = relay.sub([{ kinds: [Kind.Contacts], authors: [pubkey] }]);
+  let eose: boolean = false;
+  let existingFollowing: IFollowing[] = [];
+
+  followingSub.on("event", (evt: Event) => {
+    if (eose) {
+      setFollowing([...following(), { pubkey: evt.tags[0][1], eventID: evt.id }]);
+    } else {
+      existingFollowing.push({ pubkey: evt.tags[0][1], eventID: evt.id });
+    }
+  });
+
+  followingSub.on("eose", () => {
+    setFollowing(existingFollowing);
+    eose = true;
+  });
+};
+
+const followUser = async (
+  relay: Relay,
+  pubkey: string,
+  following: Accessor<IFollowing[]>,
+  setFollowing: Setter<IFollowing[]>
+): Promise<void> => {
+  const followEvent: EventTemplate = {
+    content: "",
+    kind: Kind.Contacts,
+    created_at: Math.floor(Date.now() / 1000),
+    tags: [["p", pubkey]]
+  };
+
+  const signedEvent = await window.nostr.signEvent(followEvent);
+  const pubRes: Pub = relay.publish(signedEvent);
+
+  pubRes.on("ok", () => {
+    setFollowing([...following(), { pubkey: pubkey, eventID: signedEvent.id }]);
+    console.table(following());
+  });
+
+  pubRes.on("failed", () => {
+    console.log("follow event failure");
+  });
+
+  return;
+};
+
+const isUserAlreadyFollowed = (pubkey: string, following: Accessor<IFollowing[]>): boolean => {
+  const followingPubkeys = following().map((fl) => fl.pubkey);
+
+  if (followingPubkeys.includes(pubkey)) {
+    return true;
+  }
+
+  return false;
+};
+
+export { deleteNostrEvent, reactToEvent, fetchEvents, fetchUserFollowing, followUser, isUserAlreadyFollowed };
