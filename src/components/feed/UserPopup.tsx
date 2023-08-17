@@ -11,7 +11,7 @@ interface Props {
 }
 
 const UserPopup: Component<Props> = (props): JSX.Element => {
-  const { relay, following, setFollowing } = useContext(RelayContext);
+  const { relay, publicKey, following, setFollowing } = useContext(RelayContext);
 
   const handleFollow = async (): Promise<void> => {
     await followUser(relay, props.pubkey, following, setFollowing);
@@ -32,7 +32,9 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
       <div class='w-1/2'>
         <EventAuthor name={props.name} about={props.about} picture={props.picture} pubKey={props.pubkey} />
         <div class='mt-10'>
-          {canFollow() ? (
+          {publicKey == props.pubkey ? (
+            <></>
+          ) : canFollow() ? (
             <div onClick={handleFollow}>follow</div>
           ) : (
             <div onClick={handleUnfollow}>unfollow</div>
