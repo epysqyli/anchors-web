@@ -214,8 +214,17 @@ const fetchEvents = (
 };
 
 // define optional filter to retrieve only most recent x events
-const fetchUserEvents = (relay: Relay, pubkey: string): void => {
-  return;
+const fetchUserEvents = (relay: Relay, pubkey: string, setUserEvents: Setter<Event[]>): void => {
+  const eventsSub: Sub = relay.sub([{ authors: [pubkey], kinds: [Kind.Text] }]);
+
+  let userEvents: Event[] = [];
+  eventsSub.on("event", (evt: Event) => {
+    userEvents.push(evt);
+  });
+
+  eventsSub.on("eose", () => {
+    setUserEvents(userEvents);
+  });
 };
 
 const fetchUserFollowing = (relay: Relay, pubkey: string, setFollowing: Setter<string[]>): void => {
@@ -256,4 +265,12 @@ const isUserAlreadyFollowed = (pubkey: string, following: Accessor<string[]>): b
   return false;
 };
 
-export { deleteNostrEvent, reactToEvent, fetchEvents, fetchUserFollowing, followUser, isUserAlreadyFollowed };
+export {
+  deleteNostrEvent,
+  reactToEvent,
+  fetchEvents,
+  fetchUserFollowing,
+  followUser,
+  isUserAlreadyFollowed,
+  fetchUserEvents
+};
