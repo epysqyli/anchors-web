@@ -3,6 +3,7 @@ import { RelayContext } from "~/contexts/relay";
 import { TbUsersPlus, TbUsersMinus } from "solid-icons/tb";
 import { Component, JSX, createSignal, useContext } from "solid-js";
 import { followUser, isUserAlreadyFollowed } from "~/lib/nostr/nostr-nips-actions";
+import { A } from "@solidjs/router";
 
 interface Props {
   name: string;
@@ -20,7 +21,10 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
   };
 
   const handleUnfollow = async (): Promise<void> => {
-    await followUser(relay, following().filter((fl) => fl !== props.pubkey));
+    await followUser(
+      relay,
+      following().filter((fl) => fl !== props.pubkey)
+    );
     setCanFollow(true);
   };
 
@@ -29,7 +33,9 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
   return (
     <div class='flex items-center justify-around'>
       <div class='w-1/2'>
-        <EventAuthor name={props.name} about={props.about} picture={props.picture} pubKey={props.pubkey} />
+        <A href={`/users/${props.pubkey}`} class="hover:text-neutral-400 active:text-neutral-300">
+          <EventAuthor name={props.name} about={props.about} picture={props.picture} pubKey={props.pubkey} />
+        </A>
         <div class='mt-10 mx-auto w-fit'>
           {publicKey == props.pubkey ? (
             <></>
