@@ -40,7 +40,13 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
     <div class='flex items-center justify-around'>
       <div class='w-1/2'>
         <A href={`/users/${props.pubkey}`} class='hover:text-neutral-400 active:text-neutral-300'>
-          <EventAuthor name={props.name} about={props.about} picture={props.picture} pubKey={props.pubkey} />
+          <EventAuthor
+            name={props.name}
+            about={props.about}
+            picture={props.picture}
+            pubKey={props.pubkey}
+            layout='v'
+          />
         </A>
         <div class='mt-10 mx-auto w-fit'>
           {publicKey == props.pubkey ? (

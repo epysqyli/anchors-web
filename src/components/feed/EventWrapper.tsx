@@ -203,6 +203,7 @@ const EventWrapper: Component<Props> = (props) => {
                 about={nostrEvent().about}
                 picture={nostrEvent().picture}
                 pubKey={nostrEvent().pubkey}
+                layout='h'
               />
 
               <div class='text-sm text-slate-400 mt-3 text-center'>{parseDate(nostrEvent().created_at)}</div>
