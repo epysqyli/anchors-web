@@ -74,8 +74,8 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
           {(evt) => (
             <A href={`/events/${evt.id}`}>
               <div class='text-sm break-all mb-2 hover:bg-neutral-800 active:scale-95 rounded-md p-1'>
-                <div class='text-neutral-300 mb-1'>{parseDate(evt.created_at)}</div>
-                <div class='text-neutral-400'>{shrinkContent(evt.content, 30)}</div>
+                <div class='text-neutral-300 mb-1 text-left'>{parseDate(evt.created_at)}</div>
+                <div class='text-neutral-400 text-left'>{shrinkContent(evt.content, 30)}</div>
               </div>
             </A>
           )}
