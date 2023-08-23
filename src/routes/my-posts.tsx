@@ -50,13 +50,9 @@ const MyPosts: VoidComponent = () => {
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold my-14'>Your nostr posts</h1>
       <Show when={!isLoading()} fallback={<LoadingFallback />}>
-        <div class='grid grid-cols-2 xl:grid-cols-3 p-1 gap-x-3 gap-y-5 h-4/5 w-4/5 mx-auto overflow-y-scroll custom-scrollbar'>
+        <div class='w-4/5 xl:w-2/3 2xl:w-3/5 px-5 mx-auto overflow-y-scroll custom-scrollbar h-4/5'>
           <For each={events()}>
-            {(nostrEvent) => (
-              <div class='col-span-1'>
-                <UserNostrEvent nostrEvent={nostrEvent} handleDeletion={handleDeletion} />
-              </div>
-            )}
+            {(nostrEvent) => <UserNostrEvent nostrEvent={nostrEvent} handleDeletion={handleDeletion} />}
           </For>
         </div>
       </Show>
