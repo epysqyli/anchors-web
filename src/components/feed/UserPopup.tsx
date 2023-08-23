@@ -2,7 +2,7 @@ import { A } from "@solidjs/router";
 import { Event } from "nostr-tools";
 import EventAuthor from "./EventAuthor";
 import { RelayContext } from "~/contexts/relay";
-import { parseDate } from "~/lib/nostr/nostr-utils";
+import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import { TbUsersPlus, TbUsersMinus } from "solid-icons/tb";
 import { Component, For, JSX, createSignal, onMount, useContext } from "solid-js";
 import { fetchUserEvents, followUser, isUserAlreadyFollowed } from "~/lib/nostr/nostr-nips-actions";
@@ -69,7 +69,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
             <A href={`/events/${evt.id}`}>
               <div class='text-sm break-all mb-2 hover:bg-neutral-800 active:scale-95 rounded-md p-1'>
                 <div class='text-neutral-300 mb-1'>{parseDate(evt.created_at)}</div>
-                <div class='text-neutral-400'>{evt.id}</div>
+                <div class='text-neutral-400'>{shrinkContent(evt.content, 30)}</div>
               </div>
             </A>
           )}
