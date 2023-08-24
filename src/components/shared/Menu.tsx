@@ -1,12 +1,11 @@
 import { A } from "@solidjs/router";
+import { CgFeed } from "solid-icons/cg";
 import { BsGlobe2 } from "solid-icons/bs";
 import { useLocation } from "solid-start";
 import { Component, Show } from "solid-js";
-import { TbUsersGroup } from "solid-icons/tb";
 import { FiAnchor, FiEdit } from "solid-icons/fi";
 import { IoSettingsOutline } from "solid-icons/io";
 import { BsStack, BsSearch } from "solid-icons/bs";
-import { CgFeed } from "solid-icons/cg";
 
 interface Props {
   isNarrow: boolean | undefined;
@@ -42,19 +41,19 @@ const Menu: Component<Props> = (props) => {
             <FiAnchor size={40} />
           </div>
 
-          <div class='flex w-11/12 mx-auto gap-x-5'>
-            <div class={active("/") ? selectedActionStyle : actionStyle}>
-              <A onClick={props.toggleMenu} href='/'>
+          <div class='flex w-11/12 mx-auto'>
+            <A class="w-1/2" onClick={props.toggleMenu} href='/'>
+              <div class={active("/") ? selectedActionStyle : actionStyle}>
                 <CgFeed size={30} class='md:group-hover:animate-pulse mx-auto' />
                 <div class='text-center text-slate-300 text-sm mt-5'>following feed</div>
-              </A>
-            </div>
-            <div class={active("/?feed=global") ? selectedActionStyle : actionStyle}>
-              <A onClick={props.toggleMenu} href='/?feed=global'>
+              </div>
+            </A>
+            <A class="w-1/2" onClick={props.toggleMenu} href='/?feed=global'>
+              <div class={active("/?feed=global") ? selectedActionStyle : actionStyle}>
                 <BsGlobe2 size={30} class='md:group-hover:animate-pulse mx-auto' />
                 <div class='text-center text-slate-300 text-sm mt-5'>global feed</div>
-              </A>
-            </div>
+              </div>
+            </A>
           </div>
 
           <A onClick={props.toggleMenu} href='/write'>
