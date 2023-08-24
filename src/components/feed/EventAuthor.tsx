@@ -13,7 +13,7 @@ const EventAuthor: Component<IUserMetadata & { pubKey: string; layout: "h" | "v"
     <>
       <div class={containerStyle}>
         {imageSrcFails() ? (
-          <RiUserFacesAccountCircleFill size={30} />
+          <RiUserFacesAccountCircleFill size={36} class={imgStyle} />
         ) : (
           <img src={props.picture} onError={() => setImageSrcFails(true)} loading='lazy' class={imgStyle} />
         )}
