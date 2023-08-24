@@ -4,9 +4,9 @@ import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import { Event, EventTemplate, Filter, Sub } from "nostr-tools";
-import { fetchEvents, fetchUserEvents, fetchUserFollowing } from "~/lib/nostr/nostr-nips-actions";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
+import { fetchEvents, fetchUserFollowing } from "~/lib/nostr/nostr-nips-actions";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 
 declare global {
