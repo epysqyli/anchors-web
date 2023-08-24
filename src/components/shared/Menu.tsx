@@ -45,13 +45,13 @@ const Menu: Component<Props> = (props) => {
             <A class="w-1/2" onClick={props.toggleMenu} href='/'>
               <div class={active("/") ? selectedActionStyle : actionStyle}>
                 <CgFeed size={30} class='md:group-hover:animate-pulse mx-auto' />
-                <div class='text-center text-slate-300 text-sm mt-5'>following feed</div>
+                <div class='text-center text-slate-300 text-sm mt-5'>following</div>
               </div>
             </A>
             <A class="w-1/2" onClick={props.toggleMenu} href='/?feed=global'>
               <div class={active("/?feed=global") ? selectedActionStyle : actionStyle}>
                 <BsGlobe2 size={30} class='md:group-hover:animate-pulse mx-auto' />
-                <div class='text-center text-slate-300 text-sm mt-5'>global feed</div>
+                <div class='text-center text-slate-300 text-sm mt-5'>global</div>
               </div>
             </A>
           </div>
