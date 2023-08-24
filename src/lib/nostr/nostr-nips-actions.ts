@@ -231,7 +231,7 @@ const fetchUserFollowing = async (
   relay: Relay,
   pubkey: string,
   setFollowing: Setter<string[]>
-): Promise<void> => {
+): Promise<Sub> => {
   const followingSub: Sub = relay.sub([{ kinds: [Kind.Contacts], authors: [pubkey] }]);
 
   let following: string[] = [];
@@ -241,8 +241,8 @@ const fetchUserFollowing = async (
     setFollowing(following);
   });
 
-  await new Promise((res) => {
-    followingSub.on("eose", () => res(following));
+  return await new Promise((res) => {
+    followingSub.on("eose", () => res(followingSub));
   });
 };
 
