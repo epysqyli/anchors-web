@@ -1,9 +1,9 @@
 import { useLocation } from "solid-start";
 import { RelayContext } from "~/contexts/relay";
-import { Event, EventTemplate } from "nostr-tools";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
+import { Event, EventTemplate, Filter } from "nostr-tools";
 import { fetchEvents } from "~/lib/nostr/nostr-nips-actions";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
@@ -25,7 +25,7 @@ interface EventHtmlRef {
 }
 
 const Home: Component<{}> = () => {
-  const { relay } = useContext(RelayContext);
+  const { relay, following } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
@@ -33,7 +33,16 @@ const Home: Component<{}> = () => {
   const [eventHtmlRefs, setEventHtmlRefs] = createSignal<EventHtmlRef[]>([]);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
-  onMount(() => fetchEvents(relay, setEvents, setIsLoading, {}, setShowPopup));
+  onMount(() => {
+    const location = useLocation();
+    let filter: Filter = {};
+
+    if (location.search === "") {
+      filter = { authors: following() };
+    }
+
+    fetchEvents(relay, setEvents, setIsLoading, filter, setShowPopup);
+  });
 
   const scrollPage = (direction: "up" | "down"): void => {
     eventWrapperContainer()!.scrollBy({
