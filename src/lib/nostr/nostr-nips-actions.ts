@@ -234,11 +234,8 @@ const fetchUserFollowing = async (
 ): Promise<Sub> => {
   const followingSub: Sub = relay.sub([{ kinds: [Kind.Contacts], authors: [pubkey] }]);
 
-  let following: string[] = [];
-
   followingSub.on("event", (evt: Event) => {
-    following = evt.tags.map((e) => e[1]);
-    setFollowing(following);
+    setFollowing(evt.tags.map((e) => e[1]));
   });
 
   return await new Promise((res) => {
