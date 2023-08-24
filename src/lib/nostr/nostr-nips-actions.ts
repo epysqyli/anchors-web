@@ -227,11 +227,22 @@ const fetchUserEvents = (relay: Relay, pubkey: string, setUserEvents: Setter<Eve
   });
 };
 
-const fetchUserFollowing = (relay: Relay, pubkey: string, setFollowing: Setter<string[]>): void => {
+const fetchUserFollowing = async (
+  relay: Relay,
+  pubkey: string,
+  setFollowing: Setter<string[]>
+): Promise<void> => {
   const followingSub: Sub = relay.sub([{ kinds: [Kind.Contacts], authors: [pubkey] }]);
 
+  let following: string[] = [];
+
   followingSub.on("event", (evt: Event) => {
-    setFollowing(evt.tags.map((e) => e[1]));
+    following = evt.tags.map((e) => e[1]);
+    setFollowing(following);
+  });
+
+  await new Promise((res) => {
+    followingSub.on("eose", () => res(following));
   });
 };
 

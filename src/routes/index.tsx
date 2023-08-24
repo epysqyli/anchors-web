@@ -4,7 +4,7 @@ import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import { Event, EventTemplate, Filter } from "nostr-tools";
-import { fetchEvents } from "~/lib/nostr/nostr-nips-actions";
+import { fetchEvents, fetchUserEvents, fetchUserFollowing } from "~/lib/nostr/nostr-nips-actions";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
@@ -25,7 +25,7 @@ interface EventHtmlRef {
 }
 
 const Home: Component<{}> = () => {
-  const { relay, following } = useContext(RelayContext);
+  const { relay, following, setFollowing, publicKey } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
@@ -33,9 +33,13 @@ const Home: Component<{}> = () => {
   const [eventHtmlRefs, setEventHtmlRefs] = createSignal<EventHtmlRef[]>([]);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
-  onMount(() => {
+  onMount(async () => {
     const location = useLocation();
     let filter: Filter = {};
+
+    if (following().length == 0) {
+      await fetchUserFollowing(relay, publicKey, setFollowing);
+    }
 
     if (location.search === "") {
       filter = { authors: following() };

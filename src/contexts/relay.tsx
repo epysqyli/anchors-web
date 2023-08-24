@@ -37,9 +37,7 @@ const RelayContext: Context<IRelayContext> = createContext<IRelayContext>({
 });
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
-  onMount(() => {
-    fetchUserFollowing(relay, pk, setFollowing);
-  });
+  onMount(async () => await fetchUserFollowing(relay, pk, setFollowing));
 
   return (
     <RelayContext.Provider
