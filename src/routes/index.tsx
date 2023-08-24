@@ -1,3 +1,4 @@
+import { useLocation } from "solid-start";
 import { RelayContext } from "~/contexts/relay";
 import { Event, EventTemplate } from "nostr-tools";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
