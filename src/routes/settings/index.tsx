@@ -16,7 +16,7 @@ const Settings: VoidComponent = () => {
           <RiBusinessProfileLine class='mx-auto' size={62} />
         </SettingsLink>
 
-        <SettingsLink href='/' content='manage relays'>
+        <SettingsLink href='/settings/manage-relays' content='manage relays'>
           <RiMapSignalTowerFill class='mx-auto' size={62} />
         </SettingsLink>
 
