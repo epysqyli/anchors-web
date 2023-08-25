@@ -9,6 +9,8 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   const [relays, setRelays] = createSignal<string[]>([]);
   const [eventKindThree, setEventKindThree] = createSignal<NostrEvent>();
   const [relayToAdd, setRelayToAdd] = createSignal<string>("");
+  const [validationError, setValidationError] = createSignal<boolean>(false);
+  const [placeholder, setPlaceholder] = createSignal<string>("add a relay");
 
   onMount(async () => {
     const kindThreeEvent = await fetchUserKindThreeEvent(relay, publicKey);
@@ -31,9 +33,13 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
     e.preventDefault();
 
     if (!relayToAdd().startsWith("ws") || !relayToAdd().startsWith("wss")) {
-      console.log("not a valid websocket address");
+      setValidationError(true);
+      setPlaceholder("relay address is not valid");
       return;
     }
+
+    setValidationError(false);
+    setPlaceholder("add a relay");
 
     setRelays([...relays(), relayToAdd()]);
     await publishEvent();
@@ -93,10 +99,11 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
           <input
             type='text'
             onChange={handleChange}
-            class='block outline-none bg-transparent border-slate-200 border-b border-opacity-75
-                  focus:border-opacity-100 pb-2 text-slate-200 
-                  text-center caret-slate-200 placeholder:text-center'
-            placeholder='add relay url'
+            class={`block outline-none bg-transparent border-slate-200 border-b border-opacity-75
+                  focus:border-opacity-100 py-2 text-slate-200 
+                  text-center caret-slate-200 placeholder:text-center
+                  ${validationError() ? "border rounded border-red-600" : ""}`}
+            placeholder={placeholder()}
           />
           <button class='px-5 p-2 bg-green-200 text-green-800 rounded-md active:scale-95 select-none'>
             add
