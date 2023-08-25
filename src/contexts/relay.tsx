@@ -10,8 +10,10 @@ interface IRelayContext {
   publicKey: string;
   following: Accessor<string[]>;
   setFollowing: Setter<string[]>;
+  defaultRelay: string;
 }
 
+const defaultRelay = "ws://localhost:2700";
 const pk = await getPublicKeyFromExt();
 const relay = relayInit("ws://localhost:2700");
 // const relay = relayInit("wss://nostr.wine");
@@ -24,7 +26,8 @@ const RelayContext: Context<IRelayContext> = createContext<IRelayContext>({
   relay: relay,
   publicKey: pk,
   following: following,
-  setFollowing: setFollowing
+  setFollowing: setFollowing,
+  defaultRelay: defaultRelay
 });
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
@@ -32,7 +35,13 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
 
   return (
     <RelayContext.Provider
-      value={{ relay: relay, publicKey: pk, following: following, setFollowing: setFollowing }}
+      value={{
+        relay: relay,
+        publicKey: pk,
+        following: following,
+        setFollowing: setFollowing,
+        defaultRelay: defaultRelay
+      }}
     >
       {props.children}
     </RelayContext.Provider>

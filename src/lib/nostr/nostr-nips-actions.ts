@@ -243,6 +243,23 @@ const fetchUserFollowing = async (
   });
 };
 
+const fetchUserKindThreeEvent = async (relay: Relay, pubkey: string): Promise<Event> => {
+  const kindThreeSub: Sub = relay.sub([{ kinds: [Kind.Contacts], authors: [pubkey] }]);
+
+  let event: Event;
+
+  kindThreeSub.on("event", (evt: Event) => {
+    event = evt;
+  });
+
+  return await new Promise((res) => {
+    kindThreeSub.on("eose", () => {
+      kindThreeSub.unsub();
+      res(event);
+    });
+  });
+};
+
 const followUser = async (relay: Relay, newFollowing: string[]): Promise<void> => {
   const followEvent: EventTemplate = {
     content: "",
@@ -280,5 +297,6 @@ export {
   fetchUserFollowing,
   followUser,
   isUserAlreadyFollowed,
-  fetchUserEvents
+  fetchUserEvents,
+  fetchUserKindThreeEvent
 };
