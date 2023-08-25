@@ -43,6 +43,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
     setRelays([...relays(), relayToAdd()]);
     await publishEvent();
+    setRelayToAdd("");
   };
 
   const removeRelay = async (relayUrl: string): Promise<void> => {
@@ -98,6 +99,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
         <form onSubmit={handleSubmit} class='flex items-center justify-between mt-10'>
           <input
             type='text'
+            value={relayToAdd()}
             onChange={handleChange}
             class={`block outline-none bg-transparent border-slate-200 border-b border-opacity-75
                   focus:border-opacity-100 py-2 text-slate-200 
