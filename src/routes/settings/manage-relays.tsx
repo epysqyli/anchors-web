@@ -78,7 +78,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
         Manage relays you fetch events from
       </h1>
 
-      <div class='flex flex-col justify-between bg-slate-700 rounded-md w-2/5 mx-auto mt-10 p-5 h-2/3'>
+      <div class='flex flex-col justify-between bg-slate-700 rounded-md w-3/5 mx-auto mt-10 py-5 px-10 h-2/3'>
         <div class='grow-1 overflow-y-scroll custom-scrollbar'>
           <For each={relays()}>
             {(relay) => (
