@@ -63,7 +63,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
     });
 
     pub.on("failed", () => console.log("failed"));
-  }
+  };
 
   return (
     <>
@@ -71,25 +71,36 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
         Manage relays you fetch events from
       </h1>
 
-      <div class='border rounded-md border-slate-400 w-2/5 mx-auto mt-20 p-5'>
-        <For each={relays()}>
-          {(relay) => (
-            <div class='flex items-center justify-between'>
-              <div class='text-slate-300'>{relay}</div>
-              <div onClick={() => removeRelay(relay)}>delete relay</div>
-            </div>
-          )}
-        </For>
+      <div class='flex flex-col justify-between bg-slate-700 rounded-md w-2/5 mx-auto mt-10 p-5 h-2/3'>
+        <div class='grow-1 overflow-y-scroll custom-scrollbar'>
+          <For each={relays()}>
+            {(relay) => (
+              <div class='flex items-center justify-between my-4 pb-4 px-1 border-b border-slate-500'>
+                <div class='text-slate-200'>{relay}</div>
+                <div
+                  onClick={() => removeRelay(relay)}
+                  class='text-sm bg-red-400 bg-opacity-40 hover:bg-opacity-100 cursor-pointer 
+                rounded p-2 text-slate-400 active:scale-95 select-none'
+                >
+                  delete
+                </div>
+              </div>
+            )}
+          </For>
+        </div>
 
         <form onSubmit={handleSubmit} class='flex items-center justify-between mt-10'>
           <input
             type='text'
             onChange={handleChange}
-            class='block outline-none bg-transparent border-b pb-2 text-slate-200 
+            class='block outline-none bg-transparent border-slate-200 border-b border-opacity-75
+                  focus:border-opacity-100 pb-2 text-slate-200 
                   text-center caret-slate-200 placeholder:text-center'
             placeholder='add relay url'
           />
-          <button>add relay</button>
+          <button class='px-5 p-2 bg-green-200 text-green-800 rounded-md active:scale-95 select-none'>
+            add
+          </button>
         </form>
       </div>
     </>
