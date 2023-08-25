@@ -3,6 +3,7 @@ import { Relay, relayInit } from "nostr-tools";
 import type { Accessor, Context, Setter } from "solid-js";
 import { fetchUserFollowing } from "~/lib/nostr/nostr-nips-actions";
 import { Component, JSX, createContext, createSignal, onMount } from "solid-js";
+import { getPublicKeyFromExt } from "~/lib/nostr/nostr-utils";
 
 interface IRelayContext {
   relay: Relay;
@@ -11,17 +12,7 @@ interface IRelayContext {
   setFollowing: Setter<string[]>;
 }
 
-let pk = "";
-
-try {
-  pk = await window.nostr.getPublicKey();
-} catch (error) {
-  try {
-    await new Promise((_) => setTimeout(_, 500));
-    pk = await window.nostr.getPublicKey();
-  } catch (error) {}
-}
-
+const pk = await getPublicKeyFromExt();
 const relay = relayInit("ws://localhost:2700");
 // const relay = relayInit("wss://nostr.wine");
 (async () => await relay.connect())();

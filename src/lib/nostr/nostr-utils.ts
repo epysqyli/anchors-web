@@ -44,11 +44,27 @@ const parseDate = (eventDate: number): string => {
   return `${date.toTimeString().split(" ")[0]} ${date.toDateString()}`;
 };
 
+const getPublicKeyFromExt = async (): Promise<string> => {
+  let pk = "";
+
+  try {
+    pk = await window.nostr.getPublicKey();
+  } catch (error) {
+    try {
+      await new Promise((_) => setTimeout(_, 500));
+      pk = await window.nostr.getPublicKey();
+    } catch (error) {}
+  }
+
+  return pk;
+};
+
 export {
   createMetadataFilter,
   sortByCreatedAt,
   assignUserMetadata,
   shrinkContent,
   parseDate,
-  makeDefaultEnrichedEvent
+  makeDefaultEnrichedEvent,
+  getPublicKeyFromExt
 };
