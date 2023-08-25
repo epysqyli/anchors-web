@@ -30,7 +30,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   const handleSubmit = async (e: Event): Promise<void> => {
     e.preventDefault();
 
-    if (!relayToAdd().includes("ws") || !relayToAdd().includes("wss")) {
+    if (!relayToAdd().startsWith("ws") || !relayToAdd().startsWith("wss")) {
       console.log("not a valid websocket address");
       return;
     }
