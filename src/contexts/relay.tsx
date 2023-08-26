@@ -26,7 +26,10 @@ let relayUrls = [defaultRelay];
 
 if (pk) {
   const kindThreeEvent = await fetchUserKindThreeEvent(relay, pk);
-  relayUrls = kindThreeEvent.content.split(";");
+  const potentialrelayUrls = kindThreeEvent.content.split(";");
+  if (potentialrelayUrls[0] != '') {
+    relayUrls = potentialrelayUrls;
+  }
 }
 
 const relayPool: SimplePool = new SimplePool();
