@@ -13,9 +13,9 @@ const EventByID: VoidComponent = (): JSX.Element => {
 
   onMount(() => {
     const params = useParams<{ id: string }>();
-    const { relay } = useContext(RelayContext);
+    const { relayPool, relaysUrls } = useContext(RelayContext);
 
-    fetchEvents(relay, setEvents, setIsLoading, { ids: [params.id] });
+    fetchEvents(relayPool, relaysUrls, setEvents, setIsLoading, { ids: [params.id] });
   });
 
   return (

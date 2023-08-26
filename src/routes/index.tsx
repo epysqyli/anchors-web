@@ -3,7 +3,7 @@ import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
-import { Event, EventTemplate, Filter, Sub } from "nostr-tools";
+import { Event, EventTemplate, Filter, Kind, Sub } from "nostr-tools";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { fetchEvents, fetchUserFollowing } from "~/lib/nostr/nostr-relay-calls";
@@ -25,7 +25,7 @@ interface EventHtmlRef {
 }
 
 const Home: Component<{}> = () => {
-  const { relay, following, setFollowing, publicKey } = useContext(RelayContext);
+  const { relay, following, setFollowing, publicKey, relaysUrls, relayPool } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
@@ -35,7 +35,7 @@ const Home: Component<{}> = () => {
 
   onMount(async () => {
     const location = useLocation();
-    let filter: Filter = {};
+    let filter: Filter = { limit: 25, kinds: [Kind.Text] };
 
     if (following().length == 0) {
       const followingSub: Sub = await fetchUserFollowing(relay, publicKey, setFollowing);
@@ -43,10 +43,10 @@ const Home: Component<{}> = () => {
     }
 
     if (location.search === "") {
-      filter = { authors: following() };
+      filter = { ...filter, authors: following() };
     }
 
-    fetchEvents(relay, setEvents, setIsLoading, filter, setShowPopup);
+    fetchEvents(relayPool, relaysUrls, setEvents, setIsLoading, filter, setShowPopup);
   });
 
   const scrollPage = (direction: "up" | "down"): void => {

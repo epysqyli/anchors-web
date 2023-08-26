@@ -5,6 +5,7 @@ import {
   Kind,
   Pub,
   Relay,
+  SimplePool,
   Sub,
   validateEvent,
   verifySignature
@@ -64,7 +65,8 @@ const reactToEvent = async (
 };
 
 const fetchEvents = (
-  relay: Relay,
+  relay: SimplePool,
+  relaysUrls: string[],
   setEvents: Setter<IEnrichedEvent[]>,
   setIsLoading: Setter<boolean>,
   filter?: Filter,
@@ -72,7 +74,7 @@ const fetchEvents = (
 ) => {
   let eose: boolean = false;
 
-  const eventsSub: Sub = relay.sub(filter ? [filter] : [{}]);
+  const eventsSub: Sub = relay.sub(relaysUrls, filter ? [filter] : [{}]);
   const events: IEnrichedEvent[] = [];
 
   eventsSub.on("event", (evt: Event) => {
@@ -91,7 +93,7 @@ const fetchEvents = (
     /* Handle incoming events after all events have been received */
     if (eose) {
       const enrichedEvent: IEnrichedEvent = makeDefaultEnrichedEvent(evt);
-      const metadataSub: Sub = relay.sub([createMetadataFilter([enrichedEvent.pubkey])]);
+      const metadataSub: Sub = relay.sub(relaysUrls, [createMetadataFilter([enrichedEvent.pubkey])]);
 
       metadataSub.on("event", (metaEvt: Event) => {
         const userMetadata: IUserMetadata = JSON.parse(metaEvt.content);
@@ -104,7 +106,7 @@ const fetchEvents = (
       });
 
       metadataSub.on("eose", () => {
-        const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [enrichedEvent.id] }]);
+        const reactionsSub: Sub = relay.sub(relaysUrls, [{ kinds: [Kind.Reaction], "#e": [enrichedEvent.id] }]);
         const positive: IReactionFields = { count: 0, events: [] };
         const negative: IReactionFields = { count: 0, events: [] };
 
@@ -148,7 +150,7 @@ const fetchEvents = (
 
   eventsSub.on("eose", () => {
     // fetch and assign metadata
-    const metadataSub: Sub = relay.sub([createMetadataFilter(events.map((e) => e.pubkey))]);
+    const metadataSub: Sub = relay.sub(relaysUrls, [createMetadataFilter(events.map((e) => e.pubkey))]);
 
     metadataSub.on("event", (metaEvt: Event) => {
       const userMetadata: IUserMetadata = JSON.parse(metaEvt.content);
@@ -168,7 +170,7 @@ const fetchEvents = (
 
       // fetch and assign reactions
       events.forEach((evt: IEnrichedEvent) => {
-        const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [evt.id] }]);
+        const reactionsSub: Sub = relay.sub(relaysUrls, [{ kinds: [Kind.Reaction], "#e": [evt.id] }]);
         const positive: IReactionFields = { count: 0, events: [] };
         const negative: IReactionFields = { count: 0, events: [] };
 
