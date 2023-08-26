@@ -6,7 +6,7 @@ import EventWrapper from "~/components/feed/EventWrapper";
 import { Event, EventTemplate, Filter, Sub } from "nostr-tools";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
-import { fetchEvents, fetchUserFollowing } from "~/lib/nostr/nostr-nips-actions";
+import { fetchEvents, fetchUserFollowing } from "~/lib/nostr/nostr-relay-calls";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 
 declare global {

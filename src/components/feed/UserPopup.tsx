@@ -5,7 +5,7 @@ import { RelayContext } from "~/contexts/relay";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import { TbUsersPlus, TbUsersMinus } from "solid-icons/tb";
 import { Component, For, JSX, createSignal, onMount, useContext } from "solid-js";
-import { fetchUserEvents, followUser, isUserAlreadyFollowed } from "~/lib/nostr/nostr-nips-actions";
+import { fetchUserEvents, followUser, isUserAlreadyFollowed } from "~/lib/nostr/nostr-relay-calls";
 
 interface Props {
   name: string;

@@ -3,7 +3,7 @@ import { RelayContext } from "~/contexts/relay";
 import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
-import { deleteNostrEvent } from "~/lib/nostr/nostr-nips-actions";
+import { deleteNostrEvent } from "~/lib/nostr/nostr-relay-calls";
 import { Event, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 

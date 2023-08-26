@@ -1,7 +1,7 @@
 import "websocket-polyfill";
 import { Relay, relayInit } from "nostr-tools";
 import type { Accessor, Context, Setter } from "solid-js";
-import { fetchUserFollowing } from "~/lib/nostr/nostr-nips-actions";
+import { fetchUserFollowing } from "~/lib/nostr/nostr-relay-calls";
 import { Component, JSX, createContext, createSignal, onMount } from "solid-js";
 import { getPublicKeyFromExt } from "~/lib/nostr/nostr-utils";
 

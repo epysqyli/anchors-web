@@ -20,7 +20,7 @@ import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
-import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-nips-actions";
+import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-relay-calls";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 
 interface Props {

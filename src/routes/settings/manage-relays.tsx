@@ -1,6 +1,6 @@
 import { RelayContext } from "~/contexts/relay";
 import { Kind, Event as NostrEvent, Pub, Sub, UnsignedEvent } from "nostr-tools";
-import { fetchUserKindThreeEvent } from "~/lib/nostr/nostr-nips-actions";
+import { fetchUserKindThreeEvent } from "~/lib/nostr/nostr-relay-calls";
 import { For, JSX, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const ManageRelays: VoidComponent = (): JSX.Element => {
