@@ -46,7 +46,7 @@ const Home: Component<{}> = () => {
       filter = { ...filter, authors: following() };
     }
 
-    fetchEvents(relayPool, relaysUrls, setEvents, setIsLoading, filter, setShowPopup);
+    fetchEvents(relayPool, relaysUrls(), setEvents, setIsLoading, filter, setShowPopup);
   });
 
   const scrollPage = (direction: "up" | "down"): void => {

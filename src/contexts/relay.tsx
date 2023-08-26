@@ -3,7 +3,7 @@ import { Relay, SimplePool, relayInit } from "nostr-tools";
 import type { Accessor, Context, Setter } from "solid-js";
 import { getPublicKeyFromExt } from "~/lib/nostr/nostr-utils";
 import { Component, JSX, createContext, createSignal, onMount } from "solid-js";
-import { fetchUserFollowing, fetchUserKindThreeEvent } from "~/lib/nostr/nostr-relay-calls";
+import { fetchUserFollowing, fetchUserRelayUrls } from "~/lib/nostr/nostr-relay-calls";
 
 interface IRelayContext {
   relay: Relay;
@@ -11,25 +11,21 @@ interface IRelayContext {
   following: Accessor<string[]>;
   setFollowing: Setter<string[]>;
   defaultRelay: string;
-  relaysUrls: string[];
+  relaysUrls: Accessor<string[]>;
   relayPool: SimplePool;
 }
 
 const defaultRelay = "ws://localhost:2700";
 const pk = await getPublicKeyFromExt();
 
-const relay = relayInit("ws://localhost:2700");
+const relay = relayInit(defaultRelay);
 (async () => await relay.connect())();
 
 // setup relay pool and change method call throughout the codebase
-let relayUrls = [defaultRelay];
+const [relayUrls, setRelayUrls] = createSignal<string[]>([defaultRelay]);
 
 if (pk) {
-  const kindThreeEvent = await fetchUserKindThreeEvent(relay, pk);
-  const potentialrelayUrls = kindThreeEvent.content.split(";");
-  if (potentialrelayUrls[0] != '') {
-    relayUrls = potentialrelayUrls;
-  }
+  await fetchUserRelayUrls(relay, pk, setRelayUrls);
 }
 
 const relayPool: SimplePool = new SimplePool();

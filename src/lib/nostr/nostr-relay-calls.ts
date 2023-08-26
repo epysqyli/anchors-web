@@ -106,7 +106,9 @@ const fetchEvents = (
       });
 
       metadataSub.on("eose", () => {
-        const reactionsSub: Sub = relay.sub(relaysUrls, [{ kinds: [Kind.Reaction], "#e": [enrichedEvent.id] }]);
+        const reactionsSub: Sub = relay.sub(relaysUrls, [
+          { kinds: [Kind.Reaction], "#e": [enrichedEvent.id] }
+        ]);
         const positive: IReactionFields = { count: 0, events: [] };
         const negative: IReactionFields = { count: 0, events: [] };
 
@@ -262,6 +264,26 @@ const fetchUserKindThreeEvent = async (relay: Relay, pubkey: string): Promise<Ev
   });
 };
 
+const fetchUserRelayUrls = async (
+  relay: Relay,
+  pubkey: string,
+  setRelayUrls: Setter<string[]>
+): Promise<void> => {
+  const kindThreeSub: Sub = relay.sub([{ kinds: [Kind.Contacts], authors: [pubkey] }]);
+
+  return await new Promise((res) => {
+    kindThreeSub.on("event", (evt: Event) => {
+      const relayUrls = evt.content.split(";");
+
+      if (relayUrls[0] !== "") {
+        setRelayUrls(relayUrls);
+      }
+
+      res();
+    });
+  });
+};
+
 const followUser = async (relay: Relay, newFollowing: string[]): Promise<void> => {
   const followEvent: EventTemplate = {
     content: "",
@@ -300,5 +322,6 @@ export {
   followUser,
   isUserAlreadyFollowed,
   fetchUserEvents,
-  fetchUserKindThreeEvent
+  fetchUserKindThreeEvent,
+  fetchUserRelayUrls
 };
