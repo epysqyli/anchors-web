@@ -15,7 +15,7 @@ interface Props {
 }
 
 const UserPopup: Component<Props> = (props): JSX.Element => {
-  const { relay, publicKey, following } = useContext(RelayContext);
+  const { relay, publicKey, following, relaysUrls, relayPool } = useContext(RelayContext);
   const [canFollow, setCanFollow] = createSignal<boolean>(!isUserAlreadyFollowed(props.pubkey, following));
   const [userEvents, setUserEvents] = createSignal<Event[]>([]);
 
@@ -33,7 +33,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
   };
 
   onMount(() => {
-    fetchUserEvents(relay, props.pubkey, setUserEvents);
+    fetchUserEvents(relayPool, setUserEvents, relaysUrls, { authors: [props.pubkey], limit: 3 });
   });
 
   return (
@@ -70,7 +70,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
       </div>
 
       <div class='w-1/2'>
-        <For each={userEvents().slice(0, 3)}>
+        <For each={userEvents()}>
           {(evt) => (
             <A href={`/events/${evt.id}`}>
               <div class='text-sm break-all mb-2 hover:bg-neutral-800 active:scale-95 rounded-md p-1'>

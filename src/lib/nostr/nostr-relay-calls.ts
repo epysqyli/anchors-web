@@ -217,9 +217,13 @@ const fetchEvents = (
   });
 };
 
-// define optional filter to retrieve only most recent x events
-const fetchUserEvents = (relay: Relay, pubkey: string, setUserEvents: Setter<Event[]>): void => {
-  const eventsSub: Sub = relay.sub([{ authors: [pubkey], kinds: [Kind.Text] }]);
+const fetchUserEvents = (
+  relay: SimplePool,
+  setUserEvents: Setter<Event[]>,
+  relaysUrls: Accessor<string[]>,
+  filter: Filter
+): void => {
+  const eventsSub: Sub = relay.sub(relaysUrls(), [{ kinds: [Kind.Text], ...filter }]);
 
   let userEvents: Event[] = [];
   eventsSub.on("event", (evt: Event) => {
@@ -228,6 +232,7 @@ const fetchUserEvents = (relay: Relay, pubkey: string, setUserEvents: Setter<Eve
 
   eventsSub.on("eose", () => {
     setUserEvents(userEvents);
+    eventsSub.unsub();
   });
 };
 
