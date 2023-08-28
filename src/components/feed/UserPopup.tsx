@@ -19,7 +19,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
   const [userEvents, setUserEvents] = createSignal<Event[]>([]);
 
   const handleFollow = async (): Promise<void> => {
-    await relay.followUser(relay.following);
+    await relay.followUser([...relay.following, props.pubkey]);
     setCanFollow(false);
   };
 
