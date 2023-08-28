@@ -2,10 +2,9 @@ import { A } from "@solidjs/router";
 import { Event } from "nostr-tools";
 import EventAuthor from "./EventAuthor";
 import { RelayContext } from "~/contexts/relay";
-import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import { TbUsersPlus, TbUsersMinus } from "solid-icons/tb";
+import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import { Component, For, JSX, createSignal, onMount, useContext } from "solid-js";
-import { fetchUserEvents, followUser, isUserAlreadyFollowed } from "~/lib/nostr/nostr-relay-calls";
 
 interface Props {
   name: string;
@@ -15,25 +14,22 @@ interface Props {
 }
 
 const UserPopup: Component<Props> = (props): JSX.Element => {
-  const { relay, publicKey, following, relaysUrls, relayPool } = useContext(RelayContext);
-  const [canFollow, setCanFollow] = createSignal<boolean>(!isUserAlreadyFollowed(props.pubkey, following));
+  const { relay } = useContext(RelayContext);
+  const [canFollow, setCanFollow] = createSignal<boolean>(!relay.isUserAlreadyFollowed(props.pubkey));
   const [userEvents, setUserEvents] = createSignal<Event[]>([]);
 
   const handleFollow = async (): Promise<void> => {
-    await followUser(relay, [...following(), props.pubkey]);
+    await relay.followUser(relay.following);
     setCanFollow(false);
   };
 
   const handleUnfollow = async (): Promise<void> => {
-    await followUser(
-      relay,
-      following().filter((fl) => fl !== props.pubkey)
-    );
+    await relay.followUser(relay.following.filter((fl) => fl !== props.pubkey));
     setCanFollow(true);
   };
 
   onMount(() => {
-    fetchUserEvents(relayPool, setUserEvents, relaysUrls, { authors: [props.pubkey], limit: 3 });
+    relay.fetchUserEvents(setUserEvents, { authors: [props.pubkey], limit: 3 });
   });
 
   return (
@@ -49,7 +45,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
           />
         </A>
         <div class='mt-10 mx-auto w-fit'>
-          {publicKey == props.pubkey ? (
+          {relay.userPubKey == props.pubkey ? (
             <></>
           ) : canFollow() ? (
             <div

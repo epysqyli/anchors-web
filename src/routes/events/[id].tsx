@@ -3,7 +3,6 @@ import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
-import { fetchEvents } from "~/lib/nostr/nostr-relay-calls";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
@@ -13,9 +12,9 @@ const EventByID: VoidComponent = (): JSX.Element => {
 
   onMount(() => {
     const params = useParams<{ id: string }>();
-    const { relayPool, relaysUrls } = useContext(RelayContext);
+    const { relay } = useContext(RelayContext);
 
-    fetchEvents(relayPool, relaysUrls(), setEvents, setIsLoading, { ids: [params.id] });
+    relay.fetchEvents(setIsLoading, setEvents, undefined, { ids: [params.id] });
   });
 
   return (

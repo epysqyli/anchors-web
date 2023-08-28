@@ -3,10 +3,9 @@ import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
-import { Event, EventTemplate, Filter, Kind, Sub } from "nostr-tools";
+import { Event, EventTemplate, Filter, Kind } from "nostr-tools";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
-import { fetchEvents, fetchUserFollowing } from "~/lib/nostr/nostr-relay-calls";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 
 declare global {
@@ -25,7 +24,7 @@ interface EventHtmlRef {
 }
 
 const Home: Component<{}> = () => {
-  const { relay, following, setFollowing, publicKey, relaysUrls, relayPool } = useContext(RelayContext);
+  const { relay } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
@@ -37,16 +36,16 @@ const Home: Component<{}> = () => {
     const location = useLocation();
     let filter: Filter = { limit: 25, kinds: [Kind.Text] };
 
-    if (following().length == 0) {
-      const followingSub: Sub = await fetchUserFollowing(relay, publicKey, setFollowing);
-      followingSub.unsub();
+    if (relay.following.length == 0) {
+      const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
+      relay.following = kindThreeEvent.tags.map((e) => e[1]);
     }
 
     if (location.search === "") {
-      filter = { ...filter, authors: following() };
+      filter = { ...filter, authors: relay.following };
     }
 
-    fetchEvents(relayPool, relaysUrls(), setEvents, setIsLoading, filter, setShowPopup);
+    relay.fetchEvents(setIsLoading, setEvents, setShowPopup, filter);
   });
 
   const scrollPage = (direction: "up" | "down"): void => {

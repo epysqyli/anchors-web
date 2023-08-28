@@ -1,10 +1,9 @@
 import { RelayContext } from "~/contexts/relay";
-import { Kind, Event as NostrEvent, Pub, Sub, UnsignedEvent } from "nostr-tools";
-import { fetchUserKindThreeEvent } from "~/lib/nostr/nostr-relay-calls";
+import { Kind, Event as NostrEvent, Pub, UnsignedEvent } from "nostr-tools";
 import { For, JSX, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const ManageRelays: VoidComponent = (): JSX.Element => {
-  const { relay, publicKey, defaultRelay } = useContext(RelayContext);
+  const { relay } = useContext(RelayContext);
 
   const [relays, setRelays] = createSignal<string[]>([]);
   const [eventKindThree, setEventKindThree] = createSignal<NostrEvent>();
@@ -13,16 +12,9 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   const [placeholder, setPlaceholder] = createSignal<string>("add a relay");
 
   onMount(async () => {
-    const kindThreeEvent = await fetchUserKindThreeEvent(relay, publicKey);
+    const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
     setEventKindThree(kindThreeEvent);
-
-    const currentRelays: string[] = kindThreeEvent.content.split(";").filter((el) => el != "");
-
-    if (currentRelays.length == 0) {
-      currentRelays.push(defaultRelay);
-    }
-
-    setRelays(currentRelays);
+    setRelays(kindThreeEvent.content.split(";").filter((el) => el != ""));
   });
 
   const handleChange = (e: Event): void => {
@@ -56,13 +48,13 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
       content: relays().join(";"),
       created_at: Math.floor(Date.now() / 1000),
       kind: Kind.Contacts,
-      pubkey: publicKey,
+      pubkey: relay.userPubKey!,
       tags: eventKindThree()!.tags
     };
 
     const signedEvent = await window.nostr.signEvent(updatedKindThreeEvent);
 
-    const pub: Pub = relay.publish(signedEvent);
+    const pub: Pub = relay.relayPool.publish([relay.relaysUrls[0]], signedEvent);
 
     pub.on("ok", () => {
       setEventKindThree(signedEvent);

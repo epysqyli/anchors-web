@@ -20,7 +20,6 @@ import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
-import { deleteNostrEvent, reactToEvent } from "~/lib/nostr/nostr-relay-calls";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 
 interface Props {
@@ -30,7 +29,7 @@ interface Props {
 }
 
 const EventWrapper: Component<Props> = (props) => {
-  const { relay, publicKey } = useContext(RelayContext);
+  const { relay } = useContext(RelayContext);
 
   const nostrEvent = () => props.event;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
@@ -51,11 +50,11 @@ const EventWrapper: Component<Props> = (props) => {
     }
 
     const eventToDelete = reactions()[reactionType as keyof IReaction].events.find(
-      (evt) => evt.pubkey === publicKey
+      (evt) => evt.pubkey === relay.userPubKey
     );
 
     if (eventToDelete) {
-      await deleteNostrEvent(relay, eventToDelete.eventID);
+      await relay.deleteEvent(eventToDelete.eventID);
 
       const newReactions: IReactionFields = {
         count: reactions()[reactionType as keyof IReaction].count - 1,
@@ -66,7 +65,7 @@ const EventWrapper: Component<Props> = (props) => {
 
       setReactions({ ...reactions(), [reactionType]: newReactions });
     } else {
-      await reactToEvent(relay, nostrEvent().id, nostrEvent().pubkey, reaction);
+      await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction);
     }
   };
 
@@ -81,7 +80,9 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   onMount(async () => {
-    const reactionsSub: Sub = relay.sub([{ kinds: [Kind.Reaction], "#e": [nostrEvent().id] }]);
+    const reactionsSub: Sub = relay.relayPool.sub(relay.relaysUrls, [
+      { kinds: [Kind.Reaction], "#e": [nostrEvent().id] }
+    ]);
 
     reactionsSub.on("event", (evt: Event) => {
       let reactionType = "";
@@ -92,7 +93,7 @@ const EventWrapper: Component<Props> = (props) => {
       }
 
       const alreadyReacted = reactions()[reactionType as keyof IReaction].events.find(
-        (evt) => evt.pubkey === publicKey
+        (evt) => evt.pubkey === relay.userPubKey
       );
 
       if (!alreadyReacted) {
@@ -210,7 +211,7 @@ const EventWrapper: Component<Props> = (props) => {
             </div>
 
             <EventAnchor nostrEventID={nostrEvent().id} />
-            <Reactions reactions={reactions} publicKey={publicKey} handleReaction={handleReaction} />
+            <Reactions reactions={reactions} publicKey={relay.userPubKey!} handleReaction={handleReaction} />
             <FiTrendingUp class='text-slate-400' size={26} />
             <VsCommentDiscussion class='text-slate-400' size={28} />
             <EventScroller scrollPage={props.scrollPage} />

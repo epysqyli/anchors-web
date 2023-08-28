@@ -3,19 +3,18 @@ import { RelayContext } from "~/contexts/relay";
 import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
-import { deleteNostrEvent } from "~/lib/nostr/nostr-relay-calls";
 import { Event, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const MyPosts: VoidComponent = () => {
-  const { relay, publicKey } = useContext(RelayContext);
+  const { relay } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
 
   const handleDeletion = async (nostrEventID: string): Promise<void> => {
-    await deleteNostrEvent(relay, nostrEventID);
+    await relay.deleteEvent(nostrEventID);
     const remainingEvents: Event[] = events().filter((evt) => evt.id != nostrEventID);
     setEvents(remainingEvents);
     setShowPopup(true);
@@ -27,13 +26,13 @@ const MyPosts: VoidComponent = () => {
       return;
     }
 
-    if (publicKey == "") {
+    if (relay.userPubKey == undefined) {
       console.log("your public key is not available");
       setIsLoading(false);
       return;
     }
 
-    const eventsSub: Sub = relay.sub([{ authors: [publicKey] }]);
+    const eventsSub: Sub = relay.relayPool.sub(relay.relaysUrls, [{ authors: [relay.userPubKey] }]);
 
     eventsSub.on("event", (nostrEvent: Event) => {
       if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {

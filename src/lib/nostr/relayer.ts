@@ -16,20 +16,23 @@ import {
 } from "nostr-tools";
 
 class Relayer {
-  private userPubKey?: string;
-  private relayPool: SimplePool;
-  private following: string[] = [];
-  private setEvents: Setter<Event[]>;
-  private relaysUrls: string[] = ["ws://localhost:2700"];
+  public userPubKey?: string;
+  public relayPool: SimplePool;
+  public following: string[] = [];
+  public relaysUrls: string[] = ["ws://localhost:2700"];
 
-  constructor(setEvents: Setter<IEnrichedEvent[]>, userPubkey?: string) {
+  constructor(userPubkey?: string) {
     this.relayPool = new SimplePool();
-    this.setEvents = setEvents;
     this.userPubKey = userPubkey;
     this.fetchKindThreeEvent();
   }
 
-  public fetchEvents(setIsLoading: Setter<boolean>, setShowPopup?: Setter<boolean>, filter?: Filter): void {
+  public fetchEvents(
+    setIsLoading: Setter<boolean>,
+    setEvents: Setter<Event[]>,
+    setShowPopup?: Setter<boolean>,
+    filter?: Filter
+  ): void {
     let eose: boolean = false;
 
     const eventsSub: Sub = this.relayPool.sub(this.relaysUrls, filter ? [filter] : [{}]);
@@ -44,7 +47,7 @@ class Relayer {
         events.push(makeDefaultEnrichedEvent(evt));
 
         if (filter?.ids?.length == 1) {
-          this.setEvents(events);
+          setEvents(events);
         }
       }
 
@@ -103,7 +106,7 @@ class Relayer {
                 setShowPopup(true);
               }
 
-              this.setEvents(events.sort(sortByCreatedAt));
+              setEvents(events.sort(sortByCreatedAt));
             }
           });
         });
@@ -165,7 +168,7 @@ class Relayer {
             if (positive.count != 0 || negative.count != 0) {
               evt.positive = positive;
               evt.negative = negative;
-              this.setEvents(events.sort(sortByCreatedAt));
+              setEvents(events.sort(sortByCreatedAt));
             }
 
             parsedReactionEventsCount++;
@@ -178,6 +181,20 @@ class Relayer {
           });
         });
       });
+    });
+  }
+
+  public fetchUserEvents(setUserEvents: Setter<Event[]>, filter: Filter): void {
+    const eventsSub: Sub = this.relayPool.sub(this.relaysUrls, [{ kinds: [Kind.Text], ...filter }]);
+
+    let userEvents: Event[] = [];
+    eventsSub.on("event", (evt: Event) => {
+      userEvents.push(evt);
+    });
+
+    eventsSub.on("eose", () => {
+      setUserEvents(userEvents);
+      eventsSub.unsub();
     });
   }
 
