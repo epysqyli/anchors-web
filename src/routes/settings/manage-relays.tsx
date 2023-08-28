@@ -14,7 +14,12 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   onMount(async () => {
     const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
     setEventKindThree(kindThreeEvent);
-    setRelays(kindThreeEvent.content.split(";").filter((el) => el != ""));
+
+    if (kindThreeEvent.content == "") {
+      setRelays(relay.relaysUrls);
+    } else {
+      setRelays(kindThreeEvent.content.split(";").filter((el) => el != ""));
+    }
   });
 
   const handleChange = (e: Event): void => {

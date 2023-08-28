@@ -21,6 +21,8 @@ class Relayer {
   public following: string[] = [];
   public relaysUrls: string[] = ["ws://localhost:2700"];
 
+  private kindThreeEvent?: Event;
+
   constructor(userPubkey?: string) {
     this.relayPool = new SimplePool();
     this.userPubKey = userPubkey;
@@ -271,7 +273,7 @@ class Relayer {
 
   public async followUser(newFollowing: string[]): Promise<void> {
     const followEvent: EventTemplate = {
-      content: "",
+      content: this.kindThreeEvent!.content,
       kind: Kind.Contacts,
       created_at: Math.floor(Date.now() / 1000),
       tags: newFollowing.map((pk) => ["p", pk])
@@ -310,6 +312,7 @@ class Relayer {
 
     // manage multiple events from multiple relays
     kindThreeSub.on("event", (evt: Event) => {
+      this.kindThreeEvent = evt;
       this.following = evt.tags.map((e) => e[1]);
 
       const relayUrls = evt.content.split(";");
