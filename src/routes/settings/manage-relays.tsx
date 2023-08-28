@@ -1,6 +1,7 @@
 import { RelayContext } from "~/contexts/relay";
 import { Kind, Event as NostrEvent, Pub, UnsignedEvent } from "nostr-tools";
-import { For, JSX, VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import LoadingFallback from "~/components/feed/LoadingFallback";
 
 const ManageRelays: VoidComponent = (): JSX.Element => {
   const { relay } = useContext(RelayContext);
@@ -10,9 +11,13 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   const [relayToAdd, setRelayToAdd] = createSignal<string>("");
   const [validationError, setValidationError] = createSignal<boolean>(false);
   const [placeholder, setPlaceholder] = createSignal<string>("add a relay");
+  const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   onMount(async () => {
+    setIsLoading(true);
     const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
+    setIsLoading(false);
+
     setEventKindThree(kindThreeEvent);
 
     if (kindThreeEvent.content == "") {
@@ -76,38 +81,40 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
       </h1>
 
       <div class='flex flex-col justify-between bg-slate-700 rounded-md w-3/5 mx-auto mt-10 py-5 px-10 h-2/3'>
-        <div class='grow-1 overflow-y-scroll custom-scrollbar'>
-          <For each={relays()}>
-            {(relay) => (
-              <div class='flex items-center justify-between my-4 pb-4 px-1 border-b border-slate-500'>
-                <div class='text-slate-200'>{relay}</div>
-                <div
-                  onClick={() => removeRelay(relay)}
-                  class='text-sm bg-red-400 bg-opacity-40 hover:bg-opacity-100 cursor-pointer 
+        <Show when={!isLoading()} fallback={<LoadingFallback />}>
+          <div class='grow-1 overflow-y-scroll custom-scrollbar'>
+            <For each={relays()}>
+              {(relay) => (
+                <div class='flex items-center justify-between my-4 pb-4 px-1 border-b border-slate-500'>
+                  <div class='text-slate-200'>{relay}</div>
+                  <div
+                    onClick={() => removeRelay(relay)}
+                    class='text-sm bg-red-400 bg-opacity-40 hover:bg-opacity-100 cursor-pointer 
                 rounded p-2 text-slate-400 active:scale-95 select-none'
-                >
-                  delete
+                  >
+                    delete
+                  </div>
                 </div>
-              </div>
-            )}
-          </For>
-        </div>
+              )}
+            </For>
+          </div>
 
-        <form onSubmit={handleSubmit} class='flex items-center justify-between mt-10'>
-          <input
-            type='text'
-            value={relayToAdd()}
-            onChange={handleChange}
-            class={`block outline-none bg-transparent border-slate-200 border-b border-opacity-75
+          <form onSubmit={handleSubmit} class='flex items-center justify-between mt-10'>
+            <input
+              type='text'
+              value={relayToAdd()}
+              onChange={handleChange}
+              class={`block outline-none bg-transparent border-slate-200 border-b border-opacity-75
                   focus:border-opacity-100 py-2 text-slate-200 
                   text-center caret-slate-200 placeholder:text-center
                   ${validationError() ? "border rounded border-red-600" : ""}`}
-            placeholder={placeholder()}
-          />
-          <button class='px-5 p-2 bg-green-200 text-green-800 rounded-md active:scale-95 select-none'>
-            add
-          </button>
-        </form>
+              placeholder={placeholder()}
+            />
+            <button class='px-5 p-2 bg-green-200 text-green-800 rounded-md active:scale-95 select-none'>
+              add
+            </button>
+          </form>
+        </Show>
       </div>
     </>
   );
