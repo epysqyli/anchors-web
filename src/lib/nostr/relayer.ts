@@ -1,4 +1,4 @@
-import { Accessor, Setter } from "solid-js";
+import { Setter } from "solid-js";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
@@ -24,7 +24,7 @@ class Relayer {
   constructor(userPubkey?: string) {
     this.relayPool = new SimplePool();
     this.userPubKey = userPubkey;
-    this.fetchKindThreeEvent();
+    this.fetchRelaysAndFollowers();
   }
 
   public fetchEvents(
@@ -299,7 +299,7 @@ class Relayer {
     return false;
   };
 
-  private fetchKindThreeEvent() {
+  private fetchRelaysAndFollowers() {
     if (!this.userPubKey) {
       return;
     }
