@@ -94,7 +94,7 @@ const Write: Component<{}> = () => {
     }
 
     const signedEvent = await window.nostr.signEvent(nostrEvent());
-    const pubResult: Pub = relay.publish(signedEvent);
+    const pubResult: Pub = relay.relayPool.publish([relay.relaysUrls[0]], signedEvent);
 
     pubResult.on("ok", () => {
       setShowPopup(true);
