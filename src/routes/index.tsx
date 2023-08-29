@@ -33,13 +33,13 @@ const Home: Component<{}> = () => {
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
   onMount(async () => {
+    setIsLoading(true);
+
     const location = useLocation();
     let filter: Filter = { limit: 25, kinds: [Kind.Text] };
 
-    if (relay.following.length == 0) {
-      const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
-      relay.following = kindThreeEvent.tags.map((e) => e[1]);
-    }
+    const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
+    relay.following = kindThreeEvent.tags.map((e) => e[1]);
 
     if (location.search === "") {
       filter = { ...filter, authors: relay.following };
