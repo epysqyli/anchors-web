@@ -32,7 +32,7 @@ const MyPosts: VoidComponent = () => {
       return;
     }
 
-    const eventsSub: Sub = relay.relayPool.sub(relay.relaysUrls, [{ authors: [relay.userPubKey] }]);
+    const eventsSub: Sub = relay.sub({ authors: [relay.userPubKey] });
 
     eventsSub.on("event", (nostrEvent: Event) => {
       if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {

@@ -17,10 +17,10 @@ import {
 
 class Relayer {
   public userPubKey?: string;
-  public relayPool: SimplePool;
   public following: string[] = [];
   public relaysUrls: string[] = ["ws://localhost:2700"];
 
+  private relayPool: SimplePool;
   private kindThreeEvent?: Event;
 
   constructor(userPubkey?: string) {
@@ -198,6 +198,15 @@ class Relayer {
       setUserEvents(userEvents);
       eventsSub.unsub();
     });
+  }
+
+  public sub(filter: Filter): Sub {
+    return this.relayPool.sub(this.relaysUrls, [filter]);
+  }
+
+  public pub(event: Event, relays?: string[]): Pub {
+    const destRelays: string[] = relays == undefined ? this.relaysUrls : relays;
+    return this.relayPool.publish(destRelays, event);
   }
 
   public async deleteEvent(eventID: string): Promise<void> {

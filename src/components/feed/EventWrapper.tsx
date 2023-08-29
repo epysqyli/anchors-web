@@ -80,9 +80,7 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   onMount(async () => {
-    const reactionsSub: Sub = relay.relayPool.sub(relay.relaysUrls, [
-      { kinds: [Kind.Reaction], "#e": [nostrEvent().id] }
-    ]);
+    const reactionsSub: Sub = relay.sub({ kinds: [Kind.Reaction], "#e": [nostrEvent().id] });
 
     reactionsSub.on("event", (evt: Event) => {
       let reactionType = "";

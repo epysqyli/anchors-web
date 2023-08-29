@@ -63,8 +63,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
     };
 
     const signedEvent = await window.nostr.signEvent(updatedKindThreeEvent);
-
-    const pub: Pub = relay.relayPool.publish([relay.relaysUrls[0]], signedEvent);
+    const pub: Pub = relay.pub(signedEvent, [relay.relaysUrls[0]]);
 
     pub.on("ok", () => {
       setEventKindThree(signedEvent);
