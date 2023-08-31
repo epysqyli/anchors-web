@@ -1,7 +1,17 @@
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IReactionWithEventID, Reaction } from "~/interfaces/IReaction";
 import { IUserMetadata, IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
-import { Event, EventTemplate, Filter, Kind, Pub, SimplePool, Sub } from "nostr-tools";
+import {
+  Event,
+  EventTemplate,
+  Filter,
+  Kind,
+  Pub,
+  SimplePool,
+  Sub,
+  validateEvent,
+  verifySignature
+} from "nostr-tools";
 import { sortByCreatedAt } from "./nostr-utils";
 
 class Relayer {
@@ -260,6 +270,10 @@ class Relayer {
         this.relaysUrls = relayUrls;
       }
     });
+  }
+
+  private isEventValid(event: Event): boolean {
+    return validateEvent(event) && verifySignature(event);
   }
 }
 
