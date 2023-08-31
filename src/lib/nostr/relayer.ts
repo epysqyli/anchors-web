@@ -2,6 +2,7 @@ import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IReactionWithEventID, Reaction } from "~/interfaces/IReaction";
 import { IUserMetadata, IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { Event, EventTemplate, Filter, Kind, Pub, SimplePool, Sub } from "nostr-tools";
+import { sortByCreatedAt } from "./nostr-utils";
 
 class Relayer {
   public userPubKey?: string;
@@ -221,31 +222,33 @@ class Relayer {
     metadata: IUserMetadataWithPubkey[],
     reactions: IReactionWithEventID[]
   ): IEnrichedEvent[] {
-    return events.map((evt) => {
-      const enrichedEvent: IEnrichedEvent = {
-        ...evt,
-        name: "",
-        about: "",
-        picture: "",
-        positive: { count: 0, events: [] },
-        negative: { count: 0, events: [] }
-      };
+    return events
+      .map((evt) => {
+        const enrichedEvent: IEnrichedEvent = {
+          ...evt,
+          name: "",
+          about: "",
+          picture: "",
+          positive: { count: 0, events: [] },
+          negative: { count: 0, events: [] }
+        };
 
-      const metaEvent = metadata.find((metaEvt) => metaEvt.pubkey == evt.pubkey);
-      if (metaEvent) {
-        enrichedEvent.name = metaEvent.name;
-        enrichedEvent.about = metaEvent.about;
-        enrichedEvent.picture = metaEvent.picture;
-      }
+        const metaEvent = metadata.find((metaEvt) => metaEvt.pubkey == evt.pubkey);
+        if (metaEvent) {
+          enrichedEvent.name = metaEvent.name;
+          enrichedEvent.about = metaEvent.about;
+          enrichedEvent.picture = metaEvent.picture;
+        }
 
-      const reactionEvent = reactions.find((re) => re.eventID == evt.id);
-      if (reactionEvent) {
-        enrichedEvent.positive = reactionEvent.positive;
-        enrichedEvent.negative = reactionEvent.negative;
-      }
+        const reactionEvent = reactions.find((re) => re.eventID == evt.id);
+        if (reactionEvent) {
+          enrichedEvent.positive = reactionEvent.positive;
+          enrichedEvent.negative = reactionEvent.negative;
+        }
 
-      return enrichedEvent;
-    });
+        return enrichedEvent;
+      })
+      .sort(sortByCreatedAt);
   }
 
   private setRelaysAndFollowers(): void {
