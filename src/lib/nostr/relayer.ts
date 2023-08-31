@@ -154,27 +154,6 @@ class Relayer {
     return false;
   };
 
-  private setRelaysAndFollowers(): void {
-    if (!this.userPubKey) {
-      return;
-    }
-
-    const kindThreeSub: Sub = this.relayPool.sub(this.relaysUrls, [
-      { kinds: [Kind.Contacts], authors: [this.userPubKey] }
-    ]);
-
-    // manage multiple events from multiple relays
-    kindThreeSub.on("event", (evt: Event) => {
-      this.kindThreeEvent = evt;
-      this.following = evt.tags.map((e) => e[1]);
-
-      const relayUrls = evt.content.split(";");
-      if (relayUrls[0] !== "") {
-        this.relaysUrls = relayUrls;
-      }
-    });
-  }
-
   public async setRelaysAndFollowersAsync(): Promise<void> {
     if (!this.userPubKey) {
       return;
@@ -293,6 +272,27 @@ class Relayer {
       }
 
       return enrichedEvent;
+    });
+  }
+
+  private setRelaysAndFollowers(): void {
+    if (!this.userPubKey) {
+      return;
+    }
+
+    const kindThreeSub: Sub = this.relayPool.sub(this.relaysUrls, [
+      { kinds: [Kind.Contacts], authors: [this.userPubKey] }
+    ]);
+
+    // manage multiple events from multiple relays
+    kindThreeSub.on("event", (evt: Event) => {
+      this.kindThreeEvent = evt;
+      this.following = evt.tags.map((e) => e[1]);
+
+      const relayUrls = evt.content.split(";");
+      if (relayUrls[0] !== "") {
+        this.relaysUrls = relayUrls;
+      }
     });
   }
 }
