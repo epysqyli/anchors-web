@@ -50,11 +50,12 @@ const Home: Component<{}> = () => {
       metaFilter = { ...metaFilter, authors: relay.following };
     }
 
+    setMetaEvents(await relay.fetchEventsMetadata(metaFilter));
+
     let reactionsFilter: Filter[] = events().map((evt) => {
       return { kinds: [Kind.Reaction], "#e": [evt.id] };
     });
 
-    setMetaEvents(await relay.fetchEventsMetadata(metaFilter));
     const reactions = await relay.fetchEventsReactions(reactionsFilter);
     setEnrichedEvents(relay.buildEnrichedEvents(events(), metaEvents(), reactions));
 
