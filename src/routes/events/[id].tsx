@@ -1,3 +1,4 @@
+import { Kind } from "nostr-tools";
 import { useParams } from "solid-start";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
@@ -10,11 +11,19 @@ const EventByID: VoidComponent = (): JSX.Element => {
   const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
-  onMount(() => {
+  onMount(async () => {
+    setIsLoading(true);
     const params = useParams<{ id: string }>();
     const { relay } = useContext(RelayContext);
 
-    relay.fetchEvents(setIsLoading, setEvents, undefined, { ids: [params.id] });
+    const events = await relay.fetchEvents({ ids: [params.id] });
+    const metadata = await relay.fetchEventsMetadata({ authors: events.map((evt) => evt.pubkey) });
+    const reactions = await relay.fetchEventsReactions([
+      { kinds: [Kind.Reaction], "#e": events.map((evt) => evt.id) }
+    ]);
+
+    setEvents(relay.buildEnrichedEvents(events, metadata, reactions));
+    setIsLoading(false);
   });
 
   return (
