@@ -79,6 +79,7 @@ const EventWrapper: Component<Props> = (props) => {
     setShowUserPopup(true);
   };
 
+  // fetching reactions here should either disappear or be limited to new events
   onMount(async () => {
     const reactionsSub: Sub = relay.sub({ kinds: [Kind.Reaction], "#e": [nostrEvent().id] });
 

@@ -10,4 +10,8 @@ interface IReaction {
   negative: IReactionFields;
 }
 
-export { Reaction, IReaction, IReactionFields };
+interface IReactionWithEventID extends IReaction {
+  eventID: string;
+}
+
+export { Reaction, IReaction, IReactionFields, IReactionWithEventID };

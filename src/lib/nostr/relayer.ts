@@ -1,7 +1,7 @@
 import { Setter } from "solid-js";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
-import { IReactionFields, Reaction } from "~/interfaces/IReaction";
-import { IUserMetadata } from "~/interfaces/IUserMetadata";
+import { IReaction, IReactionFields, IReactionWithEventID, Reaction } from "~/interfaces/IReaction";
+import { IUserMetadata, IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { createMetadataFilter, makeDefaultEnrichedEvent, sortByCreatedAt } from "./nostr-utils";
 import {
   Event,
@@ -26,166 +26,10 @@ class Relayer {
   constructor(userPubkey?: string) {
     this.relayPool = new SimplePool();
     this.userPubKey = userPubkey;
-    this.fetchRelaysAndFollowers();
+    this.setRelaysAndFollowers();
   }
 
-  public fetchEvents(
-    setIsLoading: Setter<boolean>,
-    setEvents: Setter<Event[]>,
-    setShowPopup?: Setter<boolean>,
-    filter?: Filter
-  ): void {
-    let eose: boolean = false;
-
-    const eventsSub: Sub = this.relayPool.sub(this.relaysUrls, filter ? [filter] : [{}]);
-    const events: IEnrichedEvent[] = [];
-
-    eventsSub.on("event", (evt: Event) => {
-      if (!eose) {
-        setIsLoading(true);
-      }
-
-      if (!eose && evt.kind === Kind.Text && validateEvent(evt) && verifySignature(evt)) {
-        events.push(makeDefaultEnrichedEvent(evt));
-
-        if (filter?.ids?.length == 1) {
-          setEvents(events);
-        }
-      }
-
-      /* Handle incoming events after all events have been received */
-      if (eose) {
-        const enrichedEvent: IEnrichedEvent = makeDefaultEnrichedEvent(evt);
-        const metadataSub: Sub = this.relayPool.sub(this.relaysUrls, [
-          createMetadataFilter([enrichedEvent.pubkey])
-        ]);
-
-        metadataSub.on("event", (metaEvt: Event) => {
-          const userMetadata: IUserMetadata = JSON.parse(metaEvt.content);
-
-          if (evt.pubkey === metaEvt.pubkey) {
-            enrichedEvent.name = userMetadata.name;
-            enrichedEvent.about = userMetadata.about;
-            enrichedEvent.picture = userMetadata.picture;
-          }
-        });
-
-        metadataSub.on("eose", () => {
-          const reactionsSub: Sub = this.relayPool.sub(this.relaysUrls, [
-            { kinds: [Kind.Reaction], "#e": [enrichedEvent.id] }
-          ]);
-          const positive: IReactionFields = { count: 0, events: [] };
-          const negative: IReactionFields = { count: 0, events: [] };
-
-          reactionsSub.on("event", (reactionEvt: Event) => {
-            switch (reactionEvt.content) {
-              case "+":
-                positive.count++;
-                positive.events.push({ eventID: reactionEvt.id, pubkey: reactionEvt.pubkey });
-                break;
-
-              case "-":
-                negative.count++;
-                negative.events.push({ eventID: reactionEvt.id, pubkey: reactionEvt.pubkey });
-                break;
-
-              default:
-                break;
-            }
-          });
-
-          reactionsSub.on("eose", () => {
-            if (positive.count != 0 || negative.count != 0) {
-              enrichedEvent.positive = positive;
-              enrichedEvent.negative = negative;
-            }
-
-            reactionsSub.unsub();
-            events.push(enrichedEvent);
-
-            if (enrichedEvent.kind == Kind.Text) {
-              if (setShowPopup) {
-                setShowPopup(true);
-              }
-
-              setEvents(events.sort(sortByCreatedAt));
-            }
-          });
-        });
-      }
-    });
-
-    eventsSub.on("eose", () => {
-      // fetch and assign metadata
-      const metadataSub: Sub = this.relayPool.sub(this.relaysUrls, [
-        createMetadataFilter(events.map((e) => e.pubkey))
-      ]);
-
-      metadataSub.on("event", (metaEvt: Event) => {
-        const userMetadata: IUserMetadata = JSON.parse(metaEvt.content);
-
-        events.forEach((evt: IEnrichedEvent) => {
-          if (evt.pubkey === metaEvt.pubkey) {
-            evt.name = userMetadata.name;
-            evt.about = userMetadata.about;
-            evt.picture = userMetadata.picture;
-          }
-        });
-      });
-
-      metadataSub.on("eose", () => {
-        let parsedReactionEventsCount = 0;
-        const eventsCount = events.length;
-
-        // fetch and assign reactions
-        events.forEach((evt: IEnrichedEvent) => {
-          const reactionsSub: Sub = this.relayPool.sub(this.relaysUrls, [
-            { kinds: [Kind.Reaction], "#e": [evt.id] }
-          ]);
-          const positive: IReactionFields = { count: 0, events: [] };
-          const negative: IReactionFields = { count: 0, events: [] };
-
-          reactionsSub.on("event", (reactionEvt: Event) => {
-            switch (reactionEvt.content) {
-              case "+":
-                positive.count++;
-                positive.events.push({ eventID: reactionEvt.id, pubkey: reactionEvt.pubkey });
-                break;
-
-              case "-":
-                negative.count++;
-                negative.events.push({ eventID: reactionEvt.id, pubkey: reactionEvt.pubkey });
-                break;
-
-              default:
-                break;
-            }
-          });
-
-          reactionsSub.on("eose", () => {
-            if (filter?.ids?.length == 1 && positive.count == 0 && negative.count == 0) {
-              setIsLoading(false);
-            }
-
-            if (positive.count != 0 || negative.count != 0) {
-              evt.positive = positive;
-              evt.negative = negative;
-              setEvents(events.sort(sortByCreatedAt));
-            }
-
-            parsedReactionEventsCount++;
-            if (parsedReactionEventsCount == eventsCount) {
-              setIsLoading(false);
-              eose = true;
-            }
-
-            reactionsSub.unsub();
-          });
-        });
-      });
-    });
-  }
-
+  // use pool::list here as well
   public fetchUserEvents(setUserEvents: Setter<Event[]>, filter: Filter): void {
     const eventsSub: Sub = this.relayPool.sub(this.relaysUrls, [{ kinds: [Kind.Text], ...filter }]);
 
@@ -310,7 +154,7 @@ class Relayer {
     return false;
   };
 
-  private fetchRelaysAndFollowers() {
+  private setRelaysAndFollowers(): void {
     if (!this.userPubKey) {
       return;
     }
@@ -328,6 +172,127 @@ class Relayer {
       if (relayUrls[0] !== "") {
         this.relaysUrls = relayUrls;
       }
+    });
+  }
+
+  public async setRelaysAndFollowersAsync(): Promise<void> {
+    if (!this.userPubKey) {
+      return;
+    }
+
+    const pool = new SimplePool();
+
+    const kindThreeEvent = await pool.list(this.relaysUrls, [
+      { kinds: [Kind.Contacts], authors: [this.userPubKey] }
+    ]);
+
+    // manage multiple events from multiple relays
+    this.kindThreeEvent = kindThreeEvent[0];
+    this.following = this.kindThreeEvent.tags.map((e) => e[1]);
+
+    const relayUrls = this.kindThreeEvent.content.split(";");
+    if (relayUrls[0] !== "") {
+      this.relaysUrls = relayUrls;
+    }
+
+    pool.close(this.relaysUrls);
+  }
+
+  public async fetchEventsOnly(filter?: Filter): Promise<Event[]> {
+    const pool = new SimplePool();
+    filter = filter == undefined ? { kinds: [Kind.Text] } : { ...filter, kinds: [Kind.Text] };
+    const events = await pool.list(this.relaysUrls, [filter]);
+    pool.close(this.relaysUrls);
+
+    return events;
+  }
+
+  public async fetchEventsMetadata(filter: Filter): Promise<IUserMetadataWithPubkey[]> {
+    const pool = new SimplePool();
+    const events = await pool.list(this.relaysUrls, [{ ...filter, kinds: [Kind.Metadata] }]);
+
+    const metadataEvents: IUserMetadataWithPubkey[] = events.map((evt) => {
+      const metadata: IUserMetadata = JSON.parse(evt.content);
+      return { name: metadata.name, picture: metadata.picture, about: metadata.about, pubkey: evt.pubkey };
+    });
+
+    pool.close(this.relaysUrls);
+
+    return metadataEvents;
+  }
+
+  public async fetchEventsReactions(filter: Filter[]): Promise<IReactionWithEventID[]> {
+    const pool = new SimplePool();
+    const events = await pool.list(this.relaysUrls, filter);
+    pool.close(this.relaysUrls);
+
+    const eventdIDs = filter.flatMap((f) => f["#e"]);
+
+    return eventdIDs.map((evtID) => {
+      const reactionEvents = events.filter((re) => {
+        const reactionEventIDTag = re.tags.find((t) => t[0] == "e");
+        if (reactionEventIDTag && reactionEventIDTag[1] == evtID) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      const reactionWithEventID: IReactionWithEventID = {
+        eventID: evtID,
+        positive: {
+          count: 0,
+          events: []
+        },
+        negative: {
+          count: 0,
+          events: []
+        }
+      };
+
+      reactionEvents.forEach((re) => {
+        if (re.content == "+") {
+          reactionWithEventID.positive.count += 1;
+          reactionWithEventID.positive.events.push({ eventID: re.id, pubkey: re.pubkey });
+        } else {
+          (reactionWithEventID.negative.count += 1),
+            reactionWithEventID.negative.events.push({ eventID: re.id, pubkey: re.pubkey });
+        }
+      });
+
+      return reactionWithEventID;
+    });
+  }
+
+  public buildEnrichedEvents(
+    events: Event[],
+    metadata: IUserMetadataWithPubkey[],
+    reactions: IReactionWithEventID[]
+  ): IEnrichedEvent[] {
+    return events.map((evt) => {
+      const enrichedEvent: IEnrichedEvent = {
+        ...evt,
+        name: "",
+        about: "",
+        picture: "",
+        positive: { count: 0, events: [] },
+        negative: { count: 0, events: [] }
+      };
+
+      const metaEvent = metadata.find((metaEvt) => metaEvt.pubkey == evt.pubkey);
+      if (metaEvent) {
+        enrichedEvent.name = metaEvent.name;
+        enrichedEvent.about = metaEvent.about;
+        enrichedEvent.picture = metaEvent.picture;
+      }
+
+      const reactionEvent = reactions.find((re) => re.eventID == evt.id);
+      if (reactionEvent) {
+        enrichedEvent.positive = reactionEvent.positive;
+        enrichedEvent.negative = reactionEvent.negative;
+      }
+
+      return enrichedEvent;
     });
   }
 }

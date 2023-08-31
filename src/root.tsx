@@ -1,6 +1,7 @@
 // @refresh reload
 import "./root.css";
 import { Routes } from "@solidjs/router";
+import { Event, EventTemplate } from "nostr-tools";
 import WideLayout from "./layouts/WideLayout";
 import { RelayProvider } from "./contexts/relay";
 import NarrowLayout from "./layouts/NarrowLayout";
@@ -8,6 +9,15 @@ import { useIsNarrow } from "./hooks/useMediaQuery";
 import { ErrorBoundary } from "solid-start/error-boundary";
 import { Component, Show, Suspense, createSignal } from "solid-js";
 import { Body, FileRoutes, Head, Html, Meta, Scripts, Title } from "solid-start";
+
+declare global {
+  interface Window {
+    nostr: {
+      signEvent(unsignedEvent: EventTemplate): Promise<Event>;
+      getPublicKey(): Promise<string>;
+    };
+  }
+}
 
 const Root: Component<{}> = () => {
   const [showMenu, setShowMenu] = createSignal<boolean>(false);
