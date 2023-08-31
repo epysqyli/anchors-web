@@ -1,19 +1,7 @@
-import { Setter } from "solid-js";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
-import { IReaction, IReactionFields, IReactionWithEventID, Reaction } from "~/interfaces/IReaction";
+import { IReactionWithEventID, Reaction } from "~/interfaces/IReaction";
 import { IUserMetadata, IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
-import { createMetadataFilter, makeDefaultEnrichedEvent, sortByCreatedAt } from "./nostr-utils";
-import {
-  Event,
-  EventTemplate,
-  Filter,
-  Kind,
-  Pub,
-  SimplePool,
-  Sub,
-  validateEvent,
-  verifySignature
-} from "nostr-tools";
+import { Event, EventTemplate, Filter, Kind, Pub, SimplePool, Sub } from "nostr-tools";
 
 class Relayer {
   public userPubKey?: string;
@@ -27,21 +15,6 @@ class Relayer {
     this.relayPool = new SimplePool();
     this.userPubKey = userPubkey;
     this.setRelaysAndFollowers();
-  }
-
-  // use pool::list here as well
-  public fetchUserEvents(setUserEvents: Setter<Event[]>, filter: Filter): void {
-    const eventsSub: Sub = this.relayPool.sub(this.relaysUrls, [{ kinds: [Kind.Text], ...filter }]);
-
-    let userEvents: Event[] = [];
-    eventsSub.on("event", (evt: Event) => {
-      userEvents.push(evt);
-    });
-
-    eventsSub.on("eose", () => {
-      setUserEvents(userEvents);
-      eventsSub.unsub();
-    });
   }
 
   public sub(filter: Filter): Sub {

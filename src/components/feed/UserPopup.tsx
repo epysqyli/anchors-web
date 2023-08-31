@@ -16,7 +16,7 @@ interface Props {
 const UserPopup: Component<Props> = (props): JSX.Element => {
   const { relay } = useContext(RelayContext);
   const [canFollow, setCanFollow] = createSignal<boolean>(!relay.isUserAlreadyFollowed(props.pubkey));
-  const [userEvents, setUserEvents] = createSignal<Event[]>([]);
+  const [events, setEvents] = createSignal<Event[]>([]);
 
   const handleFollow = async (): Promise<void> => {
     await relay.followUser([...relay.following, props.pubkey]);
@@ -28,8 +28,8 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
     setCanFollow(true);
   };
 
-  onMount(() => {
-    relay.fetchUserEvents(setUserEvents, { authors: [props.pubkey], limit: 3 });
+  onMount(async () => {
+    setEvents(await relay.fetchEvents({ authors: [props.pubkey], limit: 3 }));
   });
 
   return (
@@ -66,7 +66,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
       </div>
 
       <div class='w-1/2'>
-        <For each={userEvents()}>
+        <For each={events()}>
           {(evt) => (
             <A href={`/events/${evt.id}`}>
               <div class='text-sm break-all mb-2 hover:bg-neutral-800 active:scale-95 rounded-md p-1'>
