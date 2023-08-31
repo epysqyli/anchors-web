@@ -184,23 +184,13 @@ class Relayer {
     return eventdIDs.map((evtID) => {
       const reactionEvents = events.filter((re) => {
         const reactionEventIDTag = re.tags.find((t) => t[0] == "e");
-        if (reactionEventIDTag && reactionEventIDTag[1] == evtID) {
-          return true;
-        } else {
-          return false;
-        }
+        return reactionEventIDTag && reactionEventIDTag[1] == evtID;
       });
 
       const reactionWithEventID: IReactionWithEventID = {
         eventID: evtID,
-        positive: {
-          count: 0,
-          events: []
-        },
-        negative: {
-          count: 0,
-          events: []
-        }
+        positive: { count: 0, events: [] },
+        negative: { count: 0, events: [] }
       };
 
       reactionEvents.forEach((re) => {

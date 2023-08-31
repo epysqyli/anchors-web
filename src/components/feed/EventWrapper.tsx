@@ -82,7 +82,7 @@ const EventWrapper: Component<Props> = (props) => {
   /**
    * fetching reactions here should either disappear or be limited to new events
    * avoid fetching twice, preserve reactive behavior
-   *  */ 
+   */
   onMount(async () => {
     const reactionsSub: Sub = relay.sub({ kinds: [Kind.Reaction], "#e": [nostrEvent().id] });
 
