@@ -9,7 +9,7 @@ import { createMetadataFilter } from "~/lib/nostr/nostr-utils";
 import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const UserMetadata: VoidComponent = () => {
-  const { relay, publicKey } = useContext(RelayContext);
+  const { relay } = useContext(RelayContext);
 
   const [content, setContent] = createSignal<IUserMetadata>({
     name: "",
@@ -33,8 +33,7 @@ const UserMetadata: VoidComponent = () => {
     };
 
     const signedEvent = await window.nostr.signEvent(nostrEvent);
-
-    const pubResult = relay.publish(signedEvent);
+    const pubResult = relay.pub(signedEvent, [relay.relaysUrls[0]]);
 
     pubResult.on("ok", () => {
       setIsActionSuccessful(true);
@@ -51,14 +50,13 @@ const UserMetadata: VoidComponent = () => {
   const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
 
   onMount(() => {
-    if (publicKey == "") {
+    if (relay.userPubKey == "") {
       console.log("Your public key is not available");
       setIsActionSuccessful(false);
       return;
     }
 
-    const metadataFilter = createMetadataFilter([publicKey]);
-    const metaDataSub: Sub = relay.sub([metadataFilter]);
+    const metaDataSub: Sub = relay.sub(createMetadataFilter([relay.userPubKey!]));
 
     metaDataSub.on("event", (event: NostrEvent) => {
       const userMetadata: IUserMetadata = JSON.parse(event.content);

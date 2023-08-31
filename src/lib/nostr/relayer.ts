@@ -19,6 +19,7 @@ class Relayer {
   public following: string[] = [];
   public relaysUrls: string[] = ["ws://localhost:2700"];
 
+  // get rid of relayPool whenever possible and keep it for long running processes
   private relayPool: SimplePool;
   private kindThreeEvent?: Event;
 
@@ -29,12 +30,22 @@ class Relayer {
   }
 
   public sub(filter: Filter): Sub {
-    return this.relayPool.sub(this.relaysUrls, [filter]);
+    const pool = new SimplePool();
+
+    const sub = pool.sub(this.relaysUrls, [filter]);
+    pool.close(this.relaysUrls);
+
+    return sub;
   }
 
   public pub(event: Event, relays?: string[]): Pub {
+    const pool = new SimplePool();
+
     const destRelays: string[] = relays == undefined ? this.relaysUrls : relays;
-    return this.relayPool.publish(destRelays, event);
+    const pub = pool.publish(destRelays, event);
+    pool.close(destRelays);
+
+    return pub;
   }
 
   public async deleteEvent(eventID: string): Promise<void> {
