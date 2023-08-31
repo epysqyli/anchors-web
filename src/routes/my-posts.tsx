@@ -1,9 +1,9 @@
+import { Event } from "nostr-tools";
 import Popup from "~/components/shared/Popup";
 import { RelayContext } from "~/contexts/relay";
 import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
-import { Event, Kind, Sub, validateEvent, verifySignature } from "nostr-tools";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const MyPosts: VoidComponent = () => {
@@ -32,17 +32,9 @@ const MyPosts: VoidComponent = () => {
       return;
     }
 
-    const eventsSub: Sub = relay.sub({ authors: [relay.userPubKey] });
-
-    eventsSub.on("event", (nostrEvent: Event) => {
-      if (nostrEvent.kind === Kind.Text && validateEvent(nostrEvent) && verifySignature(nostrEvent)) {
-        setEvents([...events(), nostrEvent].sort(sortByCreatedAt));
-      }
-    });
-
-    eventsSub.on("eose", () => {
-      setIsLoading(false);
-    });
+    const events = await relay.fetchEvents({ authors: [relay.userPubKey] });
+    setEvents(events.sort(sortByCreatedAt));
+    setIsLoading(false);
   });
 
   return (
