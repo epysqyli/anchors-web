@@ -283,6 +283,7 @@ class Relayer {
     });
   }
 
+  // to apply whenever events are fetched
   private isEventValid(event: Event): boolean {
     return validateEvent(event) && verifySignature(event);
   }
