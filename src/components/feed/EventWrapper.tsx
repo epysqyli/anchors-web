@@ -79,10 +79,6 @@ const EventWrapper: Component<Props> = (props) => {
     setShowUserPopup(true);
   };
 
-  /**
-   * fetching reactions here should either disappear or be limited to new events
-   * avoid fetching twice, preserve reactive behavior
-   */
   onMount(async () => {
     const reactionsSub: Sub = relay.sub({ kinds: [Kind.Reaction], "#e": [nostrEvent().id] });
 
@@ -95,10 +91,14 @@ const EventWrapper: Component<Props> = (props) => {
       }
 
       const alreadyReacted = reactions()[reactionType as keyof IReaction].events.find(
+        (newEvt) => newEvt.eventID === evt.id
+      );
+
+      const alreadyPresent = reactions()[reactionType as keyof IReaction].events.find(
         (evt) => evt.pubkey === relay.userPubKey
       );
 
-      if (!alreadyReacted) {
+      if (!alreadyReacted && !alreadyPresent) {
         const newReactions: IReactionFields = {
           count: reactions()[reactionType as keyof IReaction].count + 1,
           events: [
