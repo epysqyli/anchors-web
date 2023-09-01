@@ -16,19 +16,19 @@ const UserNostrEvent: Component<Props> = (props): JSX.Element => {
 
   return (
     <div
-      class='my-5 py-5 px-5 mx-auto gap-x-3 flex items-center justify-between 
+      class='my-5 py-5 px-5 mx-auto gap-x-5 flex items-center justify-between 
             border-y-2 border-neutral-600 text-slate-300 bg-slate-700 
             bg-opacity-90 rounded-md hover:text-slate-200'
     >
-      <div class='bg-slate-600 text-center rounded-md mx-auto break-words'>
+      <div class='w-1/5 bg-slate-600 text-center rounded-md mx-auto break-words'>
         {parseDate(props.nostrEvent.created_at)}
       </div>
 
-      <div class='break-all'>{shrinkContent(props.nostrEvent.content)}</div>
+      <div class='w-2/5 break-all'>{shrinkContent(props.nostrEvent.content)}</div>
 
       <A
         href={`/events/${props.nostrEvent.id}`}
-        class='text-sm text-slate-400 break-all bg-slate-600
+        class='w-2/5 text-sm text-slate-400 break-all bg-slate-600
         hover:text-slate-200 active:scale-95 p-2 rounded-md transition-all'
       >
         {props.nostrEvent.id}
