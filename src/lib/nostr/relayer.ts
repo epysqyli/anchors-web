@@ -19,12 +19,9 @@ class Relayer {
   public following: string[] = [];
   public relaysUrls: string[] = ["ws://localhost:2700"];
 
-  // get rid of relayPool whenever possible and keep it for long running processes
-  private relayPool: SimplePool;
   private kindThreeEvent?: Event;
 
   constructor(userPubkey?: string) {
-    this.relayPool = new SimplePool();
     this.userPubKey = userPubkey;
     this.setRelaysAndFollowers();
   }
@@ -57,7 +54,8 @@ class Relayer {
     };
 
     const signedEvent = await window.nostr.signEvent(deletionEvent);
-    const pubRes: Pub = this.relayPool.publish(this.relaysUrls, signedEvent);
+    const pool = new SimplePool();
+    const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
 
     pubRes.on("ok", () => {
       console.log("event deleted");
@@ -66,6 +64,8 @@ class Relayer {
     pubRes.on("failed", () => {
       console.log("failure");
     });
+
+    pool.close(this.relaysUrls);
   }
 
   public async reactToEvent(eventID: string, eventPubkey: string, reaction: Reaction): Promise<void> {
@@ -85,7 +85,8 @@ class Relayer {
      * Should the reaction only be published to the relay the event was fetched from?
      * If so, IEnrichedEvent should also have a relay url prop
      */
-    const pubRes: Pub = this.relayPool.publish(this.relaysUrls, signedEvent);
+    const pool = new SimplePool();
+    const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
 
     pubRes.on("ok", () => {
       console.log("reaction sent");
@@ -94,6 +95,8 @@ class Relayer {
     pubRes.on("failed", () => {
       console.log("failure");
     });
+
+    pool.close(this.relaysUrls);
   }
 
   public async fetchAndUnsubKindThreeEvent(): Promise<Event> {
@@ -101,7 +104,9 @@ class Relayer {
       return new Promise((_) => {});
     }
 
-    const kindThreeSub: Sub = this.relayPool.sub(this.relaysUrls, [
+    const pool = new SimplePool();
+
+    const kindThreeSub: Sub = pool.sub(this.relaysUrls, [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
@@ -114,6 +119,7 @@ class Relayer {
     return await new Promise((res) => {
       kindThreeSub.on("eose", () => {
         kindThreeSub.unsub();
+        pool.close(this.relaysUrls);
         res(event);
       });
     });
@@ -128,7 +134,8 @@ class Relayer {
     };
 
     const signedEvent = await window.nostr.signEvent(followEvent);
-    const pubRes: Pub = this.relayPool.publish(this.relaysUrls, signedEvent);
+    const pool = new SimplePool();
+    const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
 
     pubRes.on("ok", () => {
       // decide whether signal update should happen here or in `fetchUserFollowing` after EOSE
@@ -138,6 +145,7 @@ class Relayer {
       console.log("follow event failure");
     });
 
+    pool.close(this.relaysUrls);
     return;
   }
 
@@ -267,7 +275,9 @@ class Relayer {
       return;
     }
 
-    const kindThreeSub: Sub = this.relayPool.sub(this.relaysUrls, [
+    const pool = new SimplePool();
+
+    const kindThreeSub: Sub = pool.sub(this.relaysUrls, [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
@@ -281,6 +291,8 @@ class Relayer {
         this.relaysUrls = relayUrls;
       }
     });
+
+    pool.close(this.relaysUrls);
   }
 
   // to apply whenever events are fetched
