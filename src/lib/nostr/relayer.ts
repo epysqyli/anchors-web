@@ -182,7 +182,7 @@ class Relayer {
     pool.close(this.relaysUrls);
   }
 
-  public async fetchEvents(filter?: Filter): Promise<Event[]> {
+  public async fetchTextEvents(filter?: Filter): Promise<Event[]> {
     const pool = new SimplePool();
     filter = filter == undefined ? { kinds: [Kind.Text] } : { ...filter, kinds: [Kind.Text] };
     const events = await pool.list(this.relaysUrls, [filter]);

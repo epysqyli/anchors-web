@@ -16,7 +16,7 @@ const EventByID: VoidComponent = (): JSX.Element => {
     const params = useParams<{ id: string }>();
     const { relay } = useContext(RelayContext);
 
-    const events = await relay.fetchEvents({ ids: [params.id] });
+    const events = await relay.fetchTextEvents({ ids: [params.id] });
     const metadata = await relay.fetchEventsMetadata({ authors: events.map((evt) => evt.pubkey) });
     const reactions = await relay.fetchEventsReactions([
       { kinds: [Kind.Reaction], "#e": events.map((evt) => evt.id) }
