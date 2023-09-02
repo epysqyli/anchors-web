@@ -57,6 +57,8 @@ class Relayer {
     const pool = new SimplePool();
     const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
 
+    // use await Promise(pub) instead of `on` callbacks
+
     pubRes.on("ok", () => {
       console.log("event deleted");
     });
