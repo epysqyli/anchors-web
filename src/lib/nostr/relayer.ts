@@ -183,7 +183,7 @@ class Relayer {
   public async fetchTextEvents(filter?: Filter): Promise<Event[]> {
     const pool = new SimplePool();
     filter = filter == undefined ? { kinds: [Kind.Text] } : { ...filter, kinds: [Kind.Text] };
-    const events = await pool.list(this.relaysUrls, [filter]);
+    const events = (await pool.list(this.relaysUrls, [filter])).filter(this.isEventValid);
     pool.close(this.relaysUrls);
 
     return events;
@@ -191,7 +191,9 @@ class Relayer {
 
   public async fetchEventsMetadata(filter: Filter): Promise<IUserMetadataWithPubkey[]> {
     const pool = new SimplePool();
-    const events = await pool.list(this.relaysUrls, [{ ...filter, kinds: [Kind.Metadata] }]);
+    const events = (await pool.list(this.relaysUrls, [{ ...filter, kinds: [Kind.Metadata] }])).filter(
+      this.isEventValid
+    );
 
     const metadataEvents: IUserMetadataWithPubkey[] = events.map((evt) => {
       const metadata: IUserMetadata = JSON.parse(evt.content);
@@ -205,7 +207,7 @@ class Relayer {
 
   public async fetchEventsReactions(filter: Filter[]): Promise<IReactionWithEventID[]> {
     const pool = new SimplePool();
-    const events = await pool.list(this.relaysUrls, filter);
+    const events = (await pool.list(this.relaysUrls, filter)).filter(this.isEventValid);
     pool.close(this.relaysUrls);
 
     const eventdIDs = filter.flatMap((f) => f["#e"]);
@@ -295,7 +297,6 @@ class Relayer {
     pool.close(this.relaysUrls);
   }
 
-  // to apply whenever events are fetched
   private isEventValid(event: Event): boolean {
     return validateEvent(event) && verifySignature(event);
   }
