@@ -43,7 +43,7 @@ const Home: Component<{}> = () => {
       eventsFilter = { ...eventsFilter, authors: relay.following };
     }
 
-    setEvents(await relay.fetchEvents(eventsFilter));
+    setEvents(await relay.fetchTextEvents(eventsFilter));
 
     let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
     if (location.search == "") {

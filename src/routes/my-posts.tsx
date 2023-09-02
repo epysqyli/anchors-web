@@ -32,7 +32,7 @@ const MyPosts: VoidComponent = () => {
       return;
     }
 
-    const events = await relay.fetchEvents({ authors: [relay.userPubKey] });
+    const events = await relay.fetchTextEvents({ authors: [relay.userPubKey] });
     setEvents(events.sort(sortByCreatedAt));
     setIsLoading(false);
   });
