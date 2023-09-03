@@ -20,7 +20,7 @@ const Menu: Component<Props> = (props) => {
 
   const wideStyle = `rounded-md text-lg relative overflow-y-auto bg-neutral-700 bg-opacity-75 h-full pt-10`;
 
-  const actionStyle = `text-slate-50 w-5/6 mx-auto my-3 select-none
+  const actionStyle = `text-slate-50 w-3/4 mx-auto my-3 select-none
                        bg-gradient-to-r from-slate-800 to-gray-700
                        md:bg-none md:px-5 md:py-8 p-4 rounded-md
                        transition cursor-pointer group active:scale-90
@@ -56,29 +56,29 @@ const Menu: Component<Props> = (props) => {
 
           <A onClick={props.toggleMenu} href='/write'>
             <div class={active("/write") ? selectedFlexActionStyle : flexActionStyle}>
-              <FiEdit size={26} class='md:group-hover:animate-pulse' />
               <div class='group-hover:scale-95'>write</div>
+              <FiEdit size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
 
           <A onClick={props.toggleMenu} href='/search'>
             <div class={active("/search") ? selectedFlexActionStyle : flexActionStyle}>
-              <BsSearch size={26} class='md:group-hover:animate-pulse' />
               <div class='group-hover:scale-95'>search</div>
+              <BsSearch size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
 
           <A onClick={props.toggleMenu} href='/my-posts'>
             <div class={active("/my-posts") ? selectedFlexActionStyle : flexActionStyle}>
-              <BsStack size={26} class='md:group-hover:animate-pulse' />
               <div class='group-hover:scale-95'>my posts</div>
+              <BsStack size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
 
           <A onClick={props.toggleMenu} href='/settings'>
             <div class={active("/settings") ? selectedFlexActionStyle : flexActionStyle}>
-              <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
               <div class='group-hover:scale-95'>settings</div>
+              <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
         </div>
