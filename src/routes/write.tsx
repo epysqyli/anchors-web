@@ -4,13 +4,26 @@ import { IRefTag } from "~/interfaces/IRefTag";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import menuTogglerContext from "~/contexts/menuToggle";
-import { Component, Show, createSignal, useContext } from "solid-js";
+import { Component, Show, createSignal, onMount, useContext } from "solid-js";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
+import { useBeforeLeave } from "@solidjs/router";
 
 const Write: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
   const menuToggle = useContext(menuTogglerContext);
+
+  const [intervalID, setIntervalID] = createSignal<NodeJS.Timer>();
+
+  // keep alive - any better way?
+  onMount(() => {
+    const intervalID = setInterval(async () => await relay.fetchAndUnsubKindThreeEvent(), 30000);
+    setIntervalID(intervalID);
+  });
+
+  useBeforeLeave(() => {
+    clearInterval(intervalID());
+  });
 
   const [refTags, setRefTags] = createSignal<IRefTag[]>([], { equals: false });
   const [nostrEvent, setNostrEvent] = createSignal<EventTemplate>(

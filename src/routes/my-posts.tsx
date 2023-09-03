@@ -1,11 +1,11 @@
 import { Event } from "nostr-tools";
 import Popup from "~/components/shared/Popup";
 import { RelayContext } from "~/contexts/relay";
+import { useBeforeLeave } from "@solidjs/router";
 import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
-import PubResult from "~/interfaces/PubResult";
 
 const MyPosts: VoidComponent = () => {
   const { relay } = useContext(RelayContext);
@@ -13,6 +13,7 @@ const MyPosts: VoidComponent = () => {
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
+  const [intervalID, setIntervalID] = createSignal<NodeJS.Timer>();
 
   const handleDeletion = async (nostrEventID: string): Promise<void> => {
     const pubResult = await relay.deleteEvent(nostrEventID);
@@ -28,6 +29,10 @@ const MyPosts: VoidComponent = () => {
   };
 
   onMount(async () => {
+    // keep alive - any better way?
+    const intervalID = setInterval(async () => await relay.fetchAndUnsubKindThreeEvent(), 30000);
+    setIntervalID(intervalID);
+
     if (window.nostr == undefined) {
       console.log("browser nostr extension needed");
       return;
@@ -42,6 +47,10 @@ const MyPosts: VoidComponent = () => {
     const events = await relay.fetchTextEvents({ authors: [relay.userPubKey] });
     setEvents(events.sort(sortByCreatedAt));
     setIsLoading(false);
+  });
+
+  useBeforeLeave(() => {
+    clearInterval(intervalID());
   });
 
   return (
