@@ -6,12 +6,14 @@ interface Props {
   topEventRef: { htmlRef: HTMLDivElement; eventID: string };
   showPopup: Accessor<boolean>;
   setShowPopup: Setter<boolean>;
+  mergeEnrichedEvents(): void;
 }
 
 const NewEventsPopup: Component<Props> = (props) => {
   const handleClick = (): void => {
-    props.topEventRef.htmlRef.scrollIntoView({ behavior: "smooth" });
+    props.mergeEnrichedEvents();
     props.setShowPopup(false);
+    props.topEventRef.htmlRef.scrollIntoView({ behavior: "smooth" });
   };
 
   return (

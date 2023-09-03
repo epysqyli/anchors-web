@@ -6,6 +6,10 @@ const sortByCreatedAt = (evt1: Event, evt2: Event) => {
   return evt1.created_at > evt2.created_at ? -1 : 1;
 };
 
+const sortByCreatedAtReverse = (evt1: Event, evt2: Event) => {
+  return evt1.created_at > evt2.created_at ? 1 : -1;
+};
+
 // should return an array
 const createMetadataFilter = (pubkeys: string[]): Filter => {
   return { authors: [...new Set(pubkeys)], kinds: [Kind.Metadata] };
@@ -66,5 +70,6 @@ export {
   shrinkContent,
   parseDate,
   makeDefaultEnrichedEvent,
-  getPublicKeyFromExt
+  getPublicKeyFromExt,
+  sortByCreatedAtReverse
 };

@@ -1,16 +1,16 @@
 import { useLocation } from "solid-start";
 import { RelayContext } from "~/contexts/relay";
+import { useBeforeLeave } from "@solidjs/router";
 import { Event, Filter, Kind } from "nostr-tools";
-import { IReaction, IReactionWithEventID } from "~/interfaces/IReaction";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
+import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import EventWrapper from "~/components/feed/EventWrapper";
+import { IReactionWithEventID } from "~/interfaces/IReaction";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
-import { useBeforeLeave } from "@solidjs/router";
-import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;
@@ -19,6 +19,8 @@ interface EventHtmlRef {
 }
 
 const Home: Component<{}> = () => {
+  const MAX_EVENTS_COUNT = 75;
+
   const { relay } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -30,16 +32,17 @@ const Home: Component<{}> = () => {
   const [metaEvents, setMetaEvents] = createSignal<IUserMetadataWithPubkey[]>([]);
   const [reactions, setReactions] = createSignal<IReactionWithEventID[]>([]);
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
+  const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [intervalID, setIntervalID] = createSignal<NodeJS.Timer>();
 
-  //  manage a caching layer
+  //  setup and manage caching layer
   onMount(async () => {
     setIsLoading(true);
     const location = useLocation();
 
     await relay.setRelaysAndFollowersAsync();
 
-    let eventsFilter: Filter = { limit: 25 };
+    let eventsFilter: Filter = { limit: 10 };
     if (location.search == "") {
       eventsFilter = { ...eventsFilter, authors: relay.following };
     }
@@ -92,8 +95,11 @@ const Home: Component<{}> = () => {
 
         setReactions([...reactions(), ...newReactions]);
 
-        const newEnrichedEvents = relay.buildEnrichedEvents(events(), metaEvents(), reactions());
-        setEnrichedEvents([...enrichedEvents(), ...newEnrichedEvents].sort(sortByCreatedAt));
+        setNewEnrichedEvents([
+          ...newEnrichedEvents(),
+          ...relay.buildEnrichedEvents(newEvents, metaEvents(), reactions())
+        ]);
+
         setShowPopup(true);
       }
     }, relay.FETCH_INTERVAL_MS);
@@ -104,6 +110,17 @@ const Home: Component<{}> = () => {
   useBeforeLeave(() => {
     clearInterval(intervalID());
   });
+
+  const mergeEnrichedEvents = (): void => {
+    const eventsCount = enrichedEvents().length + newEnrichedEvents().length;
+    const eventsToSet = [...enrichedEvents(), ...newEnrichedEvents()].sort(sortByCreatedAtReverse);
+
+    if (eventsCount > MAX_EVENTS_COUNT) {
+      setEnrichedEvents(eventsToSet.slice(eventsCount - MAX_EVENTS_COUNT, eventsCount).sort(sortByCreatedAt));
+    } else {
+      setEnrichedEvents([...enrichedEvents(), ...newEnrichedEvents()].sort(sortByCreatedAt));
+    }
+  };
 
   const scrollPage = (direction: "up" | "down"): void => {
     eventWrapperContainer()!.scrollBy({
@@ -141,6 +158,7 @@ const Home: Component<{}> = () => {
               topEventRef={eventHtmlRefs()[0]}
               showPopup={showPopup}
               setShowPopup={setShowPopup}
+              mergeEnrichedEvents={mergeEnrichedEvents}
             />
           </div>
 
