@@ -6,7 +6,6 @@ import EventAuthor from "./EventAuthor";
 import EventContent from "./EventContent";
 import EventScroller from "./EventScroller";
 import { FiTrendingUp } from "solid-icons/fi";
-import { Event, Kind, Sub } from "nostr-tools";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
 import { parseDate } from "~/lib/nostr/nostr-utils";
@@ -65,7 +64,17 @@ const EventWrapper: Component<Props> = (props) => {
 
       setReactions({ ...reactions(), [reactionType]: newReactions });
     } else {
-      await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction);
+      const reactionEvent = await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction);
+
+      const newReactions: IReactionFields = {
+        count: reactions()[reactionType as keyof IReaction].count + 1,
+        events: [
+          ...reactions()[reactionType as keyof IReaction].events,
+          { pubkey: reactionEvent.pubkey, eventID: reactionEvent.id }
+        ]
+      };
+
+      setReactions({ ...reactions(), [reactionType]: newReactions });
     }
   };
 
@@ -79,39 +88,7 @@ const EventWrapper: Component<Props> = (props) => {
     setShowUserPopup(true);
   };
 
-  // too many ws connections are created onMount -> find a centralized solution
   onMount(async () => {
-    // const reactionsSub: Sub = relay.sub({ kinds: [Kind.Reaction], "#e": [nostrEvent().id] });
-
-    // reactionsSub.on("event", (evt: Event) => {
-    //   let reactionType = "";
-    //   if (evt.content == "+") {
-    //     reactionType = "positive";
-    //   } else if (evt.content == "-") {
-    //     reactionType = "negative";
-    //   }
-
-    //   const alreadyReacted = reactions()[reactionType as keyof IReaction].events.find(
-    //     (newEvt) => newEvt.eventID === evt.id
-    //   );
-
-    //   const alreadyPresent = reactions()[reactionType as keyof IReaction].events.find(
-    //     (evt) => evt.pubkey === relay.userPubKey
-    //   );
-
-    //   if (!alreadyReacted && !alreadyPresent) {
-    //     const newReactions: IReactionFields = {
-    //       count: reactions()[reactionType as keyof IReaction].count + 1,
-    //       events: [
-    //         ...reactions()[reactionType as keyof IReaction].events,
-    //         { eventID: evt.id, pubkey: evt.pubkey }
-    //       ]
-    //     };
-
-    //     setReactions({ ...reactions(), [reactionType]: newReactions });
-    //   }
-    // });
-
     const referenceTags = nostrEvent().tags.filter((t) => t[0] == "r");
 
     for (const refTag of referenceTags) {

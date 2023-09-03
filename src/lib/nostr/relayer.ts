@@ -15,7 +15,7 @@ import {
 import { sortByCreatedAt } from "./nostr-utils";
 
 class Relayer {
-  public readonly FETCH_INTERVAL_MS = 60000;
+  public readonly FETCH_INTERVAL_MS = 20000;
 
   public userPubKey?: string;
   public following: string[] = [];
@@ -72,7 +72,7 @@ class Relayer {
     pool.close(this.relaysUrls);
   }
 
-  public async reactToEvent(eventID: string, eventPubkey: string, reaction: Reaction): Promise<void> {
+  public async reactToEvent(eventID: string, eventPubkey: string, reaction: Reaction): Promise<Event> {
     const reactionEvent: EventTemplate = {
       kind: Kind.Reaction,
       tags: [
@@ -90,17 +90,18 @@ class Relayer {
      * If so, IEnrichedEvent should also have a relay url prop
      */
     const pool = new SimplePool();
-    const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
+    const pub = pool.publish([this.relaysUrls[0]], signedEvent);
 
-    pubRes.on("ok", () => {
+    pub.on("ok", () => {
       console.log("reaction sent");
     });
 
-    pubRes.on("failed", () => {
-      console.log("failure");
+    pub.on("failed", () => {
+      console.log("reaction failed");
     });
 
     pool.close(this.relaysUrls);
+    return signedEvent;
   }
 
   public async fetchAndUnsubKindThreeEvent(): Promise<Event> {
