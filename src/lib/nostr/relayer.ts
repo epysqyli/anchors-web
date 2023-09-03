@@ -13,6 +13,8 @@ import {
   verifySignature
 } from "nostr-tools";
 import { sortByCreatedAt } from "./nostr-utils";
+import { Setter } from "solid-js";
+import PubResult from "~/interfaces/PubResult";
 
 class Relayer {
   public readonly FETCH_INTERVAL_MS = 20000;
@@ -72,7 +74,12 @@ class Relayer {
     pool.close(this.relaysUrls);
   }
 
-  public async reactToEvent(eventID: string, eventPubkey: string, reaction: Reaction): Promise<Event> {
+  public async reactToEvent(
+    eventID: string,
+    eventPubkey: string,
+    reaction: Reaction,
+    setPubResult: Setter<PubResult>
+  ): Promise<void> {
     const reactionEvent: EventTemplate = {
       kind: Kind.Reaction,
       tags: [
@@ -92,16 +99,19 @@ class Relayer {
     const pool = new SimplePool();
     const pub = pool.publish([this.relaysUrls[0]], signedEvent);
 
-    pub.on("ok", () => {
-      console.log("reaction sent");
-    });
+    await new Promise<void>((res) => {
+      pub.on("ok", () => {
+        setPubResult({ error: false, event: signedEvent });
+        res();
+      });
 
-    pub.on("failed", () => {
-      console.log("reaction failed");
+      pub.on("failed", () => {
+        setPubResult({ error: true, event: signedEvent });
+        res();
+      });
     });
 
     pool.close(this.relaysUrls);
-    return signedEvent;
   }
 
   public async fetchAndUnsubKindThreeEvent(): Promise<Event> {

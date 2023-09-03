@@ -20,6 +20,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import PubResult from "~/interfaces/PubResult";
 
 interface Props {
   event: IEnrichedEvent;
@@ -34,6 +35,7 @@ const EventWrapper: Component<Props> = (props) => {
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [showUserPopup, setShowUserPopup] = createSignal<boolean>(false);
+  const [pubResult, setPubResult] = createSignal<PubResult>();
 
   const [reactions, setReactions] = createSignal<IReaction>({
     positive: nostrEvent().positive,
@@ -64,13 +66,18 @@ const EventWrapper: Component<Props> = (props) => {
 
       setReactions({ ...reactions(), [reactionType]: newReactions });
     } else {
-      const reactionEvent = await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction);
+      await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction, setPubResult);
+
+      if (pubResult()?.error) {
+        console.log("Reaction not sent correctly");
+        return;
+      }
 
       const newReactions: IReactionFields = {
         count: reactions()[reactionType as keyof IReaction].count + 1,
         events: [
           ...reactions()[reactionType as keyof IReaction].events,
-          { pubkey: reactionEvent.pubkey, eventID: reactionEvent.id }
+          { pubkey: pubResult()!.event.pubkey, eventID: pubResult()!.event.id }
         ]
       };
 
