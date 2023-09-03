@@ -185,9 +185,10 @@ const EventWrapper: Component<Props> = (props) => {
             <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 
-          <div class='w-full grow mx-auto flex justify-around items-center rounded-md py-5 bg-slate-600 bg-opacity-40'>
+          <div class='w-full grow mx-auto flex justify-around items-center rounded-md px-5 py-5 bg-slate-600 bg-opacity-40'>
+            <Reactions reactions={reactions} publicKey={relay.userPubKey!} handleReaction={handleReaction} />
             <div
-              class='w-1/6 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'
+              class='w-1/4 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'
               onClick={openUserPopup}
             >
               <EventAuthor
@@ -201,11 +202,10 @@ const EventWrapper: Component<Props> = (props) => {
               <div class='text-sm text-slate-400 mt-3 text-center'>{parseDate(nostrEvent().created_at)}</div>
             </div>
 
-            <EventAnchor nostrEventID={nostrEvent().id} />
-            <Reactions reactions={reactions} publicKey={relay.userPubKey!} handleReaction={handleReaction} />
-            <FiTrendingUp class='text-slate-400' size={26} />
             <VsCommentDiscussion class='text-slate-400' size={28} />
+            <FiTrendingUp class='text-slate-400' size={26} />
             <EventScroller scrollPage={props.scrollPage} />
+            <EventAnchor nostrEventID={nostrEvent().id} />
           </div>
         </div>
 
