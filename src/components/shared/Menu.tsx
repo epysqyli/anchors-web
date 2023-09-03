@@ -31,7 +31,17 @@ const Menu: Component<Props> = (props) => {
   const selectedFlexActionStyle = flexActionStyle + " md:border-orange-200 md:bg-slate-700";
 
   const selectedActionStyle = actionStyle + " md:border-orange-200 md:bg-slate-700";
-  const active = (path: string) => path == `${location.pathname}${location.search}`;
+  const active = (path: string) => {
+    if (path == `${location.pathname}${location.search}`) {
+      return true;
+    }
+
+    if (location.pathname.includes(path) && path !== "/") {
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <>
