@@ -79,37 +79,38 @@ const EventWrapper: Component<Props> = (props) => {
     setShowUserPopup(true);
   };
 
+  // too many ws connections are created onMount -> find a centralized solution
   onMount(async () => {
-    const reactionsSub: Sub = relay.sub({ kinds: [Kind.Reaction], "#e": [nostrEvent().id] });
+    // const reactionsSub: Sub = relay.sub({ kinds: [Kind.Reaction], "#e": [nostrEvent().id] });
 
-    reactionsSub.on("event", (evt: Event) => {
-      let reactionType = "";
-      if (evt.content == "+") {
-        reactionType = "positive";
-      } else if (evt.content == "-") {
-        reactionType = "negative";
-      }
+    // reactionsSub.on("event", (evt: Event) => {
+    //   let reactionType = "";
+    //   if (evt.content == "+") {
+    //     reactionType = "positive";
+    //   } else if (evt.content == "-") {
+    //     reactionType = "negative";
+    //   }
 
-      const alreadyReacted = reactions()[reactionType as keyof IReaction].events.find(
-        (newEvt) => newEvt.eventID === evt.id
-      );
+    //   const alreadyReacted = reactions()[reactionType as keyof IReaction].events.find(
+    //     (newEvt) => newEvt.eventID === evt.id
+    //   );
 
-      const alreadyPresent = reactions()[reactionType as keyof IReaction].events.find(
-        (evt) => evt.pubkey === relay.userPubKey
-      );
+    //   const alreadyPresent = reactions()[reactionType as keyof IReaction].events.find(
+    //     (evt) => evt.pubkey === relay.userPubKey
+    //   );
 
-      if (!alreadyReacted && !alreadyPresent) {
-        const newReactions: IReactionFields = {
-          count: reactions()[reactionType as keyof IReaction].count + 1,
-          events: [
-            ...reactions()[reactionType as keyof IReaction].events,
-            { eventID: evt.id, pubkey: evt.pubkey }
-          ]
-        };
+    //   if (!alreadyReacted && !alreadyPresent) {
+    //     const newReactions: IReactionFields = {
+    //       count: reactions()[reactionType as keyof IReaction].count + 1,
+    //       events: [
+    //         ...reactions()[reactionType as keyof IReaction].events,
+    //         { eventID: evt.id, pubkey: evt.pubkey }
+    //       ]
+    //     };
 
-        setReactions({ ...reactions(), [reactionType]: newReactions });
-      }
-    });
+    //     setReactions({ ...reactions(), [reactionType]: newReactions });
+    //   }
+    // });
 
     const referenceTags = nostrEvent().tags.filter((t) => t[0] == "r");
 

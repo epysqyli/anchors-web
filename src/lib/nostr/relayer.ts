@@ -15,6 +15,8 @@ import {
 import { sortByCreatedAt } from "./nostr-utils";
 
 class Relayer {
+  public readonly FETCH_INTERVAL_MS = 60000;
+
   public userPubKey?: string;
   public following: string[] = [];
   public relaysUrls: string[] = ["ws://localhost:2700"];
