@@ -15,15 +15,15 @@ import {
 import { sortByCreatedAt } from "./nostr-utils";
 
 class Relayer {
+  public readonly FETCH_INTERVAL_MS = 60000;
+
   public userPubKey?: string;
   public following: string[] = [];
   public relaysUrls: string[] = ["ws://localhost:2700"];
 
-  private relayPool: SimplePool;
   private kindThreeEvent?: Event;
 
   constructor(userPubkey?: string) {
-    this.relayPool = new SimplePool();
     this.userPubKey = userPubkey;
     this.setRelaysAndFollowers();
   }
@@ -58,6 +58,8 @@ class Relayer {
     const signedEvent = await window.nostr.signEvent(deletionEvent);
     const pool = new SimplePool();
     const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
+
+    // use await Promise(pub) instead of `on` callbacks
 
     pubRes.on("ok", () => {
       console.log("event deleted");
@@ -279,7 +281,9 @@ class Relayer {
       return;
     }
 
-    const kindThreeSub: Sub = this.relayPool.sub(this.relaysUrls, [
+    const pool = new SimplePool();
+
+    const kindThreeSub: Sub = pool.sub(this.relaysUrls, [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
@@ -293,6 +297,8 @@ class Relayer {
         this.relaysUrls = relayUrls;
       }
     });
+
+    pool.close(this.relaysUrls);
   }
 
   private isEventValid(event: Event): boolean {
