@@ -35,7 +35,6 @@ const EventWrapper: Component<Props> = (props) => {
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [showUserPopup, setShowUserPopup] = createSignal<boolean>(false);
-  const [pubResult, setPubResult] = createSignal<PubResult>();
 
   const [reactions, setReactions] = createSignal<IReaction>({
     positive: nostrEvent().positive,
@@ -55,9 +54,9 @@ const EventWrapper: Component<Props> = (props) => {
     );
 
     if (eventToDelete) {
-      await relay.deleteEvent(eventToDelete.eventID, setPubResult);
+      const pubResult = await relay.deleteEvent(eventToDelete.eventID);
 
-      if (pubResult()?.error) {
+      if (pubResult.error) {
         console.log("Reaction not sent correctly");
         return;
       }
@@ -70,11 +69,10 @@ const EventWrapper: Component<Props> = (props) => {
       };
 
       setReactions({ ...reactions(), [reactionType]: newReactions });
-      setPubResult(undefined);
     } else {
-      await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction, setPubResult);
+      const pubResult = await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction);
 
-      if (pubResult()?.error) {
+      if (pubResult.error) {
         console.log("Reaction not sent correctly");
         return;
       }
@@ -83,12 +81,11 @@ const EventWrapper: Component<Props> = (props) => {
         count: reactions()[reactionType as keyof IReaction].count + 1,
         events: [
           ...reactions()[reactionType as keyof IReaction].events,
-          { pubkey: pubResult()!.event.pubkey, eventID: pubResult()!.event.id }
+          { pubkey: pubResult.event.pubkey, eventID: pubResult.event.id }
         ]
       };
 
       setReactions({ ...reactions(), [reactionType]: newReactions });
-      setPubResult(undefined);
     }
   };
 

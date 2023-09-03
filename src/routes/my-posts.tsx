@@ -5,6 +5,7 @@ import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import PubResult from "~/interfaces/PubResult";
 
 const MyPosts: VoidComponent = () => {
   const { relay } = useContext(RelayContext);
@@ -14,7 +15,13 @@ const MyPosts: VoidComponent = () => {
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
 
   const handleDeletion = async (nostrEventID: string): Promise<void> => {
-    await relay.deleteEvent(nostrEventID);
+    const pubResult = await relay.deleteEvent(nostrEventID);
+
+    if (pubResult.error) {
+      console.log("Delete event failed");
+      return;
+    }
+
     const remainingEvents: Event[] = events().filter((evt) => evt.id != nostrEventID);
     setEvents(remainingEvents);
     setShowPopup(true);
