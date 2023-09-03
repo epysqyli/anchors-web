@@ -55,7 +55,12 @@ const EventWrapper: Component<Props> = (props) => {
     );
 
     if (eventToDelete) {
-      await relay.deleteEvent(eventToDelete.eventID);
+      await relay.deleteEvent(eventToDelete.eventID, setPubResult);
+
+      if (pubResult()?.error) {
+        console.log("Reaction not sent correctly");
+        return;
+      }
 
       const newReactions: IReactionFields = {
         count: reactions()[reactionType as keyof IReaction].count - 1,
@@ -65,6 +70,7 @@ const EventWrapper: Component<Props> = (props) => {
       };
 
       setReactions({ ...reactions(), [reactionType]: newReactions });
+      setPubResult(undefined);
     } else {
       await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction, setPubResult);
 
@@ -82,6 +88,7 @@ const EventWrapper: Component<Props> = (props) => {
       };
 
       setReactions({ ...reactions(), [reactionType]: newReactions });
+      setPubResult(undefined);
     }
   };
 

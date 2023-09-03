@@ -49,7 +49,7 @@ class Relayer {
     return pub;
   }
 
-  public async deleteEvent(eventID: string): Promise<void> {
+  public async deleteEvent(eventID: string, setPubResult: Setter<PubResult>): Promise<void> {
     const deletionEvent: EventTemplate = {
       kind: Kind.EventDeletion,
       tags: [["e", eventID]],
@@ -61,19 +61,25 @@ class Relayer {
     const pool = new SimplePool();
     const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
 
-    // use await Promise(pub) instead of `on` callbacks
+    await new Promise<void>((res) => {
+      pubRes.on("ok", () => {
+        setPubResult({ error: false, event: signedEvent });
+        res();
+      });
 
-    pubRes.on("ok", () => {
-      console.log("event deleted");
-    });
-
-    pubRes.on("failed", () => {
-      console.log("failure");
+      pubRes.on("failed", () => {
+        setPubResult({ error: true, event: signedEvent });
+        res();
+      });
     });
 
     pool.close(this.relaysUrls);
   }
 
+  /**
+   * Should the reaction only be published to the relay the event was fetched from?
+   * If so, IEnrichedEvent should also have a relay url prop
+   */
   public async reactToEvent(
     eventID: string,
     eventPubkey: string,
@@ -91,11 +97,6 @@ class Relayer {
     };
 
     const signedEvent = await window.nostr.signEvent(reactionEvent);
-
-    /**
-     * Should the reaction only be published to the relay the event was fetched from?
-     * If so, IEnrichedEvent should also have a relay url prop
-     */
     const pool = new SimplePool();
     const pub = pool.publish([this.relaysUrls[0]], signedEvent);
 
