@@ -13,7 +13,6 @@ import {
   verifySignature
 } from "nostr-tools";
 import { sortByCreatedAt } from "./nostr-utils";
-import { Setter } from "solid-js";
 import PubResult from "~/interfaces/PubResult";
 
 class Relayer {
