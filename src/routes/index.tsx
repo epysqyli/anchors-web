@@ -4,13 +4,14 @@ import { useBeforeLeave } from "@solidjs/router";
 import { Event, Filter, Kind } from "nostr-tools";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
-import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import EventWrapper from "~/components/feed/EventWrapper";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
+import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import { BsCloudDownload } from "solid-icons/bs";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;
@@ -185,6 +186,16 @@ const Home: Component<{}> = () => {
                 <EventWrapper event={nostrEvent} scrollPage={scrollPage} addHtmlRef={addHtmlRef} />
               )}
             </For>
+            <div class='relative snap-start h-full text-slate-300'>
+              <div
+                class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                          cursor-pointer p-20 border rounded-full border-slate-600
+                          hover:shadow-lg shadow-slate-500 active:shadow-none active:border-slate-800'
+              >
+                <BsCloudDownload size={60} class='mx-auto' />
+                <p class='text-center mt-10 text-lg select-none'>load older posts</p>
+              </div>
+            </div>
           </div>
         </div>
       </Show>
