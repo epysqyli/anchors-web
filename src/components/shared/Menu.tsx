@@ -50,7 +50,7 @@ const Menu: Component<Props> = (props) => {
             <FiAnchor size={40} />
           </div>
 
-          <div class='flex w-11/12 mx-auto'>
+          <div class='flex w-5/6 mx-auto'>
             <A class='w-1/2' onClick={props.toggleMenu} href='/'>
               <div class={active("/") ? selectedActionStyle : actionStyle}>
                 <CgFeed size={30} class='md:group-hover:animate-pulse mx-auto' />
