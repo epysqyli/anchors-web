@@ -13,18 +13,6 @@ const Write: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
   const menuToggle = useContext(menuTogglerContext);
 
-  const [intervalID, setIntervalID] = createSignal<NodeJS.Timer>();
-
-  // keep alive - any better way?
-  onMount(() => {
-    const intervalID = setInterval(async () => await relay.fetchAndUnsubKindThreeEvent(), 30000);
-    setIntervalID(intervalID);
-  });
-
-  useBeforeLeave(() => {
-    clearInterval(intervalID());
-  });
-
   const [refTags, setRefTags] = createSignal<IRefTag[]>([], { equals: false });
   const [nostrEvent, setNostrEvent] = createSignal<EventTemplate>(
     {
