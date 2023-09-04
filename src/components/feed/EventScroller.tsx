@@ -11,7 +11,7 @@ const EventScroller: Component<Props> = (props) => {
   }
 
   return (
-    <div class='p-2 flex items-center gap-x-1 text-slate-400'>
+    <div class='text-slate-400'>
       <div
         onClick={() => props.scrollPage!("up")}
         class='cursor-pointer hover:scale-105 hover:text-slate-200 active:scale-90'
