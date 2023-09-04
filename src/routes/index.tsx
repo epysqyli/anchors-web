@@ -95,10 +95,22 @@ const Home: Component<{}> = () => {
 
         setReactions([...reactions(), ...newReactions]);
 
-        setNewEnrichedEvents([
-          ...newEnrichedEvents(),
-          ...relay.buildEnrichedEvents(newEvents, metaEvents(), reactions())
-        ]);
+        const newEventsCount = newEnrichedEvents().length + newEvents.length;
+        if (newEventsCount >= MAX_EVENTS_COUNT) {
+          const newEventsToSet = [
+            ...newEnrichedEvents(),
+            ...relay.buildEnrichedEvents(newEvents, metaEvents(), reactions())
+          ]
+            .sort(sortByCreatedAtReverse)
+            .slice(newEventsCount - MAX_EVENTS_COUNT, newEventsCount);
+
+          setNewEnrichedEvents(newEventsToSet);
+        } else {
+          setNewEnrichedEvents([
+            ...newEnrichedEvents(),
+            ...relay.buildEnrichedEvents(newEvents, metaEvents(), reactions())
+          ]);
+        }
 
         setShowPopup(true);
       }
@@ -120,6 +132,8 @@ const Home: Component<{}> = () => {
     } else {
       setEnrichedEvents([...enrichedEvents(), ...newEnrichedEvents()].sort(sortByCreatedAt));
     }
+
+    setNewEnrichedEvents([]);
   };
 
   const scrollPage = (direction: "up" | "down"): void => {
