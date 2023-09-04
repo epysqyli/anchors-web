@@ -55,7 +55,7 @@ const MyPosts: VoidComponent = () => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold my-14'>Your nostr posts</h1>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14 mb-10'>Your nostr posts</h1>
       <Show when={!isLoading()} fallback={<LoadingFallback />}>
         <div class='w-4/5 xl:w-2/3 2xl:w-3/5 px-5 mx-auto overflow-y-scroll custom-scrollbar h-4/5'>
           <For each={events()}>
