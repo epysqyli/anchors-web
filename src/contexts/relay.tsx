@@ -25,9 +25,7 @@ if (pk) {
   }
 }
 
-const RelayContext: Context<IRelayContext> = createContext<IRelayContext>({
-  relay: relay
-});
+const RelayContext: Context<IRelayContext> = createContext({ relay: relay });
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
   return <RelayContext.Provider value={{ relay: relay }}>{props.children}</RelayContext.Provider>;
