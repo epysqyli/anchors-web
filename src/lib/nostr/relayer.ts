@@ -26,7 +26,6 @@ class Relayer {
 
   constructor(userPubkey?: string) {
     this.userPubKey = userPubkey;
-    this.setRelaysAndFollowers();
   }
 
   public sub(filter: Filter): Sub {
@@ -112,23 +111,12 @@ class Relayer {
 
     const pool = new SimplePool();
 
-    const kindThreeSub: Sub = pool.sub(this.relaysUrls, [
+    const kindThreeEvts = await pool.list(this.relaysUrls, [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
-    let event: Event;
-
-    kindThreeSub.on("event", (evt: Event) => {
-      event = evt;
-    });
-
-    return await new Promise((res) => {
-      kindThreeSub.on("eose", () => {
-        kindThreeSub.unsub();
-        pool.close(this.relaysUrls);
-        res(event);
-      });
-    });
+    pool.close(this.relaysUrls);
+    return kindThreeEvts[0];
   }
 
   public async followUser(newFollowing: string[]): Promise<void> {
@@ -144,7 +132,7 @@ class Relayer {
     const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
 
     pubRes.on("ok", () => {
-      // decide whether signal update should happen here or in `fetchUserFollowing` after EOSE
+      this.following = signedEvent.tags.map((e) => e[1]);
     });
 
     pubRes.on("failed", () => {
@@ -276,31 +264,6 @@ class Relayer {
         return enrichedEvent;
       })
       .sort(sortByCreatedAt);
-  }
-
-  private setRelaysAndFollowers(): void {
-    if (!this.userPubKey) {
-      return;
-    }
-
-    const pool = new SimplePool();
-
-    const kindThreeSub: Sub = pool.sub(this.relaysUrls, [
-      { kinds: [Kind.Contacts], authors: [this.userPubKey] }
-    ]);
-
-    // manage multiple events from multiple relays
-    kindThreeSub.on("event", (evt: Event) => {
-      this.kindThreeEvent = evt;
-      this.following = evt.tags.map((e) => e[1]);
-
-      const relayUrls = evt.content.split(";");
-      if (relayUrls[0] !== "") {
-        this.relaysUrls = relayUrls;
-      }
-    });
-
-    pool.close(this.relaysUrls);
   }
 
   private isEventValid(event: Event): boolean {

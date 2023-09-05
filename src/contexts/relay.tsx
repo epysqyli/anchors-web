@@ -11,8 +11,16 @@ interface IRelayContext {
 let relay: Relayer = new Relayer();
 
 const pk = await getPublicKeyFromExt();
+
 if (pk) {
   relay = new Relayer(pk);
+  const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
+
+  if (kindThreeEvent.content !== "") {
+    relay.relaysUrls = kindThreeEvent.content.split(";").filter((el) => el != "");
+  }
+
+  relay.following = kindThreeEvent.tags.map((e) => e[1]);
 }
 
 const RelayContext: Context<IRelayContext> = createContext<IRelayContext>({

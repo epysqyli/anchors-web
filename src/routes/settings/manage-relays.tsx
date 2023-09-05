@@ -16,7 +16,6 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   onMount(async () => {
     setIsLoading(true);
     const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
-    setIsLoading(false);
 
     setEventKindThree(kindThreeEvent);
 
@@ -25,6 +24,8 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
     } else {
       setRelays(kindThreeEvent.content.split(";").filter((el) => el != ""));
     }
+
+    setIsLoading(false);
   });
 
   const handleChange = (e: Event): void => {
@@ -34,9 +35,10 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   const handleSubmit = async (e: Event): Promise<void> => {
     e.preventDefault();
 
-    if (!relayToAdd().startsWith("ws") || !relayToAdd().startsWith("wss")) {
+    if (!relayToAdd().startsWith("ws")) {
       setValidationError(true);
       setPlaceholder("relay address is not valid");
+      
       return;
     }
 
