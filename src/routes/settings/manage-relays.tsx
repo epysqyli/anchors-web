@@ -10,7 +10,6 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   const [eventKindThree, setEventKindThree] = createSignal<NostrEvent>();
   const [relayToAdd, setRelayToAdd] = createSignal<string>("");
   const [validationError, setValidationError] = createSignal<boolean>(false);
-  const [placeholder, setPlaceholder] = createSignal<string>("add a relay");
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   onMount(async () => {
@@ -39,13 +38,10 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
     if (!relayToAdd().startsWith("ws")) {
       setValidationError(true);
-      setPlaceholder("relay address is not valid");
-
       return;
     }
 
     setValidationError(false);
-    setPlaceholder("add a relay");
 
     setRelays([...relays(), relayToAdd()]);
     await publishEvent();
@@ -71,6 +67,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
     pub.on("ok", () => {
       setEventKindThree(signedEvent);
+      relay.relaysUrls = signedEvent.content.split(";").filter((el) => el != "");
       console.log("ok");
     });
 
@@ -102,17 +99,25 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
             </For>
           </div>
 
-          <form onSubmit={handleSubmit} class='flex items-center justify-between mt-10'>
+          <form onSubmit={handleSubmit} class='flex items-center justify-between mb-3'>
             <input
               type='text'
               value={relayToAdd()}
               onChange={handleChange}
-              class={`block outline-none bg-transparent border-slate-200 border-b border-opacity-75
+              class='block outline-none bg-transparent border-slate-200 border-b border-opacity-75
                   focus:border-opacity-100 py-2 text-slate-200 
-                  text-center caret-slate-200 placeholder:text-center
-                  ${validationError() ? "border rounded border-red-600" : ""}`}
-              placeholder={placeholder()}
+                  text-center caret-slate-200 placeholder:text-center'
+              placeholder='add a relay url'
             />
+
+            {validationError() ? (
+              <div class='bg-red-500 bg-opacity-25 text-center rounded-md px-5 border-slate-500 text-slate-300 w-1/3'>
+                relay url should begin with 'ws' or 'wss'
+              </div>
+            ) : (
+              <></>
+            )}
+
             <button class='px-5 p-2 bg-green-200 text-green-800 rounded-md active:scale-95 select-none'>
               add
             </button>
