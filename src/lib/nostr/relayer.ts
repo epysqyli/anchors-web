@@ -104,7 +104,7 @@ class Relayer {
     });
   }
 
-  public async fetchAndUnsubKindThreeEvent(): Promise<Event> {
+  public async fetchContacts(): Promise<Event | undefined> {
     if (!this.userPubKey) {
       return new Promise((_) => {});
     }
@@ -116,7 +116,12 @@ class Relayer {
     ]);
 
     pool.close(this.relaysUrls);
-    return kindThreeEvts[0];
+
+    if (kindThreeEvts.length != 0) {
+      return kindThreeEvts[0];
+    }
+
+    return undefined;
   }
 
   public async followUser(newFollowing: string[]): Promise<void> {

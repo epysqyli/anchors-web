@@ -15,14 +15,16 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
   onMount(async () => {
     setIsLoading(true);
-    const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
+    const kindThreeEvent = await relay.fetchContacts();
 
-    setEventKindThree(kindThreeEvent);
+    if (kindThreeEvent) {
+      setEventKindThree(kindThreeEvent);
 
-    if (kindThreeEvent.content == "") {
-      setRelays(relay.relaysUrls);
-    } else {
-      setRelays(kindThreeEvent.content.split(";").filter((el) => el != ""));
+      if (kindThreeEvent.content == "") {
+        setRelays(relay.relaysUrls);
+      } else {
+        setRelays(kindThreeEvent.content.split(";").filter((el) => el != ""));
+      }
     }
 
     setIsLoading(false);
@@ -38,7 +40,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
     if (!relayToAdd().startsWith("ws")) {
       setValidationError(true);
       setPlaceholder("relay address is not valid");
-      
+
       return;
     }
 

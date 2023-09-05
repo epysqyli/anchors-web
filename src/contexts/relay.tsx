@@ -14,13 +14,15 @@ const pk = await getPublicKeyFromExt();
 
 if (pk) {
   relay = new Relayer(pk);
-  const kindThreeEvent = await relay.fetchAndUnsubKindThreeEvent();
+  const kindThreeEvent = await relay.fetchContacts();
 
-  if (kindThreeEvent.content !== "") {
-    relay.relaysUrls = kindThreeEvent.content.split(";").filter((el) => el != "");
+  if (kindThreeEvent) {
+    if (kindThreeEvent.content !== "") {
+      relay.relaysUrls = kindThreeEvent.content.split(";").filter((el) => el != "");
+    }
+
+    relay.following = kindThreeEvent.tags.map((e) => e[1]);
   }
-
-  relay.following = kindThreeEvent.tags.map((e) => e[1]);
 }
 
 const RelayContext: Context<IRelayContext> = createContext<IRelayContext>({
