@@ -20,7 +20,7 @@ class Relayer {
 
   public userPubKey?: string;
   public following: string[] = [];
-  public relaysUrls: string[] = ["ws://localhost:2700"];
+  public relaysUrls: string[] = [import.meta.env.VITE_DEFAULT_RELAY];
 
   private kindThreeEvent?: Event;
 

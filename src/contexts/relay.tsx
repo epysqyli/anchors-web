@@ -9,7 +9,6 @@ interface IRelayContext {
 }
 
 let relay: Relayer = new Relayer();
-
 const pk = await getPublicKeyFromExt();
 
 if (pk) {
