@@ -14,7 +14,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
   onMount(async () => {
     setIsLoading(true);
-    const kindThreeEvent = await relay.fetchContacts();
+    const kindThreeEvent = await relay.fetchFollowingAndRelays();
 
     if (kindThreeEvent) {
       setEventKindThree(kindThreeEvent);

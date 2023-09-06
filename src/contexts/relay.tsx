@@ -13,7 +13,7 @@ const pk = await getPublicKeyFromExt();
 
 if (pk) {
   relay = new Relayer(pk);
-  const kindThreeEvent = await relay.fetchContacts();
+  const kindThreeEvent = await relay.fetchFollowingAndRelays();
 
   if (kindThreeEvent) {
     if (kindThreeEvent.content !== "") {

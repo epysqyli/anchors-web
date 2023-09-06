@@ -104,7 +104,7 @@ class Relayer {
     });
   }
 
-  public async fetchContacts(): Promise<Event | undefined> {
+  public async fetchFollowingAndRelays(): Promise<Event | undefined> {
     if (!this.userPubKey) {
       return new Promise((_) => {});
     }
