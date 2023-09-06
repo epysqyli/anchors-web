@@ -145,6 +145,7 @@ class Relayer {
               this.relays.rw.push(relay[1]);
             }
             break;
+
           case 3:
             switch (relay[2]) {
               case "read":
@@ -152,15 +153,18 @@ class Relayer {
                   this.relays.r.push(relay[1]);
                 }
                 break;
+
               case "write":
                 if (!this.relays.w.find((r) => r[1] == relay[1])) {
                   this.relays.w.push(relay[1]);
                 }
                 break;
+
               default:
                 break;
             }
             break;
+
           default:
             break;
         }
