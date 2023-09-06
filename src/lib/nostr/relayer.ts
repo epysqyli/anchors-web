@@ -14,6 +14,7 @@ import {
 } from "nostr-tools";
 import { sortByCreatedAt } from "./nostr-utils";
 import PubResult from "~/interfaces/PubResult";
+import RelayList from "~/interfaces/RelayList";
 
 class Relayer {
   public readonly FETCH_INTERVAL_MS = 20000;
@@ -23,6 +24,7 @@ class Relayer {
   public relaysUrls: string[] = [import.meta.env.VITE_DEFAULT_RELAY];
 
   private kindThreeEvent?: Event;
+  private relays: RelayList = { r: [], w: [], rw: [] };
 
   constructor(userPubkey?: string) {
     this.userPubKey = userPubkey;
@@ -122,6 +124,58 @@ class Relayer {
     }
 
     return undefined;
+  }
+
+  public async fetchAndSetRelays(): Promise<RelayList> {
+    const pool = new SimplePool();
+    const events: Event[] = await pool.list(this.relaysUrls, [
+      {
+        kinds: [Kind.RelayList],
+        authors: [this.userPubKey!]
+      }
+    ]);
+
+    if (events.length != 0) {
+      const relays = events.map((evt) => evt.tags).flat();
+
+      relays.forEach((relay) => {
+        switch (relay.length) {
+          case 2:
+            if (!this.relays.rw.find((r) => r[1] == relay[1])) {
+              this.relays.rw.push(relay[1]);
+            }
+            break;
+          case 3:
+            switch (relay[2]) {
+              case "read":
+                if (!this.relays.r.find((r) => r[1] == relay[1])) {
+                  this.relays.r.push(relay[1]);
+                }
+                break;
+              case "write":
+                if (!this.relays.w.find((r) => r[1] == relay[1])) {
+                  this.relays.w.push(relay[1]);
+                }
+                break;
+              default:
+                break;
+            }
+            break;
+          default:
+            break;
+        }
+      });
+    }
+
+    return this.relays;
+  }
+
+  public isRelayListEmpty(): boolean {
+    if (this.relays.r.length + this.relays.w.length + this.relays.rw.length == 0) {
+      return true;
+    }
+
+    return false;
   }
 
   public async followUser(newFollowing: string[]): Promise<void> {

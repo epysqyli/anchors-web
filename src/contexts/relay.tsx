@@ -13,10 +13,12 @@ const pk = await getPublicKeyFromExt();
 
 if (pk) {
   relay = new Relayer(pk);
+  await relay.fetchAndSetRelays();
+
   const kindThreeEvent = await relay.fetchFollowingAndRelays();
 
   if (kindThreeEvent) {
-    if (kindThreeEvent.content !== "") {
+    if (relay.isRelayListEmpty() && kindThreeEvent.content !== "") {
       relay.relaysUrls = kindThreeEvent.content.split(";").filter((el) => el != "");
     }
 

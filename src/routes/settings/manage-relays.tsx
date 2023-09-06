@@ -74,6 +74,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
     pub.on("failed", () => console.log("failed"));
   };
 
+  // TODO: manage read, write, and read-write relays
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14'>
