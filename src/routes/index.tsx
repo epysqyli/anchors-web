@@ -64,7 +64,7 @@ const Home: Component<{}> = () => {
     setReactions(await relay.fetchEventsReactions(reactionsFilter));
     setEnrichedEvents(relay.buildEnrichedEvents(events(), metaEvents(), reactions()));
 
-    // setIsLoading(false);
+    setIsLoading(false);
 
     const intervalIdentifier = setInterval(async () => {
       eventsFilter = { ...eventsFilter, since: ++enrichedEvents()[0].created_at };
