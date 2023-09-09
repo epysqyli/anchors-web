@@ -137,11 +137,14 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                   <div class='grow py-5 overflow-y-scroll custom-scrollbar h-[1vh]'>
                     <For each={relays[1]}>
                       {(relayAddress) => (
-                        <div class='flex items-center justify-between w-4/5 mx-auto my-2'>
+                        <div
+                          class='flex items-center justify-between w-5/6 mx-auto my-1 py-2 px-2 bg-slate-600
+                                   hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'
+                        >
                           <div class='text-slate-300'>{relayAddress}</div>
                           <div
                             onClick={() => handleDeletion(relays[0] as "r" | "w" | "rw", relayAddress)}
-                            class='text-slate-400 hover:text-red-300 text-opacity-75'
+                            class='text-slate-400 hover:text-red-300 text-opacity-75 cursor-pointer hover:scale-105 active:scale-95'
                           >
                             <RiSystemCloseCircleFill size={30} />
                           </div>
