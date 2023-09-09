@@ -42,7 +42,7 @@ class Relayer {
   public pub(event: Event, relays?: string[]): Pub {
     const pool = new SimplePool();
 
-    const destRelays: string[] = relays == undefined ? this.relaysUrls : relays;
+    const destRelays: string[] = relays == undefined ? this.relays.rw : relays;
     const pub = pool.publish(destRelays, event);
     pool.close(destRelays);
 
@@ -141,7 +141,8 @@ class Relayer {
       relays.forEach((relay) => {
         switch (relay.length) {
           case 2:
-            if (!this.relays.rw.find((r) => r[1] == relay[1])) {
+            const found = this.relays.rw.find((r) => r == relay[1]);
+            if (!this.relays.rw.find((r) => r == relay[1])) {
               this.relays.rw.push(relay[1]);
             }
             break;
@@ -149,13 +150,13 @@ class Relayer {
           case 3:
             switch (relay[2]) {
               case "read":
-                if (!this.relays.r.find((r) => r[1] == relay[1])) {
+                if (!this.relays.r.find((r) => r == relay[1])) {
                   this.relays.r.push(relay[1]);
                 }
                 break;
 
               case "write":
-                if (!this.relays.w.find((r) => r[1] == relay[1])) {
+                if (!this.relays.w.find((r) => r == relay[1])) {
                   this.relays.w.push(relay[1]);
                 }
                 break;
@@ -169,6 +170,10 @@ class Relayer {
             break;
         }
       });
+    }
+
+    if (this.isRelayListEmpty()) {
+      this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
     }
 
     return this.relays;
