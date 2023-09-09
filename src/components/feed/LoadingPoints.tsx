@@ -7,7 +7,7 @@ const LoadingPoints: VoidComponent = () => {
         return (
           <div class='flex justify-around'>
             {Array.from({ length: 10 }).map((_) => {
-              return <span class='text-4xl'>.</span>;
+              return <div class='w-1 h-1 rounded-full bg-white my-4'></div>;
             })}
           </div>
         );
