@@ -1,5 +1,6 @@
 import { useLocation } from "solid-start";
 import { RelayContext } from "~/contexts/relay";
+import { BsCloudDownload } from "solid-icons/bs";
 import { useBeforeLeave } from "@solidjs/router";
 import { Event, Filter, Kind } from "nostr-tools";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
@@ -7,11 +8,10 @@ import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
-import LoadingFallback from "~/components/feed/LoadingFallback";
+import LoadingPoints from "~/components/feed/LoadingPoints";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
-import { BsCloudDownload } from "solid-icons/bs";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;
@@ -165,7 +165,7 @@ const Home: Component<{}> = () => {
 
       <Show
         when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()}
-        fallback={<LoadingFallback />}
+        fallback={<LoadingPoints />}
       >
         <div class='relative h-full animate-scale-on-load'>
           <div class='absolute top-2 left-5'>

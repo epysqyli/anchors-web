@@ -2,7 +2,7 @@ import { Event } from "nostr-tools";
 import Popup from "~/components/shared/Popup";
 import { RelayContext } from "~/contexts/relay";
 import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
-import LoadingFallback from "~/components/feed/LoadingFallback";
+import LoadingPoints from "~/components/feed/LoadingPoints";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
@@ -46,7 +46,7 @@ const MyPosts: VoidComponent = () => {
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14 mb-10'>Your nostr posts</h1>
-      <Show when={!isLoading()} fallback={<LoadingFallback />}>
+      <Show when={!isLoading()} fallback={<LoadingPoints />}>
         <div class='w-4/5 xl:w-2/3 2xl:w-3/5 px-5 mx-auto overflow-y-scroll custom-scrollbar h-4/5'>
           <For each={events()}>
             {(nostrEvent) => <UserNostrEvent nostrEvent={nostrEvent} handleDeletion={handleDeletion} />}

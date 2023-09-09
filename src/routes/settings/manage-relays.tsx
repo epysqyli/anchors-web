@@ -1,10 +1,10 @@
 import RelayList from "~/interfaces/RelayList";
 import { RelayContext } from "~/contexts/relay";
-import { RiSystemCloseCircleFill } from "solid-icons/ri";
-import LoadingFallback from "~/components/feed/LoadingFallback";
-import { EventTemplate, Kind, Pub } from "nostr-tools";
-import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 import { TbCirclePlus } from "solid-icons/tb";
+import { EventTemplate, Kind, Pub } from "nostr-tools";
+import { RiSystemCloseCircleFill } from "solid-icons/ri";
+import LoadingPoints from "~/components/feed/LoadingPoints";
+import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const ManageRelays: VoidComponent = (): JSX.Element => {
   const { relay } = useContext(RelayContext);
@@ -125,7 +125,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
       </h1>
 
       <div class='w-5/6 mx-auto mt-10 p-3 h-4/5'>
-        <Show when={!isLoading()} fallback={<LoadingFallback />}>
+        <Show when={!isLoading()} fallback={<LoadingPoints />}>
           <div class='grid grid-cols-3 gap-x-3 h-full'>
             <For each={Object.entries(relayList())}>
               {(relays) => (
