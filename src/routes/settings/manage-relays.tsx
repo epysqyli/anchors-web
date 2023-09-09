@@ -144,7 +144,8 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                           <div class='text-slate-300'>{relayAddress}</div>
                           <div
                             onClick={() => handleDeletion(relays[0] as "r" | "w" | "rw", relayAddress)}
-                            class='text-slate-400 hover:text-red-300 text-opacity-75 cursor-pointer hover:scale-105 active:scale-95'
+                            class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 
+                                    cursor-pointer hover:scale-105 active:scale-95'
                           >
                             <RiSystemCloseCircleFill size={30} />
                           </div>
@@ -162,7 +163,10 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                       class='block w-4/5 py-2 rounded focus:outline-none bg-slate-500 bg-opacity-75
                              text-center caret-slate-200 text-slate-200'
                     />
-                    <button class='block h-full text-slate-300 hover:scale-105 active:scale-95'>
+                    <button
+                      class='block h-full text-green-400 text-opacity-70 hover:text-opacity-100
+                                    transition-all hover:scale-105 active:scale-95'
+                    >
                       <TbCirclePlus size={42} stroke-width={1} class='mx-auto' />
                     </button>
                   </form>
