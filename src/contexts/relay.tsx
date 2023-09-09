@@ -18,10 +18,6 @@ if (pk) {
   const kindThreeEvent = await relay.fetchFollowingAndRelays();
 
   if (kindThreeEvent) {
-    if (relay.isRelayListEmpty() && kindThreeEvent.content !== "") {
-      relay.relaysUrls = kindThreeEvent.content.split(";").filter((el) => el != "");
-    }
-
     relay.following = kindThreeEvent.tags.map((e) => e[1]);
   }
 }

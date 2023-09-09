@@ -21,7 +21,6 @@ class Relayer {
 
   public userPubKey?: string;
   public following: string[] = [];
-  public relaysUrls: string[] = [import.meta.env.VITE_DEFAULT_RELAY];
 
   private kindThreeEvent?: Event;
   private relays: RelayList = { r: [], w: [], rw: [] };
@@ -32,19 +31,16 @@ class Relayer {
 
   public sub(filter: Filter): Sub {
     const pool = new SimplePool();
-
-    const sub = pool.sub(this.relaysUrls, [filter]);
-    pool.close(this.relaysUrls);
+    const sub = pool.sub(this.getReadRelays(), [filter]);
+    pool.close(this.getReadRelays());
 
     return sub;
   }
 
-  public pub(event: Event, relays?: string[]): Pub {
+  public pub(event: Event): Pub {
     const pool = new SimplePool();
-
-    const destRelays: string[] = relays == undefined ? this.relays.rw : relays;
-    const pub = pool.publish(destRelays, event);
-    pool.close(destRelays);
+    const pub = pool.publish(this.getWriteRelays(), event);
+    pool.close(this.getWriteRelays());
 
     return pub;
   }
@@ -59,16 +55,16 @@ class Relayer {
 
     const signedEvent = await window.nostr.signEvent(deletionEvent);
     const pool = new SimplePool();
-    const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
+    const pubRes: Pub = pool.publish(this.getWriteRelays(), signedEvent);
 
     return await new Promise<PubResult>((res) => {
       pubRes.on("ok", () => {
-        pool.close(this.relaysUrls);
+        pool.close(this.getWriteRelays());
         res({ error: false, event: signedEvent });
       });
 
       pubRes.on("failed", () => {
-        pool.close(this.relaysUrls);
+        pool.close(this.getWriteRelays());
         res({ error: true, event: signedEvent });
       });
     });
@@ -91,16 +87,16 @@ class Relayer {
 
     const signedEvent = await window.nostr.signEvent(reactionEvent);
     const pool = new SimplePool();
-    const pub = pool.publish([this.relaysUrls[0]], signedEvent);
+    const pub = pool.publish(this.getWriteRelays(), signedEvent);
 
     return await new Promise<PubResult>((res) => {
       pub.on("ok", () => {
-        pool.close(this.relaysUrls);
+        pool.close(this.getWriteRelays());
         res({ error: false, event: signedEvent });
       });
 
       pub.on("failed", () => {
-        pool.close(this.relaysUrls);
+        pool.close(this.getWriteRelays());
         res({ error: true, event: signedEvent });
       });
     });
@@ -113,11 +109,11 @@ class Relayer {
 
     const pool = new SimplePool();
 
-    const kindThreeEvts = await pool.list(this.relaysUrls, [
+    const kindThreeEvts = await pool.list(this.getReadRelays(), [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
-    pool.close(this.relaysUrls);
+    pool.close(this.getReadRelays());
 
     if (kindThreeEvts.length != 0) {
       return kindThreeEvts[0];
@@ -128,7 +124,7 @@ class Relayer {
 
   public async fetchAndSetRelays(): Promise<RelayList> {
     const pool = new SimplePool();
-    const events: Event[] = await pool.list(this.relaysUrls, [
+    const events: Event[] = await pool.list(this.getReadRelays(), [
       {
         kinds: [Kind.RelayList],
         authors: [this.userPubKey!]
@@ -197,7 +193,7 @@ class Relayer {
 
     const signedEvent = await window.nostr.signEvent(followEvent);
     const pool = new SimplePool();
-    const pubRes: Pub = pool.publish(this.relaysUrls, signedEvent);
+    const pubRes: Pub = pool.publish(this.getWriteRelays(), signedEvent);
 
     pubRes.on("ok", () => {
       this.following = signedEvent.tags.map((e) => e[1]);
@@ -207,7 +203,7 @@ class Relayer {
       console.log("follow event failure");
     });
 
-    pool.close(this.relaysUrls);
+    pool.close(this.getWriteRelays());
     return;
   }
 
@@ -226,7 +222,7 @@ class Relayer {
 
     const pool = new SimplePool();
 
-    const kindThreeEvent = await pool.list(this.relaysUrls, [
+    const kindThreeEvent = await pool.list(this.getReadRelays(), [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
@@ -234,26 +230,27 @@ class Relayer {
     this.kindThreeEvent = kindThreeEvent[0];
     this.following = this.kindThreeEvent.tags.map((e) => e[1]);
 
-    const relayUrls = this.kindThreeEvent.content.split(";");
-    if (relayUrls[0] !== "") {
-      this.relaysUrls = relayUrls;
+    if (this.isRelayListEmpty()) {
+      this.kindThreeEvent.content.split(";").forEach((rl) => {
+        this.relays.rw.push(rl);
+      });
     }
 
-    pool.close(this.relaysUrls);
+    pool.close(this.getReadRelays());
   }
 
   public async fetchTextEvents(filter?: Filter): Promise<Event[]> {
     const pool = new SimplePool();
     filter = filter == undefined ? { kinds: [Kind.Text] } : { ...filter, kinds: [Kind.Text] };
-    const events = (await pool.list(this.relaysUrls, [filter])).filter(this.isEventValid);
-    pool.close(this.relaysUrls);
+    const events = (await pool.list(this.getReadRelays(), [filter])).filter(this.isEventValid);
+    pool.close(this.getReadRelays());
 
     return events;
   }
 
   public async fetchEventsMetadata(filter: Filter): Promise<IUserMetadataWithPubkey[]> {
     const pool = new SimplePool();
-    const events = (await pool.list(this.relaysUrls, [{ ...filter, kinds: [Kind.Metadata] }])).filter(
+    const events = (await pool.list(this.getReadRelays(), [{ ...filter, kinds: [Kind.Metadata] }])).filter(
       this.isEventValid
     );
 
@@ -262,15 +259,15 @@ class Relayer {
       return { name: metadata.name, picture: metadata.picture, about: metadata.about, pubkey: evt.pubkey };
     });
 
-    pool.close(this.relaysUrls);
+    pool.close(this.getReadRelays());
 
     return metadataEvents;
   }
 
   public async fetchEventsReactions(filter: Filter[]): Promise<IReactionWithEventID[]> {
     const pool = new SimplePool();
-    const events = (await pool.list(this.relaysUrls, filter)).filter(this.isEventValid);
-    pool.close(this.relaysUrls);
+    const events = (await pool.list(this.getReadRelays(), filter)).filter(this.isEventValid);
+    pool.close(this.getReadRelays());
 
     const eventdIDs = filter.flatMap((f) => f["#e"]);
 
@@ -336,6 +333,14 @@ class Relayer {
 
   private isEventValid(event: Event): boolean {
     return validateEvent(event) && verifySignature(event);
+  }
+
+  private getReadRelays(): string[] {
+    return [...this.relays.r, ...this.relays.rw];
+  }
+
+  private getWriteRelays(): string[] {
+    return [...this.relays.w, ...this.relays.rw];
   }
 }
 
