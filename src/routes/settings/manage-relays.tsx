@@ -44,7 +44,25 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
     }
 
     return relayListEventTags.flat();
-  }
+  };
+
+  const handleDeletion = async (relayType: "r" | "w" | "rw", relayAddress: string): Promise<void> => {
+    switch (relayType) {
+      case "r":
+        relayList().r = relayList().r.filter((r) => r != relayAddress);
+        break;
+
+      case "w":
+        relayList().w = relayList().w.filter((r) => r != relayAddress);
+        break;
+
+      case "rw":
+        relayList().rw = relayList().rw.filter((r) => r != relayAddress);
+        break;
+    }
+
+    await publishEvent();
+  };
 
   const handleSubmit = async (e: Event): Promise<void> => {
     e.preventDefault();
@@ -71,6 +89,10 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
         break;
     }
 
+    await publishEvent();
+  };
+
+  const publishEvent = async (): Promise<boolean> => {
     const relayListEvent: EventTemplate = {
       content: "",
       created_at: Math.floor(Date.now() / 1000),
@@ -81,7 +103,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
     const signedEvent = await window.nostr.signEvent(relayListEvent);
     const pub: Pub = relay.pub(signedEvent);
 
-    const isPubResOk = await new Promise<boolean>((res) => {
+    return await new Promise<boolean>((res) => {
       pub.on("ok", () => {
         setRelayList(relayList());
         res(true);
@@ -94,7 +116,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   };
 
   type RelayBoxTitle = { r: string; w: string; rw: string };
-  const relayBoxTitle = { r: "read-only", w: "write-only", rw: "read/write" };
+  const relayBoxTitle = { r: "Read From", w: "Write To", rw: "Read & Write" };
 
   return (
     <>
@@ -117,7 +139,10 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                       {(relayAddress) => (
                         <div class='flex items-center justify-between w-4/5 mx-auto my-2'>
                           <div class='text-slate-300'>{relayAddress}</div>
-                          <div class='text-slate-400 hover:text-red-300 text-opacity-75'>
+                          <div
+                            onClick={() => handleDeletion(relays[0] as "r" | "w" | "rw", relayAddress)}
+                            class='text-slate-400 hover:text-red-300 text-opacity-75'
+                          >
                             <RiSystemCloseCircleFill size={30} />
                           </div>
                         </div>
