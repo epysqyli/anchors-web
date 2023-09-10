@@ -124,6 +124,10 @@ class Relayer {
   }
 
   public async fetchAndSetRelays(): Promise<RelayList> {
+    if (this.isRelayListEmpty()) {
+      this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
+    }
+
     const pool = new SimplePool();
     const events: Event[] = await pool.list(this.getReadRelays(), [
       {
@@ -167,10 +171,6 @@ class Relayer {
             break;
         }
       });
-    }
-
-    if (this.isRelayListEmpty()) {
-      this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
     }
 
     return this.relays;
