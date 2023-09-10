@@ -45,9 +45,14 @@ const MyPosts: VoidComponent = () => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14 mb-10'>Your nostr posts</h1>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14 mb-10'>
+        Your Anchors posts
+      </h1>
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
-        <div class='w-4/5 xl:w-2/3 2xl:w-3/5 px-5 mx-auto overflow-y-scroll custom-scrollbar h-4/5'>
+        <div
+          class='w-4/5 xl:w-2/3 2xl:w-5/6 px-5 gap-1 mx-auto overflow-y-scroll 
+                custom-scrollbar h-4/5 grid grid-cols-3 gap-x-5 gap-y-10'
+        >
           <For each={events()}>
             {(nostrEvent) => <UserNostrEvent nostrEvent={nostrEvent} handleDeletion={handleDeletion} />}
           </For>
