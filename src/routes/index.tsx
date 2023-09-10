@@ -67,7 +67,10 @@ const Home: Component<{}> = () => {
     setIsLoading(false);
 
     const intervalIdentifier = setInterval(async () => {
-      eventsFilter = { ...eventsFilter, since: ++enrichedEvents()[0].created_at };
+      const fetchSinceTimestamp =
+        newEnrichedEvents().length == 0 ? enrichedEvents()[0].created_at : newEnrichedEvents()[0].created_at;
+
+      eventsFilter = { ...eventsFilter, since: fetchSinceTimestamp + 1 };
       const newEvents: Event[] = await relay.fetchTextEvents(eventsFilter);
 
       if (newEvents.length !== 0) {
@@ -163,10 +166,7 @@ const Home: Component<{}> = () => {
         </div>
       </Show>
 
-      <Show
-        when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()}
-        fallback={<LoadingPoints />}
-      >
+      <Show when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()} fallback={<LoadingPoints />}>
         <div class='relative h-full animate-scale-on-load'>
           <div class='absolute top-2 left-5'>
             <NewEventsPopup
