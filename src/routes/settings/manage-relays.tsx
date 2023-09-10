@@ -167,7 +167,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                       class='block h-full text-green-400 text-opacity-70 hover:text-opacity-100
                                     transition-all hover:scale-105 active:scale-95'
                     >
-                      <TbCirclePlus size={42} stroke-width={1} class='mx-auto' />
+                      <TbCirclePlus size={42} stroke-width={1.5} class='mx-auto' />
                     </button>
                   </form>
                 </div>
