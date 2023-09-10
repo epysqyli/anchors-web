@@ -74,10 +74,6 @@ class Relayer {
     // });
   }
 
-  /**
-   * Should the reaction only be published to the relay the event was fetched from?
-   * If so, IEnrichedEvent should also have a relay url prop
-   */
   public async reactToEvent(eventID: string, eventPubkey: string, reaction: Reaction): Promise<PubResult> {
     const reactionEvent: EventTemplate = {
       kind: Kind.Reaction,
