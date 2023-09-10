@@ -54,20 +54,24 @@ class Relayer {
     };
 
     const signedEvent = await window.nostr.signEvent(deletionEvent);
-    const pool = new SimplePool();
-    const pubRes: Pub = pool.publish(this.getWriteRelays(), signedEvent);
+    this.pub(signedEvent);
 
-    return await new Promise<PubResult>((res) => {
-      pubRes.on("ok", () => {
-        pool.close(this.getWriteRelays());
-        res({ error: false, event: signedEvent });
-      });
+    return { error: false, event: signedEvent };
+    /**
+     * awaiting here never resolves for some reason
+     * the same pattern works on this.reactToEvent though!
+     * try out different relays or change basic relayer implementation
+     * perhaps `advancedDeleter` is interfering
+     */
+    // return await new Promise<PubResult>((res) => {
+    //   pub.on("ok", () => {
+    //     res({ error: false, event: signedEvent });
+    //   });
 
-      pubRes.on("failed", () => {
-        pool.close(this.getWriteRelays());
-        res({ error: true, event: signedEvent });
-      });
-    });
+    //   pub.on("failed", () => {
+    //     res({ error: true, event: signedEvent });
+    //   });
+    // });
   }
 
   /**
@@ -86,17 +90,14 @@ class Relayer {
     };
 
     const signedEvent = await window.nostr.signEvent(reactionEvent);
-    const pool = new SimplePool();
-    const pub = pool.publish(this.getWriteRelays(), signedEvent);
+    const pub = this.pub(signedEvent);
 
     return await new Promise<PubResult>((res) => {
       pub.on("ok", () => {
-        pool.close(this.getWriteRelays());
         res({ error: false, event: signedEvent });
       });
 
       pub.on("failed", () => {
-        pool.close(this.getWriteRelays());
         res({ error: true, event: signedEvent });
       });
     });
