@@ -36,7 +36,6 @@ const Home: Component<{}> = () => {
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [intervalID, setIntervalID] = createSignal<NodeJS.Timer>();
 
-  //  setup and manage caching layer
   onMount(async () => {
     setIsLoading(true);
     const location = useLocation();
@@ -70,13 +69,20 @@ const Home: Component<{}> = () => {
       const fetchSinceTimestamp =
         newEnrichedEvents().length == 0 ? enrichedEvents()[0].created_at : newEnrichedEvents()[0].created_at;
 
-      eventsFilter = { ...eventsFilter, since: fetchSinceTimestamp + 1 };
-      const newEvents: Event[] = await relay.fetchTextEvents(eventsFilter);
+      const newEvents: Event[] = await relay.fetchTextEvents({
+        ...eventsFilter,
+        since: fetchSinceTimestamp + 1
+      });
 
       if (newEvents.length !== 0) {
-        setEvents([...events(), ...newEvents]);
+        const newEventsIDs = newEvents.map((e) => e.id);
+        const oldEventsIDs = events().map((e) => e.id);
+        const uniqueNewEventsIDs = newEventsIDs.filter((newID) => !oldEventsIDs.includes(newID));
+        const newUniqueEvents = newEvents.filter((newEvt) => uniqueNewEventsIDs.includes(newEvt.id));
 
-        const newEventsAuthors: string[] = newEvents.map((e) => e.pubkey);
+        setEvents([...events(), ...newUniqueEvents]);
+
+        const newEventsAuthors: string[] = newUniqueEvents.map((e) => e.pubkey);
         const oldEventsAuthors: string[] = events().map((e) => e.pubkey);
         const diffAuthors: string[] = newEventsAuthors.filter((newPk) =>
           oldEventsAuthors.find((oldPk) => oldPk !== newPk)
@@ -88,7 +94,7 @@ const Home: Component<{}> = () => {
           setMetaEvents([...metaEvents(), ...recentMetaEvents]);
         }
 
-        const reactionsFilter: Filter[] = newEvents.map((evt) => {
+        const reactionsFilter: Filter[] = newUniqueEvents.map((evt) => {
           return { kinds: [Kind.Reaction], "#e": [evt.id] };
         });
 
@@ -99,11 +105,11 @@ const Home: Component<{}> = () => {
 
         setReactions([...reactions(), ...newReactions]);
 
-        const newEventsCount = newEnrichedEvents().length + newEvents.length;
+        const newEventsCount = newEnrichedEvents().length + newUniqueEvents.length;
         if (newEventsCount >= MAX_EVENTS_COUNT) {
           const newEventsToSet = [
             ...newEnrichedEvents(),
-            ...relay.buildEnrichedEvents(newEvents, metaEvents(), reactions())
+            ...relay.buildEnrichedEvents(newUniqueEvents, metaEvents(), reactions())
           ]
             .sort(sortByCreatedAtReverse)
             .slice(newEventsCount - MAX_EVENTS_COUNT, newEventsCount);
@@ -112,7 +118,7 @@ const Home: Component<{}> = () => {
         } else {
           setNewEnrichedEvents([
             ...newEnrichedEvents(),
-            ...relay.buildEnrichedEvents(newEvents, metaEvents(), reactions())
+            ...relay.buildEnrichedEvents(newUniqueEvents, metaEvents(), reactions())
           ]);
         }
 
