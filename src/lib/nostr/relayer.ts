@@ -176,14 +176,6 @@ class Relayer {
     return this.relays;
   }
 
-  public isRelayListEmpty(): boolean {
-    if (this.relays.r.length + this.relays.w.length + this.relays.rw.length == 0) {
-      return true;
-    }
-
-    return false;
-  }
-
   public async followUser(newFollowing: string[]): Promise<PubResult> {
     const followEvent: EventTemplate = {
       content: this.kindThreeEvent!.content,
@@ -340,6 +332,14 @@ class Relayer {
 
   private getWriteRelays(): string[] {
     return [...this.relays.w, ...this.relays.rw];
+  }
+
+  private isRelayListEmpty(): boolean {
+    if (this.relays.r.length + this.relays.w.length + this.relays.rw.length == 0) {
+      return true;
+    }
+
+    return false;
   }
 }
 
