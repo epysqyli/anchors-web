@@ -94,7 +94,7 @@ const Menu: Component<Props> = (props) => {
 
           <A onClick={props.toggleMenu} href='/settings'>
             <div class={active("/settings") ? selectedFlexActionStyle : flexActionStyle}>
-              <div class='group-hover:scale-95'>settings</div>
+              <div class='group-hover:scale-95'>profile</div>
               <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
