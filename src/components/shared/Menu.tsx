@@ -1,11 +1,12 @@
 import { A } from "@solidjs/router";
 import { CgFeed } from "solid-icons/cg";
-import { BsGlobe2 } from "solid-icons/bs";
+import { BsBookmark, BsGlobe2 } from "solid-icons/bs";
 import { useLocation } from "solid-start";
 import { Component, Show } from "solid-js";
 import { FiAnchor, FiEdit } from "solid-icons/fi";
 import { IoSettingsOutline } from "solid-icons/io";
-import { BsStack, BsSearch } from "solid-icons/bs";
+import { BsSearch } from "solid-icons/bs";
+import { TbStack2 } from "solid-icons/tb";
 
 interface Props {
   isNarrow: boolean | undefined;
@@ -77,10 +78,17 @@ const Menu: Component<Props> = (props) => {
             </div>
           </A>
 
+          <A onClick={props.toggleMenu} href='/saved-posts'>
+            <div class={active("/saved-posts") ? selectedFlexActionStyle : flexActionStyle}>
+              <div class='group-hover:scale-95'>saved posts</div>
+              <BsBookmark size={26} class='md:group-hover:animate-pulse' />
+            </div>
+          </A>
+
           <A onClick={props.toggleMenu} href='/my-posts'>
             <div class={active("/my-posts") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>my posts</div>
-              <BsStack size={26} class='md:group-hover:animate-pulse' />
+              <TbStack2 size={28} class='md:group-hover:animate-pulse' />
             </div>
           </A>
 
