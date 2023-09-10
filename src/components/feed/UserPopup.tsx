@@ -22,13 +22,23 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
   const [canFollow, setCanFollow] = createSignal<boolean>(!relay.isUserAlreadyFollowed(props.pubkey));
 
   const handleFollow = async (): Promise<void> => {
-    await relay.followUser([...relay.following, props.pubkey]);
-    setCanFollow(false);
+    const pubRes = await relay.followUser([...relay.following, props.pubkey]);
+
+    if (!pubRes.error) {
+      setCanFollow(false);
+    } else {
+      console.log("error following user");
+    }
   };
 
   const handleUnfollow = async (): Promise<void> => {
-    await relay.followUser(relay.following.filter((fl) => fl !== props.pubkey));
-    setCanFollow(true);
+    const pubRes = await relay.followUser(relay.following.filter((fl) => fl !== props.pubkey));
+
+    if (!pubRes.error) {
+      setCanFollow(true);
+    } else {
+      console.log("error unfollowing user");
+    }
   };
 
   onMount(async () => {

@@ -184,7 +184,7 @@ class Relayer {
     return false;
   }
 
-  public async followUser(newFollowing: string[]): Promise<void> {
+  public async followUser(newFollowing: string[]): Promise<PubResult> {
     const followEvent: EventTemplate = {
       content: this.kindThreeEvent!.content,
       kind: Kind.Contacts,
@@ -193,19 +193,17 @@ class Relayer {
     };
 
     const signedEvent = await window.nostr.signEvent(followEvent);
-    const pool = new SimplePool();
-    const pubRes: Pub = pool.publish(this.getWriteRelays(), signedEvent);
+    const pub = this.pub(signedEvent);
 
-    pubRes.on("ok", () => {
-      this.following = signedEvent.tags.map((e) => e[1]);
+    return await new Promise<PubResult>((res) => {
+      pub.on("ok", () => {
+        res({ error: false, event: signedEvent });
+      });
+
+      pub.on("failed", () => {
+        res({ error: true, event: signedEvent });
+      });
     });
-
-    pubRes.on("failed", () => {
-      console.log("follow event failure");
-    });
-
-    pool.close(this.getWriteRelays());
-    return;
   }
 
   public isUserAlreadyFollowed = (pubkey: string): boolean => {
