@@ -21,8 +21,6 @@ class Relayer {
 
   public userPubKey?: string;
   public following: string[] = [];
-
-  private kindThreeEvent?: Event;
   private relays: RelayList = { r: [], w: [], rw: [] };
 
   constructor(userPubkey?: string) {
@@ -174,7 +172,7 @@ class Relayer {
 
   public async followUser(newFollowing: string[]): Promise<PubResult> {
     const followEvent: EventTemplate = {
-      content: this.kindThreeEvent!.content,
+      content: "",
       kind: Kind.Contacts,
       created_at: Math.floor(Date.now() / 1000),
       tags: newFollowing.map((pk) => ["p", pk])
@@ -185,6 +183,7 @@ class Relayer {
 
     return await new Promise<PubResult>((res) => {
       pub.on("ok", () => {
+        this.following = signedEvent.tags.map((pk) => pk[1]);
         res({ error: false, event: signedEvent });
       });
 
@@ -209,16 +208,15 @@ class Relayer {
 
     const pool = new SimplePool();
 
-    const kindThreeEvent = await pool.list(this.getReadRelays(), [
+    const kindThreeEvents = await pool.list(this.getReadRelays(), [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
     // manage multiple events from multiple relays
-    this.kindThreeEvent = kindThreeEvent[0];
-    this.following = this.kindThreeEvent.tags.map((e) => e[1]);
+    this.following = kindThreeEvents[0].tags.map((e) => e[1]);
 
     if (this.isRelayListEmpty()) {
-      this.kindThreeEvent.content.split(";").forEach((rl) => {
+      kindThreeEvents[0].content.split(";").forEach((rl) => {
         this.relays.rw.push(rl);
       });
     }

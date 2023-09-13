@@ -21,7 +21,7 @@ const Settings: VoidComponent = () => {
             <RiMapSignalTowerFill class='mx-auto' size={62} />
           </SettingsLink>
 
-          <SettingsLink href='/' content='manage your following'>
+          <SettingsLink href='/settings/manage-following' content='manage your following'>
             <TbUsersGroup class='mx-auto' size={62} />
           </SettingsLink>
 

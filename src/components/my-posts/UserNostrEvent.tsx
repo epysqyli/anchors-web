@@ -16,7 +16,7 @@ const UserNostrEvent: Component<Props> = (props): JSX.Element => {
 
   return (
     <div
-      class='grid-cols-1 py-5 px-5 mx-auto border-y-2 border-neutral-600 text-slate-300 bg-slate-800 
+      class='col-span-1 py-5 px-5 mx-auto border-y-2 border-neutral-600 text-slate-300 bg-slate-800 
             bg-opacity-90 rounded-md hover:text-slate-200 flex flex-col justify-between'
     >
       <div class='flex items-center justify-around'>
