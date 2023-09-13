@@ -1,6 +1,6 @@
+import { TbPlus } from "solid-icons/tb";
 import RelayList from "~/interfaces/RelayList";
 import { RelayContext } from "~/contexts/relay";
-import { TbCirclePlus } from "solid-icons/tb";
 import { EventTemplate, Kind, Pub } from "nostr-tools";
 import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import LoadingPoints from "~/components/feed/LoadingPoints";
@@ -15,7 +15,6 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   onMount(async () => {
     setIsLoading(true);
     setRelayList(await relay.fetchAndSetRelays());
-    // console.log(relayList());
 
     setIsLoading(false);
   });
@@ -164,10 +163,10 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                              text-center caret-slate-200 text-slate-200'
                     />
                     <button
-                      class='block h-full text-green-400 text-opacity-70 hover:text-opacity-100
+                      class='block h-full text-green-400 text-opacity-50 hover:text-opacity-100
                                     transition-all hover:scale-105 active:scale-95'
                     >
-                      <TbCirclePlus size={42} stroke-width={1.5} class='mx-auto' />
+                      <TbPlus size={42} stroke-width={1.5} class='mx-auto' />
                     </button>
                   </form>
                 </div>
