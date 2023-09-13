@@ -16,13 +16,11 @@ const UserNostrEvent: Component<Props> = (props): JSX.Element => {
 
   return (
     <div
-      class='col-span-1 py-5 px-5 mx-auto border-y-2 border-neutral-600 text-slate-300 bg-slate-800 
+      class='col-span-1 py-5 px-5 mx-auto text-slate-300 border border-opacity-20 border-slate-200
             bg-opacity-90 rounded-md hover:text-slate-200 flex flex-col justify-between'
     >
       <div class='flex items-center justify-around'>
-        <div class='bg-slate-600 px-2 py-1 text-center rounded-md'>
-          {parseDate(props.nostrEvent.created_at)}
-        </div>
+        <div class='px-2 py-1 text-center rounded-md'>{parseDate(props.nostrEvent.created_at)}</div>
         <div onClick={deleteEvent} class='text-neutral-400 cursor-pointer group hover:text-red-400'>
           <CgRemove size={28} class='transition-all mx-auto group-hover:scale-105 group-active:scale-90' />
         </div>
