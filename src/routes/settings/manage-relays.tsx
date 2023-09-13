@@ -128,8 +128,8 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
           <div class='grid grid-cols-3 gap-x-3 h-full'>
             <For each={Object.entries(relayList())}>
               {(relays) => (
-                <div class='flex flex-col justify-between col-span-1 bg-slate-700 rounded pb-1 h-full'>
-                  <h2 class='text-center tracking-tight py-3 text-slate-300 text-xl bg-slate-500 bg-opacity-30 rounded-t-md'>
+                <div class='flex flex-col justify-between col-span-1 bg-slate-700 bg-opacity-50 rounded pb-1 h-full'>
+                  <h2 class='text-center tracking-tight py-3 text-slate-300 text-xl bg-neutral-700 rounded mb-3'>
                     {relayBoxTitle[relays[0] as keyof RelayBoxTitle]}
                   </h2>
 
