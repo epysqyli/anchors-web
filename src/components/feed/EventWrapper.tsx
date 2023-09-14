@@ -209,10 +209,10 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
         </div>
 
-        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-1/2 z-10'>
+        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
           <Popup autoClose={false} show={showUserPopup} setShow={setShowUserPopup}>
             <UserPopup
-              about={nostrEvent().name}
+              about={nostrEvent().about}
               picture={nostrEvent().picture}
               pubkey={nostrEvent().pubkey}
               name={nostrEvent().name}
