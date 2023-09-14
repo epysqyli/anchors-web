@@ -30,7 +30,7 @@ const UserNostrEvent: Component<Props> = (props): JSX.Element => {
 
       <A
         href={`/events/${props.nostrEvent.id}`}
-        class='text-sm text-slate-400 break-all bg-slate-600
+        class='text-sm text-slate-400 break-all bg-slate-700
         hover:text-slate-200 active:scale-95 p-2 rounded-md transition-all'
       >
         {props.nostrEvent.id}
