@@ -84,7 +84,7 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
                 <div
                   onClick={(e) => handleClick(e, flw.pubkey)}
                   class='border w-fit mx-auto p-5 rounded-full border-opacity-25 border-slate-300
-                        cursor-pointer transition-all group active:border-opacity-80'
+                        cursor-pointer transition-all group active:border-opacity-80 hover:bg-slate-500'
                 >
                   {isFollowed(flw.pubkey) ? (
                     <TbUserMinus size={36} class='mx-auto hover:scale-105 active:scale-95' />
