@@ -47,7 +47,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
   });
 
   return (
-    <div class='min-h-[22vh] mx-auto'>
+    <div class='mx-auto'>
       <div class='flex items-center justify-around gap-x-10'>
         <div class='w-1/2'>
           <A href={`/users/${props.pubkey}`} class='hover:text-neutral-400 active:text-neutral-300'>
