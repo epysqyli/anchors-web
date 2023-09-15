@@ -48,6 +48,7 @@ const UserMetadata: VoidComponent = () => {
 
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
   const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
+  const [imageSrcFails, setImageSrcFails] = createSignal<boolean>(false);
 
   onMount(() => {
     if (relay.userPubKey == "") {
@@ -100,9 +101,17 @@ const UserMetadata: VoidComponent = () => {
         </div>
 
         <div class='py-3 px-5'>
-          <label class='text-slate-200 text-lg select-none text-center block mb-3 p-2 rounded bg-slate-600 w-1/3'>
-            picture
-          </label>
+          <div class='flex items-center mb-3 gap-x-3'>
+            <label class='text-slate-200 text-lg select-none text-center block p-2 rounded bg-slate-600 w-1/3'>
+              picture
+            </label>
+            <img
+              src={content().picture}
+              onError={() => setImageSrcFails(true)}
+              loading='lazy'
+              class='h-10 rounded-full'
+            />
+          </div>
           <input
             type='text'
             name='picture'
