@@ -224,13 +224,13 @@ class Relayer {
     pool.close(this.getReadRelays());
   }
 
-  public async fetchTextEvents(filter?: Filter): Promise<Event[]> {
+  public async fetchTextEvents(filter: Filter, rootOnly: boolean = false): Promise<Event[]> {
     const pool = new SimplePool();
-    filter = filter == undefined ? { kinds: [Kind.Text] } : { ...filter, kinds: [Kind.Text] };
+    filter = { ...filter, kinds: [Kind.Text] };
     const events = (await pool.list(this.getReadRelays(), [filter])).filter(this.isEventValid);
     pool.close(this.getReadRelays());
 
-    return events;
+    return rootOnly ? this.getRootTextEvents(events) : events;
   }
 
   public async fetchEventsMetadata(filter: Filter): Promise<IUserMetadataWithPubkey[]> {
@@ -334,6 +334,10 @@ class Relayer {
     }
 
     return false;
+  }
+
+  private getRootTextEvents(events: Event[]): Event[] {
+    return events.filter((evt) => evt.tags.filter((t) => t[0] == "e").length == 0);
   }
 }
 

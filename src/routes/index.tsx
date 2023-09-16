@@ -20,6 +20,7 @@ interface EventHtmlRef {
 }
 
 const Home: Component<{}> = () => {
+  const FETCH_EVENTS_LIMIT = 15;
   const MAX_EVENTS_COUNT = 75;
 
   const { relay } = useContext(RelayContext);
@@ -42,12 +43,12 @@ const Home: Component<{}> = () => {
 
     await relay.setRelaysAndFollowersAsync();
 
-    let eventsFilter: Filter = { limit: 10 };
+    let eventsFilter: Filter = { limit: FETCH_EVENTS_LIMIT };
     if (location.search == "") {
       eventsFilter = { ...eventsFilter, authors: relay.following };
     }
 
-    setEvents(await relay.fetchTextEvents(eventsFilter));
+    setEvents(await relay.fetchTextEvents(eventsFilter, true));
 
     let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
     if (location.search == "") {
@@ -69,10 +70,13 @@ const Home: Component<{}> = () => {
       const fetchSinceTimestamp =
         newEnrichedEvents().length == 0 ? enrichedEvents()[0].created_at : newEnrichedEvents()[0].created_at;
 
-      const newEvents: Event[] = await relay.fetchTextEvents({
-        ...eventsFilter,
-        since: fetchSinceTimestamp + 1
-      });
+      const newEvents: Event[] = await relay.fetchTextEvents(
+        {
+          ...eventsFilter,
+          since: fetchSinceTimestamp + 1
+        },
+        true
+      );
 
       if (newEvents.length !== 0) {
         const newEventsIDs = newEvents.map((e) => e.id);
