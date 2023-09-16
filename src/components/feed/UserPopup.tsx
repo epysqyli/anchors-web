@@ -56,10 +56,11 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
               about={props.about}
               picture={props.picture}
               pubKey={props.pubkey}
-              layout='v'
+              layout='h'
             />
           </A>
-          <p class='w-4/5 mx-auto text-sm text-justify text-neutral-200 text-opacity-75 my-2 border-t border-neutral-200 border-opacity-50 pt-3'>
+          <p class='w-4/5 mx-auto text-sm text-justify text-neutral-200 text-opacity-75 my-2
+                     border-t border-neutral-200 border-opacity-50 pt-3 mt-5'>
             {props.about}
           </p>
         </div>
@@ -73,6 +74,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
             }
             when={!isLoading()}
           >
+            <h2 class='mb-5 bg-neutral-500 bg-opacity-40 rounded w-fit mx-auto px-5'>Recent posts</h2>
             <For each={events()}>
               {(evt) => (
                 <A href={`/events/${evt.id}`}>
