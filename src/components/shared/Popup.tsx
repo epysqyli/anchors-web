@@ -62,7 +62,7 @@ const Popup: Component<Props> = (props) => {
   };
 
   const popupStyle = (): string => {
-    const baseStyle = `relative tracking-tight px-12 py-16 bg-neutral-700 bg-opacity-90
+    const baseStyle = `relative tracking-tight bg-neutral-700 bg-opacity-90
                        rounded-md shadow-md text-slate-200 text-center text-lg z-20`;
 
     return props.minHeight ? `${baseStyle} h-[50vh]` : baseStyle;
@@ -89,7 +89,9 @@ const Popup: Component<Props> = (props) => {
           class={popupStyle()}
         >
           {closeButton()}
-          {props.children}
+          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6'>
+            {props.children}
+          </div>
         </Motion.div>
       </Show>
     </Presence>
