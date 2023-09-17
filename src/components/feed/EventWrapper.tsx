@@ -5,6 +5,7 @@ import EventAnchor from "./EventAnchor";
 import EventAuthor from "./EventAuthor";
 import EventContent from "./EventContent";
 import EventScroller from "./EventScroller";
+import CommmentsPopup from "../CommentsPopup";
 import { FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
@@ -20,7 +21,6 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
-import PubResult from "~/interfaces/PubResult";
 
 interface Props {
   event: IEnrichedEvent;
@@ -35,6 +35,7 @@ const EventWrapper: Component<Props> = (props) => {
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [showUserPopup, setShowUserPopup] = createSignal<boolean>(false);
+  const [showCommentsPopup, setShowCommentsPopup] = createSignal<boolean>(false);
 
   const [reactions, setReactions] = createSignal<IReaction>({
     positive: nostrEvent().positive,
@@ -97,6 +98,10 @@ const EventWrapper: Component<Props> = (props) => {
 
   const openUserPopup = (): void => {
     setShowUserPopup(true);
+  };
+
+  const openCommentsPopup = (): void => {
+    setShowCommentsPopup(true);
   };
 
   onMount(async () => {
@@ -202,7 +207,13 @@ const EventWrapper: Component<Props> = (props) => {
               <div class='text-sm text-slate-400 mt-3 text-center'>{parseDate(nostrEvent().created_at)}</div>
             </div>
 
-            <VsCommentDiscussion class='text-slate-400' size={28} />
+            <div
+              onClick={openCommentsPopup}
+              class='rounded py-5 hover:bg-slate-600 cursor-pointer active:bg-slate-700 w-1/12'
+            >
+              <VsCommentDiscussion class='text-slate-400 mx-auto' size={28} />
+            </div>
+
             <FiTrendingUp class='text-slate-400' size={26} />
             <EventScroller scrollPage={props.scrollPage} />
             <EventAnchor nostrEventID={nostrEvent().id} />
@@ -217,6 +228,12 @@ const EventWrapper: Component<Props> = (props) => {
               pubkey={nostrEvent().pubkey}
               name={nostrEvent().name}
             />
+          </Popup>
+        </div>
+
+        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
+          <Popup autoClose={false} show={showCommentsPopup} setShow={setShowCommentsPopup}>
+            <CommmentsPopup />
           </Popup>
         </div>
       </Show>
