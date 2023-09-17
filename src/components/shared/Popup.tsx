@@ -93,7 +93,7 @@ const Popup: Component<Props> = (props) => {
           class={popupStyle()}
         >
           {closeButton()}
-          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6 h-full'>
+          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6 mx-auto'>
             {props.children}
           </div>
         </Motion.div>
