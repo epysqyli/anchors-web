@@ -8,6 +8,7 @@ interface Props {
   show: Accessor<boolean>;
   setShow: Setter<boolean>;
   autoClose: boolean;
+  minHeight?: boolean;
 }
 
 const Popup: Component<Props> = (props) => {
@@ -60,6 +61,13 @@ const Popup: Component<Props> = (props) => {
     return <></>;
   };
 
+  const popupStyle = (): string => {
+    const baseStyle = `relative tracking-tight px-12 py-16 bg-neutral-700 bg-opacity-90
+                       rounded-md shadow-md text-slate-200 text-center text-lg z-20`;
+
+    return props.minHeight ? `${baseStyle} h-[50vh]` : baseStyle;
+  };
+
   return (
     <Presence exitBeforeEnter>
       <Show when={props.show()}>
@@ -78,8 +86,7 @@ const Popup: Component<Props> = (props) => {
             }
           }}
           transition={{ easing: "ease-out", duration: 0.2 }}
-          class='relative tracking-tight px-12 py-16 bg-neutral-700 bg-opacity-90
-                rounded-md shadow-md text-slate-200 text-center text-lg z-20'
+          class={popupStyle()}
         >
           {closeButton()}
           {props.children}

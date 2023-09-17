@@ -221,7 +221,7 @@ const EventWrapper: Component<Props> = (props) => {
         </div>
 
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
-          <Popup autoClose={false} show={showUserPopup} setShow={setShowUserPopup}>
+          <Popup autoClose={false} show={showUserPopup} setShow={setShowUserPopup} minHeight={true}>
             <UserPopup
               about={nostrEvent().about}
               picture={nostrEvent().picture}
@@ -232,7 +232,7 @@ const EventWrapper: Component<Props> = (props) => {
         </div>
 
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
-          <Popup autoClose={false} show={showCommentsPopup} setShow={setShowCommentsPopup}>
+          <Popup autoClose={false} show={showCommentsPopup} setShow={setShowCommentsPopup} minHeight={true}>
             <CommmentsPopup />
           </Popup>
         </div>
