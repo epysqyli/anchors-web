@@ -8,7 +8,7 @@ interface Props {
   show: Accessor<boolean>;
   setShow: Setter<boolean>;
   autoClose: boolean;
-  minHeight?: boolean;
+  largeHeight?: boolean;
 }
 
 const Popup: Component<Props> = (props) => {
@@ -62,10 +62,14 @@ const Popup: Component<Props> = (props) => {
   };
 
   const popupStyle = (): string => {
-    const baseStyle = `relative tracking-tight bg-neutral-700 bg-opacity-90
-                       rounded-md shadow-md text-slate-200 text-center text-lg z-20`;
+    const baseStyle =
+      "relative tracking-tight bg-neutral-700 bg-opacity-90 rounded-md shadow-md text-slate-200 text-center text-lg z-20";
 
-    return props.minHeight ? `${baseStyle} h-[50vh]` : baseStyle;
+    if (props.largeHeight) {
+      return `${baseStyle} h-[60vh]`;
+    }
+
+    return `${baseStyle} h-[25vh]`;
   };
 
   return (
@@ -89,7 +93,7 @@ const Popup: Component<Props> = (props) => {
           class={popupStyle()}
         >
           {closeButton()}
-          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6'>
+          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6 h-full'>
             {props.children}
           </div>
         </Motion.div>
