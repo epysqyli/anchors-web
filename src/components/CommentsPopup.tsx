@@ -1,6 +1,6 @@
 import { RelayContext } from "~/contexts/relay";
 import { Event as NostrEvent } from "nostr-tools";
-import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
+import EventComments from "~/lib/nostr/event-comments";
 import { Component, JSX, onMount, useContext } from "solid-js";
 
 interface Props {
@@ -11,16 +11,13 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
   const { relay } = useContext(RelayContext);
 
   /**
-   * define Relayer methods to build the comments thread starting from the root event
-   * handle both positional (deprecated) and marked 'e' tags at the same time
-   * build all subthread based on subroots
-   * once the data structure is ready, display the UI correctly
+   * display the UI correctly based on the CommentsTree structure
    * UI should allow all normal comment operations and update accordingly
    * show a total comments number before opening the comments popup
    */
   onMount(async () => {
-    const comments = await relay.fetchTextEvents({ "#e": [props.rootEvent.id] });
-    console.log(comments.sort(sortByCreatedAt));
+    const comments = await relay.fetchComments(props.rootEvent.id);
+    const eventComments = new EventComments(props.rootEvent, comments);
   });
 
   return (

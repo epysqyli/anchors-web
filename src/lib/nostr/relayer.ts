@@ -316,6 +316,10 @@ class Relayer {
       .sort(sortByCreatedAt);
   }
 
+  public async fetchComments(rootEventID: string): Promise<Event[]> {
+    return await this.fetchTextEvents({ "#e": [rootEventID] });
+  }
+
   private isEventValid(event: Event): boolean {
     return validateEvent(event) && verifySignature(event);
   }
