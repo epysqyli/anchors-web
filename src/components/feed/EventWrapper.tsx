@@ -5,7 +5,7 @@ import EventAnchor from "./EventAnchor";
 import EventAuthor from "./EventAuthor";
 import EventContent from "./EventContent";
 import EventScroller from "./EventScroller";
-import CommmentsPopup from "../CommentsPopup";
+import CommmentsPopup from "./CommentsPopup";
 import { FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";

@@ -1,15 +1,15 @@
 import { Event } from "nostr-tools";
 import { sortByCreatedAtReverse } from "./nostr-utils";
 
-interface EventWithComments {
-  event: { data: Event; comments: EventWithComments[] };
+export interface CommentTree {
+  event: { data: Event; comments: CommentTree[] };
 }
 
 class EventComments {
   private rootEvent: Event;
   private incomingComments: Event[];
 
-  public structure: EventWithComments;
+  public structure: CommentTree;
 
   constructor(rootEvent: Event, comments: Event[]) {
     this.rootEvent = rootEvent;
@@ -103,7 +103,7 @@ class EventComments {
     return nextComments;
   }
 
-  private assignComments(node: EventWithComments): void {
+  private assignComments(node: CommentTree): void {
     if (this.incomingComments.length == 0) {
       return;
     }
