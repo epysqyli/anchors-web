@@ -20,9 +20,11 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
       <p
         onClick={toggle}
         class={`${
-          hasReplies() ? "cursor-pointer hover:border-neutral-700 active:bg-neutral-600" : ""
+          hasReplies()
+            ? "cursor-pointer hover:border-neutral-700 hover:bg-neutral-600 active:bg-opacity-40"
+            : ""
         } text-base text-neutral-200 break-words rounded-md text-left mx-auto bg-neutral-400
-         bg-opacity-25 p-3 pb-3 border border-transparent`}
+         bg-opacity-25 p-3 pb-3 border border-transparent transition`}
       >
         {props.commentTree.event.data.content}
       </p>
