@@ -30,7 +30,11 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
       <Show when={!isLoading()} fallback={<LoadingFallback />}>
         <div class='rounded h-[85%] px-5'>
           <For each={commentsStructure()?.event.comments}>
-            {(cmtTree) => <CommentThread commentTree={cmtTree!} />}
+            {(cmtTree) => (
+              <div class='my-7'>
+                <CommentThread commentTree={cmtTree!} />
+              </div>
+            )}
           </For>
         </div>
       </Show>
