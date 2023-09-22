@@ -21,6 +21,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
 
 interface Props {
   event: IEnrichedEvent;
@@ -35,6 +36,8 @@ const EventWrapper: Component<Props> = (props) => {
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [showUserPopup, setShowUserPopup] = createSignal<boolean>(false);
+  const [commentsStructure, setCommentsStructure] = createSignal<CommentTree>();
+  const [commentsCount, setCommentsCount] = createSignal<number>(0);
   const [showCommentsPopup, setShowCommentsPopup] = createSignal<boolean>(false);
 
   const [reactions, setReactions] = createSignal<IReaction>({
@@ -150,6 +153,12 @@ const EventWrapper: Component<Props> = (props) => {
       }
     }
 
+    const comments = await relay.fetchComments(nostrEvent().id);
+    setCommentsCount(comments.length);
+    if (commentsCount() != 0) {
+      setCommentsStructure(new EventComments(nostrEvent(), comments).structure);
+    }
+
     setIsLoading(false);
   });
 
@@ -209,9 +218,10 @@ const EventWrapper: Component<Props> = (props) => {
 
             <div
               onClick={openCommentsPopup}
-              class='rounded py-5 hover:bg-slate-600 cursor-pointer active:bg-slate-700 w-1/12'
+              class='relative rounded py-5 hover:bg-slate-600 cursor-pointer active:bg-slate-700 w-1/12'
             >
               <VsCommentDiscussion class='text-slate-400 mx-auto' size={28} />
+              <div class='absolute top-1 right-3 text-sm text-slate-300'>{commentsCount()}</div>
             </div>
 
             <FiTrendingUp class='text-slate-400' size={26} />
@@ -233,7 +243,7 @@ const EventWrapper: Component<Props> = (props) => {
 
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
           <Popup autoClose={false} show={showCommentsPopup} setShow={setShowCommentsPopup} largeHeight>
-            <CommmentsPopup rootEvent={nostrEvent()} />
+            <CommmentsPopup commentsStructure={commentsStructure()} />
           </Popup>
         </div>
       </Show>
