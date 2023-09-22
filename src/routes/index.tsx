@@ -20,7 +20,7 @@ interface EventHtmlRef {
 }
 
 const Home: Component<{}> = () => {
-  const FETCH_EVENTS_LIMIT = 15;
+  const FETCH_EVENTS_LIMIT = 33;
   const MAX_EVENTS_COUNT = 75;
 
   const { relay } = useContext(RelayContext);
