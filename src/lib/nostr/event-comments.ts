@@ -1,17 +1,18 @@
 import { Event } from "nostr-tools";
 import { sortByCreatedAtReverse } from "./nostr-utils";
+import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 
 export interface CommentTree {
-  event: { data: Event; comments: CommentTree[] };
+  event: { data: IEnrichedEvent; comments: CommentTree[] };
 }
 
 class EventComments {
-  private rootEvent: Event;
-  private incomingComments: Event[];
+  private rootEvent: IEnrichedEvent;
+  private incomingComments: IEnrichedEvent[];
 
   public structure: CommentTree;
 
-  constructor(rootEvent: Event, comments: Event[]) {
+  constructor(rootEvent: IEnrichedEvent, comments: IEnrichedEvent[]) {
     this.rootEvent = rootEvent;
 
     this.incomingComments = comments.sort(sortByCreatedAtReverse).map((evt) => {
@@ -36,7 +37,7 @@ class EventComments {
     return isPositionalEventTag;
   }
 
-  private discardIntermediateTags(evt: Event): Event {
+  private discardIntermediateTags(evt: IEnrichedEvent): IEnrichedEvent {
     const eTags: string[][] = evt.tags.filter((t) => t[0] == "e");
 
     if (eTags.length > 2) {
@@ -53,7 +54,7 @@ class EventComments {
     return evt;
   }
 
-  private normalizePositionalTags(evt: Event): Event {
+  private normalizePositionalTags(evt: IEnrichedEvent): IEnrichedEvent {
     const eTags: string[][] = evt.tags.filter((t) => t[0] == "e");
 
     evt.tags = [
@@ -64,13 +65,13 @@ class EventComments {
     return evt;
   }
 
-  private selectRootComments(): Event[] {
+  private selectRootComments(): IEnrichedEvent[] {
     return this.incomingComments.filter((evt) => {
       return evt.tags.filter((t) => t[0] == "e").length == 1;
     });
   }
 
-  private selectReplyComments(targetEvtID: string): Event[] {
+  private selectReplyComments(targetEvtID: string): IEnrichedEvent[] {
     return this.incomingComments.filter((evt) => {
       return this.replyTagEventID(evt) == targetEvtID;
     });
@@ -84,8 +85,8 @@ class EventComments {
     }
   }
 
-  private selectNextComments(targetEvtID: string): Event[] {
-    let nextComments: Event[] = [];
+  private selectNextComments(targetEvtID: string): IEnrichedEvent[] {
+    let nextComments: IEnrichedEvent[] = [];
 
     if (targetEvtID == this.rootEvent.id) {
       nextComments = this.selectRootComments();

@@ -221,7 +221,7 @@ const EventWrapper: Component<Props> = (props) => {
               class='relative rounded py-5 hover:bg-slate-600 cursor-pointer active:bg-slate-700 w-1/12'
             >
               <VsCommentDiscussion class='text-slate-400 mx-auto' size={28} />
-              <div class='absolute right-1/2 translate-x-1/2 text-sm text-slate-300 tracking-tighter'>
+              <div class='absolute right-1/2 translate-x-1/2 text-sm text-slate-400 tracking-tighter'>
                 {commentsCount()}
               </div>
             </div>
