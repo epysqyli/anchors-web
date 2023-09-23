@@ -1,20 +1,33 @@
-import { FiMail } from "solid-icons/fi";
-import { parseDate } from "~/lib/nostr/nostr-utils";
-import { CommentTree } from "~/lib/nostr/event-comments";
-import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
-import { Component, For, JSX, Show, createSignal } from "solid-js";
 import { A } from "@solidjs/router";
+import { FiMail } from "solid-icons/fi";
+import { RelayContext } from "~/contexts/relay";
+import { CommentTree } from "~/lib/nostr/event-comments";
+import { IReaction, Reaction } from "~/interfaces/IReaction";
+import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
+import { handleReaction, parseDate } from "~/lib/nostr/nostr-utils";
+import { Component, For, JSX, Show, createSignal, useContext } from "solid-js";
 
 interface Props {
   commentTree: CommentTree;
 }
 
 const CommentThread: Component<Props> = (props): JSX.Element => {
+  const { relay } = useContext(RelayContext);
+
   const [show, setShow] = createSignal<boolean>(false);
   const toggle = (): void => {
     if (hasReplies()) {
       setShow(!show());
     }
+  };
+
+  const [reactions, setReactions] = createSignal<IReaction>({
+    positive: props.commentTree.event.data.positive,
+    negative: props.commentTree.event.data.negative
+  });
+
+  const reactToEvent = async (reaction: Reaction): Promise<void> => {
+    await handleReaction(props.commentTree.event.data, reactions, setReactions, reaction, relay);
   };
 
   const hasReplies = (): boolean => props.commentTree.event.comments.length != 0;
@@ -45,13 +58,19 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
         </p>
 
         <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
-          <div class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'>
-            <span class='text-sm ml-1'>{props.commentTree.event.data.positive.count}</span>
+          <div
+            onClick={() => reactToEvent("+")}
+            class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
+          >
+            <span class='text-sm ml-1'>{reactions().positive.count}</span>
             <VsArrowSmallUp size={26} />
           </div>
 
-          <div class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'>
-            <span class='text-sm ml-1'>{props.commentTree.event.data.negative.count}</span>
+          <div
+            onClick={() => reactToEvent("-")}
+            class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
+          >
+            <span class='text-sm ml-1'>{reactions().negative.count}</span>
             <VsArrowSmallDown size={26} />
           </div>
 
