@@ -1,8 +1,9 @@
 import { FiMail } from "solid-icons/fi";
 import { parseDate } from "~/lib/nostr/nostr-utils";
 import { CommentTree } from "~/lib/nostr/event-comments";
-import { VsArrowSmallDown, VsArrowSmallUp} from "solid-icons/vs";
+import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
 import { Component, For, JSX, Show, createSignal } from "solid-js";
+import { A } from "@solidjs/router";
 
 interface Props {
   commentTree: CommentTree;
@@ -22,9 +23,12 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
     <div class='my-3'>
       <div>
         <div class='text-sm text-left mb-1 w-fit rounded-md px-2 py-1 bg-slate-600'>
-          <span class='font-bold'>
+          <A
+            href={`/users/${props.commentTree.event.data.pubkey}`}
+            class='font-bold hover:underline hover:underline-offset-2'
+          >
             {props.commentTree.event.data.name == "" ? "nostr user" : props.commentTree.event.data.name}
-          </span>
+          </A>
           <span> replied on {parseDate(props.commentTree.event.data.created_at)}</span>
         </div>
 
