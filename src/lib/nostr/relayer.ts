@@ -316,6 +316,7 @@ class Relayer {
       .sort(sortByCreatedAt);
   }
 
+  // these should also be enriched events
   public async fetchComments(rootEventID: string): Promise<Event[]> {
     return await this.fetchTextEvents({ "#e": [rootEventID] });
   }
