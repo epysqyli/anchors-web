@@ -40,59 +40,6 @@ const EventWrapper: Component<Props> = (props) => {
   const [commentsCount, setCommentsCount] = createSignal<number>(0);
   const [showCommentsPopup, setShowCommentsPopup] = createSignal<boolean>(false);
 
-  const [reactions, setReactions] = createSignal<IReaction>({
-    positive: nostrEvent().positive,
-    negative: nostrEvent().negative
-  });
-
-  const handleReaction = async (reaction: Reaction): Promise<void> => {
-    let reactionType = "";
-    if (reaction == "+") {
-      reactionType = "positive";
-    } else if (reaction == "-") {
-      reactionType = "negative";
-    }
-
-    const eventToDelete = reactions()[reactionType as keyof IReaction].events.find(
-      (evt) => evt.pubkey === relay.userPubKey
-    );
-
-    if (eventToDelete) {
-      const pubResult = await relay.deleteEvent(eventToDelete.eventID);
-
-      if (pubResult.error) {
-        console.log("Reaction not sent correctly");
-        return;
-      }
-
-      const newReactions: IReactionFields = {
-        count: reactions()[reactionType as keyof IReaction].count - 1,
-        events: reactions()[reactionType as keyof IReaction].events.filter(
-          (e) => e.eventID !== eventToDelete.eventID
-        )
-      };
-
-      setReactions({ ...reactions(), [reactionType]: newReactions });
-    } else {
-      const pubResult = await relay.reactToEvent(nostrEvent().id, nostrEvent().pubkey, reaction);
-
-      if (pubResult.error) {
-        console.log("Reaction not sent correctly");
-        return;
-      }
-
-      const newReactions: IReactionFields = {
-        count: reactions()[reactionType as keyof IReaction].count + 1,
-        events: [
-          ...reactions()[reactionType as keyof IReaction].events,
-          { pubkey: pubResult.event.pubkey, eventID: pubResult.event.id }
-        ]
-      };
-
-      setReactions({ ...reactions(), [reactionType]: newReactions });
-    }
-  };
-
   const handleEventHtmlRef = (el: HTMLDivElement): void => {
     if (props.addHtmlRef !== undefined) {
       props.addHtmlRef(el, nostrEvent().id, nostrEvent().created_at);
@@ -200,7 +147,7 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='w-full grow mx-auto flex justify-around items-center rounded-md px-5 py-5 bg-slate-600 bg-opacity-40'>
-            <Reactions reactions={reactions} publicKey={relay.userPubKey!} handleReaction={handleReaction} />
+            <Reactions  event={nostrEvent()!} />
             <div
               class='w-1/4 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'
               onClick={openUserPopup}
