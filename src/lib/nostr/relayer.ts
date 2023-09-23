@@ -316,9 +316,20 @@ class Relayer {
       .sort(sortByCreatedAt);
   }
 
-  // these should also be enriched events
-  public async fetchComments(rootEventID: string): Promise<Event[]> {
-    return await this.fetchTextEvents({ "#e": [rootEventID] });
+  public async fetchComments(rootEventID: string): Promise<IEnrichedEvent[]> {
+    const comments = await this.fetchTextEvents({ "#e": [rootEventID] });
+
+    const metadata = await this.fetchEventsMetadata({
+      authors: [...new Set(comments.map((evt) => evt.pubkey))]
+    });
+
+    const reactionsFilter: Filter[] = comments.map((evt) => {
+      return { kinds: [Kind.Reaction], "#e": [evt.id] };
+    });
+
+    const reactions = await this.fetchEventsReactions(reactionsFilter);
+
+    return this.buildEnrichedEvents(comments, metadata, reactions);
   }
 
   private isEventValid(event: Event): boolean {
