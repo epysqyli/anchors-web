@@ -1,8 +1,8 @@
 import { FiMail } from "solid-icons/fi";
 import { parseDate } from "~/lib/nostr/nostr-utils";
 import { CommentTree } from "~/lib/nostr/event-comments";
+import { VsArrowSmallDown, VsArrowSmallUp} from "solid-icons/vs";
 import { Component, For, JSX, Show, createSignal } from "solid-js";
-import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
 
 interface Props {
   commentTree: CommentTree;
@@ -41,15 +41,19 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
         </p>
 
         <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
-          <div class='flex items-center'>
-            <span class='text-sm'>{props.commentTree.event.data.positive.count}</span>
-            <VsArrowSmallUp size={25} />
+          <div class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'>
+            <span class='text-sm ml-1'>{props.commentTree.event.data.positive.count}</span>
+            <VsArrowSmallUp size={26} />
           </div>
-          <div class='flex items-center'>
-            <span class='text-sm'>{props.commentTree.event.data.negative.count}</span>
+
+          <div class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'>
+            <span class='text-sm ml-1'>{props.commentTree.event.data.negative.count}</span>
             <VsArrowSmallDown size={26} />
           </div>
-          <FiMail />
+
+          <div class='hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50 px-2 py-1'>
+            <FiMail />
+          </div>
         </div>
       </div>
 
