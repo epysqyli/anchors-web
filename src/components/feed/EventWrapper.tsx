@@ -56,7 +56,6 @@ const EventWrapper: Component<Props> = (props) => {
 
   onMount(async () => {
     const referenceTags = nostrEvent().tags.filter((t) => t[0] == "r");
-
     for (const refTag of referenceTags) {
       switch (parseReferenceType(refTag[1])) {
         case "movie":
@@ -102,9 +101,7 @@ const EventWrapper: Component<Props> = (props) => {
 
     const comments = await relay.fetchComments(nostrEvent().id);
     setCommentsCount(comments.length);
-    if (commentsCount() != 0) {
-      setCommentsStructure(new EventComments(nostrEvent(), comments).structure);
-    }
+    setCommentsStructure(new EventComments(nostrEvent(), comments).structure);
 
     setIsLoading(false);
   });
@@ -147,7 +144,7 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='w-full grow mx-auto flex justify-around items-center rounded-md px-5 py-5 bg-slate-600 bg-opacity-40'>
-            <Reactions  event={nostrEvent()!} />
+            <Reactions event={nostrEvent()!} />
             <div
               class='w-1/4 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'
               onClick={openUserPopup}
@@ -163,15 +160,24 @@ const EventWrapper: Component<Props> = (props) => {
               <div class='text-sm text-slate-400 mt-3 text-center'>{parseDate(nostrEvent().created_at)}</div>
             </div>
 
-            <div
-              onClick={openCommentsPopup}
-              class='relative rounded py-5 hover:bg-slate-600 cursor-pointer active:bg-slate-700 w-1/12'
+            <Show
+              when={!isLoading()}
+              fallback={
+                <div class='relative rounded py-5 w-1/12 animate-pulse'>
+                  <VsCommentDiscussion class='text-slate-500 mx-auto' size={28} />
+                </div>
+              }
             >
-              <VsCommentDiscussion class='text-slate-400 mx-auto' size={28} />
-              <div class='absolute right-1/2 translate-x-1/2 text-sm text-slate-400 tracking-tighter'>
-                {commentsCount()}
+              <div
+                onClick={openCommentsPopup}
+                class='relative rounded py-5 hover:bg-slate-600 cursor-pointer active:bg-slate-700 w-1/12'
+              >
+                <VsCommentDiscussion class='text-slate-400 mx-auto' size={28} />
+                <div class='absolute right-1/2 translate-x-1/2 text-sm text-slate-400 tracking-tighter'>
+                  {commentsCount()}
+                </div>
               </div>
-            </div>
+            </Show>
 
             <FiTrendingUp class='text-slate-400' size={26} />
             <EventScroller scrollPage={props.scrollPage} />

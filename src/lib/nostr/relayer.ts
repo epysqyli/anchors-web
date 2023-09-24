@@ -97,6 +97,44 @@ class Relayer {
     });
   }
 
+  public async replyToEvent(content: string, replyEvent: Event, rootEvent: Event): Promise<PubResult> {
+    let tags: string[][] = [];
+
+    if (replyEvent.id == rootEvent.id) {
+      tags = [
+        ["e", rootEvent.id, "", "root"],
+        ["p", rootEvent.pubkey]
+      ];
+    } else {
+      tags = [
+        ["e", rootEvent.id, "", "root"],
+        ["e", replyEvent.id, "", "reply"],
+        ["p", rootEvent.pubkey],
+        ["p", replyEvent.pubkey]
+      ];
+    }
+
+    const reply: EventTemplate = {
+      content: content,
+      created_at: Math.floor(Date.now() / 1000),
+      kind: Kind.Text,
+      tags: tags
+    };
+
+    const signedEvent = await window.nostr.signEvent(reply);
+    const pub = this.pub(signedEvent);
+
+    return await new Promise<PubResult>((res) => {
+      pub.on("ok", () => {
+        res({ error: false, event: signedEvent });
+      });
+
+      pub.on("failed", () => {
+        res({ error: true, event: signedEvent });
+      });
+    });
+  }
+
   public async fetchFollowingAndRelays(): Promise<Event | undefined> {
     if (!this.userPubKey) {
       return new Promise((_) => {});

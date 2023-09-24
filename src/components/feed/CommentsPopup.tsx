@@ -1,16 +1,27 @@
+import WriteComment from "./WriteComment";
 import CommentThread from "./CommentThread";
-import { Component, For, JSX, Show } from "solid-js";
+import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { CommentTree } from "~/lib/nostr/event-comments";
+import { Component, For, JSX, createContext } from "solid-js";
 
 interface Props {
   commentsStructure: CommentTree | undefined;
 }
 
+export const RootEventContext = createContext<{ rootEvent: IEnrichedEvent }>();
+
 const CommmentsPopup: Component<Props> = (props): JSX.Element => {
   return (
     <div class='h-[55vh] w-full mx-auto overflow-y-auto custom-scrollbar'>
       <div class='rounded h-[85%] px-5'>
-        <Show when={props.commentsStructure != undefined}>
+        <div class='mb-16'>
+          <WriteComment
+            rootEvent={props.commentsStructure?.event.data!}
+            replyEvent={props.commentsStructure?.event.data!}
+          />
+        </div>
+
+        <RootEventContext.Provider value={{ rootEvent: props.commentsStructure?.event.data! }}>
           <For each={props.commentsStructure!.event.comments}>
             {(cmtTree) => (
               <div class='my-7'>
@@ -18,7 +29,7 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
               </div>
             )}
           </For>
-        </Show>
+        </RootEventContext.Provider>
       </div>
     </div>
   );

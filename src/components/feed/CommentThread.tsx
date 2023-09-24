@@ -1,6 +1,9 @@
+import Popup from "../shared/Popup";
 import { A } from "@solidjs/router";
 import { FiMail } from "solid-icons/fi";
+import WriteComment from "./WriteComment";
 import { RelayContext } from "~/contexts/relay";
+import { RootEventContext } from "./CommentsPopup";
 import { CommentTree } from "~/lib/nostr/event-comments";
 import { IReaction, Reaction } from "~/interfaces/IReaction";
 import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
@@ -13,7 +16,9 @@ interface Props {
 
 const CommentThread: Component<Props> = (props): JSX.Element => {
   const { relay } = useContext(RelayContext);
+  const rootEventContext = useContext(RootEventContext);
 
+  const [showReplyPopup, setShowReplyPopup] = createSignal<boolean>(false);
   const [show, setShow] = createSignal<boolean>(false);
   const toggle = (): void => {
     if (hasReplies()) {
@@ -74,7 +79,10 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
             <VsArrowSmallDown size={26} />
           </div>
 
-          <div class='hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50 px-2 py-1'>
+          <div
+            onClick={() => setShowReplyPopup(true)}
+            class='hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50 px-2 py-1'
+          >
             <FiMail />
           </div>
         </div>
@@ -87,6 +95,12 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
           </For>
         </div>
       </Show>
+
+      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-10'>
+        <Popup autoClose={false} show={showReplyPopup} setShow={setShowReplyPopup} largeHeight secondLayer>
+          <WriteComment replyEvent={props.commentTree.event.data} rootEvent={rootEventContext?.rootEvent!} />
+        </Popup>
+      </div>
     </div>
   );
 };

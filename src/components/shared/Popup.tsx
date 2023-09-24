@@ -9,6 +9,7 @@ interface Props {
   setShow: Setter<boolean>;
   autoClose: boolean;
   largeHeight?: boolean;
+  secondLayer?: boolean;
 }
 
 const Popup: Component<Props> = (props) => {
@@ -33,7 +34,7 @@ const Popup: Component<Props> = (props) => {
     });
   } else {
     createEffect(() => {
-      if (!overlayAlreadyApplied() && props.show()) {
+      if (!overlayAlreadyApplied() && props.show() && !props.secondLayer) {
         overlayContext.toggleOverlay();
         setOverlayAlreadyApplied(true);
       }
@@ -42,6 +43,11 @@ const Popup: Component<Props> = (props) => {
 
   const closePopup = (): void => {
     props.setShow(false);
+
+    if (props.secondLayer) {
+      return;
+    }
+
     overlayContext.toggleOverlay();
     setOverlayAlreadyApplied(false);
   };
@@ -63,7 +69,7 @@ const Popup: Component<Props> = (props) => {
 
   const popupStyle = (): string => {
     const baseStyle =
-      "relative tracking-tight bg-neutral-700 bg-opacity-90 rounded-md shadow-md text-slate-200 text-center text-lg z-20";
+      "relative tracking-tight bg-neutral-700 rounded-md shadow-md text-slate-200 text-center text-lg z-20";
 
     if (props.largeHeight) {
       return `${baseStyle} h-[60vh]`;
