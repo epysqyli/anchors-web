@@ -1,16 +1,16 @@
 import { VsSend } from "solid-icons/vs";
 import { RelayContext } from "~/contexts/relay";
-import { EventTemplate, Kind } from "nostr-tools";
+import { RootEventContext } from "./EventWrapper";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { Component, JSX, createSignal, useContext } from "solid-js";
 
 interface Props {
   replyEvent: IEnrichedEvent;
-  rootEvent: IEnrichedEvent;
 }
 
 const WriteComment: Component<Props> = (props): JSX.Element => {
   const { relay } = useContext(RelayContext);
+  const rootEventContext = useContext(RootEventContext);
 
   const [content, setContent] = createSignal<string>("");
 
@@ -20,10 +20,13 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
   };
 
   const signEventAndReply = async (): Promise<void> => {
-    const pubRes = await relay.replyToEvent(content(), props.replyEvent, props.rootEvent);
-    console.log(pubRes);
+    const pubRes = await relay.replyToEvent(content(), props.replyEvent, rootEventContext?.rootEvent!);
 
-    // update commentStructure state and UI in an efficient way
+    if (!pubRes.error) {
+      await rootEventContext?.fetchAndSetCommentsStructure();
+    } else {
+      console.log("Event reply did not go through, try again");
+    }
   };
 
   return (

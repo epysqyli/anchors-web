@@ -3,7 +3,6 @@ import { A } from "@solidjs/router";
 import { FiMail } from "solid-icons/fi";
 import WriteComment from "./WriteComment";
 import { RelayContext } from "~/contexts/relay";
-import { RootEventContext } from "./CommentsPopup";
 import { CommentTree } from "~/lib/nostr/event-comments";
 import { IReaction, Reaction } from "~/interfaces/IReaction";
 import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
@@ -16,7 +15,6 @@ interface Props {
 
 const CommentThread: Component<Props> = (props): JSX.Element => {
   const { relay } = useContext(RelayContext);
-  const rootEventContext = useContext(RootEventContext);
 
   const [showReplyPopup, setShowReplyPopup] = createSignal<boolean>(false);
   const [show, setShow] = createSignal<boolean>(false);
@@ -98,7 +96,7 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
 
       <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-10'>
         <Popup autoClose={false} show={showReplyPopup} setShow={setShowReplyPopup} largeHeight secondLayer>
-          <WriteComment replyEvent={props.commentTree.event.data} rootEvent={rootEventContext?.rootEvent!} />
+          <WriteComment replyEvent={props.commentTree.event.data} />
         </Popup>
       </div>
     </div>

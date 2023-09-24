@@ -19,15 +19,19 @@ import { fetchMovie } from "~/lib/external-services/tmdb";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
-import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
-import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
 import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
+import { Component, For, Show, createContext, createSignal, onMount, useContext } from "solid-js";
 
 interface Props {
   event: IEnrichedEvent;
   scrollPage?(direction: "up" | "down"): void;
   addHtmlRef?(ref: HTMLDivElement, eventID: string, createdAt: number): void;
 }
+
+export const RootEventContext = createContext<{
+  rootEvent: IEnrichedEvent;
+  fetchAndSetCommentsStructure(): Promise<void>;
+}>();
 
 const EventWrapper: Component<Props> = (props) => {
   const { relay } = useContext(RelayContext);
@@ -52,6 +56,12 @@ const EventWrapper: Component<Props> = (props) => {
 
   const openCommentsPopup = (): void => {
     setShowCommentsPopup(true);
+  };
+
+  const fetchAndSetCommentsStructure = async (): Promise<void> => {
+    const comments = await relay.fetchComments(nostrEvent().id);
+    setCommentsCount(comments.length);
+    setCommentsStructure(new EventComments(nostrEvent(), comments).structure);
   };
 
   onMount(async () => {
@@ -99,9 +109,7 @@ const EventWrapper: Component<Props> = (props) => {
       }
     }
 
-    const comments = await relay.fetchComments(nostrEvent().id);
-    setCommentsCount(comments.length);
-    setCommentsStructure(new EventComments(nostrEvent(), comments).structure);
+    await fetchAndSetCommentsStructure();
 
     setIsLoading(false);
   });
@@ -198,7 +206,11 @@ const EventWrapper: Component<Props> = (props) => {
 
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
           <Popup autoClose={false} show={showCommentsPopup} setShow={setShowCommentsPopup} largeHeight>
-            <CommmentsPopup commentsStructure={commentsStructure()} />
+            <RootEventContext.Provider
+              value={{ rootEvent: props.event, fetchAndSetCommentsStructure: fetchAndSetCommentsStructure }}
+            >
+              <CommmentsPopup commentsStructure={commentsStructure()} />
+            </RootEventContext.Provider>
           </Popup>
         </div>
       </Show>
