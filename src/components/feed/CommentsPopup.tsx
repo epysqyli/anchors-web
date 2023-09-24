@@ -1,8 +1,7 @@
 import WriteComment from "./WriteComment";
 import CommentThread from "./CommentThread";
-import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
+import { Component, For, JSX } from "solid-js";
 import { CommentTree } from "~/lib/nostr/event-comments";
-import { Component, For, JSX, createContext } from "solid-js";
 
 interface Props {
   commentsStructure: CommentTree | undefined;
