@@ -68,14 +68,17 @@ const Popup: Component<Props> = (props) => {
   };
 
   const popupStyle = (): string => {
-    const baseStyle =
-      "relative tracking-tight bg-neutral-700 rounded-md shadow-md text-slate-200 text-center text-lg z-20";
+    const baseStyle = "relative tracking-tight rounded-md shadow-md text-slate-200 text-center text-lg z-20";
 
-    if (props.largeHeight) {
-      return `${baseStyle} h-[60vh]`;
+    if (props.secondLayer && props.largeHeight) {
+      return `${baseStyle} h-[50vh] bg-slate-800`;
     }
 
-    return `${baseStyle} h-[25vh]`;
+    if (props.largeHeight) {
+      return `${baseStyle} h-[60vh] bg-neutral-700`;
+    }
+
+    return `${baseStyle} h-[25vh] bg-neutral-700`;
   };
 
   return (
