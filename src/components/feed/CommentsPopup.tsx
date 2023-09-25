@@ -18,7 +18,7 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
           <For each={props.commentsStructure!.event.comments}>
             {(cmtTree) => (
               <div class='my-7'>
-                <CommentThread commentTree={cmtTree!} setReplyEvent={setReplyEvent} />
+                <CommentThread commentTree={cmtTree!} replyEvent={replyEvent} setReplyEvent={setReplyEvent} />
               </div>
             )}
           </For>

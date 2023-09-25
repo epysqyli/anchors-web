@@ -6,10 +6,11 @@ import { CommentTree } from "~/lib/nostr/event-comments";
 import { IReaction, Reaction } from "~/interfaces/IReaction";
 import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
 import { handleReaction, parseDate } from "~/lib/nostr/nostr-utils";
-import { Component, For, JSX, Setter, Show, createSignal, useContext } from "solid-js";
+import { Accessor, Component, For, JSX, Setter, Show, createSignal, useContext } from "solid-js";
 
 interface Props {
   commentTree: CommentTree;
+  replyEvent: Accessor<IEnrichedEvent | undefined>;
   setReplyEvent: Setter<IEnrichedEvent>;
 }
 
@@ -38,6 +39,21 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
 
   const hasReplies = (): boolean => props.commentTree.event.comments.length != 0;
 
+  const contentStyle = (): string => {
+    let baseClass = `text-base text-neutral-200 break-words rounded-md text-left mx-auto
+                       bg-neutral-400 bg-opacity-25 p-3 pb-3 border border-transparent transition`;
+
+    if (hasReplies()) {
+      baseClass += " cursor-pointer hover:border-neutral-700 hover:bg-neutral-600 active:bg-opacity-40";
+    }
+
+    if (props.replyEvent() != undefined && props.replyEvent()?.id == props.commentTree.event.data.id) {
+      baseClass += " border border-neutral-50";
+    }
+
+    return baseClass;
+  };
+
   return (
     <div class='my-3'>
       <div>
@@ -51,15 +67,7 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
           <span> replied on {parseDate(props.commentTree.event.data.created_at)}</span>
         </div>
 
-        <p
-          onClick={toggle}
-          class={`${
-            hasReplies()
-              ? "cursor-pointer hover:border-neutral-700 hover:bg-neutral-600 active:bg-opacity-40"
-              : ""
-          } text-base text-neutral-200 break-words rounded-md text-left mx-auto bg-neutral-400
-         bg-opacity-25 p-3 pb-3 border border-transparent transition`}
-        >
+        <p onClick={toggle} class={contentStyle()}>
           {props.commentTree.event.data.content}
         </p>
 
@@ -92,7 +100,13 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
       <Show when={show()}>
         <div class='ml-14'>
           <For each={props.commentTree.event.comments}>
-            {(cmtTree) => <CommentThread setReplyEvent={props.setReplyEvent} commentTree={cmtTree} />}
+            {(cmtTree) => (
+              <CommentThread
+                replyEvent={props.replyEvent}
+                setReplyEvent={props.setReplyEvent}
+                commentTree={cmtTree}
+              />
+            )}
           </For>
         </div>
       </Show>
