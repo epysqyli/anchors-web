@@ -49,7 +49,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
   };
 
   return (
-    <>
+    <div class="mr-4 border-t border-neutral-400 pt-1">
       <div class='flex items-center justify-between py-1 w-4/5'>
         <div class='text-sm text-neutral-300 bg-slate-600 rounded px-2 py-1'>
           Replying to: <span class='underline underline-offset-4 ml-5'>{helperMessage()}</span>
@@ -84,7 +84,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
           <VsSend size={40} class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition' />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
