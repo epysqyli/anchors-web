@@ -75,7 +75,7 @@ const Popup: Component<Props> = (props) => {
     }
 
     if (props.largeHeight) {
-      return `${baseStyle} h-[60vh] bg-neutral-700`;
+      return `${baseStyle} h-[60vh] bg-gray-800 bg-opacity-90`;
     }
 
     return `${baseStyle} h-[25vh] bg-neutral-700`;
