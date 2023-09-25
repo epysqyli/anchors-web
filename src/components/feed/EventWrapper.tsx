@@ -28,7 +28,7 @@ interface Props {
   addHtmlRef?(ref: HTMLDivElement, eventID: string, createdAt: number): void;
 }
 
-export const RootEventContext = createContext<{
+export const CommentsContext = createContext<{
   rootEvent: IEnrichedEvent;
   fetchAndSetCommentsStructure(): Promise<void>;
 }>();
@@ -206,11 +206,11 @@ const EventWrapper: Component<Props> = (props) => {
 
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
           <Popup autoClose={false} show={showCommentsPopup} setShow={setShowCommentsPopup} largeHeight>
-            <RootEventContext.Provider
+            <CommentsContext.Provider
               value={{ rootEvent: props.event, fetchAndSetCommentsStructure: fetchAndSetCommentsStructure }}
             >
               <CommmentsPopup commentsStructure={commentsStructure()} />
-            </RootEventContext.Provider>
+            </CommentsContext.Provider>
           </Popup>
         </div>
       </Show>

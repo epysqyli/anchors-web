@@ -1,22 +1,25 @@
-import Popup from "../shared/Popup";
 import { A } from "@solidjs/router";
 import { FiMail } from "solid-icons/fi";
-import WriteComment from "./WriteComment";
 import { RelayContext } from "~/contexts/relay";
+import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { CommentTree } from "~/lib/nostr/event-comments";
 import { IReaction, Reaction } from "~/interfaces/IReaction";
 import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
 import { handleReaction, parseDate } from "~/lib/nostr/nostr-utils";
-import { Component, For, JSX, Show, createSignal, useContext } from "solid-js";
+import { Component, For, JSX, Setter, Show, createSignal, useContext } from "solid-js";
 
 interface Props {
   commentTree: CommentTree;
+  setReplyEvent: Setter<IEnrichedEvent>;
 }
 
 const CommentThread: Component<Props> = (props): JSX.Element => {
   const { relay } = useContext(RelayContext);
 
-  const [showReplyPopup, setShowReplyPopup] = createSignal<boolean>(false);
+  const setReplyEvent = (): void => {
+    props.setReplyEvent(props.commentTree.event.data);
+  };
+
   const [show, setShow] = createSignal<boolean>(false);
   const toggle = (): void => {
     if (hasReplies()) {
@@ -78,7 +81,7 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
           </div>
 
           <div
-            onClick={() => setShowReplyPopup(true)}
+            onClick={setReplyEvent}
             class='hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50 px-2 py-1'
           >
             <FiMail />
@@ -89,16 +92,10 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
       <Show when={show()}>
         <div class='ml-14'>
           <For each={props.commentTree.event.comments}>
-            {(cmtTree) => <CommentThread commentTree={cmtTree} />}
+            {(cmtTree) => <CommentThread setReplyEvent={props.setReplyEvent} commentTree={cmtTree} />}
           </For>
         </div>
       </Show>
-
-      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-10'>
-        <Popup autoClose={false} show={showReplyPopup} setShow={setShowReplyPopup} largeHeight secondLayer>
-          <WriteComment replyEvent={props.commentTree.event.data} />
-        </Popup>
-      </div>
     </div>
   );
 };

@@ -1,27 +1,32 @@
 import WriteComment from "./WriteComment";
 import CommentThread from "./CommentThread";
-import { Component, For, JSX } from "solid-js";
 import { CommentTree } from "~/lib/nostr/event-comments";
+import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
+import { Component, For, JSX, createSignal } from "solid-js";
 
 interface Props {
   commentsStructure: CommentTree | undefined;
 }
 
 const CommmentsPopup: Component<Props> = (props): JSX.Element => {
+  const [replyEvent, setReplyEvent] = createSignal<IEnrichedEvent>();
+
   return (
-    <div class='h-[55vh] w-full mx-auto overflow-y-auto custom-scrollbar'>
-      <div class='rounded h-[85%] px-5'>
-        <div class='mb-16'>
-          <WriteComment replyEvent={props.commentsStructure?.event.data!} />
+    <div class='h-[55vh] w-full mx-auto'>
+      <div class='rounded h-[95%]'>
+        <div class='h-5/6 overflow-y-scroll custom-scrollbar pr-2'>
+          <For each={props.commentsStructure!.event.comments}>
+            {(cmtTree) => (
+              <div class='my-7'>
+                <CommentThread commentTree={cmtTree!} setReplyEvent={setReplyEvent} />
+              </div>
+            )}
+          </For>
         </div>
 
-        <For each={props.commentsStructure!.event.comments}>
-          {(cmtTree) => (
-            <div class='my-7'>
-              <CommentThread commentTree={cmtTree!} />
-            </div>
-          )}
-        </For>
+        <div class='h-1/6 mt-2'>
+          <WriteComment replyEvent={replyEvent} setReplyEvent={setReplyEvent} />
+        </div>
       </div>
     </div>
   );
