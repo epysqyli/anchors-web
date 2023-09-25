@@ -50,16 +50,16 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
 
   return (
     <>
-      <div class='flex items-center justify-between py-1 px-1 w-4/5'>
-        <div class='text-sm text-neutral-300 bg-slate-600 rounded-md px-2 py-1'>
+      <div class='flex items-center justify-between py-1 w-4/5'>
+        <div class='text-sm text-neutral-300 bg-slate-600 rounded px-2 py-1'>
           Replying to: <span class='underline underline-offset-4 ml-5'>{helperMessage()}</span>
         </div>
         {props.replyEvent() != undefined ? (
           <div
             onClick={clearReplyEvent}
-            class='text-sm text-neutral-300 bg-slate-600 rounded-md px-2 py-1 cursor-pointer hover:text-white'
+            class='text-sm text-neutral-300 bg-slate-600 rounded px-2 py-1 cursor-pointer hover:text-white'
           >
-            <p class='active:scale-95'>reply to main post</p>
+            <p class='active:scale-95'>reply to main post instead</p>
           </div>
         ) : (
           <></>
