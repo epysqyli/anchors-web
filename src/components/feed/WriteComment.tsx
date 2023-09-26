@@ -50,7 +50,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
 
   return (
     <div class='mr-4 border-t border-neutral-400 pt-1'>
-      <div class='flex justify-center items-center'>
+      <div class='flex justify-center items-stretch'>
         <div class='w-4/5'>
           <div class='flex items-center justify-between py-1'>
             <div class='text-sm text-neutral-300 bg-slate-600 rounded px-2 py-1'>
@@ -80,9 +80,11 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
 
         <div
           onClick={signEventAndReply}
-          class=' text-orange-300 mx-auto group cursor-pointer hover:bg-neutral-600 rounded-md py-5 w-1/6'
+          class='relative text-orange-300 mx-auto group cursor-pointer hover:bg-neutral-600 rounded-md w-1/6'
         >
-          <VsSend size={40} class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition' />
+          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+            <VsSend size={40} class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition' />
+          </div>
         </div>
       </div>
     </div>
