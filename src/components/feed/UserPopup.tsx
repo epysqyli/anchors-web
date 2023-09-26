@@ -42,7 +42,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
 
   onMount(async () => {
     setIsLoading(true);
-    setEvents(await relay.fetchTextEvents({ authors: [props.pubkey], limit: 3 }, true));
+    setEvents(await relay.fetchTextEvents({ authors: [props.pubkey] }, true, 4));
     setIsLoading(false);
   });
 
@@ -59,8 +59,10 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
               layout='h'
             />
           </A>
-          <p class='w-4/5 mx-auto text-sm text-justify text-neutral-200 text-opacity-75 my-2
-                     border-t border-neutral-200 border-opacity-50 pt-3 mt-5'>
+          <p
+            class='w-4/5 mx-auto text-sm text-justify text-neutral-200 text-opacity-75 my-2
+                     border-t border-neutral-200 border-opacity-50 pt-3 mt-5'
+          >
             {props.about}
           </p>
         </div>

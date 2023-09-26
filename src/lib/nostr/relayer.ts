@@ -262,13 +262,25 @@ class Relayer {
     pool.close(this.getReadRelays());
   }
 
-  public async fetchTextEvents(filter: Filter, rootOnly: boolean = false): Promise<Event[]> {
+  public async fetchTextEvents(
+    filter: Filter,
+    rootOnly: boolean = false,
+    rootLimit?: number
+  ): Promise<Event[]> {
     const pool = new SimplePool();
     filter = { ...filter, kinds: [Kind.Text] };
     const events = (await pool.list(this.getReadRelays(), [filter])).filter(this.isEventValid);
     pool.close(this.getReadRelays());
 
-    return rootOnly ? this.getRootTextEvents(events) : events;
+    if (rootOnly && rootLimit) {
+      return this.getRootTextEvents(events).slice(0, rootLimit);
+    }
+
+    if (rootOnly) {
+      return this.getRootTextEvents(events);
+    }
+
+    return events;
   }
 
   public async fetchEventsMetadata(filter: Filter): Promise<IUserMetadataWithPubkey[]> {
