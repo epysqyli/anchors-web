@@ -1,6 +1,7 @@
 import { A } from "@solidjs/router";
 import { FiMail } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
+import { CommentsContext } from "./EventWrapper";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { CommentTree } from "~/lib/nostr/event-comments";
 import { IReaction, Reaction } from "~/interfaces/IReaction";
@@ -16,6 +17,7 @@ interface Props {
 
 const CommentThread: Component<Props> = (props): JSX.Element => {
   const { relay } = useContext(RelayContext);
+  const commentsContext = useContext(CommentsContext)!;
 
   const setReplyEvent = (): void => {
     props.setReplyEvent(props.commentTree.event.data);
@@ -54,6 +56,19 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
     return baseClass;
   };
 
+  const canDeleteEvent = (): boolean => {
+    if (props.commentTree.event.data.pubkey == relay.userPubKey) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const deleteComment = async (): Promise<void> => {
+    await relay.deleteEvent(props.commentTree.event.data.id);
+    await commentsContext.fetchAndSetCommentsStructure();
+  };
+
   return (
     <div class='my-3'>
       <div>
@@ -71,28 +86,42 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
           {props.commentTree.event.data.content}
         </p>
 
-        <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
-          <div
-            onClick={() => reactToEvent("+")}
-            class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
-          >
-            <span class='text-sm ml-1'>{reactions().positive.count}</span>
-            <VsArrowSmallUp size={26} />
-          </div>
+        <div class='flex justify-between items-center'>
+          {canDeleteEvent() ? (
+            <div
+              onClick={deleteComment}
+              class='text-sm rounded text-red-100 bg-red-800 bg-opacity-30 px-2 py-1 
+                     hover:bg-opacity-60 cursor-pointer active:scale-95 select-none'
+            >
+              delete comment
+            </div>
+          ) : (
+            <></>
+          )}
 
-          <div
-            onClick={() => reactToEvent("-")}
-            class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
-          >
-            <span class='text-sm ml-1'>{reactions().negative.count}</span>
-            <VsArrowSmallDown size={26} />
-          </div>
+          <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
+            <div
+              onClick={() => reactToEvent("+")}
+              class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
+            >
+              <span class='text-sm ml-1'>{reactions().positive.count}</span>
+              <VsArrowSmallUp size={26} />
+            </div>
 
-          <div
-            onClick={setReplyEvent}
-            class='hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50 px-2 py-1'
-          >
-            <FiMail />
+            <div
+              onClick={() => reactToEvent("-")}
+              class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
+            >
+              <span class='text-sm ml-1'>{reactions().negative.count}</span>
+              <VsArrowSmallDown size={26} />
+            </div>
+
+            <div
+              onClick={setReplyEvent}
+              class='hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50 px-2 py-1'
+            >
+              <FiMail />
+            </div>
           </div>
         </div>
       </div>
