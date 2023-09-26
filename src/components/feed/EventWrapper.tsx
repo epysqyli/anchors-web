@@ -36,7 +36,6 @@ export const CommentsContext = createContext<{
 const EventWrapper: Component<Props> = (props) => {
   const { relay } = useContext(RelayContext);
 
-  const nostrEvent = () => props.event;
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
   const [showUserPopup, setShowUserPopup] = createSignal<boolean>(false);
@@ -46,7 +45,7 @@ const EventWrapper: Component<Props> = (props) => {
 
   const handleEventHtmlRef = (el: HTMLDivElement): void => {
     if (props.addHtmlRef !== undefined) {
-      props.addHtmlRef(el, nostrEvent().id, nostrEvent().created_at);
+      props.addHtmlRef(el, props.event.id, props.event.created_at);
     }
   };
 
@@ -59,13 +58,13 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   const fetchAndSetCommentsStructure = async (): Promise<void> => {
-    const comments = await relay.fetchComments(nostrEvent().id);
+    const comments = await relay.fetchComments(props.event.id);
     setCommentsCount(comments.length);
-    setCommentsStructure(new EventComments(nostrEvent(), comments).structure);
+    setCommentsStructure(new EventComments(props.event, comments).structure);
   };
 
   onMount(async () => {
-    const referenceTags = nostrEvent().tags.filter((t) => t[0] == "r");
+    const referenceTags = props.event.tags.filter((t) => t[0] == "r");
     for (const refTag of referenceTags) {
       switch (parseReferenceType(refTag[1])) {
         case "movie":
@@ -119,10 +118,10 @@ const EventWrapper: Component<Props> = (props) => {
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
         <div class='snap-start h-[100vh] text-white pt-4 mx-auto'>
           <div class='h-[60vh] w-11/12 mx-auto py-2 pr-5 mb-10 text-justify overflow-auto break-words shadow-inner'>
-            {nostrEvent().content}
+            {props.event.content}
           </div>
           <div class='mb-10 w-11/12 mx-auto pb-5 snap-x snap-mandatory overflow-scroll flex justify-start gap-x-10'>
-            <For each={nostrEvent().tags}>
+            <For each={props.event.tags}>
               {(tag) => (
                 <div class='snap-center w-4/5 px-5 py-1 flex items-center bg-slate-300 rounded'>
                   <div class='w-1/4'>
@@ -147,25 +146,25 @@ const EventWrapper: Component<Props> = (props) => {
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3 flex flex-col justify-between'
         >
           <div class='grid grid-cols-5 h-[85%] gap-x-3'>
-            <EventContent content={nostrEvent().content} />
+            <EventContent content={props.event.content} />
             <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 
           <div class='w-full grow mx-auto flex justify-around items-center rounded-md px-5 py-5 bg-slate-600 bg-opacity-40'>
-            <Reactions event={nostrEvent()!} />
+            <Reactions event={props.event!} />
             <div
               class='w-1/4 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'
               onClick={openUserPopup}
             >
               <EventAuthor
-                name={nostrEvent().name}
-                about={nostrEvent().about}
-                picture={nostrEvent().picture}
-                pubKey={nostrEvent().pubkey}
+                name={props.event.name}
+                about={props.event.about}
+                picture={props.event.picture}
+                pubKey={props.event.pubkey}
                 layout='h'
               />
 
-              <div class='text-sm text-slate-400 mt-3 text-center'>{parseDate(nostrEvent().created_at)}</div>
+              <div class='text-sm text-slate-400 mt-3 text-center'>{parseDate(props.event.created_at)}</div>
             </div>
 
             <Show
@@ -189,17 +188,17 @@ const EventWrapper: Component<Props> = (props) => {
 
             <FiTrendingUp class='text-slate-400' size={26} />
             <EventScroller scrollPage={props.scrollPage} />
-            <EventAnchor nostrEventID={nostrEvent().id} />
+            <EventAnchor nostrEventID={props.event.id} />
           </div>
         </div>
 
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
           <Popup autoClose={false} show={showUserPopup} setShow={setShowUserPopup} largeHeight>
             <UserPopup
-              about={nostrEvent().about}
-              picture={nostrEvent().picture}
-              pubkey={nostrEvent().pubkey}
-              name={nostrEvent().name}
+              about={props.event.about}
+              picture={props.event.picture}
+              pubkey={props.event.pubkey}
+              name={props.event.name}
             />
           </Popup>
         </div>
