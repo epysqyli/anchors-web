@@ -20,7 +20,7 @@ import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
-import { Component, For, Show, createContext, createSignal, onMount, useContext } from "solid-js";
+import { Accessor, Component, For, Show, createContext, createSignal, onMount, useContext } from "solid-js";
 
 interface Props {
   event: IEnrichedEvent;
@@ -31,6 +31,7 @@ interface Props {
 export const CommentsContext = createContext<{
   rootEvent: IEnrichedEvent;
   fetchAndSetCommentsStructure(): Promise<void>;
+  isCommentTreeLoading: Accessor<boolean>;
 }>();
 
 const EventWrapper: Component<Props> = (props) => {
@@ -42,6 +43,7 @@ const EventWrapper: Component<Props> = (props) => {
   const [commentsStructure, setCommentsStructure] = createSignal<CommentTree>();
   const [commentsCount, setCommentsCount] = createSignal<number>(0);
   const [showCommentsPopup, setShowCommentsPopup] = createSignal<boolean>(false);
+  const [isCommentTreeLoading, setIsCommentTreeLoading] = createSignal<boolean>(false);
 
   const handleEventHtmlRef = (el: HTMLDivElement): void => {
     if (props.addHtmlRef !== undefined) {
@@ -58,9 +60,11 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   const fetchAndSetCommentsStructure = async (): Promise<void> => {
+    setIsCommentTreeLoading(true);
     const comments = await relay.fetchComments(props.event.id);
     setCommentsCount(comments.length);
     setCommentsStructure(new EventComments(props.event, comments).structure);
+    setIsCommentTreeLoading(false);
   };
 
   onMount(async () => {
@@ -206,7 +210,11 @@ const EventWrapper: Component<Props> = (props) => {
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
           <Popup autoClose={false} show={showCommentsPopup} setShow={setShowCommentsPopup} largeHeight>
             <CommentsContext.Provider
-              value={{ rootEvent: props.event, fetchAndSetCommentsStructure: fetchAndSetCommentsStructure }}
+              value={{
+                rootEvent: props.event,
+                fetchAndSetCommentsStructure: fetchAndSetCommentsStructure,
+                isCommentTreeLoading: isCommentTreeLoading
+              }}
             >
               <CommmentsPopup commentsStructure={commentsStructure()} />
             </CommentsContext.Provider>
