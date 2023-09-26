@@ -48,7 +48,7 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
     }
 
     if (props.replyEvent() != undefined && props.replyEvent()?.id == props.commentTree.event.data.id) {
-      baseClass += " border border-neutral-50";
+      baseClass += " border border-neutral-100";
     }
 
     return baseClass;
