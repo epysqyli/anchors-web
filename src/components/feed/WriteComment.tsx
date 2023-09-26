@@ -34,7 +34,30 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
     setContent(textAreaContent);
   };
 
+  const isReplyValid = (): boolean => {
+    if (!relay.userPubKey) {
+      console.log("No pubkey, nostr extension missing");
+      return false;
+    }
+
+    if (props.replyEvent() == undefined && commentsContext.rootEvent.pubkey == relay.userPubKey) {
+      console.log("Cannot directly reply to your own post");
+      return false;
+    }
+
+    if (content().trim().length == 0) {
+      console.log("Cannot post an empty reply");
+      return false;
+    }
+
+    return true;
+  };
+
   const signEventAndReply = async (): Promise<void> => {
+    if (!isReplyValid()) {
+      return;
+    }
+
     const pubRes = await relay.replyToEvent(
       content(),
       props.replyEvent() ?? commentsContext.rootEvent!,
@@ -43,6 +66,8 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
 
     if (!pubRes.error) {
       await commentsContext.fetchAndSetCommentsStructure();
+      setContent("");
+      props.setReplyEvent();
     } else {
       console.log("Event reply did not go through, try again");
     }
@@ -59,6 +84,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
             rows={2}
             onInput={updateContent}
             placeholder='write your reply'
+            value={content()}
           ></textarea>
 
           <div class='flex items-center justify-between py-1'>
