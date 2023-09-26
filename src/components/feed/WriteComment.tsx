@@ -49,7 +49,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
   };
 
   return (
-    <div class='mr-4 border-t border-neutral-400 border-opacity-50 pt-1'>
+    <div class='mr-4 border-t border-slate-400 border-opacity-50 pt-1'>
       <div class='flex justify-center items-stretch'>
         <div class='w-4/5'>
           <textarea

@@ -13,8 +13,8 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
 
   return (
     <div class='h-[55vh] w-full mx-auto'>
-      <div class='rounded h-[95%]'>
-        <div class='h-5/6 overflow-y-scroll custom-scrollbar pr-2'>
+      <div class='rounded h-[95%] flex flex-col justify-between'>
+        <div class='h-4/5 overflow-y-scroll custom-scrollbar pr-2'>
           <For each={props.commentsStructure!.event.comments}>
             {(cmtTree) => (
               <div class='my-7'>
