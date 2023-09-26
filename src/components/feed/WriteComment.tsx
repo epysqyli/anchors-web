@@ -52,22 +52,6 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
     <div class='mr-4 border-t border-neutral-400 border-opacity-50 pt-1'>
       <div class='flex justify-center items-stretch'>
         <div class='w-4/5'>
-          <div class='flex items-center justify-between py-1'>
-            <div class='text-sm text-neutral-300 bg-slate-600 rounded px-2 py-1'>
-              Replying to: <span class='underline underline-offset-4 ml-5'>{helperMessage()}</span>
-            </div>
-            {props.replyEvent() != undefined ? (
-              <div
-                onClick={clearReplyEvent}
-                class='text-sm text-neutral-300 bg-slate-600 rounded px-2 py-1 cursor-pointer hover:text-white'
-              >
-                <p class='active:scale-95'>reply to main post instead</p>
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
-
           <textarea
             class='block placeholder:text-lg text-lg focus:outline-none bg-slate-500 bg-opacity-10 
             hover:bg-opacity-20 focus:bg-opacity-25 mx-auto text-slate-300 caret-orange-200 resize-none 
@@ -76,6 +60,22 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
             onInput={updateContent}
             placeholder='write your reply'
           ></textarea>
+
+          <div class='flex items-center justify-between py-1'>
+            <div class='text-sm text-neutral-300 bg-slate-700 rounded px-2 py-1'>
+              Replying to: <span class='underline underline-offset-4 ml-5'>{helperMessage()}</span>
+            </div>
+            {props.replyEvent() != undefined ? (
+              <div
+                onClick={clearReplyEvent}
+                class='text-sm text-neutral-300 bg-slate-700 rounded px-2 py-1 cursor-pointer hover:text-white'
+              >
+                <p class='active:scale-95'>reply to main post instead</p>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
 
         <div
