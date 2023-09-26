@@ -12,6 +12,7 @@ import LoadingPoints from "~/components/feed/LoadingPoints";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import OverlayContext from "~/contexts/overlay";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;
@@ -24,6 +25,7 @@ const Home: Component<{}> = () => {
   const MAX_EVENTS_COUNT = 75;
 
   const { relay } = useContext(RelayContext);
+  const overlay = useContext(OverlayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
@@ -166,6 +168,14 @@ const Home: Component<{}> = () => {
     );
   };
 
+  const eventWrapperContainerStyle = (): string => {
+    if (!overlay.showOverlay()) {
+      return "custom-scrollbar snap-y snap-mandatory overflow-x-hidden h-full";
+    }
+
+    return "custom-scrollbar snap-y snap-mandatory overflow-hidden h-full";
+  };
+
   return (
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
@@ -187,15 +197,13 @@ const Home: Component<{}> = () => {
             />
           </div>
 
-          <div
-            ref={(el) => setEventWrapperContainer(el)}
-            class='custom-scrollbar snap-y snap-mandatory overflow-scroll overflow-x-hidden h-full'
-          >
+          <div ref={(el) => setEventWrapperContainer(el)} class={eventWrapperContainerStyle()}>
             <For each={enrichedEvents()}>
               {(nostrEvent) => (
                 <EventWrapper event={nostrEvent} scrollPage={scrollPage} addHtmlRef={addHtmlRef} />
               )}
             </For>
+
             <div class='relative snap-start h-full text-slate-300'>
               <div
                 class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
