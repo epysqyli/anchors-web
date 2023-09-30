@@ -132,17 +132,19 @@ const UserMetadata: VoidComponent = () => {
 
       <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
         <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
-          {isActionSuccessful() ? (
-            <>
-              <p>Nostr profile metadata successfully updated!</p>
-              <RiSystemCheckboxCircleFill class='mx-auto mt-8' size={44} />
-            </>
-          ) : (
-            <>
-              <p>Request failed</p>
-              <CgDanger class='mx-auto mt-8' size={44} />
-            </>
-          )}
+          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
+            {isActionSuccessful() ? (
+              <>
+                <p>Nostr profile metadata successfully updated!</p>
+                <RiSystemCheckboxCircleFill class='mx-auto mt-8' size={44} />
+              </>
+            ) : (
+              <>
+                <p>Request failed</p>
+                <CgDanger class='mx-auto mt-8' size={44} />
+              </>
+            )}
+          </div>
         </Popup>
       </div>
     </>
