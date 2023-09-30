@@ -16,6 +16,11 @@ import { sortByCreatedAt } from "./nostr-utils";
 import PubResult from "~/interfaces/PubResult";
 import RelayList from "~/interfaces/RelayList";
 
+interface FetchOptions {
+  rootOnly: boolean;
+  limit?: number;
+}
+
 class Relayer {
   public readonly FETCH_INTERVAL_MS = 20000;
   public readonly ANCHORS_EVENT_RTAG_IDENTIFIER = "anchors-event";
@@ -263,21 +268,17 @@ class Relayer {
     pool.close(this.getReadRelays());
   }
 
-  public async fetchTextEvents(
-    filter: Filter,
-    rootOnly: boolean = false,
-    rootLimit?: number
-  ): Promise<Event[]> {
+  public async fetchTextEvents(filter: Filter, options?: FetchOptions): Promise<Event[]> {
     const pool = new SimplePool();
     filter = { ...filter, kinds: [Kind.Text] };
     const events = (await pool.list(this.getReadRelays(), [filter])).filter(this.isEventValid);
     pool.close(this.getReadRelays());
 
-    if (rootOnly && rootLimit) {
-      return this.getRootTextEvents(events).slice(0, rootLimit);
+    if (options?.rootOnly && options?.limit) {
+      return this.getRootTextEvents(events).slice(0, options.limit);
     }
 
-    if (rootOnly) {
+    if (options?.rootOnly) {
       return this.getRootTextEvents(events);
     }
 

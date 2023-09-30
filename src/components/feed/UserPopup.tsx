@@ -42,7 +42,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
 
   onMount(async () => {
     setIsLoading(true);
-    setEvents(await relay.fetchTextEvents({ authors: [props.pubkey] }, true, 3));
+    setEvents(await relay.fetchTextEvents({ authors: [props.pubkey] }, { rootOnly: true, limit: 3 }));
     setIsLoading(false);
   });
 

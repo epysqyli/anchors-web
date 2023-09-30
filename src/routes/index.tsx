@@ -50,7 +50,7 @@ const Home: Component<{}> = () => {
       eventsFilter = { ...eventsFilter, authors: relay.following };
     }
 
-    setEvents(await relay.fetchTextEvents(eventsFilter, true));
+    setEvents(await relay.fetchTextEvents(eventsFilter, { rootOnly: true }));
 
     let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
     if (location.search == "") {
@@ -77,7 +77,7 @@ const Home: Component<{}> = () => {
           ...eventsFilter,
           since: fetchSinceTimestamp + 1
         },
-        true
+        { rootOnly: true }
       );
 
       if (newEvents.length !== 0) {
