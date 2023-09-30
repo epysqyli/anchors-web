@@ -25,7 +25,7 @@ const Popup: Component<Props> = (props) => {
         setTimeout(() => {
           overlayContext.toggleOverlay();
           props.setShow(false);
-        }, 2000);
+        }, 3000);
       }
 
       if (!props.show()) {

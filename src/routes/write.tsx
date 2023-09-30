@@ -4,10 +4,9 @@ import { IRefTag } from "~/interfaces/IRefTag";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import menuTogglerContext from "~/contexts/menuToggle";
-import { Component, Show, createSignal, onMount, useContext } from "solid-js";
+import { Component, Show, createSignal, useContext } from "solid-js";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
-import { useBeforeLeave } from "@solidjs/router";
 
 const Write: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
@@ -53,8 +52,7 @@ const Write: Component<{}> = () => {
 
     if (nostrEvent().tags.filter((tag) => tag[0] == "r").length == 0) {
       setShowPopup(true);
-      setPopupMsg(`There are no references for this post: this idea must have originated somewhere though. 
-                  Let's connect the dots together!`);
+      setPopupMsg(`There are no references for this post: this idea must have originated somewhere though!`);
 
       return false;
     }
@@ -150,7 +148,9 @@ const Write: Component<{}> = () => {
 
           <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
             <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
-              {popupMsg()}
+              <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
+                {popupMsg()}
+              </div>
             </Popup>
           </div>
         </>
