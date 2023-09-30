@@ -60,17 +60,16 @@ const Write: Component<{}> = () => {
     return true;
   };
 
-  const addNostrTag = (nostrTag: IRefTag): void => {
+  const addReferenceTag = (nostrTag: IRefTag): void => {
     const newNostrEvent = nostrEvent();
     newNostrEvent.tags = [...nostrEvent().tags, ["r", nostrTag.url]];
     setNostrEvent(newNostrEvent);
 
-    // add to refTags for RefSearchTagView
     const newRefTags = [...refTags(), nostrTag];
     setRefTags(newRefTags);
   };
 
-  const removeNostrTag = (nostrTag: IRefTag): void => {
+  const removeReferenceTag = (nostrTag: IRefTag): void => {
     const indexOfTagToRemove = nostrEvent().tags.findIndex((t) => t[1] === nostrTag.url);
 
     const currentTags = nostrEvent().tags;
@@ -79,7 +78,6 @@ const Write: Component<{}> = () => {
     newNostrEvent.tags = currentTags;
     setNostrEvent(newNostrEvent);
 
-    // remove from refTags for RefSearchTagView
     const indexOfRefTagToRemove = refTags().findIndex((rf) => rf.url == nostrTag.url);
 
     const currentRefTags = refTags();
@@ -139,8 +137,8 @@ const Write: Component<{}> = () => {
             <div class='col-span-3 rounded-md bg-slate-800 bg-opacity-80 h-full py-4 overflow-y-auto'>
               <RefTagsSearchPanel
                 tags={refTags()}
-                addNostrTag={addNostrTag}
-                removeNostrTag={removeNostrTag}
+                addReferenceTag={addReferenceTag}
+                removeReferenceTag={removeReferenceTag}
                 toggleMenu={toggleRefMenu}
               />
             </div>

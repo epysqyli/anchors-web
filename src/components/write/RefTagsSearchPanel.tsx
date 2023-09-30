@@ -29,8 +29,8 @@ interface RefType {
 
 interface Props {
   tags: IRefTag[];
-  addNostrTag(nostrTag: IRefTag): void;
-  removeNostrTag(nostrTag: IRefTag): void;
+  addReferenceTag(nostrTag: IRefTag): void;
+  removeReferenceTag(nostrTag: IRefTag): void;
   toggleMenu(): void;
 }
 
@@ -149,7 +149,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         additionalInfoTwo: ""
       };
 
-      props.addNostrTag(refTag);
+      props.addReferenceTag(refTag);
       return;
     }
 
@@ -215,7 +215,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             <For each={props.tags}>
               {(tag) => (
                 <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
-                  <RefTagElement tag={tag} removeTag={props.removeNostrTag} />
+                  <RefTagElement tag={tag} removeReferenceTag={props.removeReferenceTag} />
                 </Motion.div>
               )}
             </For>
@@ -233,7 +233,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
               <For each={searchResults()}>
                 {(res) => (
                   <Motion.div animate={{ scale: [0.5, 1] }} class='mb-3 w-11/12 mx-auto'>
-                    <RefTagResult result={res} addTag={props.addNostrTag} />
+                    <RefTagResult result={res} addTag={props.addReferenceTag} />
                   </Motion.div>
                 )}
               </For>

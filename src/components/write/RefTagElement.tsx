@@ -5,7 +5,7 @@ import RefTagIcon from "../shared/RefTagIcon";
 
 interface Props {
   tag: IRefTag;
-  removeTag(tag: IRefTag): void;
+  removeReferenceTag(tag: IRefTag): void;
 }
 
 const RefTagElement: Component<Props> = (props) => {
@@ -20,7 +20,7 @@ const RefTagElement: Component<Props> = (props) => {
       </div>
       <div
         class='p-3 rounded-xl cursor-pointer hover:scale-105 transition hover:text-red-300 active:scale-90'
-        onClick={() => props.removeTag(props.tag)}
+        onClick={() => props.removeReferenceTag(props.tag)}
       >
         <FiTrash2 size={28} class='mx-auto' stroke-width={1} />
       </div>
