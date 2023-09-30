@@ -47,9 +47,9 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
   });
 
   return (
-    <div class='mx-auto'>
-      <div class='flex items-center justify-around gap-x-10'>
-        <div class='w-1/2'>
+    <div class='mx-auto h-full'>
+      <div class='flex items-start justify-around gap-x-10 h-4/5 pt-20'>
+        <div class='w-1/2 h-full'>
           <A href={`/users/${props.pubkey}`} class='hover:text-neutral-400 active:text-neutral-300'>
             <EventAuthor
               name={props.name}
@@ -60,8 +60,8 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
             />
           </A>
           <p
-            class='w-4/5 mx-auto text-sm text-justify text-neutral-200 text-opacity-75 my-2
-                     border-t border-neutral-200 border-opacity-50 pt-3 mt-5'
+            class='mx-auto text-sm text-justify text-neutral-200 text-opacity-75
+                   pt-3 pr-2 mt-5 h-2/3 overflow-y-auto custom-scrollbar'
           >
             {props.about}
           </p>
@@ -70,7 +70,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
         <div class='w-1/2'>
           <Show
             fallback={
-              <div class='relative scale-50'>
+              <div class='mt-20 relative scale-50'>
                 <LoadingFallback />
               </div>
             }
@@ -91,7 +91,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
         </div>
       </div>
 
-      <div class='mt-10 mx-auto w-fit'>
+      <div class='mx-auto w-fit'>
         <div
           onClick={handleClick}
           class='border w-fit mx-auto p-5 rounded-full border-opacity-25 border-slate-300
