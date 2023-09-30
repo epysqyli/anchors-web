@@ -105,10 +105,6 @@ class EventComments {
   }
 
   private assignComments(node: CommentTree): void {
-    if (this.incomingComments.length == 0) {
-      return;
-    }
-
     this.selectNextComments(node.event.data.id).forEach((c) => {
       node.event.comments.push({ event: { data: c, comments: [] } });
       node.event.comments.forEach((nextNode) => this.assignComments(nextNode));
