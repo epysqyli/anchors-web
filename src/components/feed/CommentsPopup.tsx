@@ -15,7 +15,7 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
   const [replyEvent, setReplyEvent] = createSignal<IEnrichedEvent>();
 
   return (
-    <div class='h-[55vh] w-full mx-auto'>
+    <div class='h-full w-full mx-auto'>
       <div class='rounded h-[95%] flex flex-col justify-between'>
         <div class='h-4/5 overflow-y-scroll custom-scrollbar pr-2'>
           <Show
