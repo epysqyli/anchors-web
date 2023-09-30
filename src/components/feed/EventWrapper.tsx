@@ -68,7 +68,10 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   onMount(async () => {
-    const referenceTags = props.event.tags.filter((t) => t[0] == "r");
+    const referenceTags = props.event.tags
+      .filter((t) => t[0] == "r")
+      .filter((t) => t[1] != relay.ANCHORS_EVENT_RTAG_IDENTIFIER);
+
     for (const refTag of referenceTags) {
       switch (parseReferenceType(refTag[1])) {
         case "movie":

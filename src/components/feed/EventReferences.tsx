@@ -1,7 +1,7 @@
 import { Motion } from "@motionone/solid";
-import { Accessor, Component, For, JSX } from "solid-js";
 import RefTagFeedElement from "./RefTagFeedElement";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
+import { Accessor, Component, For, JSX } from "solid-js";
 
 interface Props {
   isLoading: Accessor<boolean>;

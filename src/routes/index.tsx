@@ -1,4 +1,5 @@
 import { useLocation } from "solid-start";
+import OverlayContext from "~/contexts/overlay";
 import { RelayContext } from "~/contexts/relay";
 import { BsCloudDownload } from "solid-icons/bs";
 import { useBeforeLeave } from "@solidjs/router";
@@ -12,7 +13,6 @@ import LoadingPoints from "~/components/feed/LoadingPoints";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
-import OverlayContext from "~/contexts/overlay";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;

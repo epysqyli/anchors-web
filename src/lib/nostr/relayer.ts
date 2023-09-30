@@ -18,6 +18,7 @@ import RelayList from "~/interfaces/RelayList";
 
 class Relayer {
   public readonly FETCH_INTERVAL_MS = 20000;
+  public readonly ANCHORS_EVENT_RTAG_IDENTIFIER = "anchors-event";
 
   public userPubKey?: string;
   public following: string[] = [];

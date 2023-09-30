@@ -90,6 +90,10 @@ const Write: Component<{}> = () => {
       return;
     }
 
+    const newNostrEvent = nostrEvent();
+    newNostrEvent.tags = [...nostrEvent().tags, ["r", relay.ANCHORS_EVENT_RTAG_IDENTIFIER]];
+    setNostrEvent(newNostrEvent);
+
     const signedEvent = await window.nostr.signEvent(nostrEvent());
     const pubResult: Pub = relay.pub(signedEvent);
 
