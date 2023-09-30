@@ -18,6 +18,7 @@ import RelayList from "~/interfaces/RelayList";
 
 interface FetchOptions {
   rootOnly: boolean;
+  isAnchorsMode: boolean;
   limit?: number;
 }
 
@@ -268,17 +269,21 @@ class Relayer {
     pool.close(this.getReadRelays());
   }
 
-  public async fetchTextEvents(filter: Filter, options?: FetchOptions): Promise<Event[]> {
-    const pool = new SimplePool();
+  public async fetchTextEvents(filter: Filter, options: FetchOptions): Promise<Event[]> {
     filter = { ...filter, kinds: [Kind.Text] };
+    if (options.isAnchorsMode) {
+      filter = { ...filter, "#r": [this.ANCHORS_EVENT_RTAG_IDENTIFIER] };
+    }
+
+    const pool = new SimplePool();
     const events = (await pool.list(this.getReadRelays(), [filter])).filter(this.isEventValid);
     pool.close(this.getReadRelays());
 
-    if (options?.rootOnly && options?.limit) {
+    if (options.rootOnly && options.limit) {
       return this.getRootTextEvents(events).slice(0, options.limit);
     }
 
-    if (options?.rootOnly) {
+    if (options.rootOnly) {
       return this.getRootTextEvents(events);
     }
 
@@ -369,7 +374,10 @@ class Relayer {
   }
 
   public async fetchComments(rootEventID: string): Promise<IEnrichedEvent[]> {
-    const comments = await this.fetchTextEvents({ "#e": [rootEventID] });
+    const comments = await this.fetchTextEvents(
+      { "#e": [rootEventID] },
+      { rootOnly: false, isAnchorsMode: false }
+    );
 
     const metadata = await this.fetchEventsMetadata({
       authors: [...new Set(comments.map((evt) => evt.pubkey))]

@@ -1,11 +1,13 @@
 import "websocket-polyfill";
-import type { Context } from "solid-js";
+import type { Accessor, Context, Setter } from "solid-js";
 import Relayer from "~/lib/nostr/relayer";
-import { Component, JSX, createContext } from "solid-js";
+import { Component, JSX, createContext, createSignal } from "solid-js";
 import { getPublicKeyFromExt } from "~/lib/nostr/nostr-utils";
 
 interface IRelayContext {
   relay: Relayer;
+  isAnchorsMode: Accessor<boolean>;
+  setIsAnchorsMode: Setter<boolean>;
 }
 
 let relay: Relayer = new Relayer();
@@ -22,10 +24,22 @@ if (pk) {
   }
 }
 
-const RelayContext: Context<IRelayContext> = createContext({ relay: relay });
+const [isAnchorsMode, setIsAnchorsMode] = createSignal<boolean>(true);
+
+const RelayContext: Context<IRelayContext> = createContext({
+  relay: relay,
+  isAnchorsMode: isAnchorsMode,
+  setIsAnchorsMode: setIsAnchorsMode
+});
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
-  return <RelayContext.Provider value={{ relay: relay }}>{props.children}</RelayContext.Provider>;
+  return (
+    <RelayContext.Provider
+      value={{ relay: relay, isAnchorsMode: isAnchorsMode, setIsAnchorsMode: setIsAnchorsMode }}
+    >
+      {props.children}
+    </RelayContext.Provider>
+  );
 };
 
 export { RelayProvider, RelayContext };

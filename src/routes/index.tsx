@@ -24,7 +24,7 @@ const Home: Component<{}> = () => {
   const FETCH_EVENTS_LIMIT = 33;
   const MAX_EVENTS_COUNT = 75;
 
-  const { relay } = useContext(RelayContext);
+  const { relay, isAnchorsMode } = useContext(RelayContext);
   const overlay = useContext(OverlayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -50,7 +50,7 @@ const Home: Component<{}> = () => {
       eventsFilter = { ...eventsFilter, authors: relay.following };
     }
 
-    setEvents(await relay.fetchTextEvents(eventsFilter, { rootOnly: true }));
+    setEvents(await relay.fetchTextEvents(eventsFilter, { rootOnly: true, isAnchorsMode: isAnchorsMode() }));
 
     let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
     if (location.search == "") {
@@ -77,7 +77,7 @@ const Home: Component<{}> = () => {
           ...eventsFilter,
           since: fetchSinceTimestamp + 1
         },
-        { rootOnly: true }
+        { rootOnly: true, isAnchorsMode: isAnchorsMode() }
       );
 
       if (newEvents.length !== 0) {

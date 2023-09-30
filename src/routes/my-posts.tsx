@@ -7,7 +7,7 @@ import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
 import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const MyPosts: VoidComponent = () => {
-  const { relay } = useContext(RelayContext);
+  const { relay, isAnchorsMode } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
@@ -38,7 +38,11 @@ const MyPosts: VoidComponent = () => {
       return;
     }
 
-    const events = await relay.fetchTextEvents({ authors: [relay.userPubKey] }, { rootOnly: true });
+    const events = await relay.fetchTextEvents(
+      { authors: [relay.userPubKey] },
+      { rootOnly: true, isAnchorsMode: isAnchorsMode() }
+    );
+
     setEvents(events.sort(sortByCreatedAt));
     setIsLoading(false);
   });

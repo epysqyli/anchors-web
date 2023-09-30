@@ -15,7 +15,7 @@ interface Props {
 }
 
 const UserPopup: Component<Props> = (props): JSX.Element => {
-  const { relay } = useContext(RelayContext);
+  const { relay, isAnchorsMode } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -42,7 +42,14 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
 
   onMount(async () => {
     setIsLoading(true);
-    setEvents(await relay.fetchTextEvents({ authors: [props.pubkey] }, { rootOnly: true, limit: 3 }));
+
+    setEvents(
+      await relay.fetchTextEvents(
+        { authors: [props.pubkey] },
+        { rootOnly: true, isAnchorsMode: isAnchorsMode(), limit: 3 }
+      )
+    );
+
     setIsLoading(false);
   });
 
