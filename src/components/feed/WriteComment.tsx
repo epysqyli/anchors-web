@@ -74,7 +74,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
   };
 
   return (
-    <div class='mr-4 border-t border-slate-400 border-opacity-50 pt-1'>
+    <div class='mr-4 border-t border-slate-400 border-opacity-50 pt-2'>
       <div class='flex justify-center items-stretch'>
         <div class='w-4/5'>
           <textarea
@@ -87,7 +87,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
             value={content()}
           ></textarea>
 
-          <div class='flex items-center justify-between py-1'>
+          <div class='flex items-center justify-between py-1 mt-2'>
             <div class='text-sm text-neutral-300 bg-slate-700 rounded px-2 py-1'>
               Replying to: <span class='underline underline-offset-4 ml-5'>{helperMessage()}</span>
             </div>
