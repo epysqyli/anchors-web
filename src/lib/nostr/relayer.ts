@@ -20,6 +20,8 @@ interface FetchOptions {
   rootOnly: boolean;
   isAnchorsMode: boolean;
   limit?: number;
+  relay?: string;
+  tags?: string[];
 }
 
 class Relayer {
@@ -276,7 +278,10 @@ class Relayer {
     }
 
     const pool = new SimplePool();
-    const events = (await pool.list(this.getReadRelays(), [filter])).filter(this.isEventValid);
+
+    const readFromRelays = options.relay ? [options.relay] : this.getReadRelays();
+    const events = (await pool.list(readFromRelays, [filter])).filter(this.isEventValid);
+
     pool.close(this.getReadRelays());
 
     if (options.rootOnly && options.limit) {
@@ -390,6 +395,10 @@ class Relayer {
     const reactions = await this.fetchEventsReactions(reactionsFilter);
 
     return this.buildEnrichedEvents(comments, metadata, reactions);
+  }
+
+  public getAllRelays(): string[] {
+    return [...this.relays.r, ...this.relays.rw, ...this.relays.w];
   }
 
   private isEventValid(event: Event): boolean {
