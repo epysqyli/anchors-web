@@ -73,7 +73,7 @@ const Menu: Component<Props> = (props) => {
             </div>
 
             <div
-              class='mt-3 rounded px-2 py-1 text-sm bg-transparent text-transparent
+              class='mt-3 rounded px-2 py-1 text-sm bg-transparent text-transparent select-none
                       group-hover:text-neutral-300 group-hover:bg-neutral-600 transition'
             >
               switch to {isAnchorsMode() ? "all nostr" : "only anchors"} posts

@@ -12,7 +12,7 @@ import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingPoints from "~/components/feed/LoadingPoints";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
-import { Component, For, Show, createSignal, onMount, useContext } from "solid-js";
+import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;
@@ -32,18 +32,20 @@ const Home: Component<{}> = () => {
   const [eventHtmlRefs, setEventHtmlRefs] = createSignal<EventHtmlRef[]>([]);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
+  let intervalID: NodeJS.Timer | undefined = undefined;
   const [events, setEvents] = createSignal<Event[]>([]);
   const [metaEvents, setMetaEvents] = createSignal<IUserMetadataWithPubkey[]>([]);
   const [reactions, setReactions] = createSignal<IReactionWithEventID[]>([]);
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
-  const [intervalID, setIntervalID] = createSignal<NodeJS.Timer>();
 
-  onMount(async () => {
+  const fetchAndSetEvents = async (): Promise<void> => {
     setIsLoading(true);
-    const location = useLocation();
+    if (intervalID) {
+      clearInterval(intervalID);
+    }
 
-    await relay.setRelaysAndFollowersAsync();
+    const location = useLocation();
 
     let eventsFilter: Filter = { limit: FETCH_EVENTS_LIMIT };
     if (location.search == "") {
@@ -132,11 +134,29 @@ const Home: Component<{}> = () => {
       }
     }, relay.FETCH_INTERVAL_MS);
 
-    setIntervalID(intervalIdentifier);
+    intervalID = intervalIdentifier;
+  };
+
+  onMount(async () => {
+    await fetchAndSetEvents();
+  });
+
+  createEffect(async () => {
+    isAnchorsMode();
+    clearInterval(intervalID);
+
+    setEvents([]);
+    setEnrichedEvents([]);
+    setNewEnrichedEvents([]);
+    setMetaEvents([]);
+    setReactions([]);
+    setShowPopup(false);
+
+    await fetchAndSetEvents();
   });
 
   useBeforeLeave(() => {
-    clearInterval(intervalID());
+    clearInterval(intervalID);
   });
 
   const mergeEnrichedEvents = (): void => {
