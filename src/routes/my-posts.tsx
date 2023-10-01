@@ -4,7 +4,7 @@ import { RelayContext } from "~/contexts/relay";
 import { sortByCreatedAt } from "~/lib/nostr/nostr-utils";
 import LoadingPoints from "~/components/feed/LoadingPoints";
 import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
-import { For, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import { For, Show, VoidComponent, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const MyPosts: VoidComponent = () => {
   const { relay, isAnchorsMode } = useContext(RelayContext);
@@ -26,7 +26,7 @@ const MyPosts: VoidComponent = () => {
     setShowPopup(true);
   };
 
-  onMount(async () => {
+  const fetchAndSetEvents = async (): Promise<void> => {
     if (window.nostr == undefined) {
       console.log("browser nostr extension needed");
       return;
@@ -38,6 +38,8 @@ const MyPosts: VoidComponent = () => {
       return;
     }
 
+    setIsLoading(true);
+
     const events = await relay.fetchTextEvents(
       { authors: [relay.userPubKey] },
       { rootOnly: true, isAnchorsMode: isAnchorsMode() }
@@ -45,12 +47,21 @@ const MyPosts: VoidComponent = () => {
 
     setEvents(events.sort(sortByCreatedAt));
     setIsLoading(false);
+  };
+
+  onMount(async () => {
+    await fetchAndSetEvents();
+  });
+
+  createEffect(async () => {
+    isAnchorsMode();
+    await fetchAndSetEvents();
   });
 
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14 mb-10'>
-        Your Anchors posts
+        Your {isAnchorsMode() ? "Anchors" : "Nostr"} posts
       </h1>
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
         <div

@@ -1,12 +1,14 @@
 import { A } from "@solidjs/router";
 import { CgFeed } from "solid-icons/cg";
-import { BsBookmark, BsGlobe2 } from "solid-icons/bs";
 import { useLocation } from "solid-start";
-import { Component, Show } from "solid-js";
+import { BsSearch } from "solid-icons/bs";
+import { Motion } from "@motionone/solid";
+import { TbStack2 } from "solid-icons/tb";
+import { RelayContext } from "~/contexts/relay";
 import { FiAnchor, FiEdit } from "solid-icons/fi";
 import { IoSettingsOutline } from "solid-icons/io";
-import { BsSearch } from "solid-icons/bs";
-import { TbStack2 } from "solid-icons/tb";
+import { BsBookmark, BsGlobe2 } from "solid-icons/bs";
+import { Component, Show, useContext } from "solid-js";
 
 interface Props {
   isNarrow: boolean | undefined;
@@ -15,6 +17,11 @@ interface Props {
 
 const Menu: Component<Props> = (props) => {
   const location = useLocation();
+  const { isAnchorsMode, setIsAnchorsMode } = useContext(RelayContext);
+
+  const toggleAnchorsMode = (): void => {
+    setIsAnchorsMode(!isAnchorsMode());
+  };
 
   const narrowStyle = `text-lg bg-gradient-to-br from-slate-600 via-slate-700
                        via-20% to-gray-900 to-90% pt-10 h-[100vh]`;
@@ -29,8 +36,8 @@ const Menu: Component<Props> = (props) => {
 
   const flexActionStyle = actionStyle + " flex items-center justify-between";
   const selectedFlexActionStyle = flexActionStyle + " md:border-orange-200 md:bg-slate-700";
-
   const selectedActionStyle = actionStyle + " md:border-orange-200 md:bg-slate-700";
+
   const active = (path: string) => {
     if (path == `${location.pathname}${location.search}`) {
       return true;
@@ -47,8 +54,30 @@ const Menu: Component<Props> = (props) => {
     <>
       <Show when={props.isNarrow !== undefined}>
         <div class={props.isNarrow ? narrowStyle : wideStyle}>
-          <div class='text-slate-100 w-fit mx-auto mt-10 mb-10 md:mb-20'>
-            <FiAnchor size={40} />
+          <div class='mt-10 mb-10 md:mb-16 group w-fit mx-auto'>
+            <div
+              onClick={toggleAnchorsMode}
+              class='text-slate-100 w-fit mx-auto cursor-pointer transition
+                   border-2 border-dashed border-neutral-500 hover:bg-neutral-500
+                   hover:border-neutral-600 rounded-full p-3 active:bg-neutral-700'
+            >
+              {isAnchorsMode() ? (
+                <Motion.div animate={{ scale: [0.7, 1] }}>
+                  <FiAnchor size={40} />
+                </Motion.div>
+              ) : (
+                <Motion.div animate={{ scale: [0.7, 1] }}>
+                  <BsGlobe2 size={40} />
+                </Motion.div>
+              )}
+            </div>
+
+            <div
+              class='mt-3 rounded px-2 py-1 text-sm bg-transparent text-transparent
+                      group-hover:text-neutral-300 group-hover:bg-neutral-600 transition'
+            >
+              switch to {isAnchorsMode() ? "all nostr" : "only anchors"} posts
+            </div>
           </div>
 
           <div class='flex w-5/6 mx-auto'>
