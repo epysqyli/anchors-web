@@ -71,8 +71,13 @@ const Home: Component<{}> = () => {
     setIsLoading(false);
 
     const intervalIdentifier = setInterval(async () => {
-      const fetchSinceTimestamp =
-        newEnrichedEvents().length == 0 ? enrichedEvents()[0].created_at : newEnrichedEvents()[0].created_at;
+      let fetchSinceTimestamp = Math.floor(Date.now() / 1000);
+      if (newEnrichedEvents().length || enrichedEvents().length) {
+        fetchSinceTimestamp =
+          newEnrichedEvents().length == 0
+            ? enrichedEvents()[0].created_at
+            : newEnrichedEvents()[0].created_at;
+      }
 
       const newEvents: Event[] = await relay.fetchTextEvents(
         {
