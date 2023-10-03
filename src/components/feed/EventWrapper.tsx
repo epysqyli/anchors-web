@@ -157,7 +157,10 @@ const EventWrapper: Component<Props> = (props) => {
             <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 
-          <div class='w-full grow mx-auto flex justify-around items-center rounded-md px-5 py-5 border border-slate-400 border-opacity-10'>
+          <div
+            class='w-full grow mx-auto flex justify-around items-center rounded-md px-5 py-5
+                      border border-slate-400 border-opacity-10 hover:border-opacity-20'
+          >
             <Reactions event={props.event!} />
             <div
               class='w-1/4 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'
