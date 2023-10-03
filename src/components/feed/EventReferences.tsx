@@ -10,7 +10,7 @@ interface Props {
 
 const EventReferences: Component<Props> = (props): JSX.Element => {
   return (
-    <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-slate-800'>
+    <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-slate-800 bg-opacity-50'>
       <div class='text-center text-base text-slate-200 bg-slate-700 w-fit px-10 mx-auto my-5 py-2 rounded-md'>
         {props.eventRefTags().length == 1 ? "1 reference" : `${props.eventRefTags().length} references`}
       </div>

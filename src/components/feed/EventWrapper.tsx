@@ -152,7 +152,7 @@ const EventWrapper: Component<Props> = (props) => {
           ref={handleEventHtmlRef}
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3 flex flex-col justify-between'
         >
-          <div class='grid grid-cols-5 h-[85%] gap-x-3'>
+          <div class='grid grid-cols-6 h-[85%] gap-x-2'>
             <EventContent content={props.event.content} />
             <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
