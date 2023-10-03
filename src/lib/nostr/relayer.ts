@@ -30,25 +30,22 @@ class Relayer {
 
   public userPubKey?: string;
   public following: string[] = [];
+
   private relays: RelayList = { r: [], w: [], rw: [] };
+  private currentPool: SimplePool;
 
   constructor(userPubkey?: string) {
     this.userPubKey = userPubkey;
+    this.currentPool = new SimplePool();
   }
 
   public sub(filter: Filter): Sub {
-    const pool = new SimplePool();
-    const sub = pool.sub(this.getReadRelays(), [filter]);
-    pool.close(this.getReadRelays());
-
+    const sub = this.currentPool.sub(this.getReadRelays(), [filter]);
     return sub;
   }
 
   public pub(event: Event): Pub {
-    const pool = new SimplePool();
-    const pub = pool.publish(this.getWriteRelays(), event);
-    pool.close(this.getWriteRelays());
-
+    const pub = this.currentPool.publish(this.getWriteRelays(), event);
     return pub;
   }
 
@@ -149,13 +146,9 @@ class Relayer {
       return new Promise((_) => {});
     }
 
-    const pool = new SimplePool();
-
-    const kindThreeEvts = await pool.list(this.getReadRelays(), [
+    const kindThreeEvts = await this.currentPool.list(this.getReadRelays(), [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
-
-    pool.close(this.getReadRelays());
 
     if (kindThreeEvts.length != 0) {
       return kindThreeEvts[0];
@@ -169,8 +162,7 @@ class Relayer {
       this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
     }
 
-    const pool = new SimplePool();
-    const events: Event[] = await pool.list(this.getReadRelays(), [
+    const events: Event[] = await this.currentPool.list(this.getReadRelays(), [
       {
         kinds: [Kind.RelayList],
         authors: [this.userPubKey!]
@@ -253,9 +245,7 @@ class Relayer {
       return;
     }
 
-    const pool = new SimplePool();
-
-    const kindThreeEvents = await pool.list(this.getReadRelays(), [
+    const kindThreeEvents = await this.currentPool.list(this.getReadRelays(), [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
@@ -267,8 +257,6 @@ class Relayer {
         this.relays.rw.push(rl);
       });
     }
-
-    pool.close(this.getReadRelays());
   }
 
   public async fetchTextEvents(filter: Filter, options: FetchOptions): Promise<Event[]> {
@@ -277,12 +265,8 @@ class Relayer {
       filter = { ...filter, "#r": [this.ANCHORS_EVENT_RTAG_IDENTIFIER] };
     }
 
-    const pool = new SimplePool();
-
     const readFromRelays = options.relay ? [options.relay] : this.getReadRelays();
-    const events = (await pool.list(readFromRelays, [filter])).filter(this.isEventValid);
-
-    pool.close(this.getReadRelays());
+    const events = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
 
     if (options.rootOnly && options.limit) {
       return this.getRootTextEvents(events).slice(0, options.limit);
@@ -296,26 +280,20 @@ class Relayer {
   }
 
   public async fetchEventsMetadata(filter: Filter): Promise<IUserMetadataWithPubkey[]> {
-    const pool = new SimplePool();
-    const events = (await pool.list(this.getReadRelays(), [{ ...filter, kinds: [Kind.Metadata] }])).filter(
-      this.isEventValid
-    );
+    const events = (
+      await this.currentPool.list(this.getReadRelays(), [{ ...filter, kinds: [Kind.Metadata] }])
+    ).filter(this.isEventValid);
 
     const metadataEvents: IUserMetadataWithPubkey[] = events.map((evt) => {
       const metadata: IUserMetadata = JSON.parse(evt.content);
       return { name: metadata.name, picture: metadata.picture, about: metadata.about, pubkey: evt.pubkey };
     });
 
-    pool.close(this.getReadRelays());
-
     return metadataEvents;
   }
 
   public async fetchEventsReactions(filter: Filter[]): Promise<IReactionWithEventID[]> {
-    const pool = new SimplePool();
-    const events = (await pool.list(this.getReadRelays(), filter)).filter(this.isEventValid);
-    pool.close(this.getReadRelays());
-
+    const events = (await this.currentPool.list(this.getReadRelays(), filter)).filter(this.isEventValid);
     const eventdIDs = filter.flatMap((f) => f["#e"]);
 
     return eventdIDs.map((evtID) => {
