@@ -213,7 +213,7 @@ const Home: Component<{}> = () => {
 
       <Show when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()} fallback={<LoadingPoints />}>
         <div class='relative h-full animate-scale-on-load'>
-          <div class='absolute top-2 left-5'>
+          <div class='absolute top-3 left-5'>
             <NewEventsPopup
               topEventRef={eventHtmlRefs()[0]}
               showPopup={showPopup}
