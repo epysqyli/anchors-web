@@ -1,23 +1,25 @@
-import { A } from "@solidjs/router";
-import { CgFeed } from "solid-icons/cg";
 import { useLocation } from "solid-start";
 import { BsSearch } from "solid-icons/bs";
 import { Motion } from "@motionone/solid";
 import { TbStack2 } from "solid-icons/tb";
+import { BsGlobe2 } from "solid-icons/bs";
 import { RelayContext } from "~/contexts/relay";
 import { FiAnchor, FiEdit } from "solid-icons/fi";
 import { IoSettingsOutline } from "solid-icons/io";
-import { BsBookmark, BsGlobe2 } from "solid-icons/bs";
+import { A, useSearchParams } from "@solidjs/router";
 import { Component, Show, useContext } from "solid-js";
+import { FeedSearchParams } from "~/types/FeedSearchParams";
+import FollowingSelector from "../feed/FollowingSelected";
 
 interface Props {
   isNarrow: boolean | undefined;
-  toggleMenu: () => void;
+  toggleMenu: () => void; // handle for mobile view
 }
 
 const Menu: Component<Props> = (props) => {
   const location = useLocation();
   const { isAnchorsMode, setIsAnchorsMode } = useContext(RelayContext);
+  const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const toggleAnchorsMode = (): void => {
     setIsAnchorsMode(!isAnchorsMode());
@@ -36,7 +38,6 @@ const Menu: Component<Props> = (props) => {
 
   const flexActionStyle = actionStyle + " flex items-center justify-between";
   const selectedFlexActionStyle = flexActionStyle + " md:border-orange-200 md:bg-slate-700";
-  const selectedActionStyle = actionStyle + " md:border-orange-200 md:bg-slate-700";
 
   const active = (path: string) => {
     if (path == `${location.pathname}${location.search}`) {
@@ -80,18 +81,11 @@ const Menu: Component<Props> = (props) => {
             </div>
           </div>
 
-          <div class='flex w-5/6 mx-auto'>
-            <A class='w-1/2' onClick={props.toggleMenu} href='/'>
-              <div class={active("/") ? selectedActionStyle : actionStyle}>
-                <CgFeed size={30} class='md:group-hover:animate-pulse mx-auto' />
-              </div>
-            </A>
-            <A class='w-1/2' onClick={props.toggleMenu} href='/?feed=global'>
-              <div class={active("/?feed=global") ? selectedActionStyle : actionStyle}>
-                <BsGlobe2 size={30} class='md:group-hover:animate-pulse mx-auto' />
-              </div>
-            </A>
+          <div class='flex w-4/5 mx-auto justify-center gap-x-5'>
+            <FollowingSelector />
           </div>
+
+          {/* show a relay list here (all relays + single relays) */}
 
           <A onClick={props.toggleMenu} href='/write'>
             <div class={active("/write") ? selectedFlexActionStyle : flexActionStyle}>
@@ -107,12 +101,13 @@ const Menu: Component<Props> = (props) => {
             </div>
           </A>
 
-          <A onClick={props.toggleMenu} href='/saved-posts'>
+          {/* should be in profile */}
+          {/* <A onClick={props.toggleMenu} href='/saved-posts'>
             <div class={active("/saved-posts") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>saved posts</div>
               <BsBookmark size={26} class='md:group-hover:animate-pulse' />
             </div>
-          </A>
+          </A> */}
 
           <A onClick={props.toggleMenu} href='/my-posts'>
             <div class={active("/my-posts") ? selectedFlexActionStyle : flexActionStyle}>

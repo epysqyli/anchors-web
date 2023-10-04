@@ -1,15 +1,15 @@
-import { useLocation } from "solid-start";
 import OverlayContext from "~/contexts/overlay";
 import { RelayContext } from "~/contexts/relay";
 import { BsCloudDownload } from "solid-icons/bs";
-import { useBeforeLeave } from "@solidjs/router";
 import { Event, Filter, Kind } from "nostr-tools";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
+import { FeedSearchParams } from "~/types/FeedSearchParams";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingPoints from "~/components/feed/LoadingPoints";
+import { useBeforeLeave, useSearchParams } from "@solidjs/router";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
@@ -27,6 +27,7 @@ const Home: Component<{}> = () => {
   const { relay, isAnchorsMode } = useContext(RelayContext);
   const overlay = useContext(OverlayContext);
 
+  const [searchParams, setSearchParams] = useSearchParams<FeedSearchParams>();
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
   const [eventHtmlRefs, setEventHtmlRefs] = createSignal<EventHtmlRef[]>([]);
@@ -45,17 +46,15 @@ const Home: Component<{}> = () => {
       clearInterval(intervalID);
     }
 
-    const location = useLocation();
-
     let eventsFilter: Filter = { limit: FETCH_EVENTS_LIMIT };
-    if (location.search == "") {
+    if (searchParams.following == "on") {
       eventsFilter = { ...eventsFilter, authors: relay.following };
     }
 
     setEvents(await relay.fetchTextEvents(eventsFilter, { rootOnly: true, isAnchorsMode: isAnchorsMode() }));
 
     let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
-    if (location.search == "") {
+    if (searchParams.following == "on") {
       metaFilter = { authors: relay.following };
     }
 
@@ -143,6 +142,11 @@ const Home: Component<{}> = () => {
   };
 
   onMount(async () => {
+    const { following, relayAddress } = searchParams;
+    if (following == undefined) {
+      setSearchParams({ following: "on" });
+    }
+
     await fetchAndSetEvents();
   });
 
