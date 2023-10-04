@@ -1,3 +1,4 @@
+import { A } from "@solidjs/router";
 import { useLocation } from "solid-start";
 import { BsSearch } from "solid-icons/bs";
 import { Motion } from "@motionone/solid";
@@ -5,11 +6,10 @@ import { TbStack2 } from "solid-icons/tb";
 import { BsGlobe2 } from "solid-icons/bs";
 import { RelayContext } from "~/contexts/relay";
 import { FiAnchor, FiEdit } from "solid-icons/fi";
+import RelaySelector from "../feed/RelaySelector";
 import { IoSettingsOutline } from "solid-icons/io";
-import { A, useSearchParams } from "@solidjs/router";
 import { Component, Show, useContext } from "solid-js";
-import { FeedSearchParams } from "~/types/FeedSearchParams";
-import FollowingSelector from "../feed/FollowingSelected";
+import FollowingSelector from "../feed/FollowingSelector";
 
 interface Props {
   isNarrow: boolean | undefined;
@@ -19,7 +19,6 @@ interface Props {
 const Menu: Component<Props> = (props) => {
   const location = useLocation();
   const { isAnchorsMode, setIsAnchorsMode } = useContext(RelayContext);
-  const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const toggleAnchorsMode = (): void => {
     setIsAnchorsMode(!isAnchorsMode());
@@ -55,7 +54,7 @@ const Menu: Component<Props> = (props) => {
     <>
       <Show when={props.isNarrow !== undefined}>
         <div class={props.isNarrow ? narrowStyle : wideStyle}>
-          <div class='mt-10 mb-10 md:mb-16 group w-fit mx-auto'>
+          <div class='my-5 group w-fit mx-auto'>
             <div
               onClick={toggleAnchorsMode}
               class='text-slate-100 w-fit mx-auto cursor-pointer transition
@@ -80,12 +79,6 @@ const Menu: Component<Props> = (props) => {
               switch to {isAnchorsMode() ? "all nostr" : "only anchors"} posts
             </div>
           </div>
-
-          <div class='flex w-4/5 mx-auto justify-center gap-x-5'>
-            <FollowingSelector />
-          </div>
-
-          {/* show a relay list here (all relays + single relays) */}
 
           <A onClick={props.toggleMenu} href='/write'>
             <div class={active("/write") ? selectedFlexActionStyle : flexActionStyle}>
@@ -122,6 +115,17 @@ const Menu: Component<Props> = (props) => {
               <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
+
+          <div class='flex w-4/5 mx-auto justify-center gap-x-5 mt-10'>
+            <FollowingSelector />
+          </div>
+
+          <div
+            class='mx-auto w-5/6 my-10 px-2 text-base text-center
+                 text-neutral-400 h-[20%] overflow-y-scroll custom-scrollbar'
+          >
+            <RelaySelector />
+          </div>
         </div>
       </Show>
     </>

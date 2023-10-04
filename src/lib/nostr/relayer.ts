@@ -27,6 +27,7 @@ interface FetchOptions {
 class Relayer {
   public readonly FETCH_INTERVAL_MS = 20000;
   public readonly ANCHORS_EVENT_RTAG_IDENTIFIER = "anchors-event";
+  public readonly ALL_RELAYS_IDENTIFIED = "all";
 
   public userPubKey?: string;
   public following: string[] = [];
@@ -375,15 +376,7 @@ class Relayer {
     return this.buildEnrichedEvents(comments, metadata, reactions);
   }
 
-  public getAllRelays(): string[] {
-    return [...this.relays.r, ...this.relays.rw, ...this.relays.w];
-  }
-
-  private isEventValid(event: Event): boolean {
-    return validateEvent(event) && verifySignature(event);
-  }
-
-  private getReadRelays(): string[] {
+  public getReadRelays(): string[] {
     return [...this.relays.r, ...this.relays.rw];
   }
 
@@ -401,6 +394,10 @@ class Relayer {
 
   private getRootTextEvents(events: Event[]): Event[] {
     return events.filter((evt) => evt.tags.filter((t) => t[0] == "e").length == 0);
+  }
+
+  private isEventValid(event: Event): boolean {
+    return validateEvent(event) && verifySignature(event);
   }
 }
 

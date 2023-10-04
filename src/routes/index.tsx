@@ -51,7 +51,19 @@ const Home: Component<{}> = () => {
       eventsFilter = { ...eventsFilter, authors: relay.following };
     }
 
-    setEvents(await relay.fetchTextEvents(eventsFilter, { rootOnly: true, isAnchorsMode: isAnchorsMode() }));
+    if (searchParams.relayAddress == relay.ALL_RELAYS_IDENTIFIED) {
+      setEvents(
+        await relay.fetchTextEvents(eventsFilter, { rootOnly: true, isAnchorsMode: isAnchorsMode() })
+      );
+    } else {
+      setEvents(
+        await relay.fetchTextEvents(eventsFilter, {
+          rootOnly: true,
+          isAnchorsMode: isAnchorsMode(),
+          relay: searchParams.relayAddress
+        })
+      );
+    }
 
     let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
     if (searchParams.following == "on") {
@@ -78,13 +90,22 @@ const Home: Component<{}> = () => {
             : newEnrichedEvents()[0].created_at;
       }
 
-      const newEvents: Event[] = await relay.fetchTextEvents(
-        {
-          ...eventsFilter,
-          since: fetchSinceTimestamp + 1
-        },
-        { rootOnly: true, isAnchorsMode: isAnchorsMode() }
-      );
+      const newEvents: Event[] =
+        searchParams.relayAddress == relay.ALL_RELAYS_IDENTIFIED
+          ? await relay.fetchTextEvents(
+              {
+                ...eventsFilter,
+                since: fetchSinceTimestamp + 1
+              },
+              { rootOnly: true, isAnchorsMode: isAnchorsMode() }
+            )
+          : await relay.fetchTextEvents(
+              {
+                ...eventsFilter,
+                since: fetchSinceTimestamp + 1
+              },
+              { rootOnly: true, isAnchorsMode: isAnchorsMode(), relay: searchParams.relayAddress }
+            );
 
       if (newEvents.length !== 0) {
         const newEventsIDs = newEvents.map((e) => e.id);
@@ -142,9 +163,12 @@ const Home: Component<{}> = () => {
   };
 
   onMount(async () => {
-    const { following, relayAddress } = searchParams;
-    if (following == undefined) {
-      setSearchParams({ following: "on" });
+    if (searchParams.following == undefined || searchParams.following == "undefined") {
+      setSearchParams({ ...searchParams, following: "on" });
+    }
+
+    if (searchParams.relayAddress == undefined || searchParams.relayAddress == "undefined") {
+      setSearchParams({ ...searchParams, relayAddress: "all" });
     }
 
     await fetchAndSetEvents();
