@@ -21,7 +21,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
         }`}
         href={`/?following=${searchParams.following}&relayAddress=all`}
       >
-        all relays
+        All relays
       </A>
 
       <For each={relay.getReadRelays()}>
