@@ -1,7 +1,7 @@
 import { VoidComponent } from "solid-js";
 import { TbUsersGroup } from "solid-icons/tb";
-import { BsLightningChargeFill } from "solid-icons/bs";
 import SettingsLink from "~/components/settings/SettingsLink";
+import { BsBookmark, BsLightningChargeFill } from "solid-icons/bs";
 import { RiBusinessProfileLine, RiMapSignalTowerFill } from "solid-icons/ri";
 
 const Settings: VoidComponent = () => {
@@ -25,7 +25,11 @@ const Settings: VoidComponent = () => {
             <TbUsersGroup class='mx-auto' size={62} />
           </SettingsLink>
 
-          <SettingsLink href='/' content='set your lightning address?'>
+          <SettingsLink href='/settings' content='saved posts'>
+            <BsBookmark class='mx-auto' size={60} />
+          </SettingsLink>
+
+          <SettingsLink href='/settings' content='set your lightning address?'>
             <BsLightningChargeFill class='mx-auto' size={62} />
           </SettingsLink>
         </div>

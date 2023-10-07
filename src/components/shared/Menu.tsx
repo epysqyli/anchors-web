@@ -94,14 +94,6 @@ const Menu: Component<Props> = (props) => {
             </div>
           </A>
 
-          {/* should be in profile */}
-          {/* <A onClick={props.toggleMenu} href='/saved-posts'>
-            <div class={active("/saved-posts") ? selectedFlexActionStyle : flexActionStyle}>
-              <div class='group-hover:scale-95'>saved posts</div>
-              <BsBookmark size={26} class='md:group-hover:animate-pulse' />
-            </div>
-          </A> */}
-
           <A onClick={props.toggleMenu} href='/my-posts'>
             <div class={active("/my-posts") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>my posts</div>
