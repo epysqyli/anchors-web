@@ -120,10 +120,7 @@ const Menu: Component<Props> = (props) => {
             <FollowingSelector />
           </div>
 
-          <div
-            class='mx-auto w-5/6 my-10 px-2 text-base text-center
-                 text-neutral-400 h-[20%] overflow-y-scroll custom-scrollbar'
-          >
+          <div class='mx-auto w-5/6 my-10 px-2 h-[20%] overflow-y-scroll custom-scrollbar'>
             <RelaySelector />
           </div>
         </div>

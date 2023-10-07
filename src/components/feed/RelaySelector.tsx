@@ -8,13 +8,17 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
   const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const isCurrentRelay = (address: string): boolean => searchParams.relayAddress == address;
+  const baseStyle = "my-1 py-1 px-3 block rounded mx-auto text-base text-center";
+  const selectedStyle = "bg-neutral-800 bg-opacity-80 text-neutral-300";
 
   return (
     <>
       <A
-        class={`${
-          isCurrentRelay("all") ? "bg-neutral-800 bg-opacity-80" : ""
-        } my-1 py-1 px-3 block rounded mx-auto`}
+        class={`${baseStyle} ${
+          isCurrentRelay("all")
+            ? selectedStyle
+            : "text-neutral-500 hover:text-neutral-400 hover:bg-neutral-700"
+        }`}
         href={`/?following=${searchParams.following}&relayAddress=all`}
       >
         all relays
@@ -23,9 +27,11 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
       <For each={relay.getReadRelays()}>
         {(address) => (
           <A
-            class={`${
-              isCurrentRelay(address) ? "bg-neutral-800 bg-opacity-80" : ""
-            } my-1 py-1 px-3 block rounded mx-auto`}
+            class={`${baseStyle} ${
+              isCurrentRelay(address)
+                ? selectedStyle
+                : "text-neutral-500 hover:text-neutral-400 hover:bg-neutral-700"
+            }`}
             href={`/?following=${searchParams.following}&relayAddress=${encodeURIComponent(address)}`}
           >
             {address}
