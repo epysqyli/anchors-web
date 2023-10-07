@@ -73,13 +73,6 @@ const Menu: Component<Props> = (props) => {
             </div>
           </A>
 
-          <A onClick={props.toggleMenu} href='/my-posts'>
-            <div class={active("/my-posts") ? selectedFlexActionStyle : flexActionStyle}>
-              <div class='group-hover:scale-95'>my posts</div>
-              <TbStack2 size={28} class='md:group-hover:animate-pulse' />
-            </div>
-          </A>
-
           <A onClick={props.toggleMenu} href='/settings'>
             <div class={active("/settings") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>profile</div>
