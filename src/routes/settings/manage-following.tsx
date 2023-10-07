@@ -3,16 +3,19 @@ import { RelayContext } from "~/contexts/relay";
 import { Event as NostrEvent } from "nostr-tools";
 import EventAuthor from "~/components/feed/EventAuthor";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
-import { For, JSX, VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 import { TbUserMinus, TbUserPlus } from "solid-icons/tb";
+import LoadingPoints from "~/components/feed/LoadingPoints";
 
 const ManageFollowing: VoidComponent = (): JSX.Element => {
   const { relay } = useContext(RelayContext);
 
+  const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [following, setFollowing] = createSignal<IUserMetadataWithPubkey[]>([]);
   const [followingPubkeys, setFollowingPubkeys] = createSignal<string[]>([]);
 
   onMount(async () => {
+    setIsLoading(true);
     let followPubkeys = relay.following;
 
     if (followPubkeys.length == 0) {
@@ -34,6 +37,7 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
     }
 
     setFollowingPubkeys(following().map((fl) => fl.pubkey));
+    setIsLoading(false);
   });
 
   const handleClick = async (e: Event, pk: string): Promise<void> => {
@@ -62,45 +66,47 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14'>Manage your following</h1>
 
-      <div class='h-4/5 w-5/6 mx-auto mt-10 p-3 overflow-y-auto custom-scrollbar grid grid-cols-3 gap-5'>
-        <For each={following()}>
-          {(flw) => (
-            <div
-              class='col-span-1 border border-opacity-20 border-slate-200 break-all 
+      <Show when={!isLoading()} fallback={<LoadingPoints />}>
+        <div class='h-4/5 w-5/6 mx-auto mt-10 p-3 overflow-y-auto custom-scrollbar grid grid-cols-3 gap-5'>
+          <For each={following()}>
+            {(flw) => (
+              <div
+                class='col-span-1 border border-opacity-20 border-slate-200 break-all 
                         rounded-md text-slate-300 p-5 flex flex-col justify-between
                         hover:bg-slate-600 hover:bg-opacity-60'
-            >
-              <A href={`/users/${flw.pubkey}`} class='bg-slate-600 rounded py-2 hover:bg-slate-500'>
-                <EventAuthor
-                  about={flw.about}
-                  layout='h'
-                  name={flw.name}
-                  picture={flw.picture}
-                  pubKey={flw.pubkey}
-                />
-              </A>
+              >
+                <A href={`/users/${flw.pubkey}`} class='bg-slate-600 rounded py-2 hover:bg-slate-500'>
+                  <EventAuthor
+                    about={flw.about}
+                    layout='h'
+                    name={flw.name}
+                    picture={flw.picture}
+                    pubKey={flw.pubkey}
+                  />
+                </A>
 
-              <div class='w-2/3 my-10 mx-auto text-center'>
-                <div
-                  onClick={(e) => handleClick(e, flw.pubkey)}
-                  class='border w-fit mx-auto p-5 rounded-full border-opacity-25 border-slate-300
+                <div class='w-2/3 my-10 mx-auto text-center'>
+                  <div
+                    onClick={(e) => handleClick(e, flw.pubkey)}
+                    class='border w-fit mx-auto p-5 rounded-full border-opacity-25 border-slate-300
                         cursor-pointer transition-all group active:border-opacity-80 hover:bg-slate-500'
-                >
-                  {isFollowed(flw.pubkey) ? (
-                    <TbUserMinus size={36} class='mx-auto hover:scale-105 active:scale-95' />
-                  ) : (
-                    <TbUserPlus size={36} class='mx-auto hover:scale-105 active:scale-95' />
-                  )}
+                  >
+                    {isFollowed(flw.pubkey) ? (
+                      <TbUserMinus size={36} class='mx-auto hover:scale-105 active:scale-95' />
+                    ) : (
+                      <TbUserPlus size={36} class='mx-auto hover:scale-105 active:scale-95' />
+                    )}
+                  </div>
+                </div>
+
+                <div class='text-sm text-center border-t border-slate-400 border-opacity-25 pt-5'>
+                  {flw.pubkey}
                 </div>
               </div>
-
-              <div class='text-sm text-center border-t border-slate-400 border-opacity-25 pt-5'>
-                {flw.pubkey}
-              </div>
-            </div>
-          )}
-        </For>
-      </div>
+            )}
+          </For>
+        </div>
+      </Show>
     </>
   );
 };
