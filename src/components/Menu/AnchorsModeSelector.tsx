@@ -24,8 +24,8 @@ const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
         onMouseEnter={toggleSwitchMsg}
         onMouseLeave={toggleSwitchMsg}
         class='text-slate-100 w-fit mx-auto cursor-pointer transition
-                   border-2 border-dashed border-neutral-500 hover:bg-neutral-500
-                   hover:border-neutral-600 rounded-full p-3 active:bg-neutral-700'
+                   border-2 border-neutral-600 hover:bg-neutral-500
+                   hover:border-neutral-700 rounded-full p-3 active:bg-neutral-700'
       >
         {isAnchorsMode() ? (
           <Motion.div animate={{ scale: [0.7, 1] }}>
