@@ -1,4 +1,4 @@
-import { JSX } from "solid-js";
+import { JSX, Show } from "solid-js";
 import { A, useSearchParams } from "solid-start";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 
@@ -27,12 +27,23 @@ const FollowingSelector = (): JSX.Element => {
   // make sure following or all users is highlighted only when on the feed page
   return (
     <>
-      <A class={isFollowing() ? isFollowingStyle : isNotFollowingStyle} href={followingOnHref()}>
-        <span>following</span>
-      </A>
-      <A class={isFollowing() ? isNotFollowingStyle : isFollowingStyle} href={followingOffHref()}>
-        <span>all users</span>
-      </A>
+      <Show when={searchParams.following !== undefined}>
+        <A class={isFollowing() ? isFollowingStyle : isNotFollowingStyle} href={followingOnHref()}>
+          <span>following</span>
+        </A>
+        <A class={isFollowing() ? isNotFollowingStyle : isFollowingStyle} href={followingOffHref()}>
+          <span>all users</span>
+        </A>
+      </Show>
+
+      <Show when={searchParams.following == undefined}>
+        <A class={isNotFollowingStyle} href={followingOnHref()}>
+          <span>following</span>
+        </A>
+        <A class={isNotFollowingStyle} href={followingOffHref()}>
+          <span>all users</span>
+        </A>
+      </Show>
     </>
   );
 };
