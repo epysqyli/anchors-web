@@ -268,6 +268,15 @@ class Relayer {
       filter = { ...filter, "#r": [this.ANCHORS_EVENT_RTAG_IDENTIFIER] };
     }
 
+    let rTag: string = "";
+    if (options.filter["#r"] && options.filter["#r"].length != 0) {
+      rTag = decodeURIComponent(options.filter["#r"][0]);
+    }
+
+    if (rTag) {
+      filter = { ...filter, "#r": [rTag] };
+    }
+
     if (options.feedSearchParams?.following == "on") {
       filter = { ...filter, authors: this.following };
     }

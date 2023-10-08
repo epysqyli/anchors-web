@@ -3,6 +3,7 @@ import { VsReferences } from "solid-icons/vs";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import { FiExternalLink } from "solid-icons/fi";
 import RefTagIcon from "../shared/RefTagIcon";
+import { A } from "solid-start";
 
 interface Props {
   tag: IFeedRefTag;
@@ -45,12 +46,12 @@ const RefTagFeedElement: Component<Props> = (props) => {
               class='mx-auto text-slate-400 hover:scale-110 active:scale-95 transition'
             />
           </a>
-          <div class='w-1/3'>
+          <A href={`/refs/${encodeURIComponent(props.tag.url)}`} class='w-1/3'>
             <VsReferences
               size={28}
               class='mx-auto cursor-pointer text-slate-400 hover:scale-110 active:scale-95 transition'
             />
-          </div>
+          </A>
         </div>
       </div>
     </Show>
