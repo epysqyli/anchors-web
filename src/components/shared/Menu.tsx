@@ -2,11 +2,9 @@ import { A } from "@solidjs/router";
 import { FiEdit } from "solid-icons/fi";
 import { useLocation } from "solid-start";
 import { BsSearch } from "solid-icons/bs";
-import { TbStack2 } from "solid-icons/tb";
 import { Component, Show } from "solid-js";
 import RelaySelector from "../Menu/RelaySelector";
 import { IoSettingsOutline } from "solid-icons/io";
-import FollowingSelector from "../Menu/FollowingSelector";
 import AnchorsModeSelector from "../Menu/AnchorsModeSelector";
 
 interface Props {
@@ -51,11 +49,7 @@ const Menu: Component<Props> = (props) => {
             <AnchorsModeSelector />
           </div>
 
-          <div class='flex w-4/5 mx-auto justify-center gap-x-5 mt-10'>
-            <FollowingSelector />
-          </div>
-
-          <div class='mx-auto w-5/6 my-10 px-2 h-[20%] overflow-y-scroll custom-scrollbar'>
+          <div class='mx-auto w-5/6 mt-10 mb-28 px-2 h-[20%]'>
             <RelaySelector />
           </div>
 

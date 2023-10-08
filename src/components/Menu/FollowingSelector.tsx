@@ -20,10 +20,11 @@ const FollowingSelector = (): JSX.Element => {
   };
 
   const isFollowingStyle =
-    "w-fit text-base rounded-t px-3 py-1 text-neutral-300 bg-neutral-800 border-b border-neutral-300";
+    "w-fit text-base rounded px-3 py-1 text-neutral-300 bg-neutral-800 border-b border-neutral-300";
   const isNotFollowingStyle =
     "w-fit text-base rounded px-3 py-1 text-neutral-500 bg-neutral-700 hover:text-neutral-400";
 
+  // make sure following or all users is highlighted only when on the feed page
   return (
     <>
       <A class={isFollowing() ? isFollowingStyle : isNotFollowingStyle} href={followingOnHref()}>
