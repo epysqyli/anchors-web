@@ -46,24 +46,14 @@ const Home: Component<{}> = () => {
       clearInterval(intervalID);
     }
 
-    let eventsFilter: Filter = { limit: FETCH_EVENTS_LIMIT };
-    if (searchParams.following == "on") {
-      eventsFilter = { ...eventsFilter, authors: relay.following };
-    }
-
-    if (searchParams.relayAddress == relay.ALL_RELAYS_IDENTIFIED) {
-      setEvents(
-        await relay.fetchTextEvents(eventsFilter, { rootOnly: true, isAnchorsMode: isAnchorsMode() })
-      );
-    } else {
-      setEvents(
-        await relay.fetchTextEvents(eventsFilter, {
-          rootOnly: true,
-          isAnchorsMode: isAnchorsMode(),
-          relay: searchParams.relayAddress
-        })
-      );
-    }
+    setEvents(
+      await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        feedSearchParams: searchParams,
+        filter: { limit: FETCH_EVENTS_LIMIT }
+      })
+    );
 
     let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
     if (searchParams.following == "on") {
@@ -72,7 +62,7 @@ const Home: Component<{}> = () => {
 
     setMetaEvents(await relay.fetchEventsMetadata(metaFilter));
 
-    let reactionsFilter: Filter[] = events().map((evt) => {
+    const reactionsFilter: Filter[] = events().map((evt) => {
       return { kinds: [Kind.Reaction], "#e": [evt.id] };
     });
 
@@ -83,6 +73,7 @@ const Home: Component<{}> = () => {
 
     const intervalIdentifier = setInterval(async () => {
       let fetchSinceTimestamp = Math.floor(Date.now() / 1000);
+
       if (newEnrichedEvents().length || enrichedEvents().length) {
         fetchSinceTimestamp =
           newEnrichedEvents().length == 0
@@ -90,22 +81,12 @@ const Home: Component<{}> = () => {
             : newEnrichedEvents()[0].created_at;
       }
 
-      const newEvents: Event[] =
-        searchParams.relayAddress == relay.ALL_RELAYS_IDENTIFIED
-          ? await relay.fetchTextEvents(
-              {
-                ...eventsFilter,
-                since: fetchSinceTimestamp + 1
-              },
-              { rootOnly: true, isAnchorsMode: isAnchorsMode() }
-            )
-          : await relay.fetchTextEvents(
-              {
-                ...eventsFilter,
-                since: fetchSinceTimestamp + 1
-              },
-              { rootOnly: true, isAnchorsMode: isAnchorsMode(), relay: searchParams.relayAddress }
-            );
+      const newEvents: Event[] = await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        feedSearchParams: searchParams,
+        filter: { limit: FETCH_EVENTS_LIMIT, since: fetchSinceTimestamp + 1 }
+      });
 
       if (newEvents.length !== 0) {
         const newEventsIDs = newEvents.map((e) => e.id);

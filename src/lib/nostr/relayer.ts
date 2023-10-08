@@ -15,19 +15,20 @@ import {
 import { sortByCreatedAt } from "./nostr-utils";
 import PubResult from "~/interfaces/PubResult";
 import RelayList from "~/interfaces/RelayList";
+import { FeedSearchParams } from "~/types/FeedSearchParams";
 
 interface FetchOptions {
   rootOnly: boolean;
   isAnchorsMode: boolean;
-  limit?: number;
-  relay?: string;
-  tags?: string[];
+  filter: Filter;
+  feedSearchParams?: FeedSearchParams;
+  postFetchLimit?: number;
 }
 
 class Relayer {
   public readonly FETCH_INTERVAL_MS = 20000;
+  public readonly ALL_RELAYS_IDENTIFIER = "all";
   public readonly ANCHORS_EVENT_RTAG_IDENTIFIER = "anchors-event";
-  public readonly ALL_RELAYS_IDENTIFIED = "all";
 
   public userPubKey?: string;
   public following: string[] = [];
@@ -260,17 +261,30 @@ class Relayer {
     }
   }
 
-  public async fetchTextEvents(filter: Filter, options: FetchOptions): Promise<Event[]> {
-    filter = { ...filter, kinds: [Kind.Text] };
+  public async fetchTextEvents(options: FetchOptions): Promise<Event[]> {
+    let filter: Filter = { ...options.filter, kinds: [Kind.Text] };
+
     if (options.isAnchorsMode) {
       filter = { ...filter, "#r": [this.ANCHORS_EVENT_RTAG_IDENTIFIER] };
     }
 
-    const readFromRelays = options.relay ? [options.relay] : this.getReadRelays();
+    if (options.feedSearchParams?.following == "on") {
+      filter = { ...filter, authors: this.following };
+    }
+
+    let readFromRelays: string[] = this.getReadRelays();
+
+    if (
+      options.feedSearchParams?.relayAddress &&
+      options.feedSearchParams?.relayAddress != this.ALL_RELAYS_IDENTIFIER
+    ) {
+      readFromRelays = [options.feedSearchParams.relayAddress];
+    }
+
     const events = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
 
-    if (options.rootOnly && options.limit) {
-      return this.getRootTextEvents(events).slice(0, options.limit);
+    if (options.rootOnly && options.postFetchLimit) {
+      return this.getRootTextEvents(events).slice(0, options.postFetchLimit);
     }
 
     if (options.rootOnly) {
@@ -358,10 +372,8 @@ class Relayer {
   }
 
   public async fetchComments(rootEventID: string): Promise<IEnrichedEvent[]> {
-    const comments = await this.fetchTextEvents(
-      { "#e": [rootEventID] },
-      { rootOnly: false, isAnchorsMode: false }
-    );
+    const filter = { "#e": [rootEventID], kinds: [Kind.Text] };
+    const comments = (await this.currentPool.list(this.getReadRelays(), [filter])).filter(this.isEventValid);
 
     const metadata = await this.fetchEventsMetadata({
       authors: [...new Set(comments.map((evt) => evt.pubkey))]

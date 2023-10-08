@@ -1,7 +1,7 @@
 import { Kind } from "nostr-tools";
-import { useParams } from "solid-start";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
+import { useParams } from "solid-start";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import LoadingFallback from "~/components/feed/LoadingFallback";
@@ -17,10 +17,11 @@ const EventByID: VoidComponent = (): JSX.Element => {
     setIsLoading(true);
     const params = useParams<{ id: string }>();
 
-    const events = await relay.fetchTextEvents(
-      { ids: [params.id] },
-      { rootOnly: true, isAnchorsMode: isAnchorsMode() }
-    );
+    const events = await relay.fetchTextEvents({
+      rootOnly: true,
+      isAnchorsMode: isAnchorsMode(),
+      filter: { ids: [params.id] }
+    });
 
     const metadata = await relay.fetchEventsMetadata({ authors: events.map((evt) => evt.pubkey) });
     const reactions = await relay.fetchEventsReactions([

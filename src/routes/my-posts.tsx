@@ -40,10 +40,11 @@ const MyPosts: VoidComponent = () => {
 
     setIsLoading(true);
 
-    const events = await relay.fetchTextEvents(
-      { authors: [relay.userPubKey] },
-      { rootOnly: true, isAnchorsMode: isAnchorsMode() }
-    );
+    const events = await relay.fetchTextEvents({
+      rootOnly: true,
+      isAnchorsMode: isAnchorsMode(),
+      filter: { authors: [relay.userPubKey] }
+    });
 
     setEvents(events.sort(sortByCreatedAt));
     setIsLoading(false);
