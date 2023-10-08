@@ -24,7 +24,6 @@ const FollowingSelector = (): JSX.Element => {
   const isNotFollowingStyle =
     "w-fit text-base rounded px-3 py-1 text-neutral-500 bg-neutral-700 hover:text-neutral-400";
 
-  // make sure following or all users is highlighted only when on the feed page
   return (
     <>
       <Show when={searchParams.following !== undefined}>
