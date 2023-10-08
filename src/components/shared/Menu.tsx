@@ -5,6 +5,7 @@ import { BsSearch } from "solid-icons/bs";
 import { Component, Show } from "solid-js";
 import RelaySelector from "../Menu/RelaySelector";
 import { IoSettingsOutline } from "solid-icons/io";
+import FollowingSelector from "../Menu/FollowingSelector";
 import AnchorsModeSelector from "../Menu/AnchorsModeSelector";
 
 interface Props {
@@ -50,6 +51,10 @@ const Menu: Component<Props> = (props) => {
           </div>
 
           <div class='mx-auto w-5/6 mt-10 mb-28 px-2 h-[20%]'>
+            <span class='w-fit block mx-auto text-center text-neutral-300 font-bold select-none'>Feed</span>
+            <div class='flex justify-around my-5'>
+              <FollowingSelector />
+            </div>
             <RelaySelector />
           </div>
 

@@ -1,6 +1,5 @@
 import { RelayContext } from "~/contexts/relay";
 import { A, useSearchParams } from "solid-start";
-import FollowingSelector from "./FollowingSelector";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { For, JSX, VoidComponent, useContext } from "solid-js";
 
@@ -14,15 +13,6 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <div class=''>
-        <div class='w-fit mx-auto text-center text-neutral-300 font-bold select-none'>
-          Feed
-        </div>
-        <div class='flex justify-around my-5'>
-          <FollowingSelector />
-        </div>
-      </div>
-
       <div class='h-5/6 overflow-y-scroll custom-scrollbar'>
         <A
           class={`${baseStyle} ${
