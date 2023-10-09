@@ -1,37 +1,24 @@
-import OverlayContext from "~/contexts/overlay";
+import Feed from "~/components/feed/Feed";
 import { RelayContext } from "~/contexts/relay";
-import { BsCloudDownload } from "solid-icons/bs";
 import { Event, Filter, Kind } from "nostr-tools";
-import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
-import EventWrapper from "~/components/feed/EventWrapper";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
-import NewEventsPopup from "~/components/feed/NewEventsPopup";
 import LoadingPoints from "~/components/feed/LoadingPoints";
 import { useBeforeLeave, useSearchParams } from "@solidjs/router";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
-import { Component, For, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
-
-interface EventHtmlRef {
-  htmlRef: HTMLDivElement;
-  eventID: string;
-  createdAt: number;
-}
+import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const Home: Component<{}> = () => {
   const FETCH_EVENTS_LIMIT = 33;
   const MAX_EVENTS_COUNT = 75;
 
   const { relay, isAnchorsMode } = useContext(RelayContext);
-  const overlay = useContext(OverlayContext);
 
   const [searchParams, setSearchParams] = useSearchParams<FeedSearchParams>();
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
-  const [eventHtmlRefs, setEventHtmlRefs] = createSignal<EventHtmlRef[]>([]);
-  const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
   let intervalID: NodeJS.Timer | undefined = undefined;
   const [events, setEvents] = createSignal<Event[]>([]);
@@ -186,70 +173,16 @@ const Home: Component<{}> = () => {
     setNewEnrichedEvents([]);
   };
 
-  const scrollPage = (direction: "up" | "down"): void => {
-    eventWrapperContainer()!.scrollBy({
-      behavior: "smooth",
-      top: direction == "up" ? -1000 : 1000
-    });
-  };
-
-  // there should be a better way to handle this
-  const addHtmlRef = (ref: HTMLDivElement, eventID: string, createdAt: number): void => {
-    setEventHtmlRefs(
-      [...eventHtmlRefs(), { htmlRef: ref, eventID: eventID, createdAt: createdAt }].sort((ref1, ref2) => {
-        return ref1.createdAt > ref2.createdAt ? -1 : 1;
-      })
-    );
-  };
-
-  const eventWrapperContainerStyle = (): string => {
-    if (!overlay.showOverlay()) {
-      return "custom-scrollbar snap-y snap-mandatory overflow-x-hidden h-full";
-    }
-
-    return "custom-scrollbar snap-y snap-mandatory overflow-hidden h-full";
-  };
-
   return (
     <>
-      <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
-        <div class='snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[100vh]'>
-          <For each={enrichedEvents()}>
-            {(nostrEvent) => <EventWrapper addHtmlRef={addHtmlRef} event={nostrEvent} />}
-          </For>
-        </div>
-      </Show>
-
-      <Show when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()} fallback={<LoadingPoints />}>
-        <div class='relative h-full animate-scale-on-load'>
-          <div class='absolute top-3 left-5'>
-            <NewEventsPopup
-              topEventRef={eventHtmlRefs()[0]}
-              showPopup={showPopup}
-              setShowPopup={setShowPopup}
-              mergeEnrichedEvents={mergeEnrichedEvents}
-            />
-          </div>
-
-          <div ref={(el) => setEventWrapperContainer(el)} class={eventWrapperContainerStyle()}>
-            <For each={enrichedEvents()}>
-              {(nostrEvent) => (
-                <EventWrapper event={nostrEvent} scrollPage={scrollPage} addHtmlRef={addHtmlRef} />
-              )}
-            </For>
-
-            <div class='relative snap-start h-full text-slate-300'>
-              <div
-                class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                          cursor-pointer p-20 border rounded-full border-slate-600
-                          hover:shadow-lg shadow-slate-500 active:shadow-none active:border-slate-800'
-              >
-                <BsCloudDownload size={60} class='mx-auto' />
-                <p class='text-center mt-10 text-lg select-none'>load older posts</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <Show when={!isLoading()} fallback={<LoadingPoints />}>
+        <Feed
+          isLiveFeed={true}
+          enrichedEvents={enrichedEvents}
+          mergeEnrichedEvents={mergeEnrichedEvents}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+        />
       </Show>
     </>
   );
