@@ -16,6 +16,7 @@ const RefUrl: VoidComponent = (): JSX.Element => {
   const fetchAndSetEvents = async (): Promise<void> => {
     const params = useParams<{ refUrl: string }>();
 
+    // manage limit and older posts
     const events = await relay.fetchTextEvents({
       rootOnly: true,
       isAnchorsMode: isAnchorsMode(),
