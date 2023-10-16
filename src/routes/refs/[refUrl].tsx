@@ -5,7 +5,7 @@ import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import LoadingFallback from "~/components/feed/LoadingFallback";
-import { JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import { JSX, Show, VoidComponent, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const RefUrl: VoidComponent = (): JSX.Element => {
   const { relay, isAnchorsMode } = useContext(RelayContext);
@@ -20,7 +20,7 @@ const RefUrl: VoidComponent = (): JSX.Element => {
     const events = await relay.fetchTextEvents({
       rootOnly: true,
       isAnchorsMode: isAnchorsMode(),
-      filter: { "#r": [params.refUrl] }
+      filter: { "#r": [params.refUrl], limit: 30 }
     });
 
     const metadata = await relay.fetchEventsMetadata({ authors: events.map((evt) => evt.pubkey) });
@@ -35,6 +35,12 @@ const RefUrl: VoidComponent = (): JSX.Element => {
     setIsLoading(true);
     await fetchAndSetEvents();
     setIsLoading(false);
+  });
+
+  createEffect(async () => {
+    isAnchorsMode();
+    setEvents([]);
+    await fetchAndSetEvents();
   });
 
   return (
