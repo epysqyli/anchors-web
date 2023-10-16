@@ -152,6 +152,7 @@ class Relayer {
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
+    // loop over all contacts events instead of taking only the first one
     if (kindThreeEvts.length != 0) {
       return kindThreeEvts[0];
     }
