@@ -8,7 +8,7 @@ import LoadingFallback from "~/components/feed/LoadingFallback";
 import { JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const EventByID: VoidComponent = (): JSX.Element => {
-  const { relay, isAnchorsMode } = useContext(RelayContext);
+  const { relay } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<IEnrichedEvent[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -19,7 +19,7 @@ const EventByID: VoidComponent = (): JSX.Element => {
 
     const events = await relay.fetchTextEvents({
       rootOnly: true,
-      isAnchorsMode: isAnchorsMode(),
+      isAnchorsMode: false,
       filter: { ids: [params.id] }
     });
 
