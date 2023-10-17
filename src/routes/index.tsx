@@ -9,6 +9,7 @@ import { useBeforeLeave, useSearchParams } from "@solidjs/router";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
+import { getFetchSinceTimestamp, getNewEventsAuthors, getNewUniqueEvents } from "~/lib/feed/feed";
 
 const Home: Component<{}> = () => {
   const FETCH_EVENTS_LIMIT = 33;
@@ -59,14 +60,7 @@ const Home: Component<{}> = () => {
     setIsLoading(false);
 
     const intervalIdentifier = setInterval(async () => {
-      let fetchSinceTimestamp = Math.floor(Date.now() / 1000);
-
-      if (newEnrichedEvents().length || enrichedEvents().length) {
-        fetchSinceTimestamp =
-          newEnrichedEvents().length == 0
-            ? enrichedEvents()[0].created_at
-            : newEnrichedEvents()[0].created_at;
-      }
+      let fetchSinceTimestamp = getFetchSinceTimestamp(enrichedEvents(), newEnrichedEvents());
 
       const newEvents: Event[] = await relay.fetchTextEvents({
         rootOnly: true,
@@ -76,30 +70,20 @@ const Home: Component<{}> = () => {
       });
 
       if (newEvents.length !== 0) {
-        const newEventsIDs = newEvents.map((e) => e.id);
-        const oldEventsIDs = events().map((e) => e.id);
-        const uniqueNewEventsIDs = newEventsIDs.filter((newID) => !oldEventsIDs.includes(newID));
-        const newUniqueEvents = newEvents.filter((newEvt) => uniqueNewEventsIDs.includes(newEvt.id));
-
+        const newUniqueEvents = getNewUniqueEvents(events(), newEvents);
+        const newEventsAuthors = getNewEventsAuthors(events(), newUniqueEvents);
         setEvents([...events(), ...newUniqueEvents]);
 
-        const newEventsAuthors: string[] = newUniqueEvents.map((e) => e.pubkey);
-        const oldEventsAuthors: string[] = events().map((e) => e.pubkey);
-        const diffAuthors: string[] = newEventsAuthors.filter((newPk) =>
-          oldEventsAuthors.find((oldPk) => oldPk !== newPk)
-        );
-
-        if (diffAuthors.length !== 0) {
-          let metaFilter: Filter = { authors: [...new Set(diffAuthors)] };
+        if (newEventsAuthors.length !== 0) {
+          const metaFilter: Filter = { authors: [...new Set(newEventsAuthors)] };
           const recentMetaEvents: IUserMetadataWithPubkey[] = await relay.fetchEventsMetadata(metaFilter);
           setMetaEvents([...metaEvents(), ...recentMetaEvents]);
         }
 
-        const reactionsFilter: Filter[] = newUniqueEvents.map((evt) => {
-          return { kinds: [Kind.Reaction], "#e": [evt.id] };
-        });
+        const recentReactions: IReactionWithEventID[] = await relay.fetchEventsReactions(
+          newUniqueEvents.map((evt) => ({ kinds: [Kind.Reaction], "#e": [evt.id] }))
+        );
 
-        const recentReactions: IReactionWithEventID[] = await relay.fetchEventsReactions(reactionsFilter);
         const newReactions: IReactionWithEventID[] = recentReactions.filter(
           (re) => !reactions().find((r) => r.eventID === re.eventID)
         );
@@ -107,6 +91,7 @@ const Home: Component<{}> = () => {
         setReactions([...reactions(), ...newReactions]);
 
         const newEventsCount = newEnrichedEvents().length + newUniqueEvents.length;
+
         if (newEventsCount >= MAX_EVENTS_COUNT) {
           const newEventsToSet = [
             ...newEnrichedEvents(),
