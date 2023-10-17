@@ -1,4 +1,11 @@
-import { Event } from "nostr-tools";
+import Relayer from "../nostr/relayer";
+import { Accessor, Setter } from "solid-js";
+import { Event, Filter, Kind } from "nostr-tools";
+import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
+import { FeedSearchParams } from "~/types/FeedSearchParams";
+import { sortByCreatedAtReverse } from "../nostr/nostr-utils";
+import { IReactionWithEventID } from "~/interfaces/IReaction";
+import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 
 const getNewUniqueEvents = (currentEvents: Event[], newEvents: Event[]): Event[] => {
   const newEventsIDs = newEvents.map((e) => e.id);
@@ -23,4 +30,106 @@ const getFetchSinceTimestamp = (currentEvents: Event[], newEvents: Event[]): num
   return fetchSinceTimestamp;
 };
 
-export { getNewUniqueEvents, getNewEventsAuthors, getFetchSinceTimestamp };
+const fetchAndSetEvents = async (
+  relay: Relayer,
+  setIsLoading: Setter<boolean>,
+  events: Accessor<Event[]>,
+  setEvents: Setter<Event[]>,
+  metaEvents: Accessor<IUserMetadataWithPubkey[]>,
+  setMetaEvents: Setter<IUserMetadataWithPubkey[]>,
+  reactions: Accessor<IReactionWithEventID[]>,
+  setReactions: Setter<IReactionWithEventID[]>,
+  enrichedEvents: Accessor<IEnrichedEvent[]>,
+  setEnrichedEvents: Setter<IEnrichedEvent[]>,
+  newEnrichedEvents: Accessor<IEnrichedEvent[]>,
+  setNewEnrichedEvents: Setter<IEnrichedEvent[]>,
+  isAnchorsMode: Accessor<boolean>,
+  setShowPopup: Setter<boolean>,
+  searchParams: FeedSearchParams,
+  fetchEventsLimit: number,
+  maxEventsCount: number
+): Promise<NodeJS.Timer> => {
+  setIsLoading(true);
+
+  setEvents(
+    await relay.fetchTextEvents({
+      rootOnly: true,
+      isAnchorsMode: isAnchorsMode(),
+      feedSearchParams: searchParams,
+      filter: { limit: fetchEventsLimit }
+    })
+  );
+
+  let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
+  if (searchParams.following == "on") {
+    metaFilter = { authors: relay.following };
+  }
+
+  setMetaEvents(await relay.fetchEventsMetadata(metaFilter));
+
+  const reactionsFilter: Filter[] = events().map((evt) => {
+    return { kinds: [Kind.Reaction], "#e": [evt.id] };
+  });
+
+  setReactions(await relay.fetchEventsReactions(reactionsFilter));
+  setEnrichedEvents(relay.buildEnrichedEvents(events(), metaEvents(), reactions()));
+
+  setIsLoading(false);
+
+  const intervalID = setInterval(async () => {
+    let fetchSinceTimestamp = getFetchSinceTimestamp(enrichedEvents(), newEnrichedEvents());
+
+    const newEvents: Event[] = await relay.fetchTextEvents({
+      rootOnly: true,
+      isAnchorsMode: isAnchorsMode(),
+      feedSearchParams: searchParams,
+      filter: { limit: fetchEventsLimit, since: fetchSinceTimestamp + 1 }
+    });
+
+    if (newEvents.length !== 0) {
+      const newUniqueEvents = getNewUniqueEvents(events(), newEvents);
+      const newEventsAuthors = getNewEventsAuthors(events(), newUniqueEvents);
+      setEvents([...events(), ...newUniqueEvents]);
+
+      if (newEventsAuthors.length !== 0) {
+        const metaFilter: Filter = { authors: [...new Set(newEventsAuthors)] };
+        const recentMetaEvents: IUserMetadataWithPubkey[] = await relay.fetchEventsMetadata(metaFilter);
+        setMetaEvents([...metaEvents(), ...recentMetaEvents]);
+      }
+
+      const recentReactions: IReactionWithEventID[] = await relay.fetchEventsReactions(
+        newUniqueEvents.map((evt) => ({ kinds: [Kind.Reaction], "#e": [evt.id] }))
+      );
+
+      const newReactions: IReactionWithEventID[] = recentReactions.filter(
+        (re) => !reactions().find((r) => r.eventID === re.eventID)
+      );
+
+      setReactions([...reactions(), ...newReactions]);
+
+      const newEventsCount = newEnrichedEvents().length + newUniqueEvents.length;
+
+      if (newEventsCount >= maxEventsCount) {
+        const newEventsToSet = [
+          ...newEnrichedEvents(),
+          ...relay.buildEnrichedEvents(newUniqueEvents, metaEvents(), reactions())
+        ]
+          .sort(sortByCreatedAtReverse)
+          .slice(newEventsCount - maxEventsCount, newEventsCount);
+
+        setNewEnrichedEvents(newEventsToSet);
+      } else {
+        setNewEnrichedEvents([
+          ...newEnrichedEvents(),
+          ...relay.buildEnrichedEvents(newUniqueEvents, metaEvents(), reactions())
+        ]);
+      }
+
+      setShowPopup(true);
+    }
+  }, relay.FETCH_INTERVAL_MS);
+
+  return intervalID;
+};
+
+export { fetchAndSetEvents };
