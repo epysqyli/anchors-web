@@ -28,16 +28,8 @@ const Home: Component<{}> = () => {
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
 
-  onMount(async () => {
-    if (searchParams.following == undefined || searchParams.following == "undefined") {
-      setSearchParams({ ...searchParams, following: "on" });
-    }
-
-    if (searchParams.relayAddress == undefined || searchParams.relayAddress == "undefined") {
-      setSearchParams({ ...searchParams, relayAddress: "all" });
-    }
-
-    intervalID = await fetchAndSetEvents(
+  const startFetchAndSetEventsInterval = async (): Promise<NodeJS.Timer> => {
+    return await fetchAndSetEvents(
       relay,
       setIsLoading,
       events,
@@ -56,6 +48,18 @@ const Home: Component<{}> = () => {
       FETCH_EVENTS_LIMIT,
       MAX_EVENTS_COUNT
     );
+  };
+
+  onMount(async () => {
+    if (searchParams.following == undefined || searchParams.following == "undefined") {
+      setSearchParams({ ...searchParams, following: "on" });
+    }
+
+    if (searchParams.relayAddress == undefined || searchParams.relayAddress == "undefined") {
+      setSearchParams({ ...searchParams, relayAddress: "all" });
+    }
+
+    intervalID = await startFetchAndSetEventsInterval();
   });
 
   createEffect(async () => {
@@ -69,25 +73,7 @@ const Home: Component<{}> = () => {
     setReactions([]);
     setShowPopup(false);
 
-    intervalID = await fetchAndSetEvents(
-      relay,
-      setIsLoading,
-      events,
-      setEvents,
-      metaEvents,
-      setMetaEvents,
-      reactions,
-      setReactions,
-      enrichedEvents,
-      setEnrichedEvents,
-      newEnrichedEvents,
-      setNewEnrichedEvents,
-      isAnchorsMode,
-      setShowPopup,
-      { searchParams: searchParams },
-      FETCH_EVENTS_LIMIT,
-      MAX_EVENTS_COUNT
-    );
+    intervalID = await startFetchAndSetEventsInterval();
   });
 
   useBeforeLeave(() => {

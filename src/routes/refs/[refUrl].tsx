@@ -29,8 +29,8 @@ const RefUrl: VoidComponent = (): JSX.Element => {
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
 
-  onMount(async () => {
-    intervalID = await fetchAndSetEvents(
+  const startFetchAndSetEventsInterval = async (): Promise<NodeJS.Timer> => {
+    return await fetchAndSetEvents(
       relay,
       setIsLoading,
       events,
@@ -49,6 +49,10 @@ const RefUrl: VoidComponent = (): JSX.Element => {
       FETCH_EVENTS_LIMIT,
       MAX_EVENTS_COUNT
     );
+  };
+
+  onMount(async () => {
+    intervalID = await startFetchAndSetEventsInterval();
   });
 
   createEffect(async () => {
@@ -62,25 +66,7 @@ const RefUrl: VoidComponent = (): JSX.Element => {
     setReactions([]);
     setShowPopup(false);
 
-    intervalID = await fetchAndSetEvents(
-      relay,
-      setIsLoading,
-      events,
-      setEvents,
-      metaEvents,
-      setMetaEvents,
-      reactions,
-      setReactions,
-      enrichedEvents,
-      setEnrichedEvents,
-      newEnrichedEvents,
-      setNewEnrichedEvents,
-      isAnchorsMode,
-      setShowPopup,
-      { nostrRefTag: params.refUrl },
-      FETCH_EVENTS_LIMIT,
-      MAX_EVENTS_COUNT
-    );
+    intervalID = await startFetchAndSetEventsInterval();
   });
 
   const mergeEnrichedEvents = (): void => {
