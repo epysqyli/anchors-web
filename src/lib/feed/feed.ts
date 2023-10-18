@@ -45,23 +45,49 @@ const fetchAndSetEvents = async (
   setNewEnrichedEvents: Setter<IEnrichedEvent[]>,
   isAnchorsMode: Accessor<boolean>,
   setShowPopup: Setter<boolean>,
-  searchParams: FeedSearchParams,
+  optionalParams: {
+    searchParams?: FeedSearchParams;
+    nostrRefTag?: string;
+    nostrHashTag?: string;
+  },
   fetchEventsLimit: number,
   maxEventsCount: number
 ): Promise<NodeJS.Timer> => {
   setIsLoading(true);
 
-  setEvents(
-    await relay.fetchTextEvents({
-      rootOnly: true,
-      isAnchorsMode: isAnchorsMode(),
-      feedSearchParams: searchParams,
-      filter: { limit: fetchEventsLimit }
-    })
-  );
+  if (optionalParams.searchParams != undefined) {
+    setEvents(
+      await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        feedSearchParams: optionalParams.searchParams,
+        filter: { limit: fetchEventsLimit }
+      })
+    );
+  }
+
+  if (optionalParams.nostrRefTag != undefined) {
+    setEvents(
+      await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        filter: { limit: fetchEventsLimit, "#r": [optionalParams.nostrRefTag] }
+      })
+    );
+  }
+
+  if (optionalParams.nostrHashTag != undefined) {
+    setEvents(
+      await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        filter: { limit: fetchEventsLimit, "#t": [optionalParams.nostrHashTag] }
+      })
+    );
+  }
 
   let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
-  if (searchParams.following == "on") {
+  if (optionalParams.searchParams?.following == "on") {
     metaFilter = { authors: relay.following };
   }
 
@@ -79,12 +105,40 @@ const fetchAndSetEvents = async (
   const intervalID = setInterval(async () => {
     let fetchSinceTimestamp = getFetchSinceTimestamp(enrichedEvents(), newEnrichedEvents());
 
-    const newEvents: Event[] = await relay.fetchTextEvents({
-      rootOnly: true,
-      isAnchorsMode: isAnchorsMode(),
-      feedSearchParams: searchParams,
-      filter: { limit: fetchEventsLimit, since: fetchSinceTimestamp + 1 }
-    });
+    let newEvents: Event[] = [];
+
+    if (optionalParams.searchParams != undefined) {
+      newEvents = await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        feedSearchParams: optionalParams.searchParams,
+        filter: { limit: fetchEventsLimit, since: fetchSinceTimestamp + 1 }
+      });
+    }
+
+    if (optionalParams.nostrRefTag != undefined) {
+      newEvents = await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        filter: {
+          limit: fetchEventsLimit,
+          since: fetchSinceTimestamp + 1,
+          "#r": [optionalParams.nostrRefTag]
+        }
+      });
+    }
+
+    if (optionalParams.nostrHashTag != undefined) {
+      newEvents = await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        filter: {
+          limit: fetchEventsLimit,
+          since: fetchSinceTimestamp + 1,
+          "#t": [optionalParams.nostrHashTag]
+        }
+      });
+    }
 
     if (newEvents.length !== 0) {
       const newUniqueEvents = getNewUniqueEvents(events(), newEvents);

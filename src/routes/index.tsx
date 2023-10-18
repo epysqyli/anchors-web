@@ -52,7 +52,7 @@ const Home: Component<{}> = () => {
       setNewEnrichedEvents,
       isAnchorsMode,
       setShowPopup,
-      searchParams,
+      { searchParams: searchParams },
       FETCH_EVENTS_LIMIT,
       MAX_EVENTS_COUNT
     );
@@ -84,7 +84,7 @@ const Home: Component<{}> = () => {
       setNewEnrichedEvents,
       isAnchorsMode,
       setShowPopup,
-      searchParams,
+      { searchParams: searchParams },
       FETCH_EVENTS_LIMIT,
       MAX_EVENTS_COUNT
     );
