@@ -1,10 +1,9 @@
+import { A } from "@solidjs/router";
 import { Event } from "nostr-tools";
 import EventAuthor from "./EventAuthor";
 import LoadingFallback from "./LoadingFallback";
 import { RelayContext } from "~/contexts/relay";
-import { A, useSearchParams } from "@solidjs/router";
 import { TbUsersPlus, TbUsersMinus } from "solid-icons/tb";
-import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import { Component, For, JSX, Show, createSignal, onMount, useContext } from "solid-js";
 
@@ -47,7 +46,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
     setEvents(
       await relay.fetchTextEvents({
         rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
+        isAnchorsMode: false,
         filter: { authors: [props.pubkey] },
         postFetchLimit: 3
       })
