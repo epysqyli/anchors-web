@@ -150,7 +150,7 @@ const EventWrapper: Component<Props> = (props) => {
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
         <div
           ref={handleEventHtmlRef}
-          class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3 flex flex-col justify-between'
+          class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3'
         >
           <div class='grid grid-cols-6 h-[85%] gap-x-2'>
             <EventContent content={props.event.content} />
@@ -159,7 +159,7 @@ const EventWrapper: Component<Props> = (props) => {
 
           <div
             class='w-full grow mx-auto flex justify-around items-center rounded-md px-5 py-5
-                      border border-slate-400 border-opacity-10 hover:border-opacity-20'
+                      border border-slate-400 border-opacity-10 hover:border-opacity-20 mt-3'
           >
             <Reactions event={props.event!} />
             <div

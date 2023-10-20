@@ -2,12 +2,13 @@ import { Component, JSX } from "solid-js";
 
 const EventContent: Component<{ content: string }> = (props): JSX.Element => {
   return (
-    <div
-      class='col-span-4 xl:col-span-4 custom-scrollbar bg-neutral-900 bg-opacity-30
-         text-slate-300 tracking-tighter overflow-auto break-words text-justify
-          whitespace-pre-line rounded-md py-20'
-    >
-      <p class='w-3/5 mx-auto'>{props.content}</p>
+    <div class='col-span-4 xl:col-span-4 bg-neutral-900 bg-opacity-30 rounded-md h-full overflow-y-hidden py-10'>
+      <p
+        class='w-5/6 px-5 mx-auto text-slate-300 tracking-tighter break-words text-justify
+               whitespace-pre-line overflow-y-scroll custom-scrollbar h-full'
+      >
+        {props.content}
+      </p>
     </div>
   );
 };
