@@ -8,12 +8,12 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
   const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const isCurrentRelay = (address: string): boolean => searchParams.relayAddress == address;
-  const baseStyle = "my-1 py-1 px-3 block rounded mx-auto text-base text-center";
+  const baseStyle = "my-1 py-1 pl-1 block rounded mx-auto text-base";
   const selectedStyle = "bg-neutral-800 bg-opacity-80 text-neutral-300";
 
   return (
     <>
-      <div class='h-5/6 overflow-y-scroll custom-scrollbar'>
+      <div class='h-5/6 overflow-y-scroll custom-scrollbar px-1'>
         <A
           class={`${baseStyle} ${
             isCurrentRelay("all")
