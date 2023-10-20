@@ -9,7 +9,7 @@ import CommmentsPopup from "./CommentsPopup";
 import { FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
-import { parseDate } from "~/lib/nostr/nostr-utils";
+import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { VsCommentDiscussion } from "solid-icons/vs";
 import { BiRegularBoltCircle } from "solid-icons/bi";
@@ -167,7 +167,7 @@ const EventWrapper: Component<Props> = (props) => {
               onClick={openUserPopup}
             >
               <EventAuthor
-                name={props.event.name}
+                name={shrinkContent(props.event.name, 10)}
                 about={props.event.about}
                 picture={props.event.picture}
                 pubKey={props.event.pubkey}
