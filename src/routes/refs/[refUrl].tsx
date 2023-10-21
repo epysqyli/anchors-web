@@ -45,9 +45,11 @@ const RefUrl: VoidComponent = (): JSX.Element => {
       setNewEnrichedEvents,
       isAnchorsMode,
       setShowPopup,
-      { nostrRefTag: params.refUrl },
-      FETCH_EVENTS_LIMIT,
-      MAX_EVENTS_COUNT
+      {
+        fetchEventsLimit: FETCH_EVENTS_LIMIT,
+        maxEventsCount: MAX_EVENTS_COUNT,
+        nostrRefTag: params.refUrl
+      }
     );
   };
 

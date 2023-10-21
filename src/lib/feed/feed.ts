@@ -45,49 +45,49 @@ const fetchAndSetEvents = async (
   setNewEnrichedEvents: Setter<IEnrichedEvent[]>,
   isAnchorsMode: Accessor<boolean>,
   setShowPopup: Setter<boolean>,
-  optionalParams: {
+  fetchParams: {
+    fetchEventsLimit: number;
+    maxEventsCount: number;
     searchParams?: FeedSearchParams;
     nostrRefTag?: string;
     nostrHashTag?: string;
-  },
-  fetchEventsLimit: number,
-  maxEventsCount: number
+  }
 ): Promise<NodeJS.Timer> => {
   setIsLoading(true);
 
-  if (optionalParams.searchParams != undefined) {
+  if (fetchParams.searchParams != undefined) {
     setEvents(
       await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
-        feedSearchParams: optionalParams.searchParams,
-        filter: { limit: fetchEventsLimit }
+        feedSearchParams: fetchParams.searchParams,
+        filter: { limit: fetchParams.fetchEventsLimit }
       })
     );
   }
 
-  if (optionalParams.nostrRefTag != undefined) {
+  if (fetchParams.nostrRefTag != undefined) {
     setEvents(
       await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
-        filter: { limit: fetchEventsLimit, "#r": [optionalParams.nostrRefTag] }
+        filter: { limit: fetchParams.fetchEventsLimit, "#r": [fetchParams.nostrRefTag] }
       })
     );
   }
 
-  if (optionalParams.nostrHashTag != undefined) {
+  if (fetchParams.nostrHashTag != undefined) {
     setEvents(
       await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
-        filter: { limit: fetchEventsLimit, "#t": [optionalParams.nostrHashTag] }
+        filter: { limit: fetchParams.fetchEventsLimit, "#t": [fetchParams.nostrHashTag] }
       })
     );
   }
 
   let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
-  if (optionalParams.searchParams?.following == "on") {
+  if (fetchParams.searchParams?.following == "on") {
     metaFilter = { authors: relay.following };
   }
 
@@ -107,35 +107,35 @@ const fetchAndSetEvents = async (
 
     let newEvents: Event[] = [];
 
-    if (optionalParams.searchParams != undefined) {
+    if (fetchParams.searchParams != undefined) {
       newEvents = await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
-        feedSearchParams: optionalParams.searchParams,
-        filter: { limit: fetchEventsLimit, since: fetchSinceTimestamp + 1 }
+        feedSearchParams: fetchParams.searchParams,
+        filter: { limit: fetchParams.fetchEventsLimit, since: fetchSinceTimestamp + 1 }
       });
     }
 
-    if (optionalParams.nostrRefTag != undefined) {
+    if (fetchParams.nostrRefTag != undefined) {
       newEvents = await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
         filter: {
-          limit: fetchEventsLimit,
+          limit: fetchParams.fetchEventsLimit,
           since: fetchSinceTimestamp + 1,
-          "#r": [optionalParams.nostrRefTag]
+          "#r": [fetchParams.nostrRefTag]
         }
       });
     }
 
-    if (optionalParams.nostrHashTag != undefined) {
+    if (fetchParams.nostrHashTag != undefined) {
       newEvents = await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
         filter: {
-          limit: fetchEventsLimit,
+          limit: fetchParams.fetchEventsLimit,
           since: fetchSinceTimestamp + 1,
-          "#t": [optionalParams.nostrHashTag]
+          "#t": [fetchParams.nostrHashTag]
         }
       });
     }
@@ -163,13 +163,13 @@ const fetchAndSetEvents = async (
 
       const newEventsCount = newEnrichedEvents().length + newUniqueEvents.length;
 
-      if (newEventsCount >= maxEventsCount) {
+      if (newEventsCount >= fetchParams.maxEventsCount) {
         const newEventsToSet = [
           ...newEnrichedEvents(),
           ...relay.buildEnrichedEvents(newUniqueEvents, metaEvents(), reactions())
         ]
           .sort(sortByCreatedAtReverse)
-          .slice(newEventsCount - maxEventsCount, newEventsCount);
+          .slice(newEventsCount - fetchParams.maxEventsCount, newEventsCount);
 
         setNewEnrichedEvents(newEventsToSet);
       } else {
