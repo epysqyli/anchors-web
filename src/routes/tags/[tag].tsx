@@ -16,6 +16,7 @@ const Tag: VoidComponent = (): JSX.Element => {
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   // manage limit and older posts
+  // implement live feed
   const fetchAndSetEvents = async (): Promise<void> => {
     const events = await relay.fetchTextEvents({
       rootOnly: true,
