@@ -50,7 +50,7 @@ const Menu: Component<Props> = (props) => {
             <AnchorsModeSelector />
           </div>
 
-          <div class='mx-auto w-5/6 mt-10 mb-16 px-2 h-[20%]'>
+          <div class='mx-auto w-5/6 mt-10 mb-16 px-2 h-[25%]'>
             <div class='flex justify-around my-5'>
               <FollowingSelector />
             </div>
