@@ -4,7 +4,7 @@ import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { For, JSX, VoidComponent, useContext } from "solid-js";
 
 const RelaySelector: VoidComponent = (): JSX.Element => {
-  const { relay } = useContext(RelayContext);
+  const { readRelays } = useContext(RelayContext);
   const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const isCurrentRelay = (address: string): boolean => searchParams.relayAddress == address;
@@ -25,7 +25,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
           All relays
         </A>
 
-        <For each={relay.getReadRelays()}>
+        <For each={readRelays()}>
           {(address) => (
             <A
               class={`${baseStyle} ${
