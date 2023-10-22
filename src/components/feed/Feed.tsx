@@ -2,9 +2,9 @@ import EventWrapper from "./EventWrapper";
 import NewEventsPopup from "./NewEventsPopup";
 import OverlayContext from "~/contexts/overlay";
 import { BsCloudDownload } from "solid-icons/bs";
-import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
-import { Accessor, Component, For, JSX, Setter, Show, createSignal, useContext } from "solid-js";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
+import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
+import { Accessor, Component, For, JSX, Setter, Show, createSignal, onMount, useContext } from "solid-js";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;
@@ -18,10 +18,13 @@ interface Props {
   setShowPopup?: Setter<boolean>;
   mergeEnrichedEvents?(): void;
   enrichedEvents: Accessor<IEnrichedEvent[]>;
+  loadOlderPosts(): Promise<void>;
+  mostRecentOlderEventID: Accessor<string>;
 }
 
 const Feed: Component<Props> = (props): JSX.Element => {
   const overlay = useContext(OverlayContext);
+
   const [eventHtmlRefs, setEventHtmlRefs] = createSignal<EventHtmlRef[]>([]);
   const [eventWrapperContainer, setEventWrapperContainer] = createSignal<HTMLDivElement>();
 
@@ -47,6 +50,14 @@ const Feed: Component<Props> = (props): JSX.Element => {
       top: direction == "up" ? -1000 : 1000
     });
   };
+
+  onMount(async () => {
+    const mostRecentOlderEventRef = eventHtmlRefs().find(
+      (evtRef) => evtRef.eventID == props.mostRecentOlderEventID()
+    );
+
+    mostRecentOlderEventRef?.htmlRef.scrollIntoView({ behavior: "smooth" });
+  });
 
   return (
     <>
@@ -82,6 +93,7 @@ const Feed: Component<Props> = (props): JSX.Element => {
 
             <div class='relative snap-start h-full text-slate-300'>
               <div
+                onClick={props.loadOlderPosts}
                 class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
                   cursor-pointer p-20 border rounded-full border-slate-600
                   hover:shadow-lg shadow-slate-500 active:shadow-none active:border-slate-800'

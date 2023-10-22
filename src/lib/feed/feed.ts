@@ -3,9 +3,17 @@ import { Accessor, Setter } from "solid-js";
 import { Event, Filter, Kind } from "nostr-tools";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
-import { sortByCreatedAtReverse } from "../nostr/nostr-utils";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
+import { sortByCreatedAt, sortByCreatedAtReverse } from "../nostr/nostr-utils";
+
+interface FetchParams {
+  fetchEventsLimit: number;
+  maxEventsCount: number;
+  searchParams?: FeedSearchParams;
+  nostrRefTag?: string;
+  nostrHashTag?: string;
+}
 
 const getNewUniqueEvents = (currentEvents: Event[], newEvents: Event[]): Event[] => {
   const newEventsIDs = newEvents.map((e) => e.id);
@@ -45,13 +53,7 @@ const fetchAndSetEvents = async (
   setNewEnrichedEvents: Setter<IEnrichedEvent[]>,
   isAnchorsMode: Accessor<boolean>,
   setShowPopup: Setter<boolean>,
-  fetchParams: {
-    fetchEventsLimit: number;
-    maxEventsCount: number;
-    searchParams?: FeedSearchParams;
-    nostrRefTag?: string;
-    nostrHashTag?: string;
-  }
+  fetchParams: FetchParams
 ): Promise<NodeJS.Timer> => {
   setIsLoading(true);
 
@@ -186,4 +188,33 @@ const fetchAndSetEvents = async (
   return intervalID;
 };
 
-export { fetchAndSetEvents };
+const fetchAndSetOlderEvents = async (
+  relay: Relayer,
+  fetchParams: FetchParams,
+  isAnchorsMode: Accessor<boolean>,
+  enrichedEvents: Accessor<IEnrichedEvent[]>,
+  setEnrichedEvents: Setter<IEnrichedEvent[]>
+): Promise<string> => {
+  const untilTimestamp: number = enrichedEvents()[enrichedEvents().length - 1].created_at;
+
+  const olderEvents = await relay.fetchTextEvents({
+    rootOnly: true,
+    isAnchorsMode: isAnchorsMode(),
+    filter: { until: untilTimestamp, limit: fetchParams.fetchEventsLimit },
+    feedSearchParams: fetchParams.searchParams
+  });
+
+  const olderMetaEvents = await relay.fetchEventsMetadata({ authors: olderEvents.map((evt) => evt.pubkey) });
+
+  const olderEventsReactions = await relay.fetchEventsReactions([
+    { kinds: [Kind.Reaction], "#e": olderEvents.map((evt) => evt.id) }
+  ]);
+
+  const olderEnrichedEvents = relay.buildEnrichedEvents(olderEvents, olderMetaEvents, olderEventsReactions);
+
+  setEnrichedEvents([...enrichedEvents(), ...olderEnrichedEvents].sort(sortByCreatedAt))
+
+  return olderEvents[0].id;
+};
+
+export { fetchAndSetEvents, fetchAndSetOlderEvents };

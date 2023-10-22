@@ -1,7 +1,7 @@
 import { Event } from "nostr-tools";
 import Feed from "~/components/feed/Feed";
 import { RelayContext } from "~/contexts/relay";
-import { fetchAndSetEvents } from "~/lib/feed/feed";
+import { fetchAndSetEvents, fetchAndSetOlderEvents } from "~/lib/feed/feed";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
@@ -12,7 +12,7 @@ import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils
 import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const Home: Component<{}> = () => {
-  const FETCH_EVENTS_LIMIT = 33;
+  const FETCH_EVENTS_LIMIT = 15;
   const MAX_EVENTS_COUNT = 75;
 
   const { relay, isAnchorsMode } = useContext(RelayContext);
@@ -27,6 +27,7 @@ const Home: Component<{}> = () => {
   const [reactions, setReactions] = createSignal<IReactionWithEventID[]>([]);
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
+  const [mostRecentOlderEventID, setMostRecentOlderEventID] = createSignal<string>("");
 
   const startFetchAndSetEventsInterval = async (): Promise<NodeJS.Timer> => {
     return await fetchAndSetEvents(
@@ -95,6 +96,25 @@ const Home: Component<{}> = () => {
     setNewEnrichedEvents([]);
   };
 
+  const loadOlderPosts = async (): Promise<void> => {
+    setIsLoading(true);
+
+    const olderEventID = await fetchAndSetOlderEvents(
+      relay,
+      {
+        fetchEventsLimit: 5,
+        maxEventsCount: 75,
+        searchParams: searchParams
+      },
+      isAnchorsMode,
+      enrichedEvents,
+      setEnrichedEvents
+    );
+
+    setMostRecentOlderEventID(olderEventID);
+    setIsLoading(false);
+  };
+
   return (
     <>
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
@@ -104,6 +124,8 @@ const Home: Component<{}> = () => {
           mergeEnrichedEvents={mergeEnrichedEvents}
           showPopup={showPopup}
           setShowPopup={setShowPopup}
+          loadOlderPosts={loadOlderPosts}
+          mostRecentOlderEventID={mostRecentOlderEventID}
         />
       </Show>
     </>
