@@ -5,6 +5,7 @@ import { BsCloudDownload } from "solid-icons/bs";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { Accessor, Component, For, JSX, Setter, Show, createSignal, onMount, useContext } from "solid-js";
+import NoEvents from "./NoEvents";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;
@@ -91,17 +92,19 @@ const Feed: Component<Props> = (props): JSX.Element => {
               )}
             </For>
 
-            <div class='relative snap-start h-full text-slate-300'>
-              <div
-                onClick={props.loadOlderPosts}
-                class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+            <Show when={props.enrichedEvents().length} fallback={<NoEvents />}>
+              <div class='relative snap-start h-full text-slate-300'>
+                <div
+                  onClick={props.loadOlderPosts}
+                  class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
                   cursor-pointer p-20 border rounded-full border-slate-600
                   hover:shadow-lg shadow-slate-500 active:shadow-none active:border-slate-800'
-              >
-                <BsCloudDownload size={60} class='mx-auto' />
-                <p class='text-center mt-10 text-lg select-none'>load older posts</p>
+                >
+                  <BsCloudDownload size={60} class='mx-auto' />
+                  <p class='text-center mt-10 text-lg select-none'>load older posts</p>
+                </div>
               </div>
-            </div>
+            </Show>
           </div>
         </div>
       </Show>
