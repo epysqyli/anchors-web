@@ -2,13 +2,14 @@ import { Event } from "nostr-tools";
 import { useParams } from "solid-start";
 import Feed from "~/components/feed/Feed";
 import { RelayContext } from "~/contexts/relay";
-import { useBeforeLeave } from "@solidjs/router";
-import { fetchAndSetEvents } from "~/lib/feed/feed";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
+import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import LoadingFallback from "~/components/feed/LoadingFallback";
+import { useBeforeLeave, useSearchParams } from "@solidjs/router";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
+import { fetchAndSetEvents, fetchAndSetOlderEvents } from "~/lib/feed/feed";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import { JSX, Show, VoidComponent, createEffect, createSignal, onMount, useContext } from "solid-js";
 
@@ -28,6 +29,9 @@ const RefUrl: VoidComponent = (): JSX.Element => {
   const [reactions, setReactions] = createSignal<IReactionWithEventID[]>([]);
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
+  const [mostRecentOlderEventID, setMostRecentOlderEventID] = createSignal<string>("");
+  const [isFeedOver, setIsFeedOver] = createSignal<boolean>(false);
+  const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const startFetchAndSetEventsInterval = async (): Promise<NodeJS.Timer> => {
     return await fetchAndSetEvents(
@@ -84,6 +88,26 @@ const RefUrl: VoidComponent = (): JSX.Element => {
     setNewEnrichedEvents([]);
   };
 
+  const loadOlderPosts = async (): Promise<void> => {
+    setIsLoading(true);
+
+    const olderEventsFetchResult = await fetchAndSetOlderEvents(
+      relay,
+      {
+        fetchEventsLimit: 5,
+        maxEventsCount: 75,
+        searchParams: searchParams
+      },
+      isAnchorsMode,
+      enrichedEvents,
+      setEnrichedEvents
+    );
+
+    setIsFeedOver(olderEventsFetchResult.isFeedOver);
+    setMostRecentOlderEventID(olderEventsFetchResult.mostRecentOlderEventID);
+    setIsLoading(false);
+  };
+
   useBeforeLeave(() => {
     clearInterval(intervalID);
   });
@@ -100,6 +124,9 @@ const RefUrl: VoidComponent = (): JSX.Element => {
           showPopup={showPopup}
           setShowPopup={setShowPopup}
           mergeEnrichedEvents={mergeEnrichedEvents}
+          isFeedOver={isFeedOver}
+          loadOlderPosts={loadOlderPosts}
+          mostRecentOlderEventID={mostRecentOlderEventID}
         />
       </Show>
     </>
