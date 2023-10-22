@@ -194,7 +194,7 @@ const fetchAndSetOlderEvents = async (
   isAnchorsMode: Accessor<boolean>,
   enrichedEvents: Accessor<IEnrichedEvent[]>,
   setEnrichedEvents: Setter<IEnrichedEvent[]>
-): Promise<string> => {
+): Promise<{ mostRecentOlderEventID: string; isFeedOver: boolean }> => {
   const untilTimestamp: number = enrichedEvents()[enrichedEvents().length - 1].created_at;
 
   const olderEvents = await relay.fetchTextEvents({
@@ -204,6 +204,10 @@ const fetchAndSetOlderEvents = async (
     feedSearchParams: fetchParams.searchParams
   });
 
+  if (olderEvents.length == 0) {
+    return { mostRecentOlderEventID: "", isFeedOver: true };
+  }
+
   const olderMetaEvents = await relay.fetchEventsMetadata({ authors: olderEvents.map((evt) => evt.pubkey) });
 
   const olderEventsReactions = await relay.fetchEventsReactions([
@@ -212,9 +216,9 @@ const fetchAndSetOlderEvents = async (
 
   const olderEnrichedEvents = relay.buildEnrichedEvents(olderEvents, olderMetaEvents, olderEventsReactions);
 
-  setEnrichedEvents([...enrichedEvents(), ...olderEnrichedEvents].sort(sortByCreatedAt))
+  setEnrichedEvents([...enrichedEvents(), ...olderEnrichedEvents].sort(sortByCreatedAt));
 
-  return olderEvents[0].id;
+  return { mostRecentOlderEventID: olderEvents[0].id, isFeedOver: false };
 };
 
 export { fetchAndSetEvents, fetchAndSetOlderEvents };

@@ -28,6 +28,7 @@ const Home: Component<{}> = () => {
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [mostRecentOlderEventID, setMostRecentOlderEventID] = createSignal<string>("");
+  const [isFeedOver, setIsFeedOver] = createSignal<boolean>(false);
 
   const startFetchAndSetEventsInterval = async (): Promise<NodeJS.Timer> => {
     return await fetchAndSetEvents(
@@ -99,7 +100,7 @@ const Home: Component<{}> = () => {
   const loadOlderPosts = async (): Promise<void> => {
     setIsLoading(true);
 
-    const olderEventID = await fetchAndSetOlderEvents(
+    const olderEventsFetchResult = await fetchAndSetOlderEvents(
       relay,
       {
         fetchEventsLimit: 5,
@@ -111,7 +112,8 @@ const Home: Component<{}> = () => {
       setEnrichedEvents
     );
 
-    setMostRecentOlderEventID(olderEventID);
+    setIsFeedOver(olderEventsFetchResult.isFeedOver);
+    setMostRecentOlderEventID(olderEventsFetchResult.mostRecentOlderEventID);
     setIsLoading(false);
   };
 
@@ -126,6 +128,7 @@ const Home: Component<{}> = () => {
           setShowPopup={setShowPopup}
           loadOlderPosts={loadOlderPosts}
           mostRecentOlderEventID={mostRecentOlderEventID}
+          isFeedOver={isFeedOver}
         />
       </Show>
     </>

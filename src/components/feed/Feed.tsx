@@ -21,6 +21,7 @@ interface Props {
   enrichedEvents: Accessor<IEnrichedEvent[]>;
   loadOlderPosts(): Promise<void>;
   mostRecentOlderEventID: Accessor<string>;
+  isFeedOver: Accessor<boolean>;
 }
 
 const Feed: Component<Props> = (props): JSX.Element => {
@@ -92,7 +93,10 @@ const Feed: Component<Props> = (props): JSX.Element => {
               )}
             </For>
 
-            <Show when={props.enrichedEvents().length} fallback={<NoEvents />}>
+            <Show
+              when={props.enrichedEvents().length && !props.isFeedOver()}
+              fallback={<NoEvents />}
+            >
               <div class='relative snap-start h-full text-slate-300'>
                 <div
                   onClick={props.loadOlderPosts}
