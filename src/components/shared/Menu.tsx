@@ -3,10 +3,10 @@ import { FiEdit } from "solid-icons/fi";
 import { useLocation } from "solid-start";
 import { BsSearch } from "solid-icons/bs";
 import { Component, Show } from "solid-js";
-import RelaySelector from "../Menu/RelaySelector";
+import RelaySelector from "../menu/RelaySelector";
 import { IoSettingsOutline } from "solid-icons/io";
-import FollowingSelector from "../Menu/FollowingSelector";
-import AnchorsModeSelector from "../Menu/AnchorsModeSelector";
+import FollowingSelector from "../menu/FollowingSelector";
+import AnchorsModeSelector from "../menu/AnchorsModeSelector";
 
 interface Props {
   isNarrow: boolean | undefined;
