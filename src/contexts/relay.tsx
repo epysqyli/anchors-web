@@ -12,10 +12,11 @@ interface IRelayContext {
   setIsAnchorsMode: Setter<boolean>;
 }
 
+const [readRelays, setReadRelays] = createSignal<string[]>([]);
+const [isAnchorsMode, setIsAnchorsMode] = createSignal<boolean>(true);
+
 let relay: Relayer = new Relayer();
 const pk = await getPublicKeyFromExt();
-
-const [readRelays, setReadRelays] = createSignal<string[]>([]);
 
 if (pk) {
   relay = new Relayer(pk);
@@ -28,8 +29,6 @@ if (pk) {
     relay.following = kindThreeEvent.tags.map((e) => e[1]);
   }
 }
-
-const [isAnchorsMode, setIsAnchorsMode] = createSignal<boolean>(true);
 
 const RelayContext: Context<IRelayContext> = createContext({
   relay: relay,
