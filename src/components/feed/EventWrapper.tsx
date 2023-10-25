@@ -158,8 +158,8 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div
-            class='w-full grow mx-auto flex justify-around items-center rounded-md px-5 py-5
-                      border border-slate-400 border-opacity-10 hover:border-opacity-20 mt-1'
+            class='w-full grow mx-auto flex justify-around items-center
+                   rounded-md px-5 py-4 mt-1 bg-neutral-700 bg-opacity-25'
           >
             <Reactions event={props.event!} />
             <div
