@@ -39,6 +39,10 @@ const assignUserMetadata = (evt: IEnrichedEvent, metadata: IUserMetadata): IEnri
 };
 
 const shrinkContent = (content: string, limit: number = 100): string => {
+  if (!content) {
+    return "";
+  }
+
   if (content.length > limit) {
     return `${content.substring(0, limit)} ...`;
   }
