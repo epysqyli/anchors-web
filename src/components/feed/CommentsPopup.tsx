@@ -36,7 +36,7 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
           </Show>
         </div>
 
-        <div class='h-1/6 mt-2'>
+        <div class='h-1/5'>
           <WriteComment replyEvent={replyEvent} setReplyEvent={setReplyEvent} />
         </div>
       </div>
