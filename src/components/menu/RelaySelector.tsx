@@ -31,7 +31,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
               class={`${baseStyle} ${
                 isCurrentRelay(address)
                   ? selectedStyle
-                  : "text-neutral-500 hover:text-neutral-400 hover:bg-neutral-700"
+                  : "text-neutral-500 hover:text-neutral-400 hover:bg-neutral-500 hover:bg-opacity-25"
               }`}
               href={`/?following=${searchParams.following}&relayAddress=${encodeURIComponent(address)}`}
             >
