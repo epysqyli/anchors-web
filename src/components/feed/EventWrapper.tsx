@@ -161,7 +161,8 @@ const EventWrapper: Component<Props> = (props) => {
             class='w-full grow mx-auto flex justify-around items-center
                    rounded-md px-5 py-3 mt-2 bg-neutral-700 bg-opacity-25'
           >
-            <Reactions event={props.event!} />
+            <EventScroller scrollPage={props.scrollPage} />
+
             <div
               class='w-1/4 p-2 rounded hover:bg-slate-600 cursor-pointer active:bg-slate-700'
               onClick={openUserPopup}
@@ -177,6 +178,8 @@ const EventWrapper: Component<Props> = (props) => {
               <div class='text-sm text-slate-400 mt-3 text-center'>{parseDate(props.event.created_at)}</div>
             </div>
 
+            <Reactions event={props.event!} />
+
             <Show
               when={!isLoading()}
               fallback={
@@ -190,14 +193,13 @@ const EventWrapper: Component<Props> = (props) => {
                 class='relative rounded py-5 hover:bg-slate-600 cursor-pointer active:bg-slate-700 w-1/12'
               >
                 <VsCommentDiscussion class='text-slate-400 mx-auto' size={28} />
-                <div class='absolute right-1/2 translate-x-1/2 text-sm text-slate-400 tracking-tighter'>
+                <div class='absolute top-2 right-5 text-sm text-slate-400 tracking-tighter'>
                   {commentsCount()}
                 </div>
               </div>
             </Show>
 
             <FiTrendingUp class='text-slate-400' size={26} />
-            <EventScroller scrollPage={props.scrollPage} />
             <EventAnchor nostrEventID={props.event.id} />
           </div>
         </div>
