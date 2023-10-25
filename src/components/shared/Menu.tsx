@@ -22,10 +22,8 @@ const Menu: Component<Props> = (props) => {
   const wideStyle = `rounded-md text-lg relative overflow-y-auto bg-neutral-700 bg-opacity-50 h-full pt-10`;
 
   const actionStyle = `text-neutral-300 w-3/4 mx-auto my-3 select-none
-                       bg-gradient-to-r from-slate-800 to-gray-700
-                       md:bg-none md:px-5 md:py-5 p-4 transition cursor-pointer 
-                       group active:scale-90 hover:bg-slate-600 hover:text-orange-200
-                       border-b border-neutral-600 rounded`;
+                       md:bg-neutral-700 md:bg-opacity-25 md:px-5 md:py-5 p-4 transition cursor-pointer 
+                       group active:scale-90 hover:bg-neutral-700 rounded`;
 
   const flexActionStyle = actionStyle + " flex items-center justify-between";
   const selectedFlexActionStyle = flexActionStyle + " md:border-orange-200 md:bg-slate-700";
@@ -50,7 +48,7 @@ const Menu: Component<Props> = (props) => {
             <AnchorsModeSelector />
           </div>
 
-          <div class='mx-auto w-5/6 mt-10 mb-16 px-2 h-[25%]'>
+          <div class='mx-auto w-5/6 mt-5 mb-16 px-2 h-[25%]'>
             <div class='flex justify-around my-5'>
               <FollowingSelector />
             </div>
