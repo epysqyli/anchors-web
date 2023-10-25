@@ -15,7 +15,7 @@ interface Props {
 }
 
 const UserPopup: Component<Props> = (props): JSX.Element => {
-  const { relay, isAnchorsMode } = useContext(RelayContext);
+  const { relay } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -85,11 +85,11 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
             }
             when={!isLoading()}
           >
-            <h2 class='mb-5 bg-neutral-500 bg-opacity-40 rounded w-fit mx-auto px-5'>Recent posts</h2>
+            <h2 class='mb-5 w-fit mx-auto px-5'>Recent posts</h2>
             <For each={events()}>
               {(evt) => (
                 <A href={`/events/${evt.id}`}>
-                  <div class='text-sm break-all mb-2 hover:bg-neutral-800 active:scale-95 rounded-md p-1'>
+                  <div class='text-sm break-all mb-2 hover:bg-slate-700 active:scale-95 rounded-md p-1'>
                     <div class='text-neutral-300 mb-1 text-left'>{parseDate(evt.created_at)}</div>
                     <div class='text-neutral-400 text-left'>{shrinkContent(evt.content, 100)}</div>
                   </div>
