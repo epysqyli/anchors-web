@@ -13,7 +13,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <div class='h-5/6 overflow-y-scroll custom-scrollbar px-1'>
+      <div class='h-5/6 overflow-y-scroll overflow-x-hidden custom-scrollbar px-1'>
         <A
           class={`${baseStyle} ${
             isCurrentRelay("all")
