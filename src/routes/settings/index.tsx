@@ -13,7 +13,7 @@ const Settings: VoidComponent = () => {
 
       <div class='overflow-y-scroll custom-scrollbar h-4/5'>
         <div class='grid grid-cols-3 w-4/5 mx-auto px-5 gap-x-5 gap-y-10 mt-20'>
-          <SettingsLink href='user-metadata' content='set or update your profile info'>
+          <SettingsLink href='user-metadata' content='update your profile info'>
             <RiBusinessProfileLine class='mx-auto' size={62} />
           </SettingsLink>
 
