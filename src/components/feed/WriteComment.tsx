@@ -65,7 +65,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
     );
 
     if (!pubRes.error) {
-      await commentsContext.fetchAndSetCommentsStructure();
+      await commentsContext.fetchAndSetCommentsStructure(false);
       setContent("");
       props.setReplyEvent();
     } else {

@@ -66,7 +66,7 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
 
   const deleteComment = async (): Promise<void> => {
     await relay.deleteEvent(props.commentTree.event.data.id);
-    await commentsContext.fetchAndSetCommentsStructure();
+    await commentsContext.fetchAndSetCommentsStructure(true);
   };
 
   return (

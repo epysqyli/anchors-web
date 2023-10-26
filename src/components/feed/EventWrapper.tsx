@@ -30,7 +30,7 @@ interface Props {
 
 export const CommentsContext = createContext<{
   rootEvent: IEnrichedEvent;
-  fetchAndSetCommentsStructure(): Promise<void>;
+  fetchAndSetCommentsStructure(arbitraryDelay: boolean): Promise<void>;
   isCommentTreeLoading: Accessor<boolean>;
 }>();
 
@@ -59,8 +59,13 @@ const EventWrapper: Component<Props> = (props) => {
     setShowCommentsPopup(true);
   };
 
-  const fetchAndSetCommentsStructure = async (): Promise<void> => {
+  const fetchAndSetCommentsStructure = async (arbitraryDelay: boolean): Promise<void> => {
     setIsCommentTreeLoading(true);
+
+    if (arbitraryDelay) {
+      await new Promise((res) => setTimeout(res, 500));
+    }
+
     const comments = await relay.fetchComments(props.event.id);
     setCommentsCount(comments.length);
     setCommentsStructure(new EventComments(props.event, comments).structure);
@@ -115,7 +120,7 @@ const EventWrapper: Component<Props> = (props) => {
       }
     }
 
-    await fetchAndSetCommentsStructure();
+    await fetchAndSetCommentsStructure(false);
 
     setIsLoading(false);
   });
