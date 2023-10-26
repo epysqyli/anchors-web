@@ -66,7 +66,7 @@ const MyPosts: VoidComponent = () => {
       </h1>
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
         <div
-          class='w-4/5 xl:w-2/3 2xl:w-5/6 px-5 gap-1 mx-auto overflow-y-scroll 
+          class='w-4/5 xl:w-5/6 px-5 gap-1 mx-auto overflow-y-scroll 
                 custom-scrollbar h-4/5 grid grid-cols-3 gap-x-5 gap-y-10 pb-10'
         >
           <For each={events()}>
