@@ -180,7 +180,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       return "w-1/2 relative h-full text-center group cursor-pointer transition rounded bg-slate-600";
     }
 
-    return "w-1/2 relative h-full text-center group cursor-pointer transition rounded";
+    return "w-1/2 relative h-full text-center group cursor-pointer transition rounded hover:bg-slate-700";
   };
 
   return (
@@ -188,14 +188,16 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
       <div class='h-[80%] max-h-[80%]'>
         <div class='flex items-center justify-between gap-x-1 md:px-5 md:gap-x-10 text-slate-200 h-[15%]'>
           <div onClick={() => setShowSearch(false)} class={panelSelectorStyle(!showSearch())}>
-            <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+            <div class='group-active:scale-95 transition w-fit mx-auto
+                        absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <VsReferences size={useIsNarrow() ? 30 : 40} />
               <div class='absolute -top-5 -right-10'>{props.tags.length}</div>
             </div>
           </div>
 
           <div onClick={() => setShowSearch(true)} class={panelSelectorStyle(showSearch())}>
-            <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+            <div class='group-active:scale-95 transition w-fit mx-auto
+                        absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <TbDatabaseSearch size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
