@@ -4,13 +4,15 @@ import { IRefTag } from "~/interfaces/IRefTag";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import menuTogglerContext from "~/contexts/menuToggle";
-import { Component, Show, createSignal, useContext } from "solid-js";
+import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
 
 const Write: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
   const menuToggle = useContext(menuTogglerContext);
+  const LOCAL_STORAGE_CONTENT_KEY = "current-nostr-post-content";
+  const LOCAL_STORAGE_REFTAGS_KEY = "current-nostr-post-reftags";
 
   const [refTags, setRefTags] = createSignal<IRefTag[]>([], { equals: false });
   const [nostrEvent, setNostrEvent] = createSignal<EventTemplate>(
@@ -34,7 +36,7 @@ const Write: Component<{}> = () => {
 
   const updateContent = (e: Event) => {
     const textAreaContent = (e.currentTarget as HTMLInputElement).value;
-    nostrEvent().content = textAreaContent;
+    setNostrEvent({ ...nostrEvent(), content: textAreaContent });
   };
 
   const canPublish = (): boolean => {
@@ -61,12 +63,8 @@ const Write: Component<{}> = () => {
   };
 
   const addReferenceTag = (nostrTag: IRefTag): void => {
-    const newNostrEvent = nostrEvent();
-    newNostrEvent.tags = [...nostrEvent().tags, ["r", nostrTag.url]];
-    setNostrEvent(newNostrEvent);
-
-    const newRefTags = [...refTags(), nostrTag];
-    setRefTags(newRefTags);
+    setNostrEvent({ ...nostrEvent(), tags: [...nostrEvent().tags, ["r", nostrTag.url]] });
+    setRefTags([...refTags(), nostrTag]);
   };
 
   const removeReferenceTag = (nostrTag: IRefTag): void => {
@@ -100,6 +98,8 @@ const Write: Component<{}> = () => {
     pubResult.on("ok", () => {
       setShowPopup(true);
       setPopupMsg("Post correctly published! Find it in your 'my posts' section");
+      localStorage.removeItem(LOCAL_STORAGE_CONTENT_KEY);
+      localStorage.removeItem(LOCAL_STORAGE_REFTAGS_KEY);
     });
 
     pubResult.on("failed", () => {
@@ -107,6 +107,28 @@ const Write: Component<{}> = () => {
       setPopupMsg("Something did not work when publishing the post, please try again.");
     });
   };
+
+  onMount(() => {
+    const content = localStorage.getItem(LOCAL_STORAGE_CONTENT_KEY);
+    if (content != "undefined" && content != null) {
+      setNostrEvent({ ...nostrEvent(), content: content });
+    }
+
+    const localStorageRefTags: IRefTag[] = JSON.parse(localStorage.getItem(LOCAL_STORAGE_REFTAGS_KEY)!);
+
+    if (localStorageRefTags?.flat()) {
+      setRefTags([...refTags(), ...localStorageRefTags]);
+      setNostrEvent({
+        ...nostrEvent(),
+        tags: [...nostrEvent().tags, ...localStorageRefTags.map((rt) => ["r", rt.url])]
+      });
+    }
+  });
+
+  createEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_CONTENT_KEY, nostrEvent().content);
+    localStorage.setItem(LOCAL_STORAGE_REFTAGS_KEY, JSON.stringify(refTags()));
+  });
 
   return (
     <>
@@ -125,6 +147,7 @@ const Write: Component<{}> = () => {
                      mx-auto text-slate-300 caret-orange-200 resize-none custom-scrollbar px-5 py-2'
                 rows={14}
                 onInput={updateContent}
+                value={nostrEvent().content}
               ></textarea>
 
               <div
