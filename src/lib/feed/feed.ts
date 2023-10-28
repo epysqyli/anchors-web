@@ -13,6 +13,7 @@ interface FetchParams {
   searchParams?: FeedSearchParams;
   nostrRefTag?: string;
   nostrHashTag?: string;
+  userID?: string;
 }
 
 const getNewUniqueEvents = (currentEvents: Event[], newEvents: Event[]): Event[] => {
@@ -84,6 +85,16 @@ const fetchAndSetEvents = async (
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
         filter: { limit: fetchParams.fetchEventsLimit, "#t": [fetchParams.nostrHashTag] }
+      })
+    );
+  }
+
+  if (fetchParams.userID != undefined) {
+    setEvents(
+      await relay.fetchTextEvents({
+        rootOnly: true,
+        isAnchorsMode: isAnchorsMode(),
+        filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] }
       })
     );
   }
