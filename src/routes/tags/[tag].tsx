@@ -115,7 +115,7 @@ const Tag: VoidComponent = (): JSX.Element => {
   return (
     <>
       <Show
-        when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow() && events().length > 0}
+        when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()}
         fallback={<LoadingFallback />}
       >
         <Feed
