@@ -120,7 +120,6 @@ const RefUrl: VoidComponent = (): JSX.Element => {
       >
         <Feed
           enrichedEvents={enrichedEvents}
-          isLiveFeed={true}
           showPopup={showPopup}
           setShowPopup={setShowPopup}
           mergeEnrichedEvents={mergeEnrichedEvents}

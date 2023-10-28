@@ -14,7 +14,6 @@ interface EventHtmlRef {
 }
 
 interface Props {
-  isLiveFeed: boolean;
   showPopup?: Accessor<boolean>;
   setShowPopup?: Setter<boolean>;
   mergeEnrichedEvents?(): void;
@@ -73,18 +72,14 @@ const Feed: Component<Props> = (props): JSX.Element => {
 
       <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
         <div class='relative h-full animate-scale-on-load'>
-          {props.isLiveFeed ? (
-            <div class='absolute top-3 left-5'>
-              <NewEventsPopup
-                topEventRef={eventHtmlRefs()[0]}
-                showPopup={props.showPopup!}
-                setShowPopup={props.setShowPopup!}
-                mergeEnrichedEvents={props.mergeEnrichedEvents!}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
+          <div class='absolute top-3 left-5'>
+            <NewEventsPopup
+              topEventRef={eventHtmlRefs()[0]}
+              showPopup={props.showPopup!}
+              setShowPopup={props.setShowPopup!}
+              mergeEnrichedEvents={props.mergeEnrichedEvents!}
+            />
+          </div>
 
           <div ref={(el) => setEventWrapperContainer(el)} class={eventWrapperContainerStyle()}>
             <For each={props.enrichedEvents()}>
@@ -93,10 +88,7 @@ const Feed: Component<Props> = (props): JSX.Element => {
               )}
             </For>
 
-            <Show
-              when={props.enrichedEvents().length && !props.isFeedOver()}
-              fallback={<NoEvents />}
-            >
+            <Show when={props.enrichedEvents().length && !props.isFeedOver()} fallback={<NoEvents />}>
               <div class='relative snap-start h-full text-slate-300'>
                 <div
                   onClick={props.loadOlderPosts}

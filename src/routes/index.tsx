@@ -121,7 +121,6 @@ const Home: Component<{}> = () => {
     <>
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
         <Feed
-          isLiveFeed={true}
           enrichedEvents={enrichedEvents}
           mergeEnrichedEvents={mergeEnrichedEvents}
           showPopup={showPopup}
