@@ -27,6 +27,17 @@ const RefTagFeedElement: Component<Props> = (props) => {
     </div>
   );
 
+  const anchorTagOnHoverTitle = (title: string): JSX.Element => {
+    return (
+      <span
+        class='hidden group-hover:block absolute text-xs -top-12 left-1/2 -translate-x-1/2
+               bg-slate-600 rounded-md px-5 py-2 w-48 text-center'
+      >
+        {title}
+      </span>
+    );
+  };
+
   return (
     <Show when={!props.isLoading()} fallback={fallback}>
       <div class='text-slate-300 bg-slate-700 break-words mb-5 py-1 relative border-x border-orange-200 border-opacity-40'>
@@ -40,34 +51,38 @@ const RefTagFeedElement: Component<Props> = (props) => {
           <div class='w-1/4'>
             <RefTagIcon category={props.tag.category} />
           </div>
-          <A title='external resource link' class='w-1/4 cursor-pointer' href={props.tag.url} target='_blank'>
+
+          <A class='w-1/4 cursor-pointer group relative' href={props.tag.url} target='_blank'>
             <FiExternalLink
               size={28}
               class='mx-auto text-slate-400 hover:scale-110 active:scale-95 transition'
             />
+
+            {anchorTagOnHoverTitle("navigate to external resource link")}
           </A>
-          <A
-            title='check other posts using the same reference'
-            href={`/refs/${encodeURIComponent(props.tag.url)}`}
-            class='w-1/4'
-          >
+
+          <A href={`/refs/${encodeURIComponent(props.tag.url)}`} class='w-1/4 group relative'>
             <VsReferences
               size={28}
               class='mx-auto cursor-pointer text-slate-400 hover:scale-110 active:scale-95 transition'
             />
+
+            {anchorTagOnHoverTitle("explore other posts using the same reference")}
           </A>
+
           <A
             href={`/write?preview=${encodeURIComponent(props.tag.preview)}&url=${encodeURIComponent(
               props.tag.url
             )}&primaryInfo=${encodeURIComponent(props.tag.primaryInfo)}&category=${props.tag.category}`}
-            title='write a post with the same reference'
-            class='w-1/4 data-[title]:hover:text-slate-300'
+            class='w-1/4 data-[title]:hover:text-slate-300 group relative'
           >
             <FiEdit
               size={28}
               stroke-width={1.5}
               class='mx-auto cursor-pointer text-slate-400 hover:scale-110 active:scale-95 transition'
             />
+
+            {anchorTagOnHoverTitle("write a post with the same reference")}
           </A>
         </div>
       </div>
