@@ -40,13 +40,17 @@ const RefTagFeedElement: Component<Props> = (props) => {
           <div class='w-1/4'>
             <RefTagIcon category={props.tag.category} />
           </div>
-          <a class='w-1/4 cursor-pointer' href={props.tag.url} target='_blank'>
+          <A title='external resource link' class='w-1/4 cursor-pointer' href={props.tag.url} target='_blank'>
             <FiExternalLink
               size={28}
               class='mx-auto text-slate-400 hover:scale-110 active:scale-95 transition'
             />
-          </a>
-          <A href={`/refs/${encodeURIComponent(props.tag.url)}`} class='w-1/4'>
+          </A>
+          <A
+            title='check other posts using the same reference'
+            href={`/refs/${encodeURIComponent(props.tag.url)}`}
+            class='w-1/4'
+          >
             <VsReferences
               size={28}
               class='mx-auto cursor-pointer text-slate-400 hover:scale-110 active:scale-95 transition'
@@ -56,7 +60,8 @@ const RefTagFeedElement: Component<Props> = (props) => {
             href={`/write?preview=${encodeURIComponent(props.tag.preview)}&url=${encodeURIComponent(
               props.tag.url
             )}&primaryInfo=${encodeURIComponent(props.tag.primaryInfo)}&category=${props.tag.category}`}
-            class='w-1/4'
+            title='write a post with the same reference'
+            class='w-1/4 data-[title]:hover:text-slate-300'
           >
             <FiEdit
               size={28}
