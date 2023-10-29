@@ -1,18 +1,26 @@
 import { VsSend } from "solid-icons/vs";
+import { useSearchParams } from "solid-start";
 import Popup from "~/components/shared/Popup";
-import { IRefTag } from "~/interfaces/IRefTag";
+import { IRefTag, RefTagCategory } from "~/interfaces/IRefTag";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import menuTogglerContext from "~/contexts/menuToggle";
-import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
+import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const Write: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
   const menuToggle = useContext(menuTogglerContext);
   const LOCAL_STORAGE_CONTENT_KEY = "current-nostr-post-content";
   const LOCAL_STORAGE_REFTAGS_KEY = "current-nostr-post-reftags";
+
+  const [incomingRefParams] = useSearchParams<{
+    preview: string;
+    primaryInfo: string;
+    url: string;
+    category: string;
+  }>();
 
   const [refTags, setRefTags] = createSignal<IRefTag[]>([], { equals: false });
   const [nostrEvent, setNostrEvent] = createSignal<EventTemplate>(
@@ -122,6 +130,24 @@ const Write: Component<{}> = () => {
         ...nostrEvent(),
         tags: [...nostrEvent().tags, ...localStorageRefTags.map((rt) => ["r", rt.url])]
       });
+    }
+
+    const refTagAlreadyPresent = refTags().find((rt) => rt.url == incomingRefParams.url);
+
+    if (!refTagAlreadyPresent) {
+      setRefTags([
+        ...refTags(),
+        {
+          title: incomingRefParams.primaryInfo,
+          category: incomingRefParams.category as RefTagCategory,
+          url: incomingRefParams.url,
+          preview: incomingRefParams.preview,
+          additionalInfoOne: "",
+          additionalInfoTwo: ""
+        }
+      ]);
+
+      setNostrEvent({ ...nostrEvent(), tags: [...nostrEvent().tags, ["r", incomingRefParams.url]] });
     }
   });
 

@@ -1,9 +1,9 @@
-import { Accessor, Component, JSX, Show } from "solid-js";
-import { VsReferences } from "solid-icons/vs";
-import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
-import { FiExternalLink } from "solid-icons/fi";
-import RefTagIcon from "../shared/RefTagIcon";
 import { A } from "solid-start";
+import { VsReferences } from "solid-icons/vs";
+import RefTagIcon from "../shared/RefTagIcon";
+import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
+import { FiEdit, FiExternalLink } from "solid-icons/fi";
+import { Accessor, Component, JSX, Show } from "solid-js";
 
 interface Props {
   tag: IFeedRefTag;
@@ -37,18 +37,30 @@ const RefTagFeedElement: Component<Props> = (props) => {
         </div>
 
         <div class='flex items-center justify-between py-3'>
-          <div class='w-1/3'>
+          <div class='w-1/4'>
             <RefTagIcon category={props.tag.category} />
           </div>
-          <a class='w-1/3 cursor-pointer' href={props.tag.url} target='_blank'>
+          <a class='w-1/4 cursor-pointer' href={props.tag.url} target='_blank'>
             <FiExternalLink
               size={28}
               class='mx-auto text-slate-400 hover:scale-110 active:scale-95 transition'
             />
           </a>
-          <A href={`/refs/${encodeURIComponent(props.tag.url)}`} class='w-1/3'>
+          <A href={`/refs/${encodeURIComponent(props.tag.url)}`} class='w-1/4'>
             <VsReferences
               size={28}
+              class='mx-auto cursor-pointer text-slate-400 hover:scale-110 active:scale-95 transition'
+            />
+          </A>
+          <A
+            href={`/write?preview=${encodeURIComponent(props.tag.preview)}&url=${encodeURIComponent(
+              props.tag.url
+            )}&primaryInfo=${encodeURIComponent(props.tag.primaryInfo)}&category=${props.tag.category}`}
+            class='w-1/4'
+          >
+            <FiEdit
+              size={28}
+              stroke-width={1.5}
               class='mx-auto cursor-pointer text-slate-400 hover:scale-110 active:scale-95 transition'
             />
           </A>
