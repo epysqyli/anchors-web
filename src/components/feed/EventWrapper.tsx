@@ -157,14 +157,14 @@ const EventWrapper: Component<Props> = (props) => {
           ref={handleEventHtmlRef}
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3'
         >
-          <div class='grid grid-cols-6 h-[85%] gap-x-2'>
+          <div class='grid grid-cols-6 h-[84%] gap-x-2'>
             <EventContent content={props.event.content} />
             <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 
           <div
             class='w-full grow mx-auto flex justify-around items-center
-                   rounded-md px-5 py-4 mt-3 bg-neutral-700 bg-opacity-25'
+                   rounded-md px-5 py-5 mt-3 bg-neutral-700 bg-opacity-25'
           >
             <EventScroller scrollPage={props.scrollPage} />
 
