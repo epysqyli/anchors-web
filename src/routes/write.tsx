@@ -132,22 +132,24 @@ const Write: Component<{}> = () => {
       });
     }
 
-    const refTagAlreadyPresent = refTags().find((rt) => rt.url == incomingRefParams.url);
+    if (incomingRefParams.url) {
+      const refTagAlreadyPresent = refTags().find((rt) => rt.url == incomingRefParams.url);
 
-    if (!refTagAlreadyPresent) {
-      setRefTags([
-        ...refTags(),
-        {
-          title: incomingRefParams.primaryInfo,
-          category: incomingRefParams.category as RefTagCategory,
-          url: incomingRefParams.url,
-          preview: incomingRefParams.preview,
-          additionalInfoOne: "",
-          additionalInfoTwo: ""
-        }
-      ]);
+      if (!refTagAlreadyPresent) {
+        setRefTags([
+          ...refTags(),
+          {
+            title: incomingRefParams.primaryInfo,
+            category: incomingRefParams.category as RefTagCategory,
+            url: incomingRefParams.url,
+            preview: incomingRefParams.preview,
+            additionalInfoOne: "",
+            additionalInfoTwo: ""
+          }
+        ]);
 
-      setNostrEvent({ ...nostrEvent(), tags: [...nostrEvent().tags, ["r", incomingRefParams.url]] });
+        setNostrEvent({ ...nostrEvent(), tags: [...nostrEvent().tags, ["r", incomingRefParams.url]] });
+      }
     }
   });
 
