@@ -31,7 +31,7 @@ const RefTagFeedElement: Component<Props> = (props) => {
     return (
       <span
         class='hidden group-hover:block absolute text-xs -top-12 left-1/2 -translate-x-1/2
-               bg-slate-600 rounded-md px-5 py-2 w-48 text-center'
+               bg-slate-600 rounded-md px-5 py-2 w-48 text-center shadow-md'
       >
         {title}
       </span>
