@@ -8,10 +8,10 @@ const [getReadRelays, setReadRelays] = createSignal<string[]>([]);
 const [getAnchorsMode, setAnchorsMode] = createSignal<boolean>(true);
 
 let relay: Relayer = new Relayer();
-const pk = await getPublicKeyFromExt();
+const userPublicKey = await getPublicKeyFromExt();
 
-if (pk) {
-  relay = new Relayer(pk);
+if (userPublicKey) {
+  relay = new Relayer(userPublicKey);
   await relay.fetchAndSetRelays();
   setReadRelays(relay.getReadRelays());
   relay.following = await relay.fetchContacts();
