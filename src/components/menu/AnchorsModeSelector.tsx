@@ -5,11 +5,11 @@ import { JSX, VoidComponent, createSignal, useContext } from "solid-js";
 import { RelayContext } from "~/contexts/relay";
 
 const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
-  const { isAnchorsMode, setIsAnchorsMode } = useContext(RelayContext);
+  const { anchorsMode } = useContext(RelayContext);
 
   const toggleAnchorsMode = (): void => {
     toggleSwitchMsg();
-    setIsAnchorsMode(!isAnchorsMode());
+    anchorsMode.set(!anchorsMode.get());
   };
 
   const [showSwitchMsg, setShowSwitchMsg] = createSignal<boolean>(false);
@@ -27,7 +27,7 @@ const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
                    border-2 border-neutral-600 hover:bg-neutral-500
                    hover:border-neutral-700 rounded-full p-3 active:bg-neutral-700'
       >
-        {isAnchorsMode() ? (
+        {anchorsMode.get() ? (
           <Motion.div animate={{ scale: [0.7, 1] }}>
             <FiAnchor size={40} />
           </Motion.div>
@@ -40,9 +40,9 @@ const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
 
       <div class='mt-5 rounded px-2 py-1 text-sm select-none text-neutral-400 bg-neutral-600 bg-opacity-40 transition'>
         {showSwitchMsg() ? (
-          <span>switch to {isAnchorsMode() ? "all nostr" : "only anchors"} posts</span>
+          <span>switch to {anchorsMode.get() ? "all nostr" : "only anchors"} posts</span>
         ) : (
-          <span class=''>currently showing {isAnchorsMode() ? "anchors" : "all"} posts</span>
+          <span class=''>currently showing {anchorsMode.get() ? "anchors" : "all"} posts</span>
         )}
       </div>
     </>

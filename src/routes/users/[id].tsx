@@ -17,7 +17,7 @@ const UserPage: VoidComponent = (): JSX.Element => {
   const MAX_EVENTS_COUNT = 75;
   const FETCH_EVENTS_LIMIT = 33;
 
-  const { relay, isAnchorsMode } = useContext(RelayContext);
+  const { relay, anchorsMode } = useContext(RelayContext);
 
   const params = useParams<{ id: string }>();
   let intervalID: NodeJS.Timer | undefined = undefined;
@@ -47,7 +47,7 @@ const UserPage: VoidComponent = (): JSX.Element => {
       setEnrichedEvents,
       newEnrichedEvents,
       setNewEnrichedEvents,
-      isAnchorsMode,
+      anchorsMode.get,
       setShowPopup,
       {
         fetchEventsLimit: FETCH_EVENTS_LIMIT,
@@ -62,7 +62,7 @@ const UserPage: VoidComponent = (): JSX.Element => {
   });
 
   createEffect(async () => {
-    isAnchorsMode();
+    anchorsMode.get();
     clearInterval(intervalID);
 
     setEvents([]);
@@ -98,7 +98,7 @@ const UserPage: VoidComponent = (): JSX.Element => {
         maxEventsCount: 75,
         searchParams: searchParams
       },
-      isAnchorsMode,
+      anchorsMode.get,
       enrichedEvents,
       setEnrichedEvents
     );

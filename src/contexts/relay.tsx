@@ -6,14 +6,12 @@ import { getPublicKeyFromExt } from "~/lib/nostr/nostr-utils";
 
 interface IRelayContext {
   relay: Relayer;
-  readRelays: Accessor<string[]>;
-  setReadRelays: Setter<string[]>;
-  isAnchorsMode: Accessor<boolean>;
-  setIsAnchorsMode: Setter<boolean>;
+  readRelays: { get: Accessor<string[]>; set: Setter<string[]> };
+  anchorsMode: { get: Accessor<boolean>; set: Setter<boolean> };
 }
 
-const [readRelays, setReadRelays] = createSignal<string[]>([]);
-const [isAnchorsMode, setIsAnchorsMode] = createSignal<boolean>(true);
+const [getReadRelays, setReadRelays] = createSignal<string[]>([]);
+const [getAnchorsMode, setAnchorsMode] = createSignal<boolean>(true);
 
 let relay: Relayer = new Relayer();
 const pk = await getPublicKeyFromExt();
@@ -32,10 +30,8 @@ if (pk) {
 
 const RelayContext: Context<IRelayContext> = createContext({
   relay: relay,
-  readRelays: readRelays,
-  setReadRelays: setReadRelays,
-  isAnchorsMode: isAnchorsMode,
-  setIsAnchorsMode: setIsAnchorsMode
+  readRelays: { get: getReadRelays, set: setReadRelays },
+  anchorsMode: { get: getAnchorsMode, set: setAnchorsMode }
 });
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
@@ -43,10 +39,8 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
     <RelayContext.Provider
       value={{
         relay: relay,
-        readRelays: readRelays,
-        setReadRelays: setReadRelays,
-        isAnchorsMode: isAnchorsMode,
-        setIsAnchorsMode: setIsAnchorsMode
+        readRelays: { get: getReadRelays, set: setReadRelays },
+        anchorsMode: { get: getAnchorsMode, set: setAnchorsMode }
       }}
     >
       {props.children}

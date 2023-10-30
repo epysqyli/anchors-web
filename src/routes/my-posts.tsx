@@ -7,7 +7,7 @@ import UserNostrEvent from "~/components/my-posts/UserNostrEvent";
 import { For, Show, VoidComponent, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const MyPosts: VoidComponent = () => {
-  const { relay, isAnchorsMode } = useContext(RelayContext);
+  const { relay, anchorsMode } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
@@ -42,7 +42,7 @@ const MyPosts: VoidComponent = () => {
 
     const events = await relay.fetchTextEvents({
       rootOnly: true,
-      isAnchorsMode: isAnchorsMode(),
+      isAnchorsMode: anchorsMode.get(),
       filter: { authors: [relay.userPubKey] }
     });
 
@@ -55,14 +55,14 @@ const MyPosts: VoidComponent = () => {
   });
 
   createEffect(async () => {
-    isAnchorsMode();
+    anchorsMode.get();
     await fetchAndSetEvents();
   });
 
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14 mb-10'>
-        Your {isAnchorsMode() ? "Anchors" : "Nostr"} posts
+        Your {anchorsMode.get() ? "Anchors" : "Nostr"} posts
       </h1>
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
         <div

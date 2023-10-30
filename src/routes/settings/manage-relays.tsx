@@ -7,7 +7,7 @@ import LoadingPoints from "~/components/feed/LoadingPoints";
 import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const ManageRelays: VoidComponent = (): JSX.Element => {
-  const { relay, setReadRelays } = useContext(RelayContext);
+  const { relay, readRelays } = useContext(RelayContext);
 
   const [relayList, setRelayList] = createSignal<RelayList>({ r: [], w: [], rw: [] }, { equals: false });
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -106,7 +106,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
       pub.on("ok", () => {
         setRelayList(relayList());
         relay.fetchAndSetRelays();
-        setReadRelays(relay.getReadRelays());
+        readRelays.set(relay.getReadRelays());
         res(true);
       });
 

@@ -15,7 +15,7 @@ const Home: Component<{}> = () => {
   const FETCH_EVENTS_LIMIT = 15;
   const MAX_EVENTS_COUNT = 75;
 
-  const { relay, isAnchorsMode } = useContext(RelayContext);
+  const { relay, anchorsMode } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
@@ -44,7 +44,7 @@ const Home: Component<{}> = () => {
       setEnrichedEvents,
       newEnrichedEvents,
       setNewEnrichedEvents,
-      isAnchorsMode,
+      anchorsMode.get,
       setShowPopup,
       {
         fetchEventsLimit: FETCH_EVENTS_LIMIT,
@@ -67,7 +67,7 @@ const Home: Component<{}> = () => {
   });
 
   createEffect(async () => {
-    isAnchorsMode();
+    anchorsMode.get();
     clearInterval(intervalID);
 
     setEvents([]);
@@ -107,7 +107,7 @@ const Home: Component<{}> = () => {
         maxEventsCount: 75,
         searchParams: searchParams
       },
-      isAnchorsMode,
+      anchorsMode.get,
       enrichedEvents,
       setEnrichedEvents
     );

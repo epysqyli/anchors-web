@@ -19,7 +19,7 @@ const Tag: VoidComponent = (): JSX.Element => {
 
   const params = useParams<{ tag: string }>();
 
-  const { relay, isAnchorsMode } = useContext(RelayContext);
+  const { relay, anchorsMode } = useContext(RelayContext);
   let intervalID: NodeJS.Timer | undefined = undefined;
 
   const [events, setEvents] = createSignal<Event[]>([]);
@@ -47,7 +47,7 @@ const Tag: VoidComponent = (): JSX.Element => {
       setEnrichedEvents,
       newEnrichedEvents,
       setNewEnrichedEvents,
-      isAnchorsMode,
+      anchorsMode.get,
       setShowPopup,
       {
         fetchEventsLimit: FETCH_EVENTS_LIMIT,
@@ -62,7 +62,7 @@ const Tag: VoidComponent = (): JSX.Element => {
   });
 
   createEffect(async () => {
-    isAnchorsMode();
+    anchorsMode.get();
     clearInterval(intervalID);
 
     setEvents([]);
@@ -98,7 +98,7 @@ const Tag: VoidComponent = (): JSX.Element => {
         maxEventsCount: 75,
         searchParams: searchParams
       },
-      isAnchorsMode,
+      anchorsMode.get,
       enrichedEvents,
       setEnrichedEvents
     );

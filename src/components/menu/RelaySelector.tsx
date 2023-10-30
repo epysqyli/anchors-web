@@ -25,7 +25,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
           All relays
         </A>
 
-        <For each={readRelays()}>
+        <For each={readRelays.get()}>
           {(address) => (
             <A
               class={`${baseStyle} ${
