@@ -143,21 +143,30 @@ class Relayer {
     });
   }
 
-  public async fetchFollowingAndRelays(): Promise<Event | undefined> {
+  public async fetchContacts(): Promise<string[]> {
     if (!this.userPubKey) {
-      return new Promise((_) => {});
+      return new Promise((_) => []);
     }
 
-    const kindThreeEvts = await this.currentPool.list(this.getReadRelays(), [
+    const contactEvents = await this.currentPool.list(this.getReadRelays(), [
       { kinds: [Kind.Contacts], authors: [this.userPubKey] }
     ]);
 
-    // loop over all contacts events instead of taking only the first one
-    if (kindThreeEvts.length != 0) {
-      return kindThreeEvts[0];
+    const contactList: string[] = [];
+
+    if (contactEvents.length != 0) {
+      contactEvents.forEach((ce) => {
+        ce.tags
+          .map((t) => t[1])
+          .forEach((pk) => {
+            if (!contactList.includes(pk)) {
+              contactList.push(pk);
+            }
+          });
+      });
     }
 
-    return undefined;
+    return contactList;
   }
 
   public async fetchAndSetRelays(): Promise<RelayList> {

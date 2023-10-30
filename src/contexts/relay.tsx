@@ -20,12 +20,7 @@ if (pk) {
   relay = new Relayer(pk);
   await relay.fetchAndSetRelays();
   setReadRelays(relay.getReadRelays());
-
-  const kindThreeEvent = await relay.fetchFollowingAndRelays();
-
-  if (kindThreeEvent) {
-    relay.following = kindThreeEvent.tags.map((e) => e[1]);
-  }
+  relay.following = await relay.fetchContacts();
 }
 
 const RelayContext: Context<IRelayContext> = createContext({

@@ -1,11 +1,10 @@
 import { A } from "@solidjs/router";
 import { RelayContext } from "~/contexts/relay";
-import { Event as NostrEvent } from "nostr-tools";
 import EventAuthor from "~/components/feed/EventAuthor";
-import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
-import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 import { TbUserMinus, TbUserPlus } from "solid-icons/tb";
 import LoadingPoints from "~/components/feed/LoadingPoints";
+import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
+import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const ManageFollowing: VoidComponent = (): JSX.Element => {
   const { relay } = useContext(RelayContext);
@@ -19,10 +18,7 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
     let followPubkeys = relay.following;
 
     if (followPubkeys.length == 0) {
-      const kindThreeEvent: NostrEvent | undefined = await relay.fetchFollowingAndRelays();
-      if (kindThreeEvent) {
-        followPubkeys = kindThreeEvent.tags.map((f) => f[1]);
-      }
+      followPubkeys = await relay.fetchContacts();
     }
 
     if (followPubkeys.length !== 0) {
