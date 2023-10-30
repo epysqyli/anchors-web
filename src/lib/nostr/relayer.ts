@@ -174,15 +174,15 @@ class Relayer {
       this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
     }
 
-    const events: Event[] = await this.currentPool.list(this.getReadRelays(), [
+    const relayListEvents: Event[] = await this.currentPool.list(this.getReadRelays(), [
       {
         kinds: [Kind.RelayList],
         authors: [this.userPubKey!]
       }
     ]);
 
-    if (events.length != 0) {
-      const relays = events.map((evt) => evt.tags).flat();
+    if (relayListEvents.length != 0) {
+      const relays = relayListEvents.map((evt) => evt.tags).flat();
 
       relays.forEach((relay) => {
         switch (relay.length) {
