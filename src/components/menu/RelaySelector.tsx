@@ -25,7 +25,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
           <A
             class={`${baseStyle} ${
               isCurrentRelay("all")
-                ? selectedStyle
+                ? selectedStyle + " text-right pr-3"
                 : "text-neutral-500 hover:text-neutral-400 hover:bg-slate-500 hover:bg-opacity-25 text-right pr-3"
             }`}
             href={`/?following=${searchParams.following}&relayAddress=all`}
