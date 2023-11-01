@@ -244,6 +244,14 @@ class Relayer {
     });
   }
 
+  public async fetchUserMetadata(): Promise<IUserMetadata> {
+    const metadataEvents: Event[] = await this.currentPool.list(this.getReadRelays(), [
+      { kinds: [Kind.Metadata], authors: [this.userPubKey!] }
+    ]);
+
+    return JSON.parse(metadataEvents[0].content);
+  }
+
   public isUserAlreadyFollowed = (pubkey: string): boolean => {
     if (this.following.includes(pubkey)) {
       return true;

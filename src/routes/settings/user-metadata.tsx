@@ -3,9 +3,8 @@ import { CgDanger } from "solid-icons/cg";
 import Popup from "~/components/shared/Popup";
 import { RelayContext } from "~/contexts/relay";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
-import { Event as NostrEvent, Kind, Sub } from "nostr-tools";
+import { Event as NostrEvent, Kind } from "nostr-tools";
 import { RiSystemCheckboxCircleFill } from "solid-icons/ri";
-import { createMetadataFilter } from "~/lib/nostr/nostr-utils";
 import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const UserMetadata: VoidComponent = () => {
@@ -50,19 +49,14 @@ const UserMetadata: VoidComponent = () => {
   const [isActionSuccessful, setIsActionSuccessful] = createSignal<boolean>(false);
   const [imageSrcFails, setImageSrcFails] = createSignal<boolean>(false);
 
-  onMount(() => {
+  onMount(async () => {
     if (relay.userPubKey == "") {
       console.log("Your public key is not available");
       setIsActionSuccessful(false);
       return;
     }
 
-    const metaDataSub: Sub = relay.sub(createMetadataFilter([relay.userPubKey!]));
-
-    metaDataSub.on("event", (event: NostrEvent) => {
-      const userMetadata: IUserMetadata = JSON.parse(event.content);
-      setContent(userMetadata);
-    });
+    setContent(await relay.fetchUserMetadata());
   });
 
   return (
