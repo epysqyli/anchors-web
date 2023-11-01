@@ -7,6 +7,7 @@ import { RelayProvider } from "./contexts/relay";
 import NarrowLayout from "./layouts/NarrowLayout";
 import { useIsNarrow } from "./hooks/useMediaQuery";
 import { ErrorBoundary } from "solid-start/error-boundary";
+import UserIdentity from "./components/shared/UserIdentity";
 import { Component, Show, Suspense, createSignal } from "solid-js";
 import { Body, FileRoutes, Head, Html, Meta, Scripts, Title } from "solid-start";
 
@@ -20,6 +21,7 @@ declare global {
 }
 
 const Root: Component<{}> = () => {
+  const [initialLoad, setInitialLoad] = createSignal<boolean>(true);
   const [showMenu, setShowMenu] = createSignal<boolean>(false);
   const toggleMenu = (): void => {
     setShowMenu(!showMenu());
@@ -52,6 +54,8 @@ const Root: Component<{}> = () => {
                   <Routes>
                     <FileRoutes />
                   </Routes>
+
+                  <UserIdentity initialLoad={initialLoad} setInitialLoad={setInitialLoad} />
                 </WideLayout>
               </Show>
             </RelayProvider>
