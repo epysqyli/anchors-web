@@ -67,6 +67,7 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
               type='text'
               minlength={64}
               maxLength={64}
+              required
               class='w-5/6 rounded focus:outline-none bg-slate-600 py-2 px-5
                        placeholder:text-base placeholder:text-center'
               placeholder={
