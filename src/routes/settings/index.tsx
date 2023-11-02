@@ -1,11 +1,14 @@
 import { FiSave } from "solid-icons/fi";
-import { VoidComponent } from "solid-js";
+import { RelayContext } from "~/contexts/relay";
+import { VoidComponent, useContext } from "solid-js";
 import { BsLightningChargeFill } from "solid-icons/bs";
 import { TbStack2, TbUsersGroup } from "solid-icons/tb";
 import SettingsLink from "~/components/settings/SettingsLink";
-import { RiBusinessProfileLine, RiMapSignalTowerFill } from "solid-icons/ri";
+import { RiBusinessProfileLine, RiMapSignalTowerFill, RiOthersKey2Line } from "solid-icons/ri";
 
 const Settings: VoidComponent = () => {
+  const { authMode } = useContext(RelayContext);
+
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14'>
@@ -29,6 +32,14 @@ const Settings: VoidComponent = () => {
           <SettingsLink href='/my-posts' content='my posts'>
             <TbStack2 class='mx-auto' size={60} />
           </SettingsLink>
+
+          {authMode.get() != "private" ? (
+            <SettingsLink href='/settings/update-guest-public-key' content='update guest public key'>
+              <RiOthersKey2Line class='mx-auto' size={60} />
+            </SettingsLink>
+          ) : (
+            <></>
+          )}
 
           <SettingsLink href='/settings' content='saved posts'>
             <FiSave class='mx-auto' size={60} />
