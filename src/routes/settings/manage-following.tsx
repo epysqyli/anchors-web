@@ -7,7 +7,7 @@ import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const ManageFollowing: VoidComponent = (): JSX.Element => {
-  const { relay } = useContext(RelayContext);
+  const { relay, authMode } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [following, setFollowing] = createSignal<IUserMetadataWithPubkey[]>([]);
@@ -81,19 +81,23 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
                   />
                 </A>
 
-                <div class='w-2/3 my-10 mx-auto text-center'>
-                  <div
-                    onClick={(e) => handleClick(e, flw.pubkey)}
-                    class='border w-fit mx-auto p-5 rounded-full border-opacity-25 border-slate-300
+                {authMode.get() == "private" ? (
+                  <div class='w-2/3 my-10 mx-auto text-center'>
+                    <div
+                      onClick={(e) => handleClick(e, flw.pubkey)}
+                      class='border w-fit mx-auto p-5 rounded-full border-opacity-25 border-slate-300
                         cursor-pointer transition-all group active:border-opacity-80 hover:bg-slate-500'
-                  >
-                    {isFollowed(flw.pubkey) ? (
-                      <TbUserMinus size={36} class='mx-auto hover:scale-105 active:scale-95' />
-                    ) : (
-                      <TbUserPlus size={36} class='mx-auto hover:scale-105 active:scale-95' />
-                    )}
+                    >
+                      {isFollowed(flw.pubkey) ? (
+                        <TbUserMinus size={36} class='mx-auto hover:scale-105 active:scale-95' />
+                      ) : (
+                        <TbUserPlus size={36} class='mx-auto hover:scale-105 active:scale-95' />
+                      )}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <></>
+                )}
 
                 <div class='text-sm text-center border-t border-slate-400 border-opacity-25 pt-5'>
                   {flw.pubkey}
