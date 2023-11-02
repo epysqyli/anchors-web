@@ -2,13 +2,13 @@ import "websocket-polyfill";
 import Relayer from "~/lib/nostr/relayer";
 import type { Accessor, Setter } from "solid-js";
 import { getPublicKeyFromExt } from "~/lib/nostr/nostr-utils";
-import { Component, JSX, createContext, createSignal } from "solid-js";
+import { Component, JSX, createContext, createEffect, createSignal } from "solid-js";
 
 const LOCAL_STORAGE_GUEST_PK = "anchors-guest-public-key";
 
 const [getReadRelays, setReadRelays] = createSignal<string[]>([]);
 const [getAnchorsMode, setAnchorsMode] = createSignal<boolean>(true);
-const [guestPublicKey, setGuestPublicKey] = createSignal<string>('');
+const [guestPublicKey, setGuestPublicKey] = createSignal<string>("");
 
 let relay: Relayer = new Relayer();
 const userPublicKey = await getPublicKeyFromExt();
@@ -40,6 +40,15 @@ const RelayContext = createContext<IRelayContext>({
 });
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
+  createEffect(async () => {
+    if (guestPublicKey()) {
+      relay.userPubKey = guestPublicKey();
+      await relay.fetchAndSetRelays();
+      setReadRelays(relay.getReadRelays());
+      relay.following = await relay.fetchContacts();
+    }
+  });
+
   return (
     <RelayContext.Provider
       value={{

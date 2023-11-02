@@ -27,11 +27,6 @@ const MyPosts: VoidComponent = () => {
   };
 
   const fetchAndSetEvents = async (): Promise<void> => {
-    if (window.nostr == undefined) {
-      console.log("browser nostr extension needed");
-      return;
-    }
-
     if (relay.userPubKey == undefined) {
       console.log("your public key is not available");
       setIsLoading(false);

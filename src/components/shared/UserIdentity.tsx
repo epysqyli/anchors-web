@@ -30,38 +30,43 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
 
   const guestModeTemplate: JSX.Element = (
     <div>
-      <h2 class='text-xl mb-10 font-bold'>Welcome to Anchors</h2>
+      <h2 class='text-2xl mb-10 font-bold'>Welcome to Anchors</h2>
       <p class='underline underline-offset-4'>No key pair detected from Nostr compatible extensions</p>
-      <p class='mt-5 mb-10 text-justify'>
-        {guestPublicKey.get() ? (
-          <p class='text-base text-left break-all'>
-            Your guest public key is: <span class='font-bold'>{guestPublicKey.get()}</span>
-          </p>
-        ) : (
-          <>
-            <p class='text-base'>
-              You can set a guest public key to use a limited version of the app where no new events can be
-              signed, (meaning that no new posts can be written, no reactions sent etc etc), but where
-              following and relay lists are available
-            </p>
+      <div class='mt-5 mb-10 text-justify'>
+        <div class='text-base text-left break-all w-3/4 mx-auto mt-10'>
+          {guestPublicKey.get() ? (
+            <>
+              <p>Your already set guest public key is:</p>
+              <p class='font-bold mt-5 mx-auto'>{guestPublicKey.get()}</p>
+            </>
+          ) : (
+            <>
+              <p class='text-base'>
+                You can set a guest public key to use a limited version of the app where no new events can be
+                signed, (meaning that no new posts can be written, no reactions sent etc etc), but where
+                following and relay lists are available
+              </p>
+            </>
+          )}
 
-            <form onsubmit={handleSubmit} class='flex items-center justify-between mt-10'>
-              <input
-                onchange={handleChange}
-                type='text'
-                minlength={64}
-                maxLength={64}
-                class='w-5/6 rounded focus:outline-none bg-slate-600 py-2 px-5
+          <form onsubmit={handleSubmit} class='flex items-center justify-between mt-10'>
+            <input
+              onchange={handleChange}
+              type='text'
+              minlength={64}
+              maxLength={64}
+              class='w-5/6 rounded focus:outline-none bg-slate-600 py-2 px-5
                        placeholder:text-base placeholder:text-center'
-                placeholder='enter your guest public key'
-              />
-              <button class='w-1/6 text-slate-300 group'>
-                <VsSave class='mx-auto hover:text-slte-200 group-active:scale-95' size={30} />
-              </button>
-            </form>
-          </>
-        )}
-      </p>
+              placeholder={
+                guestPublicKey.get() ? "update your guest public key" : "enter your guest public key"
+              }
+            />
+            <button class='w-1/6 text-slate-300 group'>
+              <VsSave class='mx-auto hover:text-slte-200 group-active:scale-95' size={30} />
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 
