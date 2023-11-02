@@ -260,25 +260,6 @@ class Relayer {
     return false;
   };
 
-  public async setRelaysAndFollowersAsync(): Promise<void> {
-    if (!this.userPubKey) {
-      return;
-    }
-
-    const kindThreeEvents = await this.currentPool.list(this.getReadRelays(), [
-      { kinds: [Kind.Contacts], authors: [this.userPubKey] }
-    ]);
-
-    // manage multiple events from multiple relays
-    this.following = kindThreeEvents[0].tags.map((e) => e[1]);
-
-    if (this.isRelayListEmpty()) {
-      kindThreeEvents[0].content.split(";").forEach((rl) => {
-        this.relays.rw.push(rl);
-      });
-    }
-  }
-
   public async fetchTextEvents(options: FetchOptions): Promise<Event[]> {
     let filter: Filter = { ...options.filter, kinds: [Kind.Text] };
 
