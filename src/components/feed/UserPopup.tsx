@@ -15,7 +15,7 @@ interface Props {
 }
 
 const UserPopup: Component<Props> = (props): JSX.Element => {
-  const { relay } = useContext(RelayContext);
+  const { relay, authMode } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -100,19 +100,23 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
         </div>
       </div>
 
-      <div class='mx-auto w-fit'>
-        <div
-          onClick={handleClick}
-          class='border w-fit mx-auto p-5 rounded-full border-opacity-25 border-slate-300
+      {authMode.get() == "private" ? (
+        <div class='mx-auto w-fit'>
+          <div
+            onClick={handleClick}
+            class='border w-fit mx-auto p-5 rounded-full border-opacity-25 border-slate-300
           cursor-pointer transition-all group active:border-opacity-80 hover:bg-slate-500'
-        >
-          {canFollow() ? (
-            <TbUsersPlus size={32} class='mx-auto hover:scale-105 active:scale-95' />
-          ) : (
-            <TbUsersMinus size={32} class='mx-auto hover:scale-105 active:scale-95' />
-          )}
+          >
+            {canFollow() ? (
+              <TbUsersPlus size={32} class='mx-auto hover:scale-105 active:scale-95' />
+            ) : (
+              <TbUsersMinus size={32} class='mx-auto hover:scale-105 active:scale-95' />
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
