@@ -1,7 +1,8 @@
 import { A } from "@solidjs/router";
 import { Event } from "nostr-tools";
 import { CgRemove } from "solid-icons/cg";
-import { Component, JSX } from "solid-js";
+import { Component, JSX, useContext } from "solid-js";
+import { RelayContext } from "~/contexts/relay";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const UserNostrEvent: Component<Props> = (props): JSX.Element => {
+  const { authMode } = useContext(RelayContext);
+
   const deleteEvent = async (): Promise<void> => {
     await props.handleDeletion(props.nostrEvent.id);
   };
@@ -21,9 +24,13 @@ const UserNostrEvent: Component<Props> = (props): JSX.Element => {
     >
       <div class='flex items-center justify-around'>
         <div class='px-2 py-1 text-center rounded-md'>{parseDate(props.nostrEvent.created_at)}</div>
-        <div onClick={deleteEvent} class='text-neutral-400 cursor-pointer group hover:text-red-400'>
-          <CgRemove size={28} class='transition-all mx-auto group-hover:scale-105 group-active:scale-90' />
-        </div>
+        {authMode.get() == "private" ? (
+          <div onClick={deleteEvent} class='text-neutral-400 cursor-pointer group hover:text-red-400'>
+            <CgRemove size={28} class='transition-all mx-auto group-hover:scale-105 group-active:scale-90' />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
 
       <div class='w-4/5 my-10 mx-auto text-center break-words'>{shrinkContent(props.nostrEvent.content)}</div>
