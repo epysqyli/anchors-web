@@ -35,7 +35,7 @@ export const CommentsContext = createContext<{
 }>();
 
 const EventWrapper: Component<Props> = (props) => {
-  const { relay } = useContext(RelayContext);
+  const { relay, authMode } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
   const [eventRefTags, setEventRefTags] = createSignal<IFeedRefTag[]>([]);
@@ -204,7 +204,7 @@ const EventWrapper: Component<Props> = (props) => {
               </div>
             </Show>
 
-            <FiTrendingUp class='text-slate-400' size={26} />
+            {authMode.get() == "private" ? <FiTrendingUp class='text-slate-400' size={26} /> : <></>}
             <EventAnchor nostrEventID={props.event.id} />
           </div>
         </div>
