@@ -16,7 +16,7 @@ interface Props {
 }
 
 const CommentThread: Component<Props> = (props): JSX.Element => {
-  const { relay } = useContext(RelayContext);
+  const { relay, authMode } = useContext(RelayContext);
   const commentsContext = useContext(CommentsContext)!;
 
   const setReplyEvent = (): void => {
@@ -57,6 +57,10 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
   };
 
   const canDeleteEvent = (): boolean => {
+    if (authMode.get() != "private") {
+      return false;
+    }
+
     if (props.commentTree.event.data.pubkey == relay.userPubKey) {
       return true;
     }
@@ -99,30 +103,48 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
             <></>
           )}
 
-          <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
-            <div
-              onClick={() => reactToEvent("+")}
-              class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
-            >
-              <span class='text-sm ml-1'>{reactions().positive.count}</span>
-              <VsArrowSmallUp size={26} />
-            </div>
+          {authMode.get() == "private" ? (
+            <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
+              <div
+                onClick={() => reactToEvent("+")}
+                class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md'
+              >
+                <span class='text-sm ml-1'>{reactions().positive.count}</span>
+                <VsArrowSmallUp size={26} />
+              </div>
 
-            <div
-              onClick={() => reactToEvent("-")}
-              class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
-            >
-              <span class='text-sm ml-1'>{reactions().negative.count}</span>
-              <VsArrowSmallDown size={26} />
-            </div>
+              <div
+                onClick={() => reactToEvent("-")}
+                class='flex items-center hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50'
+              >
+                <span class='text-sm ml-1'>{reactions().negative.count}</span>
+                <VsArrowSmallDown size={26} />
+              </div>
 
-            <div
-              onClick={setReplyEvent}
-              class='hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50 px-2 py-1'
-            >
-              <FiMail />
+              <div
+                onClick={setReplyEvent}
+                class='hover:bg-slate-700 cursor-pointer rounded-md active:bg-opacity-50 px-2 py-1'
+              >
+                <FiMail />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
+              <div class='flex items-center  rounded-md'>
+                <span class='text-sm ml-1'>{reactions().positive.count}</span>
+                <VsArrowSmallUp size={26} />
+              </div>
+
+              <div class='flex items-center  rounded-md'>
+                <span class='text-sm ml-1'>{reactions().negative.count}</span>
+                <VsArrowSmallDown size={26} />
+              </div>
+
+              <div onClick={setReplyEvent} class=' rounded-md px-2 py-1'>
+                <FiMail />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
