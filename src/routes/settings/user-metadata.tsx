@@ -8,7 +8,7 @@ import { RiSystemCheckboxCircleFill } from "solid-icons/ri";
 import { VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const UserMetadata: VoidComponent = () => {
-  const { relay } = useContext(RelayContext);
+  const { relay, authMode } = useContext(RelayContext);
 
   const [content, setContent] = createSignal<IUserMetadata>({
     name: "",
@@ -116,12 +116,16 @@ const UserMetadata: VoidComponent = () => {
           />
         </div>
 
-        <button class='block w-fit px-10 mt-16 mx-auto py-5 rounded-md bg-slate-600 group'>
-          <FiSave
-            class='text-slate-100 mx-auto group-hover:scale-110 group-active:scale-90 transition-transform'
-            size={38}
-          />
-        </button>
+        {authMode.get() == "private" ? (
+          <button class='block w-fit px-10 mt-16 mx-auto py-5 rounded-md bg-slate-600 group'>
+            <FiSave
+              class='text-slate-100 mx-auto group-hover:scale-110 group-active:scale-90 transition-transform'
+              size={38}
+            />
+          </button>
+        ) : (
+          <></>
+        )}
       </form>
 
       <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
