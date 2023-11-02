@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Reactions: Component<Props> = (props): JSX.Element => {
-  const { relay } = useContext(RelayContext);
+  const { relay, authMode } = useContext(RelayContext);
 
   const [reactions, setReactions] = createSignal<IReaction>({
     positive: props.event.positive,
@@ -35,6 +35,29 @@ const Reactions: Component<Props> = (props): JSX.Element => {
   const reactToEvent = async (reaction: Reaction): Promise<void> => {
     await handleReaction(props.event, reactions, setReactions, reaction, relay);
   };
+
+  if (authMode.get() != "private") {
+    return (
+      <div class='flex items-center gap-x-2 text-slate-400'>
+        <div>
+          <FiThumbsUp
+            size={26}
+            fill={hasPositiveUserReaction() ? "white" : ""}
+            fill-opacity={hasPositiveUserReaction() ? "0.7" : "0"}
+          />
+          <p class='text-center text-sm mt-1'>{reactions().positive.count}</p>
+        </div>
+        <div>
+          <FiThumbsDown
+            size={26}
+            fill={hasNegativeUserReaction() ? "white" : ""}
+            fill-opacity={hasNegativeUserReaction() ? "0.7" : "0"}
+          />
+          <p class='text-center text-sm mt-1'>{reactions().negative.count}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div class='flex items-center gap-x-2 text-slate-400'>
