@@ -7,7 +7,7 @@ import LoadingPoints from "~/components/feed/LoadingPoints";
 import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
 
 const ManageRelays: VoidComponent = (): JSX.Element => {
-  const { relay, readRelays } = useContext(RelayContext);
+  const { relay, readRelays, authMode } = useContext(RelayContext);
 
   const [relayList, setRelayList] = createSignal<RelayList>({ r: [], w: [], rw: [] }, { equals: false });
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
@@ -143,34 +143,42 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                                    hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'
                         >
                           <div class='text-slate-300'>{relayAddress}</div>
-                          <div
-                            onClick={() => handleDeletion(relays[0] as "r" | "w" | "rw", relayAddress)}
-                            class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 
+                          {authMode.get() == "private" ? (
+                            <div
+                              onClick={() => handleDeletion(relays[0] as "r" | "w" | "rw", relayAddress)}
+                              class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 
                                     cursor-pointer hover:scale-105 active:scale-95'
-                          >
-                            <RiSystemCloseCircleFill size={30} />
-                          </div>
+                            >
+                              <RiSystemCloseCircleFill size={30} />
+                            </div>
+                          ) : (
+                            <></>
+                          )}
                         </div>
                       )}
                     </For>
                   </div>
 
-                  <form onSubmit={handleSubmit} class='flex items-center justify-around py-2 px-1'>
-                    <input
-                      type='text'
-                      name={relays[0]}
-                      pattern='^ws.*'
-                      oninvalid={displayError}
-                      class='block w-4/5 py-2 rounded focus:outline-none bg-slate-500 bg-opacity-75
+                  {authMode.get() == "private" ? (
+                    <form onSubmit={handleSubmit} class='flex items-center justify-around py-2 px-1'>
+                      <input
+                        type='text'
+                        name={relays[0]}
+                        pattern='^ws.*'
+                        oninvalid={displayError}
+                        class='block w-4/5 py-2 rounded focus:outline-none bg-slate-500 bg-opacity-75
                              text-center caret-slate-200 text-slate-200'
-                    />
-                    <button
-                      class='block h-full text-green-400 text-opacity-50 hover:text-opacity-100
+                      />
+                      <button
+                        class='block h-full text-green-400 text-opacity-50 hover:text-opacity-100
                                     transition-all hover:scale-105 active:scale-95'
-                    >
-                      <TbPlus size={42} stroke-width={1.5} class='mx-auto' />
-                    </button>
-                  </form>
+                      >
+                        <TbPlus size={42} stroke-width={1.5} class='mx-auto' />
+                      </button>
+                    </form>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               )}
             </For>
