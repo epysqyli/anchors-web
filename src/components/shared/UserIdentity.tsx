@@ -4,7 +4,18 @@ import EventAuthor from "../feed/EventAuthor";
 import { RelayContext } from "~/contexts/relay";
 import OverlayContext from "~/contexts/overlay";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
-import { Accessor, Component, JSX, Setter, createEffect, createSignal, onMount, useContext } from "solid-js";
+import {
+  Accessor,
+  Component,
+  JSX,
+  Setter,
+  Show,
+  createEffect,
+  createSignal,
+  onMount,
+  useContext
+} from "solid-js";
+import LoadingFallback from "../feed/LoadingFallback";
 
 interface Props {
   initialLoad: Accessor<boolean>;
@@ -17,6 +28,7 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
   const [userMetadata, setUserMetadata] = createSignal<IUserMetadata>();
   const [inputPublicKey, setInputPublicKey] = createSignal<string>("");
   const [privateKeyModeTemplate, setPrivateKeyModeTemplate] = createSignal<JSX.Element>(<></>);
+  const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   const handleSubmit = (e: Event): void => {
     e.preventDefault();
@@ -71,7 +83,9 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
   );
 
   onMount(async () => {
+    setIsLoading(true);
     if (!props.initialLoad()) {
+      setIsLoading(false);
       return;
     }
 
@@ -95,6 +109,8 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
         </div>
       );
     }
+
+    setIsLoading(false);
   });
 
   createEffect(() => {
@@ -106,9 +122,11 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
   return (
     <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/2'>
       <Popup autoClose={false} show={props.initialLoad} setShow={props.setInitialLoad} largeHeight>
-        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
-          {authMode.get() == "private" ? privateKeyModeTemplate() : guestModeTemplate}
-        </div>
+        <Show when={!isLoading()} fallback={<LoadingFallback />}>
+          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
+            {authMode.get() == "private" ? privateKeyModeTemplate() : guestModeTemplate}
+          </div>
+        </Show>
       </Popup>
     </div>
   );
