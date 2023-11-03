@@ -37,7 +37,7 @@ const Root: Component<{}> = () => {
         <script src='serviceWorkerInit.ts' />
       </Head>
 
-      <Body class='h-screen bg-gray-900'>
+      <Body class='h-screen bg-gray-900 custom-scrollbar'>
         <Suspense>
           <ErrorBoundary>
             <RelayProvider>

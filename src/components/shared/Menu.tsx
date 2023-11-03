@@ -19,7 +19,8 @@ const Menu: Component<Props> = (props) => {
   const narrowStyle = `text-lg bg-gradient-to-br from-slate-600 via-slate-700
                        via-20% to-gray-900 to-90% pt-10 h-[100vh]`;
 
-  const wideStyle = `rounded-md text-lg relative overflow-y-auto bg-neutral-700 bg-opacity-50 h-full pt-10`;
+  const wideStyle = `rounded-md text-lg relative overflow-y-auto bg-neutral-700 
+                     bg-opacity-50 h-full pt-10 custom-scrollbar`;
 
   const actionStyle = `text-neutral-300 w-4/5 2xl:w-3/4 mx-auto my-3 select-none
                        md:bg-neutral-700 md:bg-opacity-25 md:px-5 md:py-5 p-4 transition cursor-pointer 
