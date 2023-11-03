@@ -54,7 +54,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
             onchange={handleChange}
             type='text'
             placeholder='Enter a relay address'
-            class='block w-4/5 rounded focus:outline-none px-3 py-1 bg-neutral-800 text-neutral-200 caret-neutral-400'
+            class='block w-4/5 rounded focus:outline-none px-3 py-2 bg-neutral-800 text-neutral-200 caret-neutral-400'
           />
 
           <A
