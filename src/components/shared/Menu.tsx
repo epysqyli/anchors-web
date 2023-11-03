@@ -22,7 +22,7 @@ const Menu: Component<Props> = (props) => {
   const wideStyle = `rounded-md text-lg relative overflow-y-auto bg-neutral-700 
                      bg-opacity-50 h-full pt-10 custom-scrollbar`;
 
-  const actionStyle = `text-neutral-300 w-4/5 2xl:w-3/4 mx-auto my-3 select-none
+  const actionStyle = `text-neutral-300 w-5/6 2xl:w-4/5 2xl:w-3/4 mx-auto my-3 select-none
                        md:bg-neutral-700 md:bg-opacity-25 md:px-5 md:py-5 p-4 transition cursor-pointer 
                        group active:scale-90 hover:bg-neutral-700 rounded`;
 
