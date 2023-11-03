@@ -274,7 +274,6 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
             onChange={handleOnChange}
             class='block focus:outline-none py-2 caret-slate-200
                placeholder:text-center placeholder:text text-slate-200 text-center
-               placeholder:text-sm md:placeholder:text-[13pt] md:text-[13pt]
                focus:placeholder-none h-full w-4/5 bg-slate-600
                border-y border-transparent focus:border-orange-200'
           />
