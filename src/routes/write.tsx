@@ -189,7 +189,7 @@ const Write: Component<{}> = () => {
               </div>
             </div>
 
-            <div class='col-span-3 rounded-md bg-slate-800 bg-opacity-80 h-full py-4 overflow-y-auto'>
+            <div class='col-span-3 rounded-md bg-slate-800 bg-opacity-80 h-full py-4 overflow-y-auto 2xl:px-10'>
               <RefTagsSearchPanel
                 tags={refTags()}
                 addReferenceTag={addReferenceTag}
