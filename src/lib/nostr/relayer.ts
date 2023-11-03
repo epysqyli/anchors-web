@@ -171,7 +171,7 @@ class Relayer {
 
   public async fetchAndSetRelays(): Promise<RelayList> {
     if (this.isRelayListEmpty()) {
-      this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
+      this.relays.rw.push('wss://nostr.lu.ke');
     }
 
     const relayListEvents: Event[] = await this.currentPool.list(this.getReadRelays(), [

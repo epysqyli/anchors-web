@@ -21,7 +21,7 @@ const Menu: Component<Props> = (props) => {
 
   const wideStyle = `rounded-md text-lg relative overflow-y-auto bg-neutral-700 bg-opacity-50 h-full pt-10`;
 
-  const actionStyle = `text-neutral-300 w-3/4 mx-auto my-3 select-none
+  const actionStyle = `text-neutral-300 w-4/5 2xl:w-3/4 mx-auto my-3 select-none
                        md:bg-neutral-700 md:bg-opacity-25 md:px-5 md:py-5 p-4 transition cursor-pointer 
                        group active:scale-90 hover:bg-neutral-700 rounded`;
 
@@ -48,7 +48,7 @@ const Menu: Component<Props> = (props) => {
             <AnchorsModeSelector />
           </div>
 
-          <div class='mx-auto w-5/6 mt-5 mb-12 px-3 h-[30%]'>
+          <div class='mx-auto w-11/12 2xl:w-5/6 mt-5 mb-12 px-3 h-[30%]'>
             <div class='flex justify-around my-5'>
               <FollowingSelector />
             </div>
