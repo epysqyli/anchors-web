@@ -61,11 +61,11 @@ const UserMetadata: VoidComponent = () => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold my-14'>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
         Update your profile info
       </h1>
 
-      <form onSubmit={handleSubmit} class='mx-auto w-1/2 md:w-2/5'>
+      <form onSubmit={handleSubmit} class='mx-auto w-5/6 md:w-2/5'>
         <div class='py-3 px-5 mb-10'>
           <label class='text-slate-200 text-lg select-none text-center block mb-3 p-2 rounded bg-slate-600 w-1/3'>
             name
