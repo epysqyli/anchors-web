@@ -121,17 +121,26 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14'>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
         Manage relays you connect to
       </h1>
 
-      <div class='w-5/6 mx-auto mt-10 p-3 h-4/5'>
+      <div class='mx-auto xl:w-5/6 xl:p-3 h-4/5'>
         <Show when={!isLoading()} fallback={<LoadingPoints />}>
-          <div class='grid grid-cols-3 gap-x-3 h-full'>
+          <div
+            class='xl:grid xl:grid-cols-3 gap-x-3 h-full overflow-y-scroll px-5 xl:px-0
+                   custom-scrollbar relative snap-mandatory snap-y xl:snap-none'
+          >
             <For each={Object.entries(relayList())}>
               {(relays) => (
-                <div class='flex flex-col justify-between col-span-1 bg-slate-700 bg-opacity-50 rounded pb-1 h-full'>
-                  <h2 class='text-center uppercase tracking-tight py-3 text-slate-300 text-lg font-bold bg-slate-600 rounded mb-3'>
+                <div
+                  class='flex flex-col justify-between col-span-1 bg-slate-700 
+                         bg-opacity-50 rounded pb-1 h-full mb-3 xl:mb-0 snap-start'
+                >
+                  <h2
+                    class='text-center uppercase tracking-tight py-3 text-slate-300
+                             text-lg font-bold bg-slate-600 rounded mb-3'
+                  >
                     {relayBoxTitle[relays[0] as keyof RelayBoxTitle]}
                   </h2>
 
