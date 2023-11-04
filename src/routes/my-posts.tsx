@@ -56,13 +56,14 @@ const MyPosts: VoidComponent = () => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold mt-14 mb-10'>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
         Your {anchorsMode.get() ? "Anchors" : "Nostr"} posts
       </h1>
+
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
         <div
-          class='w-4/5 xl:w-5/6 px-5 gap-1 mx-auto overflow-y-scroll 
-                custom-scrollbar h-4/5 grid grid-cols-3 gap-x-5 gap-y-10 pb-10'
+          class='w-11/12 xl:w-5/6 px-5 gap-1 mx-auto overflow-y-scroll custom-scrollbar
+                 pb-10 h-4/5 grid grid-cols-1 xl:grid-cols-3 gap-x-5 gap-y-5 xl:gap-y-10'
         >
           <For each={events()}>
             {(nostrEvent) => <UserNostrEvent nostrEvent={nostrEvent} handleDeletion={handleDeletion} />}
