@@ -1,7 +1,5 @@
-import { FiSave } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
 import { VoidComponent, useContext } from "solid-js";
-import { BsLightningChargeFill } from "solid-icons/bs";
 import { TbStack2, TbUsersGroup } from "solid-icons/tb";
 import SettingsLink from "~/components/settings/SettingsLink";
 import { RiBusinessProfileLine, RiMapSignalTowerFill, RiOthersKey2Line } from "solid-icons/ri";
@@ -41,13 +39,13 @@ const Settings: VoidComponent = () => {
             <></>
           )}
 
-          <SettingsLink href='/settings' content='saved posts'>
+          {/* <SettingsLink href='/settings' content='saved posts'>
             <FiSave class='mx-auto' size={60} />
           </SettingsLink>
 
           <SettingsLink href='/settings' content='set your lightning address?'>
             <BsLightningChargeFill class='mx-auto' size={62} />
-          </SettingsLink>
+          </SettingsLink> */}
         </div>
       </div>
     </>
