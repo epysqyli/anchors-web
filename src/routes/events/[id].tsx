@@ -1,7 +1,6 @@
 import { Kind } from "nostr-tools";
-import { RelayContext } from "~/contexts/relay";
-import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { useParams } from "solid-start";
+import { RelayContext } from "~/contexts/relay";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import EventWrapper from "~/components/feed/EventWrapper";
 import LoadingFallback from "~/components/feed/LoadingFallback";
@@ -35,7 +34,7 @@ const EventByID: VoidComponent = (): JSX.Element => {
   return (
     <>
       <Show
-        when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow() && events().length > 0}
+        when={!isLoading() && events().length > 0}
         fallback={<LoadingFallback />}
       >
         <EventWrapper event={events()[0]} />
