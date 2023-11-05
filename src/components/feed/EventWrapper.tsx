@@ -19,7 +19,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
-import { Accessor, Component, Show, createContext, createSignal, onMount, useContext } from "solid-js";
+import { Accessor, Component, For, Show, createContext, createSignal, onMount, useContext } from "solid-js";
 
 interface Props {
   event: IEnrichedEvent;
