@@ -9,18 +9,17 @@ import CommmentsPopup from "./CommentsPopup";
 import { FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
-import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { VsCommentDiscussion } from "solid-icons/vs";
-import { BiRegularBoltCircle } from "solid-icons/bi";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { fetchMovie } from "~/lib/external-services/tmdb";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
+import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
-import { Accessor, Component, For, Show, createContext, createSignal, onMount, useContext } from "solid-js";
+import { Accessor, Component, Show, createContext, createSignal, onMount, useContext } from "solid-js";
 
 interface Props {
   event: IEnrichedEvent;
@@ -128,28 +127,18 @@ const EventWrapper: Component<Props> = (props) => {
   return (
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
-        <div class='snap-start h-[100vh] text-white pt-4 mx-auto'>
-          <div class='h-[60vh] w-11/12 mx-auto py-2 pr-5 mb-10 text-justify overflow-auto break-words shadow-inner'>
-            {props.event.content}
-          </div>
-          <div class='mb-10 w-11/12 mx-auto pb-5 snap-x snap-mandatory overflow-scroll flex justify-start gap-x-10'>
-            <For each={props.event.tags}>
-              {(tag) => (
-                <div class='snap-center w-4/5 px-5 py-1 flex items-center bg-slate-300 rounded'>
-                  <div class='w-1/4'>
-                    <BiRegularBoltCircle size={40} color='#334155' />
-                  </div>
-                  <div class='break-words w-3/4 px-2 text-sm text-slate-700'>{tag[1]}</div>
-                </div>
-              )}
-            </For>
+        <div class='snap-start h-[90dvh] text-white pt-4 mx-auto px-2'>
+          <div class='h-3/5 mx-auto py-2 pr-5 overflow-auto break-words'>{props.event.content}</div>
+
+          <div class='h-1/5 flex snap-x snap-mandatory overflow-x-scroll'>
+            <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 
-          <div class='flex items-center justify-between w-4/5 mx-auto'>
-            <div class='border-b pb-2'>comments</div>
-            <div class='border-b pb-2'>reactions</div>
-          </div>
+          <div class='border h-[10%]'>user - reactions - comments</div>
+
+          <div class='border h-[10%]'>created_at - link to event - repost</div>
         </div>
+        <div class='h-[10dvh]'></div>
       </Show>
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
