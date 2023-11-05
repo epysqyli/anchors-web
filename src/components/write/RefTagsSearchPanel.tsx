@@ -31,7 +31,7 @@ interface Props {
   tags: IRefTag[];
   addReferenceTag(nostrTag: IRefTag): void;
   removeReferenceTag(nostrTag: IRefTag): void;
-  toggleMenu(): void;
+  toggleBetweenWriteAndRefs(): void;
 }
 
 const RefTagsSearchPanel: Component<Props> = (props) => {
@@ -177,36 +177,34 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
   const panelSelectorStyle = (active: boolean): string => {
     if (active) {
-      return "w-1/2 relative h-full text-center group cursor-pointer transition rounded bg-slate-600";
+      return "w-1/2 relative h-full text-center group cursor-pointer transition xl:rounded bg-slate-600";
     }
 
-    return "w-1/2 relative h-full text-center group cursor-pointer transition rounded hover:bg-slate-700";
+    return "w-1/2 relative h-full text-center group cursor-pointer transition xl:rounded hover:bg-slate-700";
   };
 
   return (
     <>
-      <div class='h-[80%] max-h-[80%]'>
+      <div class='h-[80dvh] max-h-[80dvh] xl:h-[80%] xl:max-h-[80%]'>
         <div class='flex items-center justify-between gap-x-1 md:px-5 md:gap-x-10 text-slate-200 h-[15%]'>
           <div onClick={() => setShowSearch(false)} class={panelSelectorStyle(!showSearch())}>
-            <div class='group-active:scale-95 transition w-fit mx-auto
-                        absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+            <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <VsReferences size={useIsNarrow() ? 30 : 40} />
               <div class='absolute -top-5 -right-10'>{props.tags.length}</div>
             </div>
           </div>
 
           <div onClick={() => setShowSearch(true)} class={panelSelectorStyle(showSearch())}>
-            <div class='group-active:scale-95 transition w-fit mx-auto
-                        absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+            <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <TbDatabaseSearch size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
 
           <div
-            onClick={props.toggleMenu}
-            class='w-1/2 relative h-full text-center group cursor-pointer transition rounded md:hidden'
+            onClick={props.toggleBetweenWriteAndRefs}
+            class='w-1/2 relative h-full text-center group cursor-pointer transition xl:rounded md:hidden active:bg-slate-700'
           >
-            <div class='group-active:scale-95 transition w-fit mx-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+            <div class='group-active:scale-95 transition absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <RiSystemCloseCircleLine size={useIsNarrow() ? 30 : 40} />
             </div>
           </div>
@@ -244,7 +242,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
         </div>
       </div>
 
-      <div class='h-[20%] w-11/12 mx-auto md:w-full py-1 px-2'>
+      <div class='h-[19dvh] xl:h-[20%] w-11/12 mx-auto md:w-full py-1 px-2'>
         <div class='flex items-center gap-x-3 px-5 justify-around h-3/5'>
           <For each={refTypes()}>
             {(refType) => {
@@ -264,8 +262,7 @@ const RefTagsSearchPanel: Component<Props> = (props) => {
 
         <form
           onSubmit={handleSubmit}
-          class='flex items-center justify-center gap-x-1
-                                             h-2/5 mt-1 mx-auto md:px-5 md:gap-x-5'
+          class='flex items-center justify-center gap-x-1 h-2/5 mt-1 mx-auto md:px-5 md:gap-x-5'
         >
           <input
             placeholder={currentRefType().placeholder}
