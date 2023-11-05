@@ -20,7 +20,7 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold my-14'>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
         Update your guest public key
       </h1>
 
@@ -54,13 +54,13 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
           </form>
 
           <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>No guest public key mode</h3>
-          <p class='mb-5 text-justify'>
+          <p class='mb-5 text-justify tracking-tight xl:tracking-normal'>
             Not having set a guest public key means that a very limited experience of Anchors is available, as
             no personal preferences whatsoever are taken into account.
           </p>
 
           <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>Guest public key mode</h3>
-          <p class='mb-5 text-justify'>
+          <p class='mb-5 text-justify tracking-tight xl:tracking-normal'>
             Setting a guest public, on the other hand, allows a personalized experience with no interactions:
             followers and relays are available, but since the private key is not available, no new posts can
             be written, nor reactions or comments sent, as events cannot be signed (see
@@ -75,7 +75,7 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
           </p>
 
           <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>Private key mode</h3>
-          <p class='mb-5 text-justify'>
+          <p class='mb-5 text-justify tracking-tight xl:tracking-normal'>
             In order to have the full Nostr experience, a private key is needed. Since saving it directly on
             the client is not secure, there exists several browser extensions that allow targeted access to
             the private key.
