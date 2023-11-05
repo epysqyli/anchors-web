@@ -29,7 +29,7 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
           {guestPublicKey.get() ? (
             <div>
               <p>Your current guest public key is:</p>
-              <p class='mt-2 font-bold'>{guestPublicKey.get()}</p>
+              <p class='mt-2 font-bold break-all'>{guestPublicKey.get()}</p>
             </div>
           ) : (
             <p>You have not yet set a guest publc key</p>
