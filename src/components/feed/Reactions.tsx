@@ -4,6 +4,7 @@ import { handleReaction } from "~/lib/nostr/nostr-utils";
 import { FiThumbsDown, FiThumbsUp } from "solid-icons/fi";
 import { IReaction, Reaction } from "~/interfaces/IReaction";
 import { Component, JSX, createMemo, createSignal, useContext } from "solid-js";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
 
 interface Props {
   event: IEnrichedEvent;
@@ -41,7 +42,7 @@ const Reactions: Component<Props> = (props): JSX.Element => {
       <div class='flex items-center gap-x-2 text-slate-400'>
         <div>
           <FiThumbsUp
-            size={26}
+            size={useIsNarrow() ? 21 : 26}
             fill={hasPositiveUserReaction() ? "white" : ""}
             fill-opacity={hasPositiveUserReaction() ? "0.7" : "0"}
           />
@@ -49,7 +50,7 @@ const Reactions: Component<Props> = (props): JSX.Element => {
         </div>
         <div>
           <FiThumbsDown
-            size={26}
+            size={useIsNarrow() ? 21 : 26}
             fill={hasNegativeUserReaction() ? "white" : ""}
             fill-opacity={hasNegativeUserReaction() ? "0.7" : "0"}
           />
@@ -66,7 +67,7 @@ const Reactions: Component<Props> = (props): JSX.Element => {
         class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
       >
         <FiThumbsUp
-          size={26}
+          size={useIsNarrow() ? 21 : 26}
           fill={hasPositiveUserReaction() ? "white" : ""}
           fill-opacity={hasPositiveUserReaction() ? "0.7" : "0"}
         />
@@ -77,7 +78,7 @@ const Reactions: Component<Props> = (props): JSX.Element => {
         class='cursor-pointer hover:text-slate-200 hover:scale-105 active:scale-95 transition-all'
       >
         <FiThumbsDown
-          size={26}
+          size={useIsNarrow() ? 21 : 26}
           fill={hasNegativeUserReaction() ? "white" : ""}
           fill-opacity={hasNegativeUserReaction() ? "0.7" : "0"}
         />

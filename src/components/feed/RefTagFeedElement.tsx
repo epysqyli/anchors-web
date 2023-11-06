@@ -22,7 +22,7 @@ const RefTagFeedElement: Component<Props> = (props) => {
   };
 
   const narrowFallback: JSX.Element = (
-    <div class='w-[80vw] h-full bg-slate-600 mr-2 rounded animate-pulse'></div>
+    <div class='w-[90vw] h-full bg-slate-600 mr-2 rounded animate-pulse'></div>
   );
 
   const wideFallback: JSX.Element = (
@@ -89,11 +89,11 @@ const RefTagFeedElement: Component<Props> = (props) => {
   if (useIsNarrow()) {
     return (
       <Show when={!props.isLoading()} fallback={narrowFallback}>
-        <div class='flex flex-col justify-between w-[80vw] h-full mr-2 rounded bg-slate-700'>
+        <div class='flex flex-col justify-between w-[90vw] h-full mr-2 rounded bg-slate-700 bg-opacity-50'>
           <div class='text-center w-5/6 mx-auto break-all text-sm py-4'>
             {props.tag.primaryInfo == ""
-              ? shrinkContent(props.tag.url, 35)
-              : shrinkContent(props.tag.primaryInfo, 35)}
+              ? shrinkContent(props.tag.url, 40)
+              : shrinkContent(props.tag.primaryInfo, 40)}
           </div>
 
           {refTagActions}

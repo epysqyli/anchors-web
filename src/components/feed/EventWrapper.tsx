@@ -19,7 +19,7 @@ import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
-import { Accessor, Component, For, Show, createContext, createSignal, onMount, useContext } from "solid-js";
+import { Accessor, Component, Show, createContext, createSignal, onMount, useContext } from "solid-js";
 
 interface Props {
   event: IEnrichedEvent;
@@ -127,16 +127,49 @@ const EventWrapper: Component<Props> = (props) => {
   return (
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
-        <div class='snap-start h-[90dvh] text-white pt-4 mx-auto px-2'>
-          <div class='h-3/5 mx-auto py-2 pr-5 overflow-auto break-words'>{props.event.content}</div>
+        <div class='snap-start h-[90dvh] text-white pt-2 mx-auto px-2'>
+          <div class='h-3/5 text-slate-100 mx-auto p-2 pr-5 overflow-auto break-words bg-slate-800 bg-opacity-40 rounded'>
+            {props.event.content}
+          </div>
 
           <div class='h-1/5 flex snap-x snap-mandatory overflow-x-scroll'>
             <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 
-          <div class='border h-[10%]'>user - reactions - comments</div>
+          <div class='h-[10%] flex items-center justify-around'>
+            <EventAuthor
+              name={shrinkContent(props.event.name, 15)}
+              about={props.event.about}
+              picture={props.event.picture}
+              pubKey={props.event.pubkey}
+              layout='h'
+            />
 
-          <div class='border h-[10%]'>created_at - link to event - repost</div>
+            <Reactions event={props.event} />
+
+            <Show
+              when={!isLoading()}
+              fallback={
+                <div class='relative rounded py-5 w-1/12 animate-pulse'>
+                  <VsCommentDiscussion class='text-slate-500 mx-auto' size={28} />
+                </div>
+              }
+            >
+              <div
+                onClick={openCommentsPopup}
+                class='relative rounded hover:bg-slate-600 active:bg-slate-700 px-2'
+              >
+                <VsCommentDiscussion class='text-slate-400 mx-auto' size={22} />
+                <div class='text-sm text-center text-slate-400 tracking-tighter mt-1'>{commentsCount()}</div>
+              </div>
+            </Show>
+          </div>
+
+          <div class='h-[10%] flex items-center justify-around gap-x-3'>
+            <div class='text-sm text-slate-400 w-1/3 text-center'>{parseDate(props.event.created_at)}</div>
+            <EventAnchor nostrEventID={props.event.id} />
+            <FiTrendingUp class='text-slate-400 w-1/4' size={26} />
+          </div>
         </div>
         <div class='h-[10dvh]'></div>
       </Show>

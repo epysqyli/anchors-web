@@ -6,7 +6,7 @@ import { Component, JSX } from "solid-js";
 const RefTagIcon: Component<{ category: string }> = (props): JSX.Element => {
   switch (props.category) {
     case "generic":
-      return <FiLink size={32} class='mx-auto' />;
+      return <FiLink size={30} class='mx-auto' />;
 
     case "book":
       return <RiDocumentBook2Line size={32} class='mx-auto text-amber-300' />;
