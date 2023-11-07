@@ -11,6 +11,7 @@ import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { VsCommentDiscussion } from "solid-icons/vs";
+import menuTogglerContext from "~/contexts/menuToggle";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { fetchMovie } from "~/lib/external-services/tmdb";
@@ -34,6 +35,7 @@ export const CommentsContext = createContext<{
 }>();
 
 const EventWrapper: Component<Props> = (props) => {
+  const menuToggler = useContext(menuTogglerContext);
   const { relay, authMode } = useContext(RelayContext);
 
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
@@ -51,6 +53,7 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   const openUserPopup = (): void => {
+    menuToggler.toggleMenu();
     setShowUserPopup(true);
   };
 
@@ -128,7 +131,8 @@ const EventWrapper: Component<Props> = (props) => {
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
         <div class='snap-start h-[90dvh] text-white pt-2 mx-auto px-2'>
-          <div class='h-3/5 text-slate-100 mx-auto p-2 pr-5 overflow-auto break-words bg-slate-800 bg-opacity-40 rounded'>
+          <div class='h-3/5 text-neutral-300 mx-auto p-2 pr-5 overflow-auto tracking-tight
+                      break-words bg-slate-800 bg-opacity-40 rounded'>
             {props.event.content}
           </div>
 
@@ -137,13 +141,15 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
 
           <div class='h-[10%] flex items-center justify-around'>
-            <EventAuthor
-              name={shrinkContent(props.event.name, 15)}
-              about={props.event.about}
-              picture={props.event.picture}
-              pubKey={props.event.pubkey}
-              layout='h'
-            />
+            <div onClick={openUserPopup}>
+              <EventAuthor
+                name={shrinkContent(props.event.name, 15)}
+                about={props.event.about}
+                picture={props.event.picture}
+                pubKey={props.event.pubkey}
+                layout='h'
+              />
+            </div>
 
             <Reactions event={props.event} />
 
@@ -172,6 +178,17 @@ const EventWrapper: Component<Props> = (props) => {
           </div>
         </div>
         <div class='h-[10dvh]'></div>
+
+        <div class='absolute top-0 left-0 z-10'>
+          <Popup autoClose={false} show={showUserPopup} setShow={setShowUserPopup} largeHeight>
+            <UserPopup
+              about={props.event.about}
+              picture={props.event.picture}
+              pubkey={props.event.pubkey}
+              name={props.event.name}
+            />
+          </Popup>
+        </div>
       </Show>
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>

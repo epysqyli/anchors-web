@@ -1,5 +1,6 @@
 import OverlayContext from "~/contexts/overlay";
 import { Motion, Presence } from "@motionone/solid";
+import menuTogglerContext from "~/contexts/menuToggle";
 import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import { Accessor, Component, JSX, Setter, Show, createEffect, createSignal, useContext } from "solid-js";
 
@@ -14,6 +15,7 @@ interface Props {
 
 const Popup: Component<Props> = (props) => {
   const overlayContext = useContext(OverlayContext);
+  const menuToggler = useContext(menuTogglerContext);
   const [overlayAlreadyApplied, setOverlayAlreadyApplied] = createSignal<boolean>(false);
 
   if (props.autoClose) {
@@ -50,6 +52,7 @@ const Popup: Component<Props> = (props) => {
 
     overlayContext.toggleOverlay();
     setOverlayAlreadyApplied(false);
+    menuToggler.toggleMenu();
   };
 
   const closeButton = (): JSX.Element => {
@@ -57,7 +60,8 @@ const Popup: Component<Props> = (props) => {
       return (
         <div
           onClick={closePopup}
-          class='absolute -top-2 -right-2 text-white cursor-pointer hover:scale-105 active:scale-95'
+          class='absolute top-5 -right-[95vw] xl:-top-2 xl:-right-2 text-white
+                 cursor-pointer hover:scale-105 active:scale-95 z-20'
         >
           <RiSystemCloseCircleFill size={28} />
         </div>
