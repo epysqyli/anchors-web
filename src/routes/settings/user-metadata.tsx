@@ -69,7 +69,7 @@ const UserMetadata: VoidComponent = () => {
       </h1>
 
       <Show when={!isLoading()} fallback={<LoadingFallback />}>
-        <form onSubmit={handleSubmit} class='mx-auto w-5/6 md:w-2/5'>
+        <form onSubmit={handleSubmit} class='mx-auto w-11/12 xl:w-2/5'>
           <div class='py-3 px-5 mb-10'>
             <label class='text-slate-200 text-lg select-none text-center block mb-3 p-2 rounded bg-slate-600 w-1/3'>
               name
