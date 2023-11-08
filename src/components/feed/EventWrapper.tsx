@@ -58,6 +58,7 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   const openCommentsPopup = (): void => {
+    menuToggler.toggleMenu();
     setShowCommentsPopup(true);
   };
 
@@ -187,6 +188,20 @@ const EventWrapper: Component<Props> = (props) => {
               pubkey={props.event.pubkey}
               name={props.event.name}
             />
+          </Popup>
+        </div>
+
+        <div class='absolute top-0 left-0 z-10'>
+          <Popup autoClose={false} show={showCommentsPopup} setShow={setShowCommentsPopup} largeHeight>
+            <CommentsContext.Provider
+              value={{
+                rootEvent: props.event,
+                fetchAndSetCommentsStructure: fetchAndSetCommentsStructure,
+                isCommentTreeLoading: isCommentTreeLoading
+              }}
+            >
+              <CommmentsPopup commentsStructure={commentsStructure()} />
+            </CommentsContext.Provider>
           </Popup>
         </div>
       </Show>
