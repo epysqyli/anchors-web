@@ -1,5 +1,7 @@
 import Menu from "~/components/shared/Menu";
 import OverlayContext from "~/contexts/overlay";
+import { Rerun } from "@solid-primitives/keyed";
+import { useBeforeLeave, useIsRouting } from "@solidjs/router";
 import { Motion, Presence } from "@motionone/solid";
 import menuTogglerContext from "~/contexts/menuToggle";
 import { Accessor, Component, JSX, Show, useContext } from "solid-js";
@@ -11,8 +13,15 @@ interface Props {
 }
 
 const NarrowLayout: Component<Props> = (props) => {
+  const isRouting = useIsRouting();
+
   const overlay = useContext(OverlayContext);
-  const menuToggle = useContext(menuTogglerContext);
+  const menuToggler = useContext(menuTogglerContext);
+
+  useBeforeLeave(() => {
+    overlay.showOverlay() && overlay.toggleOverlay();
+    !menuToggler.showMenuButton() && menuToggler.toggleMenu();
+  });
 
   return (
     <div
@@ -33,7 +42,7 @@ const NarrowLayout: Component<Props> = (props) => {
         </Show>
       </Presence>
 
-      <Show when={menuToggle.showMenuButton()}>
+      <Show when={menuToggler.showMenuButton()}>
         <Motion.button
           animate={{
             width: ["1rem", "3rem"],
@@ -49,7 +58,7 @@ const NarrowLayout: Component<Props> = (props) => {
         ></Motion.button>
       </Show>
 
-      {props.children}
+      <Rerun on={isRouting()}>{props.children}</Rerun>
       {overlay.showOverlay() ? overlay.div : <></>}
     </div>
   );
