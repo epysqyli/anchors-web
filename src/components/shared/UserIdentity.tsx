@@ -16,6 +16,8 @@ import {
   useContext
 } from "solid-js";
 import LoadingFallback from "../feed/LoadingFallback";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
+import LoadingPoints from "../feed/LoadingPoints";
 
 interface Props {
   initialLoad: Accessor<boolean>;
@@ -27,7 +29,6 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
   const { relay, authMode, guestPublicKey } = useContext(RelayContext);
   const [userMetadata, setUserMetadata] = createSignal<IUserMetadata>();
   const [inputPublicKey, setInputPublicKey] = createSignal<string>("");
-  const [privateKeyModeTemplate, setPrivateKeyModeTemplate] = createSignal<JSX.Element>(<></>);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   const handleSubmit = (e: Event): void => {
@@ -45,7 +46,7 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
       <h2 class='text-2xl mb-10 font-bold'>Welcome to Anchors</h2>
       <p class='underline underline-offset-4'>No key pair detected from Nostr compatible extensions</p>
       <div class='mt-5 mb-10 text-justify'>
-        <div class='text-base text-left break-all w-3/4 mx-auto mt-10'>
+        <div class='text-base text-left break-words w-3/4 mx-auto mt-10'>
           {guestPublicKey.get() ? (
             <>
               <p>Your already set guest public key is:</p>
@@ -85,6 +86,7 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
 
   onMount(async () => {
     setIsLoading(true);
+
     if (!props.initialLoad()) {
       setIsLoading(false);
       return;
@@ -94,21 +96,6 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
 
     if (authMode.get() == "private") {
       setUserMetadata(await relay.fetchUserMetadata());
-
-      setPrivateKeyModeTemplate(
-        <div>
-          <div>
-            <EventAuthor
-              about={userMetadata()!.about}
-              layout='v'
-              name={userMetadata()!.name}
-              picture={userMetadata()!.picture}
-              pubKey={relay.userPubKey!}
-            />
-          </div>
-          <p class='text-lg mt-5 font-bold'>Welcome back to Anchors</p>
-        </div>
-      );
     }
 
     setIsLoading(false);
@@ -121,15 +108,57 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
   });
 
   return (
-    <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/2'>
-      <Popup autoClose={false} show={props.initialLoad} setShow={props.setInitialLoad} largeHeight>
-        <Show when={!isLoading()} fallback={<LoadingFallback />}>
-          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
-            {authMode.get() == "private" ? privateKeyModeTemplate() : guestModeTemplate}
-          </div>
-        </Show>
-      </Popup>
-    </div>
+    <>
+      <Show when={useIsNarrow() != undefined && useIsNarrow()}>
+        <div class='absolute top-0 left-0 z-10'>
+          <Popup autoClose={false} show={props.initialLoad} setShow={props.setInitialLoad}>
+            <Show when={!isLoading()} fallback={<LoadingPoints />}>
+              <div class='h-screen w-screen pt-20 bg-slate-800 bg-opacity-95'>
+                {authMode.get() == "private" ? (
+                  <div class='h-full'>
+                    <EventAuthor
+                      about={userMetadata()?.about ?? ""}
+                      layout='v'
+                      name={userMetadata()?.name ?? ""}
+                      picture={userMetadata()?.picture ?? ""}
+                      pubKey={relay.userPubKey!}
+                    />
+                    <p class='text-lg mt-5 font-bold'>Welcome back to Anchors</p>
+                  </div>
+                ) : (
+                  guestModeTemplate
+                )}
+              </div>
+            </Show>
+          </Popup>
+        </div>
+      </Show>
+
+      <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
+        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/2'>
+          <Popup autoClose={false} show={props.initialLoad} setShow={props.setInitialLoad} largeHeight>
+            <Show when={!isLoading()} fallback={<LoadingFallback />}>
+              <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
+                {authMode.get() == "private" ? (
+                  <div>
+                    <EventAuthor
+                      about={userMetadata()?.about ?? ""}
+                      layout='v'
+                      name={userMetadata()?.name ?? ""}
+                      picture={userMetadata()?.picture ?? ""}
+                      pubKey={relay.userPubKey!}
+                    />
+                    <p class='text-lg mt-5 font-bold'>Welcome back to Anchors</p>
+                  </div>
+                ) : (
+                  guestModeTemplate
+                )}
+              </div>
+            </Show>
+          </Popup>
+        </div>
+      </Show>
+    </>
   );
 };
 

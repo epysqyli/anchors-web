@@ -43,6 +43,8 @@ const Root: Component<{}> = () => {
                   <Routes>
                     <FileRoutes />
                   </Routes>
+
+                  <UserIdentity initialLoad={initialLoad} setInitialLoad={setInitialLoad} />
                 </NarrowLayout>
               </Show>
 

@@ -52,7 +52,7 @@ const Popup: Component<Props> = (props) => {
 
     overlayContext.toggleOverlay();
     setOverlayAlreadyApplied(false);
-    menuToggler.toggleMenuButton();
+    !menuToggler.showMenuButton() && menuToggler.toggleMenuButton();
   };
 
   const closeButton = (): JSX.Element => {
