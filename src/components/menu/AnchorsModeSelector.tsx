@@ -1,15 +1,18 @@
 import { Motion } from "@motionone/solid";
 import { BsGlobe2 } from "solid-icons/bs";
 import { FiAnchor } from "solid-icons/fi";
-import { JSX, VoidComponent, createSignal, useContext } from "solid-js";
 import { RelayContext } from "~/contexts/relay";
+import menuTogglerContext from "~/contexts/menuToggle";
+import { JSX, VoidComponent, createSignal, useContext } from "solid-js";
 
 const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
   const { anchorsMode } = useContext(RelayContext);
+  const menuToggleCtx = useContext(menuTogglerContext);
 
   const toggleAnchorsMode = (): void => {
     toggleSwitchMsg();
     anchorsMode.set(!anchorsMode.get());
+    menuToggleCtx.toggleMobileMenu();
   };
 
   const [showSwitchMsg, setShowSwitchMsg] = createSignal<boolean>(false);

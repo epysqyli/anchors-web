@@ -19,6 +19,7 @@ const NarrowLayout: Component<Props> = (props) => {
   useBeforeLeave(() => {
     overlay.showOverlay() && overlay.toggleOverlay();
     !menuToggler.showMenuButton() && menuToggler.toggleMenuButton();
+    menuToggler.showMobileMenu() && menuToggler.toggleMobileMenu();
   });
 
   return (
