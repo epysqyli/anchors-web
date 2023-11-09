@@ -129,7 +129,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
         <Show when={!isLoading()} fallback={<LoadingPoints />}>
           <div
             class='xl:grid xl:grid-cols-3 gap-x-3 h-full overflow-y-scroll px-5 xl:px-0
-                   custom-scrollbar relative snap-mandatory snap-y xl:snap-none'
+                   xl:custom-scrollbar relative snap-mandatory snap-y xl:snap-none'
           >
             <For each={Object.entries(relayList())}>
               {(relays) => (
@@ -144,7 +144,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                     {relayBoxTitle[relays[0] as keyof RelayBoxTitle]}
                   </h2>
 
-                  <div class='grow py-5 overflow-y-scroll custom-scrollbar h-[1vh]'>
+                  <div class='grow py-5 overflow-y-scroll xl:custom-scrollbar h-[1vh]'>
                     <For each={relays[1]}>
                       {(relayAddress) => (
                         <div

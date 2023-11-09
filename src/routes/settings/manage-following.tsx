@@ -65,7 +65,7 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
       </h1>
 
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
-        <div class='h-4/5 w-11/12 xl:w-5/6 mx-auto p-3 overflow-y-auto custom-scrollbar grid grid-cols-1 xl:grid-cols-3 gap-5'>
+        <div class='h-4/5 w-11/12 xl:w-5/6 mx-auto p-3 overflow-y-auto xl:custom-scrollbar grid grid-cols-1 xl:grid-cols-3 gap-5'>
           <For each={following()}>
             {(flw) => (
               <div

@@ -1,7 +1,7 @@
+import { A } from "solid-start";
 import { VsSave } from "solid-icons/vs";
 import { RelayContext } from "~/contexts/relay";
 import { JSX, VoidComponent, createSignal, useContext } from "solid-js";
-import { A } from "solid-start";
 
 const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
   const { guestPublicKey } = useContext(RelayContext);
@@ -24,7 +24,7 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
         Update your guest public key
       </h1>
 
-      <div class='xl:w-4/5 2xl:w-3/5 mx-auto h-4/5 overflow-y-scroll custom-scrollbar px-10'>
+      <div class='xl:w-4/5 2xl:w-3/5 mx-auto h-4/5 overflow-y-scroll xl:custom-scrollbar px-10'>
         <div class='text-lg text-slate-300'>
           {guestPublicKey.get() ? (
             <div>
