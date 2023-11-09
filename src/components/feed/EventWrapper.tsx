@@ -131,9 +131,11 @@ const EventWrapper: Component<Props> = (props) => {
   return (
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
-        <div class='snap-start h-[90dvh] text-white pt-2 mx-auto px-2'>
-          <div class='h-3/5 text-neutral-300 mx-auto p-2 pr-5 overflow-auto tracking-tight
-                      break-words bg-slate-800 bg-opacity-40 rounded'>
+        <div ref={handleEventHtmlRef} class='snap-start h-[90dvh] text-white pt-2 mx-auto px-2'>
+          <div
+            class='h-3/5 text-neutral-300 mx-auto p-2 pr-5 overflow-auto tracking-tight
+                      break-words bg-slate-800 bg-opacity-40 rounded'
+          >
             {props.event.content}
           </div>
 

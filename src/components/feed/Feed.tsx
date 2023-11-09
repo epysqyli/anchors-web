@@ -63,6 +63,15 @@ const Feed: Component<Props> = (props): JSX.Element => {
   return (
     <>
       <Show when={useIsNarrow() != undefined && useIsNarrow()}>
+        <div class='absolute bottom-[9dvh] right-5'>
+          <NewEventsPopup
+            topEventRef={eventHtmlRefs()[0]}
+            showPopup={props.showPopup!}
+            setShowPopup={props.setShowPopup!}
+            mergeEnrichedEvents={props.mergeEnrichedEvents!}
+          />
+        </div>
+
         <div class='snap-y snap-mandatory overflow-scroll overflow-x-hidden h-[100vh]'>
           <For each={props.enrichedEvents()}>
             {(nostrEvent) => <EventWrapper addHtmlRef={addHtmlRef} event={nostrEvent} />}
