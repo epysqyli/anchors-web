@@ -6,20 +6,6 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-/* .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  border-radius: 5px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(100, 116, 139, 0.5);
-  border-radius: 5px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(100, 116, 139);
-} */
-
 html {
   -moz-text-size-adjust: none;
   -webkit-text-size-adjust: none;
