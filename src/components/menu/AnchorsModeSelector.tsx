@@ -12,7 +12,6 @@ const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
   const toggleAnchorsMode = (): void => {
     toggleSwitchMsg();
     anchorsMode.set(!anchorsMode.get());
-    menuToggleCtx.toggleMobileMenu();
   };
 
   const [showSwitchMsg, setShowSwitchMsg] = createSignal<boolean>(false);
