@@ -37,7 +37,7 @@ const NarrowLayout: Component<Props> = (props) => {
             transition={{ easing: "ease-out" }}
             exit={{ scale: 1.05, opacity: 0 }}
           >
-            <Menu isNarrow={true} toggleMenu={props.toggleMenu} />
+            <Menu toggleMenu={props.toggleMenu} />
           </Motion.div>
         </Show>
       </Presence>
