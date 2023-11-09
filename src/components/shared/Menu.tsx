@@ -2,19 +2,18 @@ import { A } from "@solidjs/router";
 import { FiEdit } from "solid-icons/fi";
 import { useLocation } from "solid-start";
 import { BsSearch } from "solid-icons/bs";
-import { Component, Show } from "solid-js";
 import RelaySelector from "../menu/RelaySelector";
-import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { IoSettingsOutline } from "solid-icons/io";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
+import menuTogglerContext from "~/contexts/menuToggle";
 import FollowingSelector from "../menu/FollowingSelector";
 import AnchorsModeSelector from "../menu/AnchorsModeSelector";
+import { JSX, Show, VoidComponent, useContext } from "solid-js";
 
-interface Props {
-  toggleMenu: () => void; // handle for mobile view
-}
-
-const Menu: Component<Props> = (props) => {
+const Menu: VoidComponent = (): JSX.Element => {
   const location = useLocation();
+
+  const menuToggleCtx = useContext(menuTogglerContext);
 
   const actionStyle = `text-neutral-300 w-5/6 2xl:w-4/5 2xl:w-3/4 mx-auto my-3 select-none
                        md:bg-neutral-700 md:bg-opacity-25 md:px-5 md:py-5 p-4 transition cursor-pointer 
@@ -52,21 +51,21 @@ const Menu: Component<Props> = (props) => {
               <RelaySelector />
             </div>
 
-            <A onClick={props.toggleMenu} href='/write'>
+            <A onClick={menuToggleCtx.toggleMobileMenu} href='/write'>
               <div class='flex items-center justify-around mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
                 <div class='group-hover:scale-95'>write</div>
                 <FiEdit size={26} class='md:group-hover:animate-pulse' />
               </div>
             </A>
 
-            <A onClick={props.toggleMenu} href='/search'>
+            <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
               <div class='flex items-center justify-around mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
                 <div class='group-hover:scale-95'>search</div>
                 <BsSearch size={26} class='md:group-hover:animate-pulse' />
               </div>
             </A>
 
-            <A onClick={props.toggleMenu} href='/settings'>
+            <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
               <div class='flex items-center justify-around mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
                 <div class='group-hover:scale-95'>profile</div>
                 <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
@@ -89,21 +88,21 @@ const Menu: Component<Props> = (props) => {
             <RelaySelector />
           </div>
 
-          <A onClick={props.toggleMenu} href='/write'>
+          <A onClick={menuToggleCtx.toggleMobileMenu} href='/write'>
             <div class={active("/write") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>write</div>
               <FiEdit size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
 
-          <A onClick={props.toggleMenu} href='/search'>
+          <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
             <div class={active("/search") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>search</div>
               <BsSearch size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
 
-          <A onClick={props.toggleMenu} href='/settings'>
+          <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
             <div class={active("/settings") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>profile</div>
               <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />

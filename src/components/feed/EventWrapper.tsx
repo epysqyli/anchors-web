@@ -53,12 +53,12 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   const openUserPopup = (): void => {
-    menuToggler.toggleMenu();
+    menuToggler.toggleMenuButton();
     setShowUserPopup(true);
   };
 
   const openCommentsPopup = (): void => {
-    menuToggler.toggleMenu();
+    menuToggler.toggleMenuButton();
     setShowCommentsPopup(true);
   };
 

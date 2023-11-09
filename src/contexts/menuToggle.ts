@@ -1,18 +1,27 @@
 import { Accessor, createContext, createSignal } from "solid-js";
 
+const [showMobileMenu, setShowMobileMenu] = createSignal<boolean>(false);
+const toggleMobileMenu = (): void => {
+  setShowMobileMenu(!showMobileMenu());
+};
+
 const [showMenuButton, setShowMenuButton] = createSignal<boolean>(true);
-const toggleMenu = (): void => {
+const toggleMenuButton = (): void => {
   setShowMenuButton(!showMenuButton());
 };
 
 interface MenuTogglerInterface {
+  showMobileMenu: Accessor<boolean>;
   showMenuButton: Accessor<boolean>;
-  toggleMenu(): void;
+  toggleMobileMenu(): void;
+  toggleMenuButton(): void;
 }
 
 const menuToggler: MenuTogglerInterface = {
+  showMobileMenu: showMobileMenu,
   showMenuButton: showMenuButton,
-  toggleMenu: toggleMenu
+  toggleMenuButton: toggleMenuButton,
+  toggleMobileMenu: toggleMobileMenu
 };
 
 const menuTogglerContext = createContext<MenuTogglerInterface>(menuToggler);

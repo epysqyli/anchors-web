@@ -1,19 +1,21 @@
 import Menu from "~/components/shared/Menu";
-import { Component, JSX, useContext } from "solid-js";
-import { Rerun } from "@solid-primitives/keyed";
-import { Motion, Presence } from "@motionone/solid";
 import { useIsRouting } from "solid-start";
+import { Rerun } from "@solid-primitives/keyed";
 import OverlayContext from "~/contexts/overlay";
 import { useBeforeLeave } from "@solidjs/router";
+import { Motion, Presence } from "@motionone/solid";
+import { Component, JSX, useContext } from "solid-js";
+import menuTogglerContext from "~/contexts/menuToggle";
 
 interface Props {
   children: JSX.Element;
-  toggleMenu: () => void;
 }
 
 const WideLayout: Component<Props> = (props) => {
   const isRouting = useIsRouting();
+
   const overlay = useContext(OverlayContext);
+  const menuToggleCtx = useContext(menuTogglerContext);
 
   useBeforeLeave(() => {
     overlay.showOverlay() && overlay.toggleOverlay();
@@ -22,7 +24,7 @@ const WideLayout: Component<Props> = (props) => {
   return (
     <div class='h-full gap-x-3 px-2 md:gap-x-2 md:px-2 grid grid-cols-5 items-center'>
       <div class='h-[98vh] col-span-1'>
-        <Menu isNarrow={false} toggleMenu={props.toggleMenu} />
+        <Menu />
       </div>
 
       <Presence exitBeforeEnter>

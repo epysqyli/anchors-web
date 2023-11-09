@@ -1,10 +1,11 @@
 // @refresh reload
 import "./root.css";
+
 import { Routes } from "@solidjs/router";
-import { Event, EventTemplate } from "nostr-tools";
 import WideLayout from "./layouts/WideLayout";
 import { RelayProvider } from "./contexts/relay";
 import NarrowLayout from "./layouts/NarrowLayout";
+import { Event, EventTemplate } from "nostr-tools";
 import { useIsNarrow } from "./hooks/useMediaQuery";
 import { ErrorBoundary } from "solid-start/error-boundary";
 import UserIdentity from "./components/shared/UserIdentity";
@@ -22,10 +23,6 @@ declare global {
 
 const Root: Component<{}> = () => {
   const [initialLoad, setInitialLoad] = createSignal<boolean>(true);
-  const [showMenu, setShowMenu] = createSignal<boolean>(false);
-  const toggleMenu = (): void => {
-    setShowMenu(!showMenu());
-  };
 
   return (
     <Html lang='en'>
@@ -42,7 +39,7 @@ const Root: Component<{}> = () => {
           <ErrorBoundary>
             <RelayProvider>
               <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
-                <NarrowLayout showMenu={showMenu} toggleMenu={toggleMenu}>
+                <NarrowLayout>
                   <Routes>
                     <FileRoutes />
                   </Routes>
@@ -50,7 +47,7 @@ const Root: Component<{}> = () => {
               </Show>
 
               <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
-                <WideLayout toggleMenu={toggleMenu}>
+                <WideLayout>
                   <Routes>
                     <FileRoutes />
                   </Routes>

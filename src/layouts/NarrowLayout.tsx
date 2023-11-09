@@ -1,15 +1,13 @@
 import Menu from "~/components/shared/Menu";
 import OverlayContext from "~/contexts/overlay";
 import { Rerun } from "@solid-primitives/keyed";
-import { useBeforeLeave, useIsRouting } from "@solidjs/router";
 import { Motion, Presence } from "@motionone/solid";
 import menuTogglerContext from "~/contexts/menuToggle";
-import { Accessor, Component, JSX, Show, useContext } from "solid-js";
+import { Component, JSX, Show, useContext } from "solid-js";
+import { useBeforeLeave, useIsRouting } from "@solidjs/router";
 
 interface Props {
   children: JSX.Element;
-  toggleMenu: () => void;
-  showMenu: Accessor<boolean>;
 }
 
 const NarrowLayout: Component<Props> = (props) => {
@@ -20,7 +18,7 @@ const NarrowLayout: Component<Props> = (props) => {
 
   useBeforeLeave(() => {
     overlay.showOverlay() && overlay.toggleOverlay();
-    !menuToggler.showMenuButton() && menuToggler.toggleMenu();
+    !menuToggler.showMenuButton() && menuToggler.toggleMenuButton();
   });
 
   return (
@@ -29,7 +27,7 @@ const NarrowLayout: Component<Props> = (props) => {
        via-slate-700 via-20% to-gray-800 to-80% relative'
     >
       <Presence exitBeforeEnter>
-        <Show when={props.showMenu()}>
+        <Show when={menuToggler.showMobileMenu()}>
           <Motion.div
             class='fixed top-0 left-0 w-screen z-10'
             initial={{ scale: 1.05, opacity: 0.5 }}
@@ -37,7 +35,7 @@ const NarrowLayout: Component<Props> = (props) => {
             transition={{ easing: "ease-out" }}
             exit={{ scale: 1.05, opacity: 0 }}
           >
-            <Menu toggleMenu={props.toggleMenu} />
+            <Menu />
           </Motion.div>
         </Show>
       </Presence>
@@ -54,7 +52,7 @@ const NarrowLayout: Component<Props> = (props) => {
                 fixed left-1/2 -translate-x-1/2 bottom-4 select-none
                 active:scale-95 active:border-orange-200 active:bg-orange-50
                 transition-transform shadow-lg shadow-slate-900 z-10'
-          onclick={props.toggleMenu}
+          onclick={menuToggler.toggleMobileMenu}
         ></Motion.button>
       </Show>
 

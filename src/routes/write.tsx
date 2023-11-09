@@ -37,7 +37,7 @@ const Write: Component<{}> = () => {
 
   const [showRefMenu, setShowRefMenu] = createSignal<boolean>(false);
   const toggleBetweenWriteAndRefs = (): void => {
-    menuToggle.toggleMenu();
+    menuToggle.toggleMenuButton();
     setShowRefMenu(!showRefMenu());
   };
 
