@@ -1,7 +1,6 @@
 import { A } from "@solidjs/router";
 import { FiEdit } from "solid-icons/fi";
 import { useLocation } from "solid-start";
-import { BsSearch } from "solid-icons/bs";
 import RelaySelector from "../menu/RelaySelector";
 import { IoSettingsOutline } from "solid-icons/io";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
@@ -58,12 +57,12 @@ const Menu: VoidComponent = (): JSX.Element => {
               </div>
             </A>
 
-            <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
+            {/* <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
               <div class='flex items-center justify-around mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
                 <div class='group-hover:scale-95'>search</div>
                 <BsSearch size={26} class='md:group-hover:animate-pulse' />
               </div>
-            </A>
+            </A> */}
 
             <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
               <div class='flex items-center justify-around mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
@@ -95,12 +94,12 @@ const Menu: VoidComponent = (): JSX.Element => {
             </div>
           </A>
 
-          <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
+          {/* <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
             <div class={active("/search") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>search</div>
               <BsSearch size={26} class='md:group-hover:animate-pulse' />
             </div>
-          </A>
+          </A> */}
 
           <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
             <div class={active("/settings") ? selectedFlexActionStyle : flexActionStyle}>
