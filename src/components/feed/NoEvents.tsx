@@ -15,13 +15,9 @@ const NoEvents: VoidComponent = (): JSX.Element => (
 
     <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
       <div class='relative snap-start h-full text-slate-300'>
-        <div
-          class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-             p-20 border rounded-full border-slate-600 text-slate-300
-             hover:shadow-lg shadow-slate-500'
-        >
+        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-20 text-neutral-300'>
           <CgFeed size={80} class='mx-auto' stroke-width={1} />
-          <p class='text-center mt-10 text-lg select-none w-1/2 mx-auto'>No more posts in this feed</p>
+          <p class='text-center mt-10 text-lg select-none mx-auto'>No more posts in this feed</p>
         </div>
       </div>
     </Show>
