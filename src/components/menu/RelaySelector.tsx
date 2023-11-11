@@ -10,7 +10,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
 
   const isCurrentRelay = (address: string): boolean => searchParams.relayAddress == address;
   const baseStyle = "my-1 py-1 pl-1 block rounded mx-auto text-base";
-  const selectedStyle = "bg-neutral-800 bg-opacity-80 text-neutral-300";
+  const selectedStyle = "bg-slate-500 xl:bg-neutral-800 bg-opacity-80 text-neutral-300";
 
   const [inputFieldRelayAddress, setInputFieldRelayAddress] = createSignal<string>("");
 
@@ -54,7 +54,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
             onchange={handleChange}
             type='text'
             placeholder='Enter a relay address'
-            class='block w-4/5 rounded focus:outline-none px-3 py-2 bg-neutral-800 text-neutral-200 caret-neutral-400'
+            class='block w-4/5 rounded focus:outline-none px-3 py-2 bg-slate-600 xl:bg-neutral-800 text-neutral-200 caret-neutral-400'
           />
 
           <A

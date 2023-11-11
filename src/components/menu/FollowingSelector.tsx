@@ -20,7 +20,7 @@ const FollowingSelector = (): JSX.Element => {
   };
 
   const isFollowingStyle =
-    "w-fit text-base rounded px-3 py-1 text-neutral-300 bg-neutral-700 bg-opacity-50";
+    "w-fit text-base rounded px-3 py-1 text-neutral-300 bg-slate-500 xl:bg-neutral-700 bg-opacity-50";
   const isNotFollowingStyle =
     "w-fit text-base rounded px-3 py-1 text-neutral-500 bg-neutral-800 hover:text-neutral-400";
 
