@@ -2,12 +2,10 @@ import { Motion } from "@motionone/solid";
 import { BsGlobe2 } from "solid-icons/bs";
 import { FiAnchor } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
-import menuTogglerContext from "~/contexts/menuToggle";
 import { JSX, VoidComponent, createSignal, useContext } from "solid-js";
 
 const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
   const { anchorsMode } = useContext(RelayContext);
-  const menuToggleCtx = useContext(menuTogglerContext);
 
   const toggleAnchorsMode = (): void => {
     toggleSwitchMsg();
@@ -26,8 +24,8 @@ const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
         onMouseEnter={toggleSwitchMsg}
         onMouseLeave={toggleSwitchMsg}
         class='text-slate-100 w-fit mx-auto cursor-pointer transition
-                   border-2 border-neutral-600 hover:bg-neutral-500
-                   hover:border-neutral-700 rounded-full p-3 active:bg-neutral-700'
+                   border-2 border-neutral-600 active:bg-slate-500 xl:hover:bg-neutral-500
+                   hover:border-neutral-700 rounded-full p-3 xl:active:bg-neutral-700'
       >
         {anchorsMode.get() ? (
           <Motion.div animate={{ scale: [0.7, 1] }}>
