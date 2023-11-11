@@ -172,7 +172,7 @@ const Write: Component<{}> = () => {
                 placeholder='Time to connect the dots'
                 class='block w-4/5 2xl:w-2/3 placeholder:text-center placeholder:text-lg text-lg
                        focus:outline-none bg-transparent mx-auto text-slate-300
-                       caret-orange-200 resize-none custom-scrollbar px-5 py-2'
+                       caret-orange-200 resize-none xl:custom-scrollbar px-5 py-2'
                 rows={14}
                 onInput={updateContent}
                 value={nostrEvent().content}

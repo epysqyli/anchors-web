@@ -39,10 +39,10 @@ const Feed: Component<Props> = (props): JSX.Element => {
 
   const eventWrapperContainerStyle = (): string => {
     if (!overlay.showOverlay()) {
-      return "custom-scrollbar snap-y snap-mandatory overflow-x-hidden h-full";
+      return "xl:custom-scrollbar snap-y snap-mandatory overflow-x-hidden h-full";
     }
 
-    return "custom-scrollbar snap-y snap-mandatory overflow-hidden h-full";
+    return "xl:custom-scrollbar snap-y snap-mandatory overflow-hidden h-full";
   };
 
   const scrollPage = (direction: "up" | "down"): void => {

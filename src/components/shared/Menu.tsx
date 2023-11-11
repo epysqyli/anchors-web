@@ -75,7 +75,7 @@ const Menu: VoidComponent = (): JSX.Element => {
       </Show>
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
-        <div class='rounded-md text-lg relative overflow-y-auto bg-neutral-700 bg-opacity-50 h-full pt-10 custom-scrollbar'>
+        <div class='rounded-md text-lg relative overflow-y-auto bg-neutral-700 bg-opacity-50 h-full pt-10 xl:custom-scrollbar'>
           <div class='my-5 group w-fit mx-auto'>
             <AnchorsModeSelector />
           </div>

@@ -125,7 +125,7 @@ const WriteComment: Component<Props> = (props): JSX.Element => {
               <textarea
                 class='block placeholder:text-lg text-lg focus:outline-none bg-slate-500 bg-opacity-10 
             hover:bg-opacity-20 focus:bg-opacity-25 mx-auto text-slate-300 caret-orange-200 resize-none 
-            custom-scrollbar px-5 py-2 rounded-md w-full'
+            xl:custom-scrollbar px-5 py-2 rounded-md w-full'
                 rows={2}
                 onInput={updateContent}
                 placeholder='write your reply'

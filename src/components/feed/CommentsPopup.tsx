@@ -58,7 +58,7 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
         <div class='h-full w-full mx-auto'>
           <div class='rounded h-[95%] flex flex-col justify-between'>
             <div
-              class={`overflow-y-scroll custom-scrollbar pr-2 ${
+              class={`overflow-y-scroll xl:custom-scrollbar pr-2 ${
                 authMode.get() == "private" ? "h-4/5" : "h-full"
               }`}
             >
