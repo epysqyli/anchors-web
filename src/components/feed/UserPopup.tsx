@@ -1,4 +1,4 @@
-import { A, useIsRouting } from "@solidjs/router";
+import { A } from "@solidjs/router";
 import { Event } from "nostr-tools";
 import EventAuthor from "./EventAuthor";
 import LoadingFallback from "./LoadingFallback";
@@ -40,6 +40,8 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
       }
     }
   };
+
+  const showFollowAction = () => authMode.get() == "private" && relay.userPubKey != props.pubkey;
 
   onMount(async () => {
     setIsLoading(true);
@@ -96,7 +98,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
               </For>
             </Show>
 
-            {authMode.get() == "private" ? (
+            {showFollowAction() ? (
               <div class='mx-auto w-fit mt-10'>
                 <div
                   onClick={handleClick}
@@ -162,7 +164,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
             </div>
           </div>
 
-          {authMode.get() == "private" ? (
+          {showFollowAction() ? (
             <div class='mx-auto w-fit'>
               <div
                 onClick={handleClick}
