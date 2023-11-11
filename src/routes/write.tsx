@@ -190,12 +190,13 @@ const Write: Component<{}> = () => {
                 </div>
                 <div
                   onClick={toggleBetweenWriteAndRefs}
-                  class='xl:hidden text-slate-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
+                  class='xl:hidden relative text-slate-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
                 >
                   <VsReferences
                     size={40}
                     class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition'
                   />
+                  <span class='absolute top-7 right-16'>{refTags().length}</span>
                 </div>
               </div>
             </div>
