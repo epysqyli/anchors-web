@@ -1,3 +1,4 @@
+import NoEvents from "./NoEvents";
 import EventWrapper from "./EventWrapper";
 import NewEventsPopup from "./NewEventsPopup";
 import OverlayContext from "~/contexts/overlay";
@@ -5,7 +6,6 @@ import { BsCloudDownload } from "solid-icons/bs";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { Accessor, Component, For, JSX, Setter, Show, createSignal, onMount, useContext } from "solid-js";
-import NoEvents from "./NoEvents";
 
 interface EventHtmlRef {
   htmlRef: HTMLDivElement;
@@ -76,6 +76,19 @@ const Feed: Component<Props> = (props): JSX.Element => {
           <For each={props.enrichedEvents()}>
             {(nostrEvent) => <EventWrapper addHtmlRef={addHtmlRef} event={nostrEvent} />}
           </For>
+
+          <Show when={props.enrichedEvents().length && !props.isFeedOver()} fallback={<NoEvents />}>
+            <div class='relative snap-start h-[100dvh]'>
+              <div
+                onClick={props.loadOlderPosts}
+                class='w-[90vw] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                      py-20 text-neutral-300 bg-slate-700 active:bg-slate-600 rounded-3xl'
+              >
+                <BsCloudDownload size={60} class='mx-auto' />
+                <p class='text-center mt-10 text-lg select-none'>load older posts</p>
+              </div>
+            </div>
+          </Show>
         </div>
       </Show>
 
