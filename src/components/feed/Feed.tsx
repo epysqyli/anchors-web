@@ -19,8 +19,8 @@ interface Props {
   mergeEnrichedEvents?(): void;
   enrichedEvents: Accessor<IEnrichedEvent[]>;
   loadOlderPosts(): Promise<void>;
-  mostRecentOlderEventID: Accessor<string>;
   isFeedOver: Accessor<boolean>;
+  mostRecentOlderEventIndex: Accessor<number>;
 }
 
 const Feed: Component<Props> = (props): JSX.Element => {
@@ -53,11 +53,11 @@ const Feed: Component<Props> = (props): JSX.Element => {
   };
 
   onMount(async () => {
-    const mostRecentOlderEventRef = eventHtmlRefs().find(
-      (evtRef) => evtRef.eventID == props.mostRecentOlderEventID()
-    );
-
-    mostRecentOlderEventRef?.htmlRef.scrollIntoView({ behavior: "smooth" });
+    if (props.mostRecentOlderEventIndex()) {
+      eventHtmlRefs()[props.mostRecentOlderEventIndex()].htmlRef.scrollIntoView(
+        useIsNarrow() != undefined && useIsNarrow() ? {} : { behavior: "smooth" }
+      );
+    }
   });
 
   return (

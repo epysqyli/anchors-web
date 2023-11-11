@@ -205,7 +205,7 @@ const fetchAndSetOlderEvents = async (
   isAnchorsMode: Accessor<boolean>,
   enrichedEvents: Accessor<IEnrichedEvent[]>,
   setEnrichedEvents: Setter<IEnrichedEvent[]>
-): Promise<{ mostRecentOlderEventID: string; isFeedOver: boolean }> => {
+): Promise<{ olderEventsCount: number }> => {
   const untilTimestamp: number = enrichedEvents()[enrichedEvents().length - 1].created_at;
 
   const olderEvents = await relay.fetchTextEvents({
@@ -216,7 +216,7 @@ const fetchAndSetOlderEvents = async (
   });
 
   if (olderEvents.length == 0) {
-    return { mostRecentOlderEventID: "", isFeedOver: true };
+    return { olderEventsCount: 0 };
   }
 
   const olderMetaEvents = await relay.fetchEventsMetadata({ authors: olderEvents.map((evt) => evt.pubkey) });
@@ -229,7 +229,7 @@ const fetchAndSetOlderEvents = async (
 
   setEnrichedEvents([...enrichedEvents(), ...olderEnrichedEvents].sort(sortByCreatedAt));
 
-  return { mostRecentOlderEventID: olderEvents[0].id, isFeedOver: false };
+  return { olderEventsCount: olderEvents.length };
 };
 
 export { fetchAndSetEvents, fetchAndSetOlderEvents };

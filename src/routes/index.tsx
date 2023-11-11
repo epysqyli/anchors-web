@@ -27,7 +27,7 @@ const Home: Component<{}> = () => {
   const [reactions, setReactions] = createSignal<IReactionWithEventID[]>([]);
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
-  const [mostRecentOlderEventID, setMostRecentOlderEventID] = createSignal<string>("");
+  const [mostRecentOlderEventIndex, setMostRecentOlderEventIndex] = createSignal<number>(0);
   const [isFeedOver, setIsFeedOver] = createSignal<boolean>(false);
 
   const startFetchAndSetEventsInterval = async (): Promise<NodeJS.Timer> => {
@@ -99,8 +99,9 @@ const Home: Component<{}> = () => {
 
   const loadOlderPosts = async (): Promise<void> => {
     setIsLoading(true);
+    const latestEventsCount = enrichedEvents().length;
 
-    const olderEventsFetchResult = await fetchAndSetOlderEvents(
+    const fetchOlderEventsResults = await fetchAndSetOlderEvents(
       relay,
       {
         fetchEventsLimit: 5,
@@ -112,8 +113,12 @@ const Home: Component<{}> = () => {
       setEnrichedEvents
     );
 
-    setIsFeedOver(olderEventsFetchResult.isFeedOver);
-    setMostRecentOlderEventID(olderEventsFetchResult.mostRecentOlderEventID);
+    setIsFeedOver(fetchOlderEventsResults.olderEventsCount == 0);
+
+    if (fetchOlderEventsResults.olderEventsCount) {
+      setMostRecentOlderEventIndex(latestEventsCount);
+    }
+
     setIsLoading(false);
   };
 
@@ -126,7 +131,7 @@ const Home: Component<{}> = () => {
           showPopup={showPopup}
           setShowPopup={setShowPopup}
           loadOlderPosts={loadOlderPosts}
-          mostRecentOlderEventID={mostRecentOlderEventID}
+          mostRecentOlderEventIndex={mostRecentOlderEventIndex}
           isFeedOver={isFeedOver}
         />
       </Show>
