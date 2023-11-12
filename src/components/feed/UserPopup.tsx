@@ -132,10 +132,7 @@ const UserPopup: Component<Props> = (props): JSX.Element => {
                   layout='h'
                 />
               </A>
-              <p
-                class='mx-auto text-sm text-justify text-neutral-200 text-opacity-75
-                   pt-3 pr-2 mt-5 h-2/3 overflow-y-auto xl:custom-scrollbar'
-              >
+              <p class='mx-auto text-sm text-neutral-200 text-opacity-75 pt-3 pr-2 mt-5 h-2/3 overflow-y-auto xl:custom-scrollbar'>
                 {props.about}
               </p>
             </div>
