@@ -20,7 +20,13 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
 
   createEffect(() => {
     const relayAddressFromQueryParams = searchParams.relayAddress;
-    if (relayAddressFromQueryParams != "all" && !readRelays.get().includes(relayAddressFromQueryParams)) {
+
+    if (
+      relayAddressFromQueryParams != "all" &&
+      relayAddressFromQueryParams != undefined &&
+      relayAddressFromQueryParams != "undefined" &&
+      !readRelays.get().includes(relayAddressFromQueryParams)
+    ) {
       readRelays.set([...readRelays.get(), relayAddressFromQueryParams]);
     }
   });
