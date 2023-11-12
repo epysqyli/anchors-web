@@ -2,7 +2,7 @@ import { RelayContext } from "~/contexts/relay";
 import { A, useSearchParams } from "solid-start";
 import { FiArrowRightCircle } from "solid-icons/fi";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
-import { For, JSX, VoidComponent, createSignal, useContext } from "solid-js";
+import { For, JSX, VoidComponent, createEffect, createSignal, useContext } from "solid-js";
 
 const RelaySelector: VoidComponent = (): JSX.Element => {
   const { readRelays } = useContext(RelayContext);
@@ -17,6 +17,13 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
   const handleChange = (e: Event): void => {
     setInputFieldRelayAddress((e.currentTarget as HTMLInputElement).value);
   };
+
+  createEffect(() => {
+    const relayAddressFromQueryParams = searchParams.relayAddress;
+    if (!readRelays.get().includes(relayAddressFromQueryParams)) {
+      readRelays.set([...readRelays.get(), relayAddressFromQueryParams]);
+    }
+  });
 
   return (
     <>
