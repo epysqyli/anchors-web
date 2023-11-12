@@ -104,7 +104,7 @@ const Home: Component<{}> = () => {
     const fetchOlderEventsResults = await fetchAndSetOlderEvents(
       relay,
       {
-        fetchEventsLimit: 5,
+        fetchEventsLimit: 20,
         maxEventsCount: 75,
         searchParams: searchParams
       },
