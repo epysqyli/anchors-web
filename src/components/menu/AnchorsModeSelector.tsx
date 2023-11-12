@@ -38,7 +38,10 @@ const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
         )}
       </div>
 
-      <div class='mt-5 rounded px-2 py-1 text-sm select-none text-neutral-400 bg-neutral-600 bg-opacity-40 transition'>
+      <div
+        class='mt-5 rounded px-2 py-1 text-sm select-none text-neutral-400 bg-slate-600
+                 xl:bg-neutral-600 bg-opacity-40 transition'
+      >
         {showSwitchMsg() ? (
           <span>switch to {anchorsMode.get() ? "all nostr" : "only anchors"} posts</span>
         ) : (
