@@ -16,6 +16,7 @@ import { sortByCreatedAt } from "./nostr-utils";
 import PubResult from "~/interfaces/PubResult";
 import RelayList from "~/interfaces/RelayList";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
+import EventWithMetadata from "~/interfaces/EventWithMetadata";
 
 interface FetchOptions {
   rootOnly: boolean;
@@ -254,6 +255,109 @@ class Relayer {
     }
 
     return JSON.parse(metadataEvents[0].content);
+  }
+
+  public async addEventToFavorites(eventID: string): Promise<PubResult> {
+    const favoriteEventIDs = await this.fetchFavoriteEventsIDs();
+
+    const event: EventTemplate = {
+      content: "",
+      created_at: Math.floor(Date.now() / 1000),
+      kind: 30001 as Kind,
+      tags: [["e", eventID], ...favoriteEventIDs.map((evtID) => ["e", evtID])]
+    };
+
+    const signedEvent = await window.nostr.signEvent(event);
+    const pub = this.pub(signedEvent);
+
+    return await new Promise<PubResult>((res) => {
+      pub.on("ok", () => {
+        res({ error: false, event: signedEvent });
+      });
+
+      pub.on("failed", () => {
+        res({ error: true, event: signedEvent });
+      });
+    });
+  }
+
+  public async removeEventFromFavorites(eventID: string): Promise<PubResult> {
+    const favoriteEventIDs = await this.fetchFavoriteEventsIDs();
+
+    const updatedEventIDTags: string[][] = [];
+
+    favoriteEventIDs.forEach((evtID) => {
+      if (evtID != eventID) {
+        updatedEventIDTags.push(["e", evtID]);
+      }
+    });
+
+    const event: EventTemplate = {
+      content: "",
+      created_at: Math.floor(Date.now() / 1000),
+      kind: 30001 as Kind,
+      tags: updatedEventIDTags
+    };
+
+    const signedEvent = await window.nostr.signEvent(event);
+    const pub = this.pub(signedEvent);
+
+    return await new Promise<PubResult>((res) => {
+      pub.on("ok", () => {
+        res({ error: false, event: signedEvent });
+      });
+
+      pub.on("failed", () => {
+        res({ error: true, event: signedEvent });
+      });
+    });
+  }
+
+  public async fetchFavoriteEventsIDs(): Promise<string[]> {
+    if (!this.userPubKey) {
+      return new Promise((res) => res([]));
+    }
+
+    const favoriteEvents = await this.currentPool.list(this.getReadRelays(), [
+      { kinds: [30001], authors: [this.userPubKey] }
+    ]);
+
+    const eventIDs: string[] = [];
+    favoriteEvents.forEach((fe) => {
+      fe.tags.forEach((t) => {
+        if (t[0] == "e" && !eventIDs.includes(t[1])) {
+          eventIDs.push(t[1]);
+        }
+      });
+    });
+
+    return eventIDs;
+  }
+
+  public async fetchFavoriteEvents(): Promise<EventWithMetadata[]> {
+    const eventIDs = await this.fetchFavoriteEventsIDs();
+
+    const textEvents = await this.fetchTextEvents({
+      rootOnly: true,
+      filter: { ids: eventIDs },
+      isAnchorsMode: false
+    });
+
+    const metaEvents = await this.fetchEventsMetadata({ authors: textEvents.map((evt) => evt.pubkey) });
+
+    const favoriteEvents: EventWithMetadata[] = [];
+
+    textEvents.forEach((evt) => {
+      const metaEvent = metaEvents.find((me) => me.pubkey == evt.pubkey);
+      favoriteEvents.push({
+        ...evt,
+        name: metaEvent?.name ?? "",
+        about: metaEvent?.about ?? "",
+        picture: metaEvent?.picture ?? ""
+      });
+    });
+
+    return favoriteEvents;
   }
 
   public isUserAlreadyFollowed = (pubkey: string): boolean => {

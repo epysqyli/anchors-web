@@ -6,7 +6,7 @@ import EventAuthor from "./EventAuthor";
 import EventContent from "./EventContent";
 import EventScroller from "./EventScroller";
 import CommmentsPopup from "./CommentsPopup";
-import { FiTrendingUp } from "solid-icons/fi";
+import { FiBookmark, FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
@@ -21,6 +21,7 @@ import { fetchBook } from "~/lib/external-services/open-library";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
 import { Accessor, Component, Show, createContext, createSignal, onMount, useContext } from "solid-js";
+import FavoriteEvent from "./FavoriteEvent";
 
 interface Props {
   event: IEnrichedEvent;
@@ -178,6 +179,8 @@ const EventWrapper: Component<Props> = (props) => {
                 <div class='text-sm text-center text-slate-400 tracking-tighter mt-1'>{commentsCount()}</div>
               </div>
             </Show>
+
+            {authMode.get() == "private" ? <FavoriteEvent eventID={props.event.id} /> : <></>}
           </div>
 
           <div class='h-[10%] flex items-center justify-around gap-x-3'>
@@ -263,6 +266,7 @@ const EventWrapper: Component<Props> = (props) => {
               </div>
             </Show>
 
+            {authMode.get() == "private" ? <FavoriteEvent eventID={props.event.id} /> : <></>}
             {authMode.get() == "private" ? <FiTrendingUp class='text-slate-400' size={26} /> : <></>}
             <EventAnchor nostrEventID={props.event.id} />
           </div>

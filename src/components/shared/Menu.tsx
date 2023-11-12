@@ -8,6 +8,7 @@ import menuTogglerContext from "~/contexts/menuToggle";
 import FollowingSelector from "../menu/FollowingSelector";
 import AnchorsModeSelector from "../menu/AnchorsModeSelector";
 import { JSX, Show, VoidComponent, useContext } from "solid-js";
+import { BsBookmarks } from "solid-icons/bs";
 
 const Menu: VoidComponent = (): JSX.Element => {
   const location = useLocation();
@@ -19,7 +20,7 @@ const Menu: VoidComponent = (): JSX.Element => {
                        group active:scale-90 hover:bg-neutral-700 rounded`;
 
   const flexActionStyle = actionStyle + " flex items-center justify-between";
-  const selectedFlexActionStyle = flexActionStyle + " md:border-orange-200 md:bg-slate-700";
+  const selectedFlexActionStyle = flexActionStyle + " md:border-orange-200 md:bg-neutral-500";
 
   const active = (path: string): boolean => {
     if (path == `${location.pathname}${location.search}`) {
@@ -51,21 +52,28 @@ const Menu: VoidComponent = (): JSX.Element => {
             </div>
 
             <A onClick={menuToggleCtx.toggleMobileMenu} href='/write'>
-              <div class='flex items-center justify-around mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
+              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
                 <div class='group-hover:scale-95'>write</div>
                 <FiEdit size={26} class='md:group-hover:animate-pulse' />
               </div>
             </A>
 
+            <A onClick={menuToggleCtx.toggleMobileMenu} href='/favorite-posts'>
+              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
+                <div class='group-hover:scale-95'>favorite posts</div>
+                <BsBookmarks size={26} class='md:group-hover:animate-pulse' />
+              </div>
+            </A>
+
             {/* <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
-              <div class='flex items-center justify-around mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
+              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
                 <div class='group-hover:scale-95'>search</div>
                 <BsSearch size={26} class='md:group-hover:animate-pulse' />
               </div>
             </A> */}
 
             <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
-              <div class='flex items-center justify-around mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
+              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
                 <div class='group-hover:scale-95'>profile</div>
                 <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
               </div>
@@ -91,6 +99,13 @@ const Menu: VoidComponent = (): JSX.Element => {
             <div class={active("/write") ? selectedFlexActionStyle : flexActionStyle}>
               <div class='group-hover:scale-95'>write</div>
               <FiEdit size={26} class='md:group-hover:animate-pulse' />
+            </div>
+          </A>
+
+          <A onClick={menuToggleCtx.toggleMobileMenu} href='/favorite-posts'>
+            <div class={active("/favorite-posts") ? selectedFlexActionStyle : flexActionStyle}>
+              <div class='group-hover:scale-95'>favorite posts</div>
+              <BsBookmarks size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
 

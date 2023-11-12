@@ -9,6 +9,7 @@ const LOCAL_STORAGE_GUEST_PK = "anchors-guest-public-key";
 const [getReadRelays, setReadRelays] = createSignal<string[]>([]);
 const [getAnchorsMode, setAnchorsMode] = createSignal<boolean>(true);
 const [guestPublicKey, setGuestPublicKey] = createSignal<string>("");
+const [favoriteEventIDs, setFavoriteEventIDs] = createSignal<string[]>([]);
 
 let relay: Relayer = new Relayer();
 const userPublicKey = await getPublicKeyFromExt();
@@ -18,6 +19,7 @@ if (userPublicKey) {
   await relay.fetchAndSetRelays();
   setReadRelays(relay.getReadRelays());
   relay.following = await relay.fetchContacts();
+  setFavoriteEventIDs(await relay.fetchFavoriteEventsIDs());
 }
 
 type AuthMode = "guest" | "public" | "private";
@@ -29,6 +31,7 @@ interface IRelayContext {
   anchorsMode: { get: Accessor<boolean>; set: Setter<boolean> };
   authMode: { get: Accessor<AuthMode>; set: Setter<AuthMode> };
   guestPublicKey: { get: Accessor<string>; set: Setter<string>; localStorageKey: string };
+  favoriteEventIDs: { get: Accessor<string[]>; set: Setter<string[]> };
 }
 
 const RelayContext = createContext<IRelayContext>({
@@ -36,7 +39,8 @@ const RelayContext = createContext<IRelayContext>({
   readRelays: { get: getReadRelays, set: setReadRelays },
   anchorsMode: { get: getAnchorsMode, set: setAnchorsMode },
   authMode: { get: authMode, set: setAuthMode },
-  guestPublicKey: { get: guestPublicKey, set: setGuestPublicKey, localStorageKey: LOCAL_STORAGE_GUEST_PK }
+  guestPublicKey: { get: guestPublicKey, set: setGuestPublicKey, localStorageKey: LOCAL_STORAGE_GUEST_PK },
+  favoriteEventIDs: { get: favoriteEventIDs, set: setFavoriteEventIDs }
 });
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
@@ -56,6 +60,7 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
         readRelays: { get: getReadRelays, set: setReadRelays },
         anchorsMode: { get: getAnchorsMode, set: setAnchorsMode },
         authMode: { get: authMode, set: setAuthMode },
+        favoriteEventIDs: { get: favoriteEventIDs, set: setFavoriteEventIDs },
         guestPublicKey: {
           get: guestPublicKey,
           set: setGuestPublicKey,
