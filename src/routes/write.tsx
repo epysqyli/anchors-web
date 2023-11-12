@@ -6,7 +6,7 @@ import menuTogglerContext from "~/contexts/menuToggle";
 import { IRefTag, RefTagCategory } from "~/interfaces/IRefTag";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
-import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
+import { Component, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const Write: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
@@ -159,70 +159,64 @@ const Write: Component<{}> = () => {
 
   return (
     <>
-      <Show when={true}>
-        <>
-          <div class='grid grid-cols-1 xl:grid-cols-7 gap-x-2 h-[100dvh] xl:h-full mx-auto'>
-            <div
-              class={`${showRefMenu() ? "hidden" : ""} flex flex-col justify-between py-10 xl:col-span-4 
+      <div class='grid grid-cols-1 xl:grid-cols-7 gap-x-2 h-[100dvh] xl:h-full mx-auto'>
+        <div
+          class={`${showRefMenu() ? "hidden" : ""} flex flex-col justify-between py-10 xl:col-span-4 
                                                        rounded-md bg-slate-600 bg-opacity-10`}
-            >
-              <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold'>Write a new idea</h1>
+        >
+          <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold'>Write a new idea</h1>
 
-              <textarea
-                placeholder='Time to connect the dots'
-                class='block w-4/5 2xl:w-2/3 placeholder:text-center placeholder:text-lg text-lg
+          <textarea
+            placeholder='Time to connect the dots'
+            class='block w-4/5 2xl:w-2/3 placeholder:text-center placeholder:text-lg text-lg
                        focus:outline-none bg-transparent mx-auto text-slate-300
                        caret-orange-200 resize-none xl:custom-scrollbar px-5 py-2'
-                rows={14}
-                onInput={updateContent}
-                value={nostrEvent().content}
-              ></textarea>
+            rows={14}
+            onInput={updateContent}
+            value={nostrEvent().content}
+          ></textarea>
 
-              <div class='flex items-center justify-around xl:block'>
-                <div
-                  onClick={signAndPublishNostrEvent}
-                  class='text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
-                >
-                  <VsSend
-                    size={40}
-                    class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition'
-                  />
-                </div>
-                <div
-                  onClick={toggleBetweenWriteAndRefs}
-                  class='xl:hidden relative text-slate-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
-                >
-                  <VsReferences
-                    size={40}
-                    class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition'
-                  />
-                  <span class='absolute top-7 right-16'>{refTags().length}</span>
-                </div>
-              </div>
-            </div>
-
+          <div class='flex items-center justify-around xl:block'>
             <div
-              class={`${showRefMenu() ? "" : "hidden"} xl:block xl:col-span-3 rounded-md bg-slate-800 
-                                                       bg-opacity-80 h-full xl:py-4 overflow-y-auto 2xl:px-10`}
+              onClick={signAndPublishNostrEvent}
+              class='text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
             >
-              <RefTagsSearchPanel
-                tags={refTags()}
-                addReferenceTag={addReferenceTag}
-                removeReferenceTag={removeReferenceTag}
-                toggleBetweenWriteAndRefs={toggleBetweenWriteAndRefs}
+              <VsSend
+                size={40}
+                class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition'
               />
             </div>
+            <div
+              onClick={toggleBetweenWriteAndRefs}
+              class='xl:hidden relative text-slate-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
+            >
+              <VsReferences
+                size={40}
+                class='w-fit mx-auto group-hover:scale-110 group-active:scale-90 transition'
+              />
+              <span class='absolute top-7 right-16'>{refTags().length}</span>
+            </div>
           </div>
+        </div>
 
-          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
-            <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
-              <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
-                {popupMsg()}
-              </div>
-            </Popup>
-          </div>
-        </>
-      </Show>
+        <div
+          class={`${showRefMenu() ? "" : "hidden"} xl:block xl:col-span-3 rounded-md bg-slate-800 
+                                                       bg-opacity-80 h-full xl:py-4 overflow-y-auto 2xl:px-10`}
+        >
+          <RefTagsSearchPanel
+            tags={refTags()}
+            addReferenceTag={addReferenceTag}
+            removeReferenceTag={removeReferenceTag}
+            toggleBetweenWriteAndRefs={toggleBetweenWriteAndRefs}
+          />
+        </div>
+      </div>
+
+      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
+        <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
+          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>{popupMsg()}</div>
+        </Popup>
+      </div>
     </>
   );
 };

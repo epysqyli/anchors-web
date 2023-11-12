@@ -15,7 +15,7 @@ const RefTagElement: Component<Props> = (props) => {
         <RefTagIcon category={props.tag.category} />
       </div>
       <div class='text break-all w-2/3 px-3 py-6'>
-        <div>{props.tag.title}</div>
+        <div>{props.tag.title != "" ? props.tag.title : props.tag.url}</div>
         <div class='text-slate-400 text-sm'>{props.tag.additionalInfoOne}</div>
       </div>
       <div
