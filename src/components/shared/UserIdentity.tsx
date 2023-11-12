@@ -18,6 +18,7 @@ import {
 import LoadingFallback from "../feed/LoadingFallback";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import LoadingPoints from "../feed/LoadingPoints";
+import { A } from "solid-start";
 
 interface Props {
   initialLoad: Accessor<boolean>;
@@ -84,6 +85,20 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
     </div>
   );
 
+  const undefinedMetadataSuggestions: JSX.Element = (
+    <div class='text-left mx-auto w-5/6 xl:w-4/5 mt-10'>
+      <p>No user account was found, you can either:</p>
+      <ul class='list-disc mt-3 pl-5'>
+        <li class="underline underline-offset-4 mb-2">
+          <A href='/settings/user-metadata'>add user metadata to your nostr identity</A>
+        </li>
+        <li class="underline underline-offset-4">
+          <A href='/settings/manage-relays'>add the relay(s) where it can be fetched from</A>
+        </li>
+      </ul>
+    </div>
+  );
+
   onMount(async () => {
     setIsLoading(true);
 
@@ -95,7 +110,10 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
     guestPublicKey.set(localStorage.getItem(guestPublicKey.localStorageKey) ?? "");
 
     if (authMode.get() == "private") {
-      setUserMetadata(await relay.fetchUserMetadata());
+      const userMetadataResult = await relay.fetchUserMetadata();
+      if (userMetadataResult) {
+        setUserMetadata(userMetadataResult!);
+      }
     }
 
     setIsLoading(false);
@@ -123,7 +141,8 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
                       picture={userMetadata()?.picture ?? ""}
                       pubKey={relay.userPubKey!}
                     />
-                    <p class='text-lg mt-5 font-bold'>Welcome back to Anchors</p>
+                    <p class='text-lg mt-5 font-bold'>Welcome to Anchors</p>
+                    {userMetadata() == undefined ? undefinedMetadataSuggestions : <></>}
                   </div>
                 ) : (
                   guestModeTemplate
@@ -148,7 +167,8 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
                       picture={userMetadata()?.picture ?? ""}
                       pubKey={relay.userPubKey!}
                     />
-                    <p class='text-lg mt-5 font-bold'>Welcome back to Anchors</p>
+                    <p class='text-lg mt-5 font-bold'>Welcome to Anchors</p>
+                    {userMetadata() == undefined ? undefinedMetadataSuggestions : <></>}
                   </div>
                 ) : (
                   guestModeTemplate

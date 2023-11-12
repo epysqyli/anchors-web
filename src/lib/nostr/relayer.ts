@@ -244,10 +244,14 @@ class Relayer {
     });
   }
 
-  public async fetchUserMetadata(): Promise<IUserMetadata> {
+  public async fetchUserMetadata(): Promise<IUserMetadata | null> {
     const metadataEvents: Event[] = await this.currentPool.list(this.getReadRelays(), [
       { kinds: [Kind.Metadata], authors: [this.userPubKey!] }
     ]);
+
+    if (metadataEvents.length == 0) {
+      return null;
+    }
 
     return JSON.parse(metadataEvents[0].content);
   }

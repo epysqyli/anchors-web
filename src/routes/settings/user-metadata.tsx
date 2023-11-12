@@ -58,7 +58,11 @@ const UserMetadata: VoidComponent = () => {
       return;
     }
 
-    setContent(await relay.fetchUserMetadata());
+    const userMetadataResult = await relay.fetchUserMetadata();
+    if (userMetadataResult) {
+      setContent(userMetadataResult);
+    }
+
     setIsLoading(false);
   });
 
@@ -77,7 +81,7 @@ const UserMetadata: VoidComponent = () => {
             <input
               type='text'
               name='name'
-              value={content().name}
+              value={content().name ?? ""}
               onChange={handleChange}
               placeholder='enter your nostr name to show to other users'
               class='p-3 rounded text-center text-lg text-slate-200 caret-slate-200 bg-neutral-600 focus:outline-none w-full'
@@ -91,7 +95,7 @@ const UserMetadata: VoidComponent = () => {
             <input
               type='text'
               name='about'
-              value={content().about}
+              value={content().about ?? ""}
               onChange={handleChange}
               placeholder='something about yourself'
               class='p-3 rounded text-center text-lg text-slate-200 caret-slate-200 bg-neutral-600 focus:outline-none w-full'
@@ -104,7 +108,7 @@ const UserMetadata: VoidComponent = () => {
                 picture
               </label>
               <img
-                src={content().picture}
+                src={content().picture ?? ''}
                 onError={() => setImageSrcFails(true)}
                 loading='lazy'
                 class='h-10 rounded-full'
@@ -113,7 +117,7 @@ const UserMetadata: VoidComponent = () => {
             <input
               type='text'
               name='picture'
-              value={content().picture}
+              value={content().picture ?? ''}
               onChange={handleChange}
               placeholder='url pointing to an avatar image'
               class='p-3 rounded text-center text-lg text-slate-200 caret-slate-200 bg-neutral-600 focus:outline-none w-full'
