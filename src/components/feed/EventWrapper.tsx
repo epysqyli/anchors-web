@@ -6,11 +6,12 @@ import EventAuthor from "./EventAuthor";
 import EventContent from "./EventContent";
 import EventScroller from "./EventScroller";
 import CommmentsPopup from "./CommentsPopup";
-import { FiBookmark, FiTrendingUp } from "solid-icons/fi";
+import { FiTrendingUp } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { VsCommentDiscussion } from "solid-icons/vs";
+import FavoriteEventAction from "./FavoriteEventAction";
 import menuTogglerContext from "~/contexts/menuToggle";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
@@ -21,7 +22,6 @@ import { fetchBook } from "~/lib/external-services/open-library";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
 import { Accessor, Component, Show, createContext, createSignal, onMount, useContext } from "solid-js";
-import FavoriteEventAction from "./FavoriteEventAction";
 
 interface Props {
   event: IEnrichedEvent;

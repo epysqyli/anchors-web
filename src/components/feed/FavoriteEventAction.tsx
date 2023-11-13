@@ -1,6 +1,6 @@
-import { FiBookmark } from "solid-icons/fi";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
+import { BsBookmarks, BsBookmarksFill } from "solid-icons/bs";
 import { JSX, Show, Component, useContext, createSignal, onMount } from "solid-js";
 
 const FavoriteEventAction: Component<{ eventID: string }> = (props): JSX.Element => {
@@ -41,25 +41,41 @@ const FavoriteEventAction: Component<{ eventID: string }> = (props): JSX.Element
     <>
       <Show when={useIsNarrow() != undefined && useIsNarrow()}>
         <div onClick={handleClick}>
-          <FiBookmark
-            class={`${isLoading() ? "animate-pulse" : ""} text-slate-400 mx-auto`}
-            stroke-width={1}
-            size={28}
-            fill='#e2e8f0'
-            fill-opacity={`${isEventFav() ? "1" : "0"}`}
-          />
+          {isEventFav() ? (
+            <BsBookmarksFill
+              class={`${isLoading() ? "animate-pulse" : ""} text-slate-400 mx-auto`}
+              stroke-width={1}
+              size={28}
+            />
+          ) : (
+            <BsBookmarks
+              class={`${isLoading() ? "animate-pulse" : ""} text-slate-400 mx-auto`}
+              stroke-width={1}
+              size={28}
+            />
+          )}
         </div>
       </Show>
 
       <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
         <div onClick={handleClick} class='group cursor-pointer transition'>
-          <FiBookmark
-            class={`${isLoading() ? "animate-pulse" : ""} text-slate-400 mx-auto group-hover:scale-105`}
-            stroke-width={1}
-            size={34}
-            fill='#e2e8f0'
-            fill-opacity={`${isEventFav() ? "1" : "0"}`}
-          />
+          {isEventFav() ? (
+            <BsBookmarksFill
+              class={`${
+                isLoading() ? "animate-pulse cursor-wait" : ""
+              } text-slate-400 mx-auto group-hover:scale-105`}
+              stroke-width={1}
+              size={28}
+            />
+          ) : (
+            <BsBookmarks
+              class={`${
+                isLoading() ? "animate-pulse cursor-wait" : ""
+              } text-slate-400 mx-auto group-hover:scale-105`}
+              stroke-width={1}
+              size={28}
+            />
+          )}
         </div>
       </Show>
     </>
