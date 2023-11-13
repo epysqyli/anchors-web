@@ -2,24 +2,31 @@ import { RelayContext } from "~/contexts/relay";
 import LoadingPoints from "~/components/feed/LoadingPoints";
 import EventWithMetadata from "~/interfaces/EventWithMetadata";
 import FavoritePost from "~/components/favorite-posts/FavoritePost";
-import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import { For, JSX, Show, VoidComponent, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const FavoritePosts: VoidComponent = (): JSX.Element => {
-  const { relay } = useContext(RelayContext);
+  const { relay, anchorsMode } = useContext(RelayContext);
 
   const [events, setEvents] = createSignal<EventWithMetadata[]>([]);
   const [isLoading, setIsLoading] = createSignal<boolean>(true);
 
   onMount(async () => {
     setIsLoading(true);
-    setEvents(await relay.fetchFavoriteEvents());
+    setEvents(await relay.fetchFavoriteEvents(anchorsMode.get()));
+    setIsLoading(false);
+  });
+
+  createEffect(async () => {
+    anchorsMode.get();
+    setIsLoading(true);
+    setEvents(await relay.fetchFavoriteEvents(anchorsMode.get()));
     setIsLoading(false);
   });
 
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
-        Your favorite posts
+        Your favorite { anchorsMode.get() ? 'Anchors' : 'Nostr' } posts
       </h1>
 
       <Show when={!isLoading()} fallback={<LoadingPoints />}>

@@ -326,13 +326,13 @@ class Relayer {
     return eventIDs;
   }
 
-  public async fetchFavoriteEvents(): Promise<EventWithMetadata[]> {
+  public async fetchFavoriteEvents(anchorsMode: boolean): Promise<EventWithMetadata[]> {
     const eventIDs = await this.fetchFavoriteEventsIDs();
 
     const textEvents = await this.fetchTextEvents({
       rootOnly: true,
       filter: { ids: eventIDs },
-      isAnchorsMode: false
+      isAnchorsMode: anchorsMode
     });
 
     const metaEvents = await this.fetchEventsMetadata({ authors: textEvents.map((evt) => evt.pubkey) });
