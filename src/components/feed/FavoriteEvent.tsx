@@ -24,11 +24,13 @@ const FavoriteEvent: Component<{ eventID: string }> = (props): JSX.Element => {
       const pubRes = await relay.removeEventFromFavorites(props.eventID);
       if (!pubRes.error) {
         setIsEventFav(false);
+        favoriteEventIDs.set(pubRes.data);
       }
     } else {
       const pubRes = await relay.addEventToFavorites(props.eventID);
       if (!pubRes.error) {
         setIsEventFav(true);
+        favoriteEventIDs.set(pubRes.data);
       }
     }
 
@@ -41,9 +43,10 @@ const FavoriteEvent: Component<{ eventID: string }> = (props): JSX.Element => {
         <div onClick={handleClick}>
           <FiBookmark
             class={`${isLoading() ? "animate-pulse" : ""} text-slate-400 mx-auto`}
-            stroke-width={1.5}
-            size={24}
-            fill={`${isEventFav() ? "#e2e8f0" : "#334155"}`}
+            stroke-width={1}
+            size={28}
+            fill='#e2e8f0'
+            fill-opacity={`${isEventFav() ? "1" : "0"}`}
           />
         </div>
       </Show>
@@ -54,7 +57,8 @@ const FavoriteEvent: Component<{ eventID: string }> = (props): JSX.Element => {
             class={`${isLoading() ? "animate-pulse" : ""} text-slate-400 mx-auto group-hover:scale-105`}
             stroke-width={1}
             size={34}
-            fill={`${isEventFav() ? "#e2e8f0" : "#334155"}`}
+            fill='#e2e8f0'
+            fill-opacity={`${isEventFav() ? "1" : "0"}`}
           />
         </div>
       </Show>

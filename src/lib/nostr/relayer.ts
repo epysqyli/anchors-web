@@ -13,7 +13,7 @@ import {
   verifySignature
 } from "nostr-tools";
 import { sortByCreatedAt } from "./nostr-utils";
-import PubResult from "~/interfaces/PubResult";
+import { PubResult, GenericPubResult } from "~/interfaces/PubResult";
 import RelayList from "~/interfaces/RelayList";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import EventWithMetadata from "~/interfaces/EventWithMetadata";
@@ -257,7 +257,7 @@ class Relayer {
     return JSON.parse(metadataEvents[0].content);
   }
 
-  public async addEventToFavorites(eventID: string): Promise<PubResult> {
+  public async addEventToFavorites(eventID: string): Promise<GenericPubResult<string[]>> {
     const favoriteEventIDs = await this.fetchFavoriteEventsIDs();
 
     const event: EventTemplate = {
@@ -270,45 +270,37 @@ class Relayer {
     const signedEvent = await window.nostr.signEvent(event);
     const pub = this.pub(signedEvent);
 
-    return await new Promise<PubResult>((res) => {
+    return await new Promise<GenericPubResult<string[]>>((res) => {
       pub.on("ok", () => {
-        res({ error: false, event: signedEvent });
+        res({ error: false, data: signedEvent.tags.map((t) => t[1]) });
       });
 
       pub.on("failed", () => {
-        res({ error: true, event: signedEvent });
+        res({ error: true, data: signedEvent.tags.map((t) => t[1]) });
       });
     });
   }
 
-  public async removeEventFromFavorites(eventID: string): Promise<PubResult> {
-    const favoriteEventIDs = await this.fetchFavoriteEventsIDs();
-
-    const updatedEventIDTags: string[][] = [];
-
-    favoriteEventIDs.forEach((evtID) => {
-      if (evtID != eventID) {
-        updatedEventIDTags.push(["e", evtID]);
-      }
-    });
+  public async removeEventFromFavorites(eventID: string): Promise<GenericPubResult<string[]>> {
+    const updatedEventIDs = (await this.fetchFavoriteEventsIDs()).filter((evtID) => evtID != eventID);
 
     const event: EventTemplate = {
       content: "",
       created_at: Math.floor(Date.now() / 1000),
       kind: 30001 as Kind,
-      tags: updatedEventIDTags
+      tags: updatedEventIDs.map((evtID) => ["e", evtID])
     };
 
     const signedEvent = await window.nostr.signEvent(event);
     const pub = this.pub(signedEvent);
 
-    return await new Promise<PubResult>((res) => {
+    return await new Promise<GenericPubResult<string[]>>((res) => {
       pub.on("ok", () => {
-        res({ error: false, event: signedEvent });
+        res({ error: false, data: signedEvent.tags.map((t) => t[1]) });
       });
 
       pub.on("failed", () => {
-        res({ error: true, event: signedEvent });
+        res({ error: true, data: signedEvent.tags.map((t) => t[1]) });
       });
     });
   }

@@ -1,6 +1,13 @@
 import { Event } from "nostr-tools";
 
-export default interface PubResult {
+interface PubResult {
   error: boolean;
   event: Event;
 }
+
+interface GenericPubResult<T> {
+  error: boolean;
+  data: T;
+}
+
+export { PubResult, GenericPubResult };
