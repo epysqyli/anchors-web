@@ -116,7 +116,7 @@ const handleReaction = async (
       count: reactions()[reactionType as keyof IReaction].count + 1,
       events: [
         ...reactions()[reactionType as keyof IReaction].events,
-        { pubkey: pubResult.event.pubkey, eventID: pubResult.event.id }
+        { pubkey: pubResult.data.pubkey, eventID: pubResult.data.id }
       ]
     };
 

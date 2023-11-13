@@ -12,9 +12,9 @@ import {
   validateEvent,
   verifySignature
 } from "nostr-tools";
-import { sortByCreatedAt } from "./nostr-utils";
-import { PubResult, GenericPubResult } from "~/interfaces/PubResult";
+import PubResult from "~/interfaces/PubResult";
 import RelayList from "~/interfaces/RelayList";
+import { sortByCreatedAt } from "./nostr-utils";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import EventWithMetadata from "~/interfaces/EventWithMetadata";
 
@@ -52,7 +52,7 @@ class Relayer {
     return pub;
   }
 
-  public async deleteEvent(eventID: string): Promise<PubResult> {
+  public async deleteEvent(eventID: string): Promise<PubResult<Event>> {
     const deletionEvent: EventTemplate = {
       kind: Kind.EventDeletion,
       tags: [["e", eventID]],
@@ -63,7 +63,7 @@ class Relayer {
     const signedEvent = await window.nostr.signEvent(deletionEvent);
     this.pub(signedEvent);
 
-    return { error: false, event: signedEvent };
+    return { error: false, data: signedEvent };
     /**
      * awaiting here never resolves for some reason
      * the same pattern works on this.reactToEvent though!
@@ -81,7 +81,7 @@ class Relayer {
     // });
   }
 
-  public async reactToEvent(eventID: string, eventPubkey: string, reaction: Reaction): Promise<PubResult> {
+  public async reactToEvent(eventID: string, eventPubkey: string, reaction: Reaction): Promise<PubResult<Event>> {
     const reactionEvent: EventTemplate = {
       kind: Kind.Reaction,
       tags: [
@@ -95,18 +95,18 @@ class Relayer {
     const signedEvent = await window.nostr.signEvent(reactionEvent);
     const pub = this.pub(signedEvent);
 
-    return await new Promise<PubResult>((res) => {
+    return await new Promise<PubResult<Event>>((res) => {
       pub.on("ok", () => {
-        res({ error: false, event: signedEvent });
+        res({ error: false, data: signedEvent });
       });
 
       pub.on("failed", () => {
-        res({ error: true, event: signedEvent });
+        res({ error: true, data: signedEvent });
       });
     });
   }
 
-  public async replyToEvent(content: string, replyEvent: Event, rootEvent: Event): Promise<PubResult> {
+  public async replyToEvent(content: string, replyEvent: Event, rootEvent: Event): Promise<PubResult<Event>> {
     let tags: string[][] = [];
 
     if (replyEvent.id == rootEvent.id) {
@@ -133,13 +133,13 @@ class Relayer {
     const signedEvent = await window.nostr.signEvent(reply);
     const pub = this.pub(signedEvent);
 
-    return await new Promise<PubResult>((res) => {
+    return await new Promise<PubResult<Event>>((res) => {
       pub.on("ok", () => {
-        res({ error: false, event: signedEvent });
+        res({ error: false, data: signedEvent });
       });
 
       pub.on("failed", () => {
-        res({ error: true, event: signedEvent });
+        res({ error: true, data: signedEvent });
       });
     });
   }
@@ -222,7 +222,7 @@ class Relayer {
     return this.relays;
   }
 
-  public async followUser(newFollowing: string[]): Promise<PubResult> {
+  public async followUser(newFollowing: string[]): Promise<PubResult<Event>> {
     const followEvent: EventTemplate = {
       content: "",
       kind: Kind.Contacts,
@@ -233,14 +233,14 @@ class Relayer {
     const signedEvent = await window.nostr.signEvent(followEvent);
     const pub = this.pub(signedEvent);
 
-    return await new Promise<PubResult>((res) => {
+    return await new Promise<PubResult<Event>>((res) => {
       pub.on("ok", () => {
         this.following = signedEvent.tags.map((pk) => pk[1]);
-        res({ error: false, event: signedEvent });
+        res({ error: false, data: signedEvent });
       });
 
       pub.on("failed", () => {
-        res({ error: true, event: signedEvent });
+        res({ error: true, data: signedEvent });
       });
     });
   }
@@ -257,7 +257,7 @@ class Relayer {
     return JSON.parse(metadataEvents[0].content);
   }
 
-  public async addEventToFavorites(eventID: string): Promise<GenericPubResult<string[]>> {
+  public async addEventToFavorites(eventID: string): Promise<PubResult<string[]>> {
     const favoriteEventIDs = await this.fetchFavoriteEventsIDs();
 
     const event: EventTemplate = {
@@ -270,7 +270,7 @@ class Relayer {
     const signedEvent = await window.nostr.signEvent(event);
     const pub = this.pub(signedEvent);
 
-    return await new Promise<GenericPubResult<string[]>>((res) => {
+    return await new Promise<PubResult<string[]>>((res) => {
       pub.on("ok", () => {
         res({ error: false, data: signedEvent.tags.map((t) => t[1]) });
       });
@@ -281,7 +281,7 @@ class Relayer {
     });
   }
 
-  public async removeEventFromFavorites(eventID: string): Promise<GenericPubResult<string[]>> {
+  public async removeEventFromFavorites(eventID: string): Promise<PubResult<string[]>> {
     const updatedEventIDs = (await this.fetchFavoriteEventsIDs()).filter((evtID) => evtID != eventID);
 
     const event: EventTemplate = {
@@ -294,7 +294,7 @@ class Relayer {
     const signedEvent = await window.nostr.signEvent(event);
     const pub = this.pub(signedEvent);
 
-    return await new Promise<GenericPubResult<string[]>>((res) => {
+    return await new Promise<PubResult<string[]>>((res) => {
       pub.on("ok", () => {
         res({ error: false, data: signedEvent.tags.map((t) => t[1]) });
       });
