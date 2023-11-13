@@ -30,7 +30,7 @@ const FavoritePost: Component<Props> = (props): JSX.Element => {
 
       <A
         href={`/users/${props.event.pubkey}`}
-        class='bg-slate-600 active:bg-slate-700 rounded py-2 mt-2 hover:bg-slate-500'
+        class='bg-slate-600 active:bg-slate-700 rounded-md py-2 mt-2 hover:bg-slate-500'
       >
         <EventAuthor
           about={props.event.about}
