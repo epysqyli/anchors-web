@@ -3,7 +3,7 @@ import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import { JSX, Show, Component, useContext, createSignal, onMount } from "solid-js";
 
-const FavoriteEvent: Component<{ eventID: string }> = (props): JSX.Element => {
+const FavoriteEventAction: Component<{ eventID: string }> = (props): JSX.Element => {
   const { relay, favoriteEventIDs } = useContext(RelayContext);
 
   const [isEventFav, setIsEventFav] = createSignal<boolean>(false);
@@ -66,4 +66,4 @@ const FavoriteEvent: Component<{ eventID: string }> = (props): JSX.Element => {
   );
 };
 
-export default FavoriteEvent;
+export default FavoriteEventAction;
