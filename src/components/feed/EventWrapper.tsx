@@ -7,10 +7,10 @@ import EventContent from "./EventContent";
 import EventScroller from "./EventScroller";
 import CommmentsPopup from "./CommentsPopup";
 import { FiTrendingUp } from "solid-icons/fi";
+import CommentsActions from "./CommentsAction";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
-import { VsCommentDiscussion } from "solid-icons/vs";
 import FavoriteEventAction from "./FavoriteEventAction";
 import menuTogglerContext from "~/contexts/menuToggle";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
@@ -163,22 +163,11 @@ const EventWrapper: Component<Props> = (props) => {
 
             <Reactions event={props.event} />
 
-            <Show
-              when={!isLoading()}
-              fallback={
-                <div class='relative rounded py-5 w-1/12 animate-pulse'>
-                  <VsCommentDiscussion class='text-slate-500 mx-auto' size={28} />
-                </div>
-              }
-            >
-              <div
-                onClick={openCommentsPopup}
-                class='relative rounded hover:bg-slate-600 active:bg-slate-700 px-2'
-              >
-                <VsCommentDiscussion class='text-slate-400 mx-auto' size={22} />
-                <div class='text-sm text-center text-slate-400 tracking-tighter mt-1'>{commentsCount()}</div>
-              </div>
-            </Show>
+            <CommentsActions
+              commentsCount={commentsCount}
+              isLoading={isLoading}
+              openCommentsPopup={openCommentsPopup}
+            />
 
             {authMode.get() == "private" ? <FavoriteEventAction eventID={props.event.id} /> : <></>}
           </div>
@@ -247,24 +236,11 @@ const EventWrapper: Component<Props> = (props) => {
 
             <Reactions event={props.event!} />
 
-            <Show
-              when={!isLoading()}
-              fallback={
-                <div class='relative rounded py-5 w-1/12 animate-pulse'>
-                  <VsCommentDiscussion class='text-slate-500 mx-auto' size={28} />
-                </div>
-              }
-            >
-              <div
-                onClick={openCommentsPopup}
-                class='relative rounded py-5 hover:bg-slate-600 cursor-pointer active:bg-slate-700 w-1/12'
-              >
-                <VsCommentDiscussion class='text-slate-400 mx-auto' size={28} />
-                <div class='absolute top-1 right-4 text-sm text-slate-400 tracking-tighter'>
-                  {commentsCount()}
-                </div>
-              </div>
-            </Show>
+            <CommentsActions
+              commentsCount={commentsCount}
+              isLoading={isLoading}
+              openCommentsPopup={openCommentsPopup}
+            />
 
             {authMode.get() == "private" ? <FavoriteEventAction eventID={props.event.id} /> : <></>}
             {authMode.get() == "private" ? <FiTrendingUp class='text-slate-400' size={26} /> : <></>}
