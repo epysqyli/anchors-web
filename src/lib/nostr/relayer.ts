@@ -349,7 +349,7 @@ class Relayer {
       });
     });
 
-    return favoriteEvents;
+    return favoriteEvents.sort(sortByCreatedAt);
   }
 
   public isUserAlreadyFollowed = (pubkey: string): boolean => {
