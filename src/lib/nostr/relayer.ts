@@ -42,13 +42,13 @@ class Relayer {
     this.currentPool = new SimplePool();
   }
 
-  public sub(filter: Filter): Sub {
-    const sub = this.currentPool.sub(this.getReadRelays(), [filter]);
+  public sub(filter: Filter, relays?: string[]): Sub {
+    const sub = this.currentPool.sub(relays ?? this.getReadRelays(), [filter]);
     return sub;
   }
 
-  public pub(event: Event): Pub {
-    const pub = this.currentPool.publish(this.getWriteRelays(), event);
+  public pub(event: Event, relays?: string[]): Pub {
+    const pub = this.currentPool.publish(relays ?? this.getWriteRelays(), event);
     return pub;
   }
 
@@ -188,8 +188,7 @@ class Relayer {
       relays.forEach((relay) => {
         switch (relay.length) {
           case 2:
-            const found = this.relays.rw.find((r) => r == relay[1]);
-            if (!this.relays.rw.find((r) => r == relay[1])) {
+            if (!this.relays.rw.includes(relay[1])) {
               this.relays.rw.push(relay[1]);
             }
             break;
@@ -197,13 +196,13 @@ class Relayer {
           case 3:
             switch (relay[2]) {
               case "read":
-                if (!this.relays.r.find((r) => r == relay[1])) {
+                if (!this.relays.r.includes(relay[1])) {
                   this.relays.r.push(relay[1]);
                 }
                 break;
 
               case "write":
-                if (!this.relays.w.find((r) => r == relay[1])) {
+                if (!this.relays.w.includes(relay[1])) {
                   this.relays.w.push(relay[1]);
                 }
                 break;
@@ -502,6 +501,10 @@ class Relayer {
 
   private getWriteRelays(): string[] {
     return [...this.relays.w, ...this.relays.rw];
+  }
+
+  public getAllRelays(): string[] {
+    return [...this.relays.r, ...this.relays.w, ...this.relays.rw];
   }
 
   private isRelayListEmpty(): boolean {
