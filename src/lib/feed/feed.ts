@@ -208,10 +208,15 @@ const fetchAndSetOlderEvents = async (
 ): Promise<{ olderEventsCount: number }> => {
   const untilTimestamp: number = enrichedEvents()[enrichedEvents().length - 1].created_at;
 
+  let filter: Filter = { until: untilTimestamp, limit: fetchParams.fetchEventsLimit };
+  if (fetchParams.userID) {
+    filter = { ...filter, authors: [fetchParams.userID] };
+  }
+
   const olderEvents = await relay.fetchTextEvents({
     rootOnly: true,
     isAnchorsMode: isAnchorsMode(),
-    filter: { until: untilTimestamp, limit: fetchParams.fetchEventsLimit },
+    filter: filter,
     feedSearchParams: fetchParams.searchParams
   });
 

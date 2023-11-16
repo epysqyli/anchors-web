@@ -29,9 +29,8 @@ const UserPage: VoidComponent = (): JSX.Element => {
   const [reactions, setReactions] = createSignal<IReactionWithEventID[]>([]);
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
-  const [mostRecentOlderEventID, setMostRecentOlderEventID] = createSignal<string>("");
   const [isFeedOver, setIsFeedOver] = createSignal<boolean>(false);
-  const [searchParams] = useSearchParams<FeedSearchParams>();
+  const [mostRecentOlderEventIndex, setMostRecentOlderEventIndex] = createSignal<number>(0);
 
   const startFetchAndSetEventsInterval = async (): Promise<NodeJS.Timer> => {
     return await fetchAndSetEvents(
@@ -90,21 +89,26 @@ const UserPage: VoidComponent = (): JSX.Element => {
 
   const loadOlderPosts = async (): Promise<void> => {
     setIsLoading(true);
+    const latestEventsCount = enrichedEvents().length;
 
-    const olderEventsFetchResult = await fetchAndSetOlderEvents(
+    const fetchOlderEventsResults = await fetchAndSetOlderEvents(
       relay,
       {
-        fetchEventsLimit: 5,
+        fetchEventsLimit: 20,
         maxEventsCount: 75,
-        searchParams: searchParams
+        userID: params.id
       },
       anchorsMode.get,
       enrichedEvents,
       setEnrichedEvents
     );
 
-    setIsFeedOver(olderEventsFetchResult.isFeedOver);
-    setMostRecentOlderEventID(olderEventsFetchResult.mostRecentOlderEventID);
+    setIsFeedOver(fetchOlderEventsResults.olderEventsCount == 0);
+
+    if (fetchOlderEventsResults.olderEventsCount) {
+      setMostRecentOlderEventIndex(latestEventsCount);
+    }
+
     setIsLoading(false);
   };
 
@@ -114,10 +118,7 @@ const UserPage: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <Show
-        when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()}
-        fallback={<LoadingFallback />}
-      >
+      <Show when={!isLoading()} fallback={<LoadingFallback />}>
         <Feed
           enrichedEvents={enrichedEvents}
           showPopup={showPopup}
@@ -125,7 +126,7 @@ const UserPage: VoidComponent = (): JSX.Element => {
           mergeEnrichedEvents={mergeEnrichedEvents}
           isFeedOver={isFeedOver}
           loadOlderPosts={loadOlderPosts}
-          mostRecentOlderEventID={mostRecentOlderEventID}
+          mostRecentOlderEventIndex={mostRecentOlderEventIndex}
         />
       </Show>
     </>
