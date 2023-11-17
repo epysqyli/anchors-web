@@ -14,6 +14,7 @@ interface FetchParams {
   nostrRefTag?: string;
   nostrHashTag?: string;
   userID?: string;
+  specificRelays?: string[];
 }
 
 const getNewUniqueEvents = (currentEvents: Event[], newEvents: Event[]): Event[] => {
@@ -94,6 +95,7 @@ const fetchAndSetEvents = async (
       await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
+        specificRelays: fetchParams.specificRelays,
         filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] }
       })
     );
@@ -104,13 +106,13 @@ const fetchAndSetEvents = async (
     metaFilter = { authors: relay.following };
   }
 
-  setMetaEvents(await relay.fetchEventsMetadata(metaFilter));
+  setMetaEvents(await relay.fetchEventsMetadata(metaFilter, fetchParams.specificRelays));
 
   const reactionsFilter: Filter[] = events().map((evt) => {
     return { kinds: [Kind.Reaction], "#e": [evt.id] };
   });
 
-  setReactions(await relay.fetchEventsReactions(reactionsFilter));
+  setReactions(await relay.fetchEventsReactions(reactionsFilter, fetchParams.specificRelays));
   setEnrichedEvents(relay.buildEnrichedEvents(events(), metaEvents(), reactions()));
 
   setIsLoading(false);
@@ -217,18 +219,23 @@ const fetchAndSetOlderEvents = async (
     rootOnly: true,
     isAnchorsMode: isAnchorsMode(),
     filter: filter,
-    feedSearchParams: fetchParams.searchParams
+    feedSearchParams: fetchParams.searchParams,
+    specificRelays: fetchParams.specificRelays
   });
 
   if (olderEvents.length == 0) {
     return { olderEventsCount: 0 };
   }
 
-  const olderMetaEvents = await relay.fetchEventsMetadata({ authors: olderEvents.map((evt) => evt.pubkey) });
+  const olderMetaEvents = await relay.fetchEventsMetadata(
+    { authors: olderEvents.map((evt) => evt.pubkey) },
+    fetchParams.specificRelays
+  );
 
-  const olderEventsReactions = await relay.fetchEventsReactions([
-    { kinds: [Kind.Reaction], "#e": olderEvents.map((evt) => evt.id) }
-  ]);
+  const olderEventsReactions = await relay.fetchEventsReactions(
+    [{ kinds: [Kind.Reaction], "#e": olderEvents.map((evt) => evt.id) }],
+    fetchParams.specificRelays
+  );
 
   const olderEnrichedEvents = relay.buildEnrichedEvents(olderEvents, olderMetaEvents, olderEventsReactions);
 

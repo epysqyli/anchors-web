@@ -21,6 +21,7 @@ const UserPage: VoidComponent = (): JSX.Element => {
 
   const params = useParams<{ id: string }>();
   let intervalID: NodeJS.Timer | undefined = undefined;
+  let userReadFromRelays: string[] = [];
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
@@ -51,12 +52,14 @@ const UserPage: VoidComponent = (): JSX.Element => {
       {
         fetchEventsLimit: FETCH_EVENTS_LIMIT,
         maxEventsCount: MAX_EVENTS_COUNT,
-        userID: params.id
+        userID: params.id,
+        specificRelays: userReadFromRelays
       }
     );
   };
 
   onMount(async () => {
+    userReadFromRelays = await relay.fetchUserReadFromRelays(params.id);
     intervalID = await startFetchAndSetEventsInterval();
   });
 
@@ -96,7 +99,8 @@ const UserPage: VoidComponent = (): JSX.Element => {
       {
         fetchEventsLimit: 20,
         maxEventsCount: 75,
-        userID: params.id
+        userID: params.id,
+        specificRelays: userReadFromRelays
       },
       anchorsMode.get,
       enrichedEvents,

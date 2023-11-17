@@ -24,6 +24,7 @@ interface FetchOptions {
   filter: Filter;
   feedSearchParams?: FeedSearchParams;
   postFetchLimit?: number;
+  specificRelays?: string[];
 }
 
 class Relayer {
@@ -81,7 +82,11 @@ class Relayer {
     // });
   }
 
-  public async reactToEvent(eventID: string, eventPubkey: string, reaction: Reaction): Promise<PubResult<Event>> {
+  public async reactToEvent(
+    eventID: string,
+    eventPubkey: string,
+    reaction: Reaction
+  ): Promise<PubResult<Event>> {
     const reactionEvent: EventTemplate = {
       kind: Kind.Reaction,
       tags: [
@@ -219,6 +224,26 @@ class Relayer {
     }
 
     return this.relays;
+  }
+
+  public async fetchUserReadFromRelays(pubkey: string): Promise<string[]> {
+    const userRelayList: Event[] = await this.currentPool.list(this.getReadRelays(), [
+      { kinds: [Kind.RelayList], authors: [pubkey] }
+    ]);
+
+    const userReadFromRelays: string[] = [];
+
+    userRelayList.forEach((evt) => {
+      evt.tags.forEach((t) => {
+        if (t.length == 2 || (t.length == 3 && t[2] == "read")) {
+          if (!userReadFromRelays.includes(t[1])) {
+            userReadFromRelays.push(t[1]);
+          }
+        }
+      });
+    });
+
+    return userReadFromRelays;
   }
 
   public async followUser(newFollowing: string[]): Promise<PubResult<Event>> {
@@ -388,6 +413,10 @@ class Relayer {
       readFromRelays = [options.feedSearchParams.relayAddress];
     }
 
+    if (options.specificRelays != undefined && options.specificRelays.length != 0) {
+      readFromRelays = options.specificRelays;
+    }
+
     const events = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
 
     if (options.rootOnly && options.postFetchLimit) {
@@ -401,9 +430,17 @@ class Relayer {
     return events;
   }
 
-  public async fetchEventsMetadata(filter: Filter): Promise<IUserMetadataWithPubkey[]> {
+  public async fetchEventsMetadata(
+    filter: Filter,
+    specificRelays?: string[]
+  ): Promise<IUserMetadataWithPubkey[]> {
+    let readFromRelays = this.getReadRelays();
+    if (specificRelays != undefined && specificRelays.length != 0) {
+      readFromRelays = specificRelays;
+    }
+
     const events = (
-      await this.currentPool.list(this.getReadRelays(), [{ ...filter, kinds: [Kind.Metadata] }])
+      await this.currentPool.list(readFromRelays, [{ ...filter, kinds: [Kind.Metadata] }])
     ).filter(this.isEventValid);
 
     const metadataEvents: IUserMetadataWithPubkey[] = events.map((evt) => {
@@ -414,8 +451,16 @@ class Relayer {
     return metadataEvents;
   }
 
-  public async fetchEventsReactions(filter: Filter[]): Promise<IReactionWithEventID[]> {
-    const events = (await this.currentPool.list(this.getReadRelays(), filter)).filter(this.isEventValid);
+  public async fetchEventsReactions(
+    filter: Filter[],
+    specificRelays?: string[]
+  ): Promise<IReactionWithEventID[]> {
+    let readFromRelays = this.getReadRelays();
+    if (specificRelays != undefined && specificRelays.length != 0) {
+      readFromRelays = specificRelays;
+    }
+
+    const events = (await this.currentPool.list(readFromRelays, filter)).filter(this.isEventValid);
     const eventdIDs = filter.flatMap((f) => f["#e"]);
 
     return eventdIDs.map((evtID) => {
@@ -435,8 +480,8 @@ class Relayer {
           reactionWithEventID.positive.count += 1;
           reactionWithEventID.positive.events.push({ eventID: re.id, pubkey: re.pubkey });
         } else {
-          (reactionWithEventID.negative.count += 1),
-            reactionWithEventID.negative.events.push({ eventID: re.id, pubkey: re.pubkey });
+          reactionWithEventID.negative.count += 1;
+          reactionWithEventID.negative.events.push({ eventID: re.id, pubkey: re.pubkey });
         }
       });
 
@@ -478,9 +523,14 @@ class Relayer {
       .sort(sortByCreatedAt);
   }
 
-  public async fetchComments(rootEventID: string): Promise<IEnrichedEvent[]> {
+  public async fetchComments(rootEventID: string, specificRelays?: string[]): Promise<IEnrichedEvent[]> {
+    let readFromRelays = this.getReadRelays();
+    if (specificRelays != undefined && specificRelays.length != 0) {
+      readFromRelays = specificRelays;
+    }
+
     const filter = { "#e": [rootEventID], kinds: [Kind.Text] };
-    const comments = (await this.currentPool.list(this.getReadRelays(), [filter])).filter(this.isEventValid);
+    const comments = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
 
     const metadata = await this.fetchEventsMetadata({
       authors: [...new Set(comments.map((evt) => evt.pubkey))]
@@ -490,7 +540,7 @@ class Relayer {
       return { kinds: [Kind.Reaction], "#e": [evt.id] };
     });
 
-    const reactions = await this.fetchEventsReactions(reactionsFilter);
+    const reactions = await this.fetchEventsReactions(reactionsFilter, specificRelays);
 
     return this.buildEnrichedEvents(comments, metadata, reactions);
   }
