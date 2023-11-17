@@ -21,6 +21,7 @@ const RefUrl: VoidComponent = (): JSX.Element => {
 
   const params = useParams<{ refUrl: string }>();
   let intervalID: NodeJS.Timer | undefined = undefined;
+  const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const [events, setEvents] = createSignal<Event[]>([]);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
@@ -29,9 +30,8 @@ const RefUrl: VoidComponent = (): JSX.Element => {
   const [reactions, setReactions] = createSignal<IReactionWithEventID[]>([]);
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
   const [newEnrichedEvents, setNewEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);
-  const [mostRecentOlderEventID, setMostRecentOlderEventID] = createSignal<string>("");
   const [isFeedOver, setIsFeedOver] = createSignal<boolean>(false);
-  const [searchParams] = useSearchParams<FeedSearchParams>();
+  const [mostRecentOlderEventIndex, setMostRecentOlderEventIndex] = createSignal<number>(0);
 
   const startFetchAndSetEventsInterval = async (): Promise<NodeJS.Timer> => {
     return await fetchAndSetEvents(
@@ -90,8 +90,9 @@ const RefUrl: VoidComponent = (): JSX.Element => {
 
   const loadOlderPosts = async (): Promise<void> => {
     setIsLoading(true);
+    const latestEventsCount = enrichedEvents().length;
 
-    const olderEventsFetchResult = await fetchAndSetOlderEvents(
+    const fetchOlderEventsResults = await fetchAndSetOlderEvents(
       relay,
       {
         fetchEventsLimit: 5,
@@ -103,8 +104,12 @@ const RefUrl: VoidComponent = (): JSX.Element => {
       setEnrichedEvents
     );
 
-    setIsFeedOver(olderEventsFetchResult.isFeedOver);
-    setMostRecentOlderEventID(olderEventsFetchResult.mostRecentOlderEventID);
+    setIsFeedOver(fetchOlderEventsResults.olderEventsCount == 0);
+
+    if (fetchOlderEventsResults.olderEventsCount) {
+      setMostRecentOlderEventIndex(latestEventsCount);
+    }
+
     setIsLoading(false);
   };
 
@@ -125,7 +130,7 @@ const RefUrl: VoidComponent = (): JSX.Element => {
           mergeEnrichedEvents={mergeEnrichedEvents}
           isFeedOver={isFeedOver}
           loadOlderPosts={loadOlderPosts}
-          mostRecentOlderEventID={mostRecentOlderEventID}
+          mostRecentOlderEventIndex={mostRecentOlderEventIndex}
         />
       </Show>
     </>
