@@ -155,17 +155,16 @@ const fetchAndSetEvents = async (
       });
     }
 
-
-  if (fetchParams.userID != undefined) {
-    setEvents(
-      await relay.fetchTextEvents({
-        rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
-        specificRelays: fetchParams.specificRelays,
-        filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] }
-      })
-    );
-  }
+    if (fetchParams.userID != undefined) {
+      setEvents(
+        await relay.fetchTextEvents({
+          rootOnly: true,
+          isAnchorsMode: isAnchorsMode(),
+          specificRelays: fetchParams.specificRelays,
+          filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] }
+        })
+      );
+    }
 
     if (newEvents.length !== 0) {
       const newUniqueEvents = getNewUniqueEvents(events(), newEvents);
