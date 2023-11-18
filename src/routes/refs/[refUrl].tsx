@@ -1,13 +1,12 @@
-import { Event } from "nostr-tools";
 import { useParams } from "solid-start";
 import Feed from "~/components/feed/Feed";
 import { RelayContext } from "~/contexts/relay";
-import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { useBeforeLeave, useSearchParams } from "@solidjs/router";
+import EventWithRepostInfo from "~/interfaces/EventWithRepostInfo";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { fetchAndSetEvents, fetchAndSetOlderEvents } from "~/lib/feed/feed";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
@@ -23,7 +22,7 @@ const RefUrl: VoidComponent = (): JSX.Element => {
   let intervalID: NodeJS.Timer | undefined = undefined;
   const [searchParams] = useSearchParams<FeedSearchParams>();
 
-  const [events, setEvents] = createSignal<Event[]>([]);
+  const [events, setEvents] = createSignal<EventWithRepostInfo[]>([]);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [metaEvents, setMetaEvents] = createSignal<IUserMetadataWithPubkey[]>([]);

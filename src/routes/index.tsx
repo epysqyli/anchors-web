@@ -1,13 +1,13 @@
-import { Event } from "nostr-tools";
 import Feed from "~/components/feed/Feed";
 import { RelayContext } from "~/contexts/relay";
-import { fetchAndSetEvents, fetchAndSetOlderEvents } from "~/lib/feed/feed";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import LoadingPoints from "~/components/feed/LoadingPoints";
 import { useBeforeLeave, useSearchParams } from "@solidjs/router";
+import EventWithRepostInfo from "~/interfaces/EventWithRepostInfo";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
+import { fetchAndSetEvents, fetchAndSetOlderEvents } from "~/lib/feed/feed";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "~/lib/nostr/nostr-utils";
 import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
 
@@ -22,7 +22,7 @@ const Home: Component<{}> = () => {
   const [searchParams, setSearchParams] = useSearchParams<FeedSearchParams>();
 
   let intervalID: NodeJS.Timer | undefined;
-  const [events, setEvents] = createSignal<Event[]>([]);
+  const [events, setEvents] = createSignal<EventWithRepostInfo[]>([]);
   const [metaEvents, setMetaEvents] = createSignal<IUserMetadataWithPubkey[]>([]);
   const [reactions, setReactions] = createSignal<IReactionWithEventID[]>([]);
   const [enrichedEvents, setEnrichedEvents] = createSignal<IEnrichedEvent[]>([]);

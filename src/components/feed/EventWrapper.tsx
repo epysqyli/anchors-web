@@ -7,7 +7,6 @@ import EventContent from "./EventContent";
 import RepostAction from "./RepostAction";
 import EventScroller from "./EventScroller";
 import CommmentsPopup from "./CommentsPopup";
-import { FiTrendingUp } from "solid-icons/fi";
 import CommentsActions from "./CommentsAction";
 import { RelayContext } from "~/contexts/relay";
 import EventReferences from "./EventReferences";
@@ -17,6 +16,7 @@ import menuTogglerContext from "~/contexts/menuToggle";
 import { IFeedRefTag } from "~/interfaces/IFeedRefTag";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { fetchMovie } from "~/lib/external-services/tmdb";
+import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import { fetchSong } from "~/lib/external-services/spotify";
 import { parseReferenceType } from "~/lib/ref-tags/references";
 import { fetchBook } from "~/lib/external-services/open-library";
@@ -47,6 +47,7 @@ const EventWrapper: Component<Props> = (props) => {
   const [commentsCount, setCommentsCount] = createSignal<number>(0);
   const [showCommentsPopup, setShowCommentsPopup] = createSignal<boolean>(false);
   const [isCommentTreeLoading, setIsCommentTreeLoading] = createSignal<boolean>(false);
+  const [reposter, setReposter] = createSignal<IUserMetadata | null>();
 
   const handleEventHtmlRef = (el: HTMLDivElement): void => {
     if (props.addHtmlRef !== undefined) {
@@ -78,6 +79,10 @@ const EventWrapper: Component<Props> = (props) => {
   };
 
   onMount(async () => {
+    if (props.event.isRepost) {
+      setReposter(await relay.fetchUserMetadata(props.event.repostEvent?.pubkey));
+    }
+
     const referenceTags = props.event.tags
       .filter((t) => t[0] == "r")
       .filter((t) => t[1] != relay.ANCHORS_EVENT_RTAG_IDENTIFIER);
@@ -134,14 +139,7 @@ const EventWrapper: Component<Props> = (props) => {
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
         <div ref={handleEventHtmlRef} class='snap-start h-[90dvh] text-white pt-2 mx-auto px-2'>
-          <div
-            class={`${
-              eventRefTags().length ? "h-3/5" : "h-4/5"
-            }  text-neutral-300 mx-auto p-2 pr-5 overflow-auto 
-               tracking-tight break-words bg-slate-800 bg-opacity-40 rounded`}
-          >
-            {props.event.content}
-          </div>
+          <EventContent event={props.event} refTagsLength={eventRefTags().length} reposter={reposter} />
 
           <div
             class={`${
@@ -216,7 +214,7 @@ const EventWrapper: Component<Props> = (props) => {
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3'
         >
           <div class='grid grid-cols-6 h-[84%] mb-2 gap-x-2'>
-            <EventContent content={props.event.content} />
+            <EventContent event={props.event} reposter={reposter} refTagsLength={eventRefTags().length} />
             <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 

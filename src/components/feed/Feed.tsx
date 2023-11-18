@@ -94,7 +94,7 @@ const Feed: Component<Props> = (props): JSX.Element => {
 
       <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
         <div class='relative h-full animate-scale-on-load'>
-          <div class='absolute top-3 left-5'>
+          <div class='absolute top-3 right-8'>
             <NewEventsPopup
               topEventRef={eventHtmlRefs()[0]}
               showPopup={props.showPopup!}

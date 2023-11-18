@@ -19,7 +19,8 @@ const EventByID: VoidComponent = (): JSX.Element => {
     const events = await relay.fetchTextEvents({
       rootOnly: true,
       isAnchorsMode: false,
-      filter: { ids: [params.id] }
+      filter: { ids: [params.id] },
+      fetchRepostEvents: true
     });
 
     const metadata = await relay.fetchEventsMetadata({ authors: events.map((evt) => evt.pubkey) });
@@ -33,10 +34,7 @@ const EventByID: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <Show
-        when={!isLoading() && events().length > 0}
-        fallback={<LoadingFallback />}
-      >
+      <Show when={!isLoading() && events().length > 0} fallback={<LoadingFallback />}>
         <EventWrapper event={events()[0]} />
       </Show>
     </>

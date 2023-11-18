@@ -17,6 +17,7 @@ import RelayList from "~/interfaces/RelayList";
 import { sortByCreatedAt } from "./nostr-utils";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import EventWithMetadata from "~/interfaces/EventWithMetadata";
+import EventWithRepostInfo from "~/interfaces/EventWithRepostInfo";
 
 interface FetchOptions {
   rootOnly: boolean;
@@ -25,6 +26,7 @@ interface FetchOptions {
   feedSearchParams?: FeedSearchParams;
   postFetchLimit?: number;
   specificRelays?: string[];
+  fetchRepostEvents?: boolean;
 }
 
 class Relayer {
@@ -269,9 +271,9 @@ class Relayer {
     });
   }
 
-  public async fetchUserMetadata(): Promise<IUserMetadata | null> {
+  public async fetchUserMetadata(pubkey?: string): Promise<IUserMetadata | null> {
     const metadataEvents: Event[] = await this.currentPool.list(this.getReadRelays(), [
-      { kinds: [Kind.Metadata], authors: [this.userPubKey!] }
+      { kinds: [Kind.Metadata], authors: [pubkey ?? this.userPubKey!] }
     ]);
 
     if (metadataEvents.length == 0) {
@@ -376,8 +378,12 @@ class Relayer {
     return favoriteEvents.sort(sortByCreatedAt);
   }
 
-  public async fetchTextEvents(options: FetchOptions): Promise<Event[]> {
+  public async fetchTextEvents(options: FetchOptions): Promise<EventWithRepostInfo[]> {
     let filter: Filter = { ...options.filter, kinds: [Kind.Text] };
+
+    if (options.fetchRepostEvents) {
+      filter.kinds?.push(Kind.Repost);
+    }
 
     if (options.isAnchorsMode) {
       filter = { ...filter, "#r": [this.ANCHORS_EVENT_RTAG_IDENTIFIER] };
@@ -409,14 +415,37 @@ class Relayer {
       readFromRelays = options.specificRelays;
     }
 
-    const events = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
+    const events: EventWithRepostInfo[] = (await this.currentPool.list(readFromRelays, [filter]))
+      .filter(this.isEventValid)
+      .map((evt) => {
+        if (evt.kind == Kind.Repost) {
+          const originalEvent: Event = JSON.parse(evt.content); // manage JSON parse error
+          const eventWithRepostInfo: EventWithRepostInfo = {
+            isRepost: true,
+            repostEvent: evt,
+            content: originalEvent.content,
+            created_at: originalEvent.created_at,
+            id: originalEvent.id,
+            kind: originalEvent.kind,
+            tags: originalEvent.tags,
+            pubkey: originalEvent.pubkey,
+            sig: originalEvent.sig
+          };
+
+          return eventWithRepostInfo;
+        } else {
+          return { ...evt, isRepost: false };
+        }
+      });
 
     if (options.rootOnly && options.postFetchLimit) {
-      return this.getRootTextEvents(events).slice(0, options.postFetchLimit);
+      return events
+        .filter((evt) => evt.tags.filter((t) => t[0] == "e").length == 0)
+        .slice(0, options.postFetchLimit);
     }
 
     if (options.rootOnly) {
-      return this.getRootTextEvents(events);
+      return events.filter((evt) => evt.tags.filter((t) => t[0] == "e").length == 0);
     }
 
     return events;
@@ -509,31 +538,31 @@ class Relayer {
       created_at: Math.floor(Date.now() / 1000),
       kind: Kind.Repost,
       tags: [
-        ['e', event.id, this.currentPool.seenOn(event.id)[0]],
-        ['p', event.pubkey]
+        ["e", event.id, this.currentPool.seenOn(event.id)[0]],
+        ["p", event.pubkey]
       ]
-    }
+    };
 
     if (isAnchorsMode) {
-      repostEvent.tags.push(['r', this.ANCHORS_EVENT_RTAG_IDENTIFIER]);
+      repostEvent.tags.push(["r", this.ANCHORS_EVENT_RTAG_IDENTIFIER]);
     }
 
     const signedRepostEvent = await window.nostr.signEvent(repostEvent);
     const pub = this.pub(signedRepostEvent, [import.meta.env.VITE_DEFAULT_RELAY]);
 
     return await new Promise<PubResult<Event>>((res) => {
-      pub.on('ok', () => {
+      pub.on("ok", () => {
         res({ error: false, data: signedRepostEvent });
-      })
+      });
 
-      pub.on('failed', () => {
+      pub.on("failed", () => {
         res({ error: true, data: signedRepostEvent });
-      })
-    })
+      });
+    });
   }
 
   public buildEnrichedEvents(
-    events: Event[],
+    events: EventWithRepostInfo[],
     metadata: IUserMetadataWithPubkey[],
     reactions: IReactionWithEventID[]
   ): IEnrichedEvent[] {
@@ -545,8 +574,14 @@ class Relayer {
           about: "",
           picture: "",
           positive: { count: 0, events: [] },
-          negative: { count: 0, events: [] }
+          negative: { count: 0, events: [] },
+          isRepost: evt.isRepost,
+          repostEvent: evt.repostEvent
         };
+
+        if (evt.isRepost) {
+          enrichedEvent.created_at = evt.repostEvent?.created_at ?? evt.created_at;
+        }
 
         const metaEvent = metadata.find((metaEvt) => metaEvt.pubkey == evt.pubkey);
         if (metaEvent) {
@@ -592,10 +627,6 @@ class Relayer {
     }
 
     return false;
-  }
-
-  private getRootTextEvents(events: Event[]): Event[] {
-    return events.filter((evt) => evt.tags.filter((t) => t[0] == "e").length == 0);
   }
 
   private isEventValid(event: Event): boolean {

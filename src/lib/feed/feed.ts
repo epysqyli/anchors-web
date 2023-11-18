@@ -6,6 +6,7 @@ import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "../nostr/nostr-utils";
+import EventWithRepostInfo from "~/interfaces/EventWithRepostInfo";
 
 interface FetchParams {
   fetchEventsLimit: number;
@@ -17,7 +18,10 @@ interface FetchParams {
   specificRelays?: string[];
 }
 
-const getNewUniqueEvents = (currentEvents: Event[], newEvents: Event[]): Event[] => {
+const getNewUniqueEvents = (
+  currentEvents: EventWithRepostInfo[],
+  newEvents: EventWithRepostInfo[]
+): EventWithRepostInfo[] => {
   const newEventsIDs = newEvents.map((e) => e.id);
   const oldEventsIDs = currentEvents.map((e) => e.id);
   const uniqueNewEventsIDs = newEventsIDs.filter((newID) => !oldEventsIDs.includes(newID));
@@ -43,8 +47,8 @@ const getFetchSinceTimestamp = (currentEvents: Event[], newEvents: Event[]): num
 const fetchAndSetEvents = async (
   relay: Relayer,
   setIsLoading: Setter<boolean>,
-  events: Accessor<Event[]>,
-  setEvents: Setter<Event[]>,
+  events: Accessor<EventWithRepostInfo[]>,
+  setEvents: Setter<EventWithRepostInfo[]>,
   metaEvents: Accessor<IUserMetadataWithPubkey[]>,
   setMetaEvents: Setter<IUserMetadataWithPubkey[]>,
   reactions: Accessor<IReactionWithEventID[]>,
@@ -65,7 +69,8 @@ const fetchAndSetEvents = async (
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
         feedSearchParams: fetchParams.searchParams,
-        filter: { limit: fetchParams.fetchEventsLimit }
+        filter: { limit: fetchParams.fetchEventsLimit },
+        fetchRepostEvents: true
       })
     );
   }
@@ -75,7 +80,8 @@ const fetchAndSetEvents = async (
       await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
-        filter: { limit: fetchParams.fetchEventsLimit, "#r": [fetchParams.nostrRefTag] }
+        filter: { limit: fetchParams.fetchEventsLimit, "#r": [fetchParams.nostrRefTag] },
+        fetchRepostEvents: true
       })
     );
   }
@@ -85,7 +91,8 @@ const fetchAndSetEvents = async (
       await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
-        filter: { limit: fetchParams.fetchEventsLimit, "#t": [fetchParams.nostrHashTag] }
+        filter: { limit: fetchParams.fetchEventsLimit, "#t": [fetchParams.nostrHashTag] },
+        fetchRepostEvents: true
       })
     );
   }
@@ -96,7 +103,8 @@ const fetchAndSetEvents = async (
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
         specificRelays: fetchParams.specificRelays,
-        filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] }
+        filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] },
+        fetchRepostEvents: true
       })
     );
   }
@@ -120,14 +128,15 @@ const fetchAndSetEvents = async (
   const intervalID = setInterval(async () => {
     let fetchSinceTimestamp = getFetchSinceTimestamp(enrichedEvents(), newEnrichedEvents());
 
-    let newEvents: Event[] = [];
+    let newEvents: EventWithRepostInfo[] = [];
 
     if (fetchParams.searchParams != undefined) {
       newEvents = await relay.fetchTextEvents({
         rootOnly: true,
         isAnchorsMode: isAnchorsMode(),
         feedSearchParams: fetchParams.searchParams,
-        filter: { limit: fetchParams.fetchEventsLimit, since: fetchSinceTimestamp + 1 }
+        filter: { limit: fetchParams.fetchEventsLimit, since: fetchSinceTimestamp + 1 },
+        fetchRepostEvents: true
       });
     }
 
@@ -139,7 +148,8 @@ const fetchAndSetEvents = async (
           limit: fetchParams.fetchEventsLimit,
           since: fetchSinceTimestamp + 1,
           "#r": [fetchParams.nostrRefTag]
-        }
+        },
+        fetchRepostEvents: true
       });
     }
 
@@ -151,7 +161,8 @@ const fetchAndSetEvents = async (
           limit: fetchParams.fetchEventsLimit,
           since: fetchSinceTimestamp + 1,
           "#t": [fetchParams.nostrHashTag]
-        }
+        },
+        fetchRepostEvents: true
       });
     }
 
@@ -161,7 +172,8 @@ const fetchAndSetEvents = async (
           rootOnly: true,
           isAnchorsMode: isAnchorsMode(),
           specificRelays: fetchParams.specificRelays,
-          filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] }
+          filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] },
+          fetchRepostEvents: true
         })
       );
     }

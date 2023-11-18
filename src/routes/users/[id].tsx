@@ -6,6 +6,7 @@ import Feed from "~/components/feed/Feed";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { RelayContext } from "~/contexts/relay";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
+import EventWithRepostInfo from "~/interfaces/EventWithRepostInfo";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
@@ -23,7 +24,7 @@ const UserPage: VoidComponent = (): JSX.Element => {
   let intervalID: NodeJS.Timer | undefined = undefined;
   let userReadFromRelays: string[] = [];
 
-  const [events, setEvents] = createSignal<Event[]>([]);
+  const [events, setEvents] = createSignal<EventWithRepostInfo[]>([]);
   const [showPopup, setShowPopup] = createSignal<boolean>(false);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
   const [metaEvents, setMetaEvents] = createSignal<IUserMetadataWithPubkey[]>([]);
