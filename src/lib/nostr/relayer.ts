@@ -503,6 +503,31 @@ class Relayer {
     return this.buildEnrichedEvents(comments, metadata, reactions);
   }
 
+  public async repostEvent(event: Event): Promise<PubResult<Event>> {
+    const repostEvent: EventTemplate = {
+      content: JSON.stringify(event),
+      created_at: Math.floor(Date.now() / 1000),
+      kind: Kind.Repost,
+      tags: [
+        ['e', event.id, this.currentPool.seenOn(event.id)[0]],
+        ['p', event.pubkey]
+      ]
+    }
+
+    const signedRepostEvent = await window.nostr.signEvent(repostEvent);
+    const pub = this.pub(signedRepostEvent, [import.meta.env.VITE_DEFAULT_RELAY]);
+
+    return await new Promise<PubResult<Event>>((res) => {
+      pub.on('ok', () => {
+        res({ error: false, data: signedRepostEvent });
+      })
+
+      pub.on('failed', () => {
+        res({ error: true, data: signedRepostEvent });
+      })
+    })
+  }
+
   public buildEnrichedEvents(
     events: Event[],
     metadata: IUserMetadataWithPubkey[],
