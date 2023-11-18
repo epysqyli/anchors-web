@@ -376,14 +376,6 @@ class Relayer {
     return favoriteEvents.sort(sortByCreatedAt);
   }
 
-  public isUserAlreadyFollowed = (pubkey: string): boolean => {
-    if (this.following.includes(pubkey)) {
-      return true;
-    }
-
-    return false;
-  };
-
   public async fetchTextEvents(options: FetchOptions): Promise<Event[]> {
     let filter: Filter = { ...options.filter, kinds: [Kind.Text] };
 
@@ -489,6 +481,28 @@ class Relayer {
     });
   }
 
+  public async fetchComments(rootEventID: string, specificRelays?: string[]): Promise<IEnrichedEvent[]> {
+    let readFromRelays = this.getReadRelays();
+    if (specificRelays != undefined && specificRelays.length != 0) {
+      readFromRelays = specificRelays;
+    }
+
+    const filter = { "#e": [rootEventID], kinds: [Kind.Text] };
+    const comments = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
+
+    const metadata = await this.fetchEventsMetadata({
+      authors: [...new Set(comments.map((evt) => evt.pubkey))]
+    });
+
+    const reactionsFilter: Filter[] = comments.map((evt) => {
+      return { kinds: [Kind.Reaction], "#e": [evt.id] };
+    });
+
+    const reactions = await this.fetchEventsReactions(reactionsFilter, specificRelays);
+
+    return this.buildEnrichedEvents(comments, metadata, reactions);
+  }
+
   public buildEnrichedEvents(
     events: Event[],
     metadata: IUserMetadataWithPubkey[],
@@ -523,27 +537,13 @@ class Relayer {
       .sort(sortByCreatedAt);
   }
 
-  public async fetchComments(rootEventID: string, specificRelays?: string[]): Promise<IEnrichedEvent[]> {
-    let readFromRelays = this.getReadRelays();
-    if (specificRelays != undefined && specificRelays.length != 0) {
-      readFromRelays = specificRelays;
+  public isUserAlreadyFollowed = (pubkey: string): boolean => {
+    if (this.following.includes(pubkey)) {
+      return true;
     }
 
-    const filter = { "#e": [rootEventID], kinds: [Kind.Text] };
-    const comments = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
-
-    const metadata = await this.fetchEventsMetadata({
-      authors: [...new Set(comments.map((evt) => evt.pubkey))]
-    });
-
-    const reactionsFilter: Filter[] = comments.map((evt) => {
-      return { kinds: [Kind.Reaction], "#e": [evt.id] };
-    });
-
-    const reactions = await this.fetchEventsReactions(reactionsFilter, specificRelays);
-
-    return this.buildEnrichedEvents(comments, metadata, reactions);
-  }
+    return false;
+  };
 
   public getReadRelays(): string[] {
     return [...this.relays.r, ...this.relays.rw];
