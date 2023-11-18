@@ -415,11 +415,14 @@ class Relayer {
       readFromRelays = options.specificRelays;
     }
 
-    const events: EventWithRepostInfo[] = (await this.currentPool.list(readFromRelays, [filter]))
-      .filter(this.isEventValid)
-      .map((evt) => {
-        if (evt.kind == Kind.Repost) {
-          const originalEvent: Event = JSON.parse(evt.content); // manage JSON parse error
+    const events: Event[] = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
+    let eventsWithRepostInfo: EventWithRepostInfo[] = [];
+
+    events.forEach((evt) => {
+      if (evt.kind == Kind.Repost) {
+        try {
+          const originalEvent: Event = JSON.parse(evt.content);
+
           const eventWithRepostInfo: EventWithRepostInfo = {
             isRepost: true,
             repostEvent: evt,
@@ -432,23 +435,24 @@ class Relayer {
             sig: originalEvent.sig
           };
 
-          return eventWithRepostInfo;
-        } else {
-          return { ...evt, isRepost: false };
-        }
-      });
+          eventsWithRepostInfo.push(eventWithRepostInfo);
+        } catch (error) {}
+      } else {
+        eventsWithRepostInfo.push({ ...evt, isRepost: false });
+      }
+    });
 
     if (options.rootOnly && options.postFetchLimit) {
-      return events
+      return eventsWithRepostInfo
         .filter((evt) => evt.tags.filter((t) => t[0] == "e").length == 0)
         .slice(0, options.postFetchLimit);
     }
 
     if (options.rootOnly) {
-      return events.filter((evt) => evt.tags.filter((t) => t[0] == "e").length == 0);
+      return eventsWithRepostInfo.filter((evt) => evt.tags.filter((t) => t[0] == "e").length == 0);
     }
 
-    return events;
+    return eventsWithRepostInfo;
   }
 
   public async fetchEventsMetadata(
@@ -529,7 +533,11 @@ class Relayer {
 
     const reactions = await this.fetchEventsReactions(reactionsFilter, specificRelays);
 
-    return this.buildEnrichedEvents(comments, metadata, reactions);
+    const commentsWithRepostInfo: EventWithRepostInfo[] = comments.map((cmt) => {
+      return { ...cmt, isRepost: false };
+    });
+    
+    return this.buildEnrichedEvents(commentsWithRepostInfo, metadata, reactions);
   }
 
   public async repostEvent(event: Event, isAnchorsMode: boolean): Promise<PubResult<Event>> {
