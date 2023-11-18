@@ -4,6 +4,7 @@ import UserPopup from "./UserPopup";
 import EventAnchor from "./EventAnchor";
 import EventAuthor from "./EventAuthor";
 import EventContent from "./EventContent";
+import RepostAction from "./RepostAction";
 import EventScroller from "./EventScroller";
 import CommmentsPopup from "./CommentsPopup";
 import { FiTrendingUp } from "solid-icons/fi";
@@ -175,7 +176,7 @@ const EventWrapper: Component<Props> = (props) => {
           <div class='h-[10%] flex items-center justify-around gap-x-3'>
             <div class='text-sm text-slate-400 w-1/3 text-center'>{parseDate(props.event.created_at)}</div>
             <EventAnchor nostrEventID={props.event.id} />
-            <FiTrendingUp class='text-slate-400 w-1/4' size={26} />
+            {authMode.get() == "private" ? <RepostAction enrichedEvent={props.event} /> : <></>}
           </div>
         </div>
         <div class='h-[10dvh]'></div>
@@ -243,7 +244,7 @@ const EventWrapper: Component<Props> = (props) => {
             />
 
             {authMode.get() == "private" ? <FavoriteEventAction eventID={props.event.id} /> : <></>}
-            {authMode.get() == "private" ? <FiTrendingUp class='text-slate-400' size={26} /> : <></>}
+            {authMode.get() == "private" ? <RepostAction enrichedEvent={props.event} /> : <></>}
             <EventAnchor nostrEventID={props.event.id} />
           </div>
         </div>

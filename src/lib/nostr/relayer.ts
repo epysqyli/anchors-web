@@ -503,7 +503,7 @@ class Relayer {
     return this.buildEnrichedEvents(comments, metadata, reactions);
   }
 
-  public async repostEvent(event: Event): Promise<PubResult<Event>> {
+  public async repostEvent(event: Event, isAnchorsMode: boolean): Promise<PubResult<Event>> {
     const repostEvent: EventTemplate = {
       content: JSON.stringify(event),
       created_at: Math.floor(Date.now() / 1000),
@@ -512,6 +512,10 @@ class Relayer {
         ['e', event.id, this.currentPool.seenOn(event.id)[0]],
         ['p', event.pubkey]
       ]
+    }
+
+    if (isAnchorsMode) {
+      repostEvent.tags.push(['r', this.ANCHORS_EVENT_RTAG_IDENTIFIER]);
     }
 
     const signedRepostEvent = await window.nostr.signEvent(repostEvent);
