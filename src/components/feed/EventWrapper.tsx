@@ -48,6 +48,12 @@ const EventWrapper: Component<Props> = (props) => {
   const [showCommentsPopup, setShowCommentsPopup] = createSignal<boolean>(false);
   const [isCommentTreeLoading, setIsCommentTreeLoading] = createSignal<boolean>(false);
   const [reposter, setReposter] = createSignal<IUserMetadata | null>();
+  const [UserPopupProps, setUserPopupProps] = createSignal<{ pubkey: string } & IUserMetadata>({
+    about: props.event.about,
+    name: props.event.name,
+    picture: props.event.picture,
+    pubkey: props.event.pubkey
+  });
 
   const handleEventHtmlRef = (el: HTMLDivElement): void => {
     if (props.addHtmlRef !== undefined) {
@@ -76,6 +82,17 @@ const EventWrapper: Component<Props> = (props) => {
     setCommentsCount(comments.length);
     setCommentsStructure(new EventComments(props.event, comments).structure);
     setIsCommentTreeLoading(false);
+  };
+
+  const restoreUserPopupProps = (): void => {
+    if (UserPopupProps().pubkey != props.event.pubkey) {
+      setUserPopupProps({
+        about: props.event.about,
+        name: props.event.name,
+        picture: props.event.picture,
+        pubkey: props.event.pubkey
+      });
+    }
   };
 
   onMount(async () => {
@@ -139,7 +156,13 @@ const EventWrapper: Component<Props> = (props) => {
     <>
       <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
         <div ref={handleEventHtmlRef} class='snap-start h-[90dvh] text-white pt-2 mx-auto px-2'>
-          <EventContent event={props.event} refTagsLength={eventRefTags().length} reposter={reposter} />
+          <EventContent
+            setShowUserPopup={setShowUserPopup}
+            setUserPopupProps={setUserPopupProps}
+            event={props.event}
+            refTagsLength={eventRefTags().length}
+            reposter={reposter}
+          />
 
           <div
             class={`${
@@ -185,10 +208,10 @@ const EventWrapper: Component<Props> = (props) => {
         <div class='absolute top-0 left-0 z-10'>
           <Popup autoClose={false} show={showUserPopup} setShow={setShowUserPopup} largeHeight>
             <UserPopup
-              about={props.event.about}
-              picture={props.event.picture}
-              pubkey={props.event.pubkey}
-              name={props.event.name}
+              about={UserPopupProps().about}
+              picture={UserPopupProps().picture}
+              pubkey={UserPopupProps().pubkey}
+              name={UserPopupProps().name}
             />
           </Popup>
         </div>
@@ -214,7 +237,13 @@ const EventWrapper: Component<Props> = (props) => {
           class='snap-start h-full text-white text-lg mx-auto rounded-md px-3 py-1 gap-y-3'
         >
           <div class='grid grid-cols-6 h-[84%] mb-2 gap-x-2'>
-            <EventContent event={props.event} reposter={reposter} refTagsLength={eventRefTags().length} />
+            <EventContent
+              setShowUserPopup={setShowUserPopup}
+              setUserPopupProps={setUserPopupProps}
+              event={props.event}
+              reposter={reposter}
+              refTagsLength={eventRefTags().length}
+            />
             <EventReferences eventRefTags={eventRefTags} isLoading={isLoading} />
           </div>
 
@@ -251,12 +280,18 @@ const EventWrapper: Component<Props> = (props) => {
         </div>
 
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 xl:w-2/3 z-10'>
-          <Popup autoClose={false} show={showUserPopup} setShow={setShowUserPopup} largeHeight>
+          <Popup
+            autoClose={false}
+            show={showUserPopup}
+            setShow={setShowUserPopup}
+            onCloseFunc={restoreUserPopupProps}
+            largeHeight
+          >
             <UserPopup
-              about={props.event.about}
-              picture={props.event.picture}
-              pubkey={props.event.pubkey}
-              name={props.event.name}
+              about={UserPopupProps().about}
+              picture={UserPopupProps().picture}
+              pubkey={UserPopupProps().pubkey}
+              name={UserPopupProps().name}
             />
           </Popup>
         </div>

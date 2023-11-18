@@ -1,4 +1,4 @@
-import { Accessor, Component, JSX, Show } from "solid-js";
+import { Accessor, Component, JSX, Setter, Show } from "solid-js";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IUserMetadata } from "~/interfaces/IUserMetadata";
@@ -7,9 +7,22 @@ interface Props {
   event: IEnrichedEvent;
   reposter: Accessor<IUserMetadata | null | undefined>;
   refTagsLength: number;
+  setShowUserPopup: Setter<boolean>;
+  setUserPopupProps: Setter<{ pubkey: string } & IUserMetadata>;
 }
 
 const EventContent: Component<Props> = (props): JSX.Element => {
+  const showUserPopup = (): void => {
+    props.setUserPopupProps({
+      name: props.reposter()!.name,
+      about: props.reposter()!.about,
+      pubkey: props.event.repostEvent!.pubkey,
+      picture: props.reposter()!.picture
+    });
+
+    props.setShowUserPopup(true);
+  };
+
   return (
     <>
       <Show when={useIsNarrow() != undefined && useIsNarrow()}>
@@ -21,7 +34,10 @@ const EventContent: Component<Props> = (props): JSX.Element => {
           <Show when={props.event.isRepost}>
             <div class='h-full w-full'>
               <div class='h-[8%] mb-[2%] mx-auto py-2 bg-orange-500 bg-opacity-30 w-full text-sm text-center rounded-md'>
-                repost by {props.reposter()?.name ?? "npub"}
+                repost by{" "}
+                <span onClick={showUserPopup} class='underline underline-offset-2'>
+                  {props.reposter()?.name ?? "npub"}
+                </span>
               </div>
               <div class='h-[90%] pr-5 py-3 pl-2 bg-slate-800 bg-opacity-40 rounded-md  overflow-y-scroll'>
                 {props.event.content}
@@ -45,7 +61,10 @@ const EventContent: Component<Props> = (props): JSX.Element => {
                 class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
               text-base text-slate-300 w-full text-center'
               >
-                repost by {props.reposter()?.name ?? "npub"}
+                repost by{" "}
+                <span onClick={showUserPopup} class='underline underline-offset-2 cursor-pointer'>
+                  {props.reposter()?.name ?? "npub"}
+                </span>
               </div>
             </div>
 

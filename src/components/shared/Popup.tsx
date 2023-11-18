@@ -11,6 +11,7 @@ interface Props {
   autoClose: boolean;
   largeHeight?: boolean;
   secondLayer?: boolean;
+  onCloseFunc?(): void;
 }
 
 const Popup: Component<Props> = (props) => {
@@ -53,6 +54,10 @@ const Popup: Component<Props> = (props) => {
     overlayContext.toggleOverlay();
     setOverlayAlreadyApplied(false);
     !menuToggler.showMenuButton() && menuToggler.toggleMenuButton();
+
+    if (props.onCloseFunc != undefined) {
+      props.onCloseFunc();
+    }
   };
 
   const closeButton = (): JSX.Element => {
