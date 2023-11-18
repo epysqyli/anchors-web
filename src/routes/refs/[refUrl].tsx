@@ -120,7 +120,7 @@ const RefUrl: VoidComponent = (): JSX.Element => {
   return (
     <>
       <Show
-        when={!isLoading() && useIsNarrow() !== undefined && !useIsNarrow()}
+        when={!isLoading()}
         fallback={<LoadingFallback />}
       >
         <Feed
