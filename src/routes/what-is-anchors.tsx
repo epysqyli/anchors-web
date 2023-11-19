@@ -62,6 +62,32 @@ const WhatIsAnchors: VoidComponent = (): JSX.Element => {
           needing to create a new profile in a closed network that would probably never garner attention on
           its own.
         </p>
+
+        <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>How to get started</h3>
+        <p class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'>
+          Create a public/private key pair using an extension like{" "}
+          <A
+            class='underline'
+            href='https://chromewebstore.google.com/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp?pli=1'
+            target='_blank'
+          >
+            nos2x
+          </A>{" "}
+          on Chrome. This allows you to keep your private key safe and use it to sign notes minimizing its
+          exposure to the browser. Other similar extensions exist for both Chrome and other browsers.
+        </p>
+
+        <p class="class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'">
+          On mobile, you can still use nostr signer extensions as detailed{" "}
+          <A
+            class='underline'
+            target='_blank'
+            href='https://orangepill.dev/nostr-guides/guide-nostr-key-generation-and-management/#steps-to-setup-and-use-on-android-devices'
+          >
+            on this page
+          </A>
+          .
+        </p>
       </div>
     </>
   );
