@@ -12,10 +12,10 @@ const [guestPublicKey, setGuestPublicKey] = createSignal<string>("");
 const [favoriteEventIDs, setFavoriteEventIDs] = createSignal<string[]>([]);
 
 let relay: Relayer = new Relayer();
-const userPublicKey = await getPublicKeyFromExt();
+const userPublicKeyFromExt = await getPublicKeyFromExt();
 
-if (userPublicKey) {
-  relay = new Relayer(userPublicKey);
+if (userPublicKeyFromExt) {
+  relay = new Relayer(userPublicKeyFromExt);
   await relay.fetchAndSetRelays();
   setReadRelays(relay.getReadRelays());
   relay.following = await relay.fetchContacts();
@@ -23,7 +23,7 @@ if (userPublicKey) {
 }
 
 type AuthMode = "guest" | "public" | "private";
-const [authMode, setAuthMode] = createSignal<AuthMode>(userPublicKey ? "private" : "guest");
+const [authMode, setAuthMode] = createSignal<AuthMode>(userPublicKeyFromExt ? "private" : "guest");
 
 interface IRelayContext {
   relay: Relayer;
