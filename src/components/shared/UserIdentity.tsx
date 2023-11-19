@@ -89,10 +89,10 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
     <div class='text-left mx-auto w-5/6 xl:w-4/5 mt-10'>
       <p>No user account was found, you can either:</p>
       <ul class='list-disc mt-3 pl-5'>
-        <li class="underline underline-offset-4 mb-2">
+        <li class='underline underline-offset-4 mb-2'>
           <A href='/settings/user-metadata'>add user metadata to your nostr identity</A>
         </li>
-        <li class="underline underline-offset-4">
+        <li class='underline underline-offset-4'>
           <A href='/settings/manage-relays'>add the relay(s) where it can be fetched from</A>
         </li>
       </ul>
@@ -125,11 +125,21 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
     }
   });
 
+  const setInitialLoadToFalse = (): void => {
+    localStorage.setItem("anchors_initial_load", "false");
+    props.setInitialLoad(false);
+  };
+
   return (
     <>
       <Show when={useIsNarrow() != undefined && useIsNarrow()}>
         <div class='absolute top-0 left-0 z-10'>
-          <Popup autoClose={false} show={props.initialLoad} setShow={props.setInitialLoad}>
+          <Popup
+            autoClose={false}
+            show={props.initialLoad}
+            setShow={props.setInitialLoad}
+            onCloseFunc={setInitialLoadToFalse}
+          >
             <Show when={!isLoading()} fallback={<LoadingPoints />}>
               <div class='h-screen w-screen pt-20 bg-slate-800 bg-opacity-95'>
                 {authMode.get() == "private" ? (
@@ -155,7 +165,13 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
 
       <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/2'>
-          <Popup autoClose={false} show={props.initialLoad} setShow={props.setInitialLoad} largeHeight>
+          <Popup
+            autoClose={false}
+            show={props.initialLoad}
+            setShow={props.setInitialLoad}
+            onCloseFunc={setInitialLoadToFalse}
+            largeHeight
+          >
             <Show when={!isLoading()} fallback={<LoadingFallback />}>
               <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
                 {authMode.get() == "private" ? (

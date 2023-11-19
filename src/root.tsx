@@ -1,15 +1,15 @@
 // @refresh reload
 import "./root.css";
 
-import { Routes, useBeforeLeave } from "@solidjs/router";
+import { Routes } from "@solidjs/router";
 import WideLayout from "./layouts/WideLayout";
-import { RelayProvider } from "./contexts/relay";
+import { RelayContext, RelayProvider } from "./contexts/relay";
 import NarrowLayout from "./layouts/NarrowLayout";
 import { Event, EventTemplate } from "nostr-tools";
 import { useIsNarrow } from "./hooks/useMediaQuery";
 import { ErrorBoundary } from "solid-start/error-boundary";
 import UserIdentity from "./components/shared/UserIdentity";
-import { Component, Show, Suspense, createSignal, onMount } from "solid-js";
+import { Component, Show, Suspense, createSignal, onMount, useContext } from "solid-js";
 import { Body, FileRoutes, Head, Html, Meta, Scripts, Title } from "solid-start";
 
 declare global {
@@ -22,18 +22,13 @@ declare global {
 }
 
 const Root: Component<{}> = () => {
-  const LOCAL_STORAGE_INITIAL_LOAD_KEY = "anchors_initial_load";
+  const { guestPublicKey } = useContext(RelayContext);
   const [initialLoad, setInitialLoad] = createSignal<boolean>(false);
 
-  useBeforeLeave(() => {
-    if (initialLoad()) {
-      setInitialLoad(false);
-      localStorage.setItem(LOCAL_STORAGE_INITIAL_LOAD_KEY, "false");
-    }
-  });
-
   onMount(() => {
-    setInitialLoad(localStorage.getItem(LOCAL_STORAGE_INITIAL_LOAD_KEY) !== "false");
+    const initialLoadValue = localStorage.getItem('anchors_initial_load');
+    setInitialLoad(initialLoadValue != "false");
+    guestPublicKey.set(localStorage.getItem(guestPublicKey.localStorageKey) ?? "");
   });
 
   return (
