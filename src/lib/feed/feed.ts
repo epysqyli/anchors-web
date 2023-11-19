@@ -1,12 +1,13 @@
 import Relayer from "../nostr/relayer";
 import { Accessor, Setter } from "solid-js";
 import { Event, Filter, Kind } from "nostr-tools";
+import FetchOptions from "~/interfaces/FetchOptions";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
 import { IReactionWithEventID } from "~/interfaces/IReaction";
+import EventWithRepostInfo from "~/interfaces/EventWithRepostInfo";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { sortByCreatedAt, sortByCreatedAtReverse } from "../nostr/nostr-utils";
-import EventWithRepostInfo from "~/interfaces/EventWithRepostInfo";
 
 interface FetchParams {
   fetchEventsLimit: number;
@@ -44,6 +45,37 @@ const getFetchSinceTimestamp = (currentEvents: Event[], newEvents: Event[]): num
   return fetchSinceTimestamp;
 };
 
+const getFetchOptions = (fetchParams: FetchParams, isAnchorsMode: boolean, since?: number): FetchOptions => {
+  const fetchOptions: FetchOptions = {
+    rootOnly: true,
+    isAnchorsMode: isAnchorsMode,
+    filter: { limit: fetchParams.fetchEventsLimit },
+    fetchRepostEvents: true
+  };
+
+  if (fetchParams.searchParams != undefined) {
+    fetchOptions.feedSearchParams = fetchParams.searchParams;
+  }
+
+  if (fetchParams.nostrRefTag != undefined) {
+    fetchOptions.filter = { ...fetchOptions.filter, "#r": [fetchParams.nostrRefTag] };
+  }
+
+  if (fetchParams.nostrHashTag != undefined) {
+    fetchOptions.filter = { ...fetchOptions.filter, "#r": [fetchParams.nostrHashTag] };
+  }
+
+  if (fetchParams.userID != undefined) {
+    fetchOptions.filter = { ...fetchOptions.filter, authors: [fetchParams.userID] };
+  }
+
+  if (since != undefined) {
+    fetchOptions.filter = { ...fetchOptions.filter, since: since + 1 };
+  }
+
+  return fetchOptions;
+};
+
 const fetchAndSetEvents = async (
   relay: Relayer,
   setIsLoading: Setter<boolean>,
@@ -62,52 +94,7 @@ const fetchAndSetEvents = async (
   fetchParams: FetchParams
 ): Promise<NodeJS.Timer> => {
   setIsLoading(true);
-
-  if (fetchParams.searchParams != undefined) {
-    setEvents(
-      await relay.fetchTextEvents({
-        rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
-        feedSearchParams: fetchParams.searchParams,
-        filter: { limit: fetchParams.fetchEventsLimit },
-        fetchRepostEvents: true
-      })
-    );
-  }
-
-  if (fetchParams.nostrRefTag != undefined) {
-    setEvents(
-      await relay.fetchTextEvents({
-        rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
-        filter: { limit: fetchParams.fetchEventsLimit, "#r": [fetchParams.nostrRefTag] },
-        fetchRepostEvents: true
-      })
-    );
-  }
-
-  if (fetchParams.nostrHashTag != undefined) {
-    setEvents(
-      await relay.fetchTextEvents({
-        rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
-        filter: { limit: fetchParams.fetchEventsLimit, "#t": [fetchParams.nostrHashTag] },
-        fetchRepostEvents: true
-      })
-    );
-  }
-
-  if (fetchParams.userID != undefined) {
-    setEvents(
-      await relay.fetchTextEvents({
-        rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
-        specificRelays: fetchParams.specificRelays,
-        filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] },
-        fetchRepostEvents: true
-      })
-    );
-  }
+  setEvents(await relay.fetchTextEvents(getFetchOptions(fetchParams, isAnchorsMode())));
 
   let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
   if (fetchParams.searchParams?.following == "on") {
@@ -129,60 +116,15 @@ const fetchAndSetEvents = async (
     let fetchSinceTimestamp = getFetchSinceTimestamp(enrichedEvents(), newEnrichedEvents());
 
     let newEvents: EventWithRepostInfo[] = [];
-
-    if (fetchParams.searchParams != undefined) {
-      newEvents = await relay.fetchTextEvents({
-        rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
-        feedSearchParams: fetchParams.searchParams,
-        filter: { limit: fetchParams.fetchEventsLimit, since: fetchSinceTimestamp + 1 },
-        fetchRepostEvents: true
-      });
-    }
-
-    if (fetchParams.nostrRefTag != undefined) {
-      newEvents = await relay.fetchTextEvents({
-        rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
-        filter: {
-          limit: fetchParams.fetchEventsLimit,
-          since: fetchSinceTimestamp + 1,
-          "#r": [fetchParams.nostrRefTag]
-        },
-        fetchRepostEvents: true
-      });
-    }
-
-    if (fetchParams.nostrHashTag != undefined) {
-      newEvents = await relay.fetchTextEvents({
-        rootOnly: true,
-        isAnchorsMode: isAnchorsMode(),
-        filter: {
-          limit: fetchParams.fetchEventsLimit,
-          since: fetchSinceTimestamp + 1,
-          "#t": [fetchParams.nostrHashTag]
-        },
-        fetchRepostEvents: true
-      });
-    }
-
-    if (fetchParams.userID != undefined) {
-      setEvents(
-        await relay.fetchTextEvents({
-          rootOnly: true,
-          isAnchorsMode: isAnchorsMode(),
-          specificRelays: fetchParams.specificRelays,
-          filter: { limit: fetchParams.fetchEventsLimit, authors: [fetchParams.userID] },
-          fetchRepostEvents: true
-        })
-      );
-    }
+    newEvents = await relay.fetchTextEvents(
+      getFetchOptions(fetchParams, isAnchorsMode(), fetchSinceTimestamp)
+    );
 
     if (newEvents.length !== 0) {
       const newUniqueEvents = getNewUniqueEvents(events(), newEvents);
-      const newEventsAuthors = getNewEventsAuthors(events(), newUniqueEvents);
       setEvents([...events(), ...newUniqueEvents]);
-
+      
+      const newEventsAuthors = getNewEventsAuthors(events(), newUniqueEvents);
       if (newEventsAuthors.length !== 0) {
         const metaFilter: Filter = { authors: [...new Set(newEventsAuthors)] };
         const recentMetaEvents: IUserMetadataWithPubkey[] = await relay.fetchEventsMetadata(metaFilter);

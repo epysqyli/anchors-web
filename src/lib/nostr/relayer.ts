@@ -15,19 +15,9 @@ import {
 import PubResult from "~/interfaces/PubResult";
 import RelayList from "~/interfaces/RelayList";
 import { sortByCreatedAt } from "./nostr-utils";
-import { FeedSearchParams } from "~/types/FeedSearchParams";
+import FetchOptions from "~/interfaces/FetchOptions";
 import EventWithMetadata from "~/interfaces/EventWithMetadata";
 import EventWithRepostInfo from "~/interfaces/EventWithRepostInfo";
-
-interface FetchOptions {
-  rootOnly: boolean;
-  isAnchorsMode: boolean;
-  filter: Filter;
-  feedSearchParams?: FeedSearchParams;
-  postFetchLimit?: number;
-  specificRelays?: string[];
-  fetchRepostEvents?: boolean;
-}
 
 class Relayer {
   public readonly FETCH_INTERVAL_MS = 20000;
@@ -536,7 +526,7 @@ class Relayer {
     const commentsWithRepostInfo: EventWithRepostInfo[] = comments.map((cmt) => {
       return { ...cmt, isRepost: false };
     });
-    
+
     return this.buildEnrichedEvents(commentsWithRepostInfo, metadata, reactions);
   }
 
