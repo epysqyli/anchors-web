@@ -65,13 +65,6 @@ const Menu: VoidComponent = (): JSX.Element => {
               </div>
             </A>
 
-            {/* <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
-              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
-                <div class='group-hover:scale-95'>search</div>
-                <BsSearch size={26} class='md:group-hover:animate-pulse' />
-              </div>
-            </A> */}
-
             <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
               <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
                 <div class='group-hover:scale-95'>profile</div>
@@ -108,13 +101,6 @@ const Menu: VoidComponent = (): JSX.Element => {
               <BsBookmarks size={26} class='md:group-hover:animate-pulse' />
             </div>
           </A>
-
-          {/* <A onClick={menuToggleCtx.toggleMobileMenu} href='/search'>
-            <div class={active("/search") ? selectedFlexActionStyle : flexActionStyle}>
-              <div class='group-hover:scale-95'>search</div>
-              <BsSearch size={26} class='md:group-hover:animate-pulse' />
-            </div>
-          </A> */}
 
           <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
             <div class={active("/settings") ? selectedFlexActionStyle : flexActionStyle}>
