@@ -13,6 +13,8 @@ const [favoriteEventIDs, setFavoriteEventIDs] = createSignal<string[]>([]);
 
 let relay: Relayer = new Relayer();
 const userPublicKeyFromExt = await getPublicKeyFromExt();
+await relay.fetchAndSetRelays();
+setReadRelays(relay.getReadRelays());
 
 if (userPublicKeyFromExt) {
   relay = new Relayer(userPublicKeyFromExt);
