@@ -1,0 +1,212 @@
+{
+  "_EventWrapper-00d7d2f9.js": {
+    "file": "assets/EventWrapper-00d7d2f9.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_index-c5d10f7a.js",
+      "_open-library-64fefcf2.js"
+    ]
+  },
+  "_feed-6c35ba5d.js": {
+    "file": "assets/feed-6c35ba5d.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_index-608f9ce4.js",
+      "_EventWrapper-00d7d2f9.js"
+    ]
+  },
+  "_index-608f9ce4.js": {
+    "file": "assets/index-608f9ce4.js",
+    "imports": [
+      "src/entry-client.tsx"
+    ]
+  },
+  "_index-c5d10f7a.js": {
+    "file": "assets/index-c5d10f7a.js",
+    "imports": [
+      "src/entry-client.tsx"
+    ]
+  },
+  "_open-library-64fefcf2.js": {
+    "file": "assets/open-library-64fefcf2.js",
+    "imports": [
+      "src/entry-client.tsx"
+    ]
+  },
+  "src/entry-client.css": {
+    "file": "assets/entry-client-63a1bb34.css",
+    "src": "src/entry-client.css"
+  },
+  "src/entry-client.tsx": {
+    "css": [
+      "assets/entry-client-63a1bb34.css"
+    ],
+    "dynamicImports": [
+      "src/routes/favorite-posts.tsx",
+      "src/routes/index.tsx",
+      "src/routes/my-posts.tsx",
+      "src/routes/search.tsx",
+      "src/routes/what-is-anchors.tsx",
+      "src/routes/write.tsx",
+      "src/routes/events/[id].tsx",
+      "src/routes/refs/[refUrl].tsx",
+      "src/routes/settings/index.tsx",
+      "src/routes/settings/manage-following.tsx",
+      "src/routes/settings/manage-relays.tsx",
+      "src/routes/settings/update-guest-public-key.tsx",
+      "src/routes/settings/user-metadata.tsx",
+      "src/routes/tags/[tag].tsx",
+      "src/routes/users/[id].tsx"
+    ],
+    "file": "assets/entry-client-70f5ea60.js",
+    "isEntry": true,
+    "src": "src/entry-client.tsx"
+  },
+  "src/routes/events/[id].tsx": {
+    "file": "assets/_id_-50b8b8ec.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_EventWrapper-00d7d2f9.js",
+      "_index-c5d10f7a.js",
+      "_open-library-64fefcf2.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/events/[id].tsx"
+  },
+  "src/routes/favorite-posts.tsx": {
+    "file": "assets/favorite-posts-ed0a4db0.js",
+    "imports": [
+      "src/entry-client.tsx"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/favorite-posts.tsx"
+  },
+  "src/routes/index.tsx": {
+    "file": "assets/index-4f275220.js",
+    "imports": [
+      "_feed-6c35ba5d.js",
+      "src/entry-client.tsx",
+      "_index-608f9ce4.js",
+      "_EventWrapper-00d7d2f9.js",
+      "_index-c5d10f7a.js",
+      "_open-library-64fefcf2.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/index.tsx"
+  },
+  "src/routes/my-posts.tsx": {
+    "file": "assets/my-posts-21ffcfae.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_index-608f9ce4.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/my-posts.tsx"
+  },
+  "src/routes/refs/[refUrl].tsx": {
+    "file": "assets/_refUrl_-e1213af0.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_feed-6c35ba5d.js",
+      "_index-608f9ce4.js",
+      "_EventWrapper-00d7d2f9.js",
+      "_index-c5d10f7a.js",
+      "_open-library-64fefcf2.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/refs/[refUrl].tsx"
+  },
+  "src/routes/search.tsx": {
+    "file": "assets/search-2fed0c37.js",
+    "isDynamicEntry": true,
+    "src": "src/routes/search.tsx"
+  },
+  "src/routes/settings/index.tsx": {
+    "file": "assets/index-fdc90734.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_index-c5d10f7a.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/settings/index.tsx"
+  },
+  "src/routes/settings/manage-following.tsx": {
+    "file": "assets/manage-following-4907f264.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_index-c5d10f7a.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/settings/manage-following.tsx"
+  },
+  "src/routes/settings/manage-relays.tsx": {
+    "file": "assets/manage-relays-55b8f404.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_index-c5d10f7a.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/settings/manage-relays.tsx"
+  },
+  "src/routes/settings/update-guest-public-key.tsx": {
+    "file": "assets/update-guest-public-key-d8263d08.js",
+    "imports": [
+      "src/entry-client.tsx"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/settings/update-guest-public-key.tsx"
+  },
+  "src/routes/settings/user-metadata.tsx": {
+    "file": "assets/user-metadata-7e68522f.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_index-608f9ce4.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/settings/user-metadata.tsx"
+  },
+  "src/routes/tags/[tag].tsx": {
+    "file": "assets/_tag_-cf92b17c.js",
+    "imports": [
+      "_feed-6c35ba5d.js",
+      "src/entry-client.tsx",
+      "_index-608f9ce4.js",
+      "_EventWrapper-00d7d2f9.js",
+      "_index-c5d10f7a.js",
+      "_open-library-64fefcf2.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/tags/[tag].tsx"
+  },
+  "src/routes/users/[id].tsx": {
+    "file": "assets/_id_-bb087045.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_feed-6c35ba5d.js",
+      "_index-608f9ce4.js",
+      "_EventWrapper-00d7d2f9.js",
+      "_index-c5d10f7a.js",
+      "_open-library-64fefcf2.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/users/[id].tsx"
+  },
+  "src/routes/what-is-anchors.tsx": {
+    "file": "assets/what-is-anchors-3c80acc3.js",
+    "imports": [
+      "src/entry-client.tsx"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/what-is-anchors.tsx"
+  },
+  "src/routes/write.tsx": {
+    "file": "assets/write-af09da62.js",
+    "imports": [
+      "src/entry-client.tsx",
+      "_open-library-64fefcf2.js",
+      "_index-c5d10f7a.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "src/routes/write.tsx"
+  }
+}
