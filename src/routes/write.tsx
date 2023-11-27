@@ -6,7 +6,8 @@ import menuTogglerContext from "~/contexts/menuToggle";
 import { IRefTag, RefTagCategory } from "~/interfaces/IRefTag";
 import RefTagsSearchPanel from "~/components/write/RefTagsSearchPanel";
 import { Event as NostrEvent, EventTemplate, Kind, Pub } from "nostr-tools";
-import { Component, createEffect, createSignal, onMount, useContext } from "solid-js";
+import { Component, Show, createEffect, createSignal, onMount, useContext } from "solid-js";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
 
 const Write: Component<{}> = () => {
   const { relay } = useContext(RelayContext);
@@ -212,11 +213,23 @@ const Write: Component<{}> = () => {
         </div>
       </div>
 
-      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
-        <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
-          <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>{popupMsg()}</div>
-        </Popup>
-      </div>
+      <Show when={useIsNarrow() != undefined && useIsNarrow()}>
+        <div class='absolute top-0 left-0 z-10'>
+          <Popup autoClose={false} show={showPopup} setShow={setShowPopup}>
+            <div class='h-screen w-screen pt-20 bg-slate-800 bg-opacity-95'>
+              <div class="w-4/5 mx-auto">{popupMsg()}</div>
+            </div>
+          </Popup>
+        </div>
+      </Show>
+
+      <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
+        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
+          <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
+            <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>{popupMsg()}</div>
+          </Popup>
+        </div>
+      </Show>
     </>
   );
 };
