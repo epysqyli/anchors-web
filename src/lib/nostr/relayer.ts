@@ -143,7 +143,7 @@ class Relayer {
 
   public async fetchContacts(): Promise<string[]> {
     if (!this.userPubKey) {
-      return new Promise((_) => []);
+      return new Promise((res) => res([]));
     }
 
     const contactEvents = await this.currentPool.list(this.getReadRelays(), [
