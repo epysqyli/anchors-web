@@ -1,31 +1,20 @@
 import "websocket-polyfill";
 import Relayer from "~/lib/nostr/relayer";
 import type { Accessor, Setter } from "solid-js";
-import { getPublicKeyFromExt } from "~/lib/nostr/nostr-utils";
-import { Component, JSX, createContext, createEffect, createSignal } from "solid-js";
+import { Component, JSX, createContext, createEffect, createSignal, onMount } from "solid-js";
 
+type AuthMode = "guest" | "public" | "private";
 const LOCAL_STORAGE_GUEST_PK = "anchors-guest-public-key";
 
+const [relay] = createSignal<Relayer>(new Relayer(''));
 const [getReadRelays, setReadRelays] = createSignal<string[]>([]);
 const [getAnchorsMode, setAnchorsMode] = createSignal<boolean>(true);
 const [guestPublicKey, setGuestPublicKey] = createSignal<string>("");
 const [favoriteEventIDs, setFavoriteEventIDs] = createSignal<string[]>([]);
+const [authMode, setAuthMode] = createSignal<AuthMode>("guest");
 
-let relay: Relayer = new Relayer();
-const userPublicKeyFromExt = await getPublicKeyFromExt();
-await relay.fetchAndSetRelays();
-setReadRelays(relay.getReadRelays());
-
-if (userPublicKeyFromExt) {
-  relay = new Relayer(userPublicKeyFromExt);
-  await relay.fetchAndSetRelays();
-  setReadRelays(relay.getReadRelays());
-  relay.following = await relay.fetchContacts();
-  setFavoriteEventIDs(await relay.fetchFavoriteEventsIDs());
-}
-
-type AuthMode = "guest" | "public" | "private";
-const [authMode, setAuthMode] = createSignal<AuthMode>(userPublicKeyFromExt ? "private" : "guest");
+await relay().fetchAndSetRelays();
+setReadRelays(relay().getReadRelays());
 
 interface IRelayContext {
   relay: Relayer;
@@ -37,7 +26,7 @@ interface IRelayContext {
 }
 
 const RelayContext = createContext<IRelayContext>({
-  relay: relay,
+  relay: relay(),
   readRelays: { get: getReadRelays, set: setReadRelays },
   anchorsMode: { get: getAnchorsMode, set: setAnchorsMode },
   authMode: { get: authMode, set: setAuthMode },
@@ -46,19 +35,35 @@ const RelayContext = createContext<IRelayContext>({
 });
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
+  onMount(async () => {
+    let userPublicKey: string = "";
+    try {
+      userPublicKey = await window.nostr.getPublicKey();
+    } catch (error) {}
+
+    if (userPublicKey) {
+      relay().userPubKey = userPublicKey;
+      setAuthMode("private");
+      await relay().fetchAndSetRelays();
+      setReadRelays(relay().getReadRelays());
+      relay().following = await relay().fetchContacts();
+      setFavoriteEventIDs(await relay().fetchFavoriteEventsIDs());
+    }
+  });
+
   createEffect(async () => {
     if (guestPublicKey()) {
-      relay.userPubKey = guestPublicKey();
-      await relay.fetchAndSetRelays();
-      setReadRelays(relay.getReadRelays());
-      relay.following = await relay.fetchContacts();
+      relay().userPubKey = guestPublicKey();
+      await relay().fetchAndSetRelays();
+      setReadRelays(relay().getReadRelays());
+      relay().following = await relay().fetchContacts();
     }
   });
 
   return (
     <RelayContext.Provider
       value={{
-        relay: relay,
+        relay: relay(),
         readRelays: { get: getReadRelays, set: setReadRelays },
         anchorsMode: { get: getAnchorsMode, set: setAnchorsMode },
         authMode: { get: authMode, set: setAuthMode },
