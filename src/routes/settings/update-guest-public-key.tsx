@@ -63,7 +63,7 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
           <p class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'>
             Setting a guest public, on the other hand, allows a personalized experience with no interactions:
             followers and relays are available, but since the private key is not available, no new posts can
-            be written, nor reactions or comments sent, as events cannot be signed (see 
+            be written, nor reactions or comments sent, as events cannot be signed (see
             <A
               class='italic underline'
               target='_blank'
@@ -78,7 +78,14 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
           <p class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'>
             In order to have the full Nostr experience, a private key is needed. Since saving it directly on
             the client is not secure, there exists several browser extensions that allow targeted access to
-            the private key.
+            the private key. I personally recommend{" "}
+            <A
+              class='italic underline'
+              target='_blank'
+              href='https://getalby.com/'
+            >
+              the Alby browser extension
+            </A>
           </p>
         </div>
       </div>
