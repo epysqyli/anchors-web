@@ -45,18 +45,22 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
       relay().userPubKey = userPublicKey;
       setAuthMode("private");
       await relay().fetchAndSetRelays();
-      setReadRelays(relay().getReadRelays());
+      await relay().fetchUserMetadata();
       relay().following = await relay().fetchContacts();
       setFavoriteEventIDs(await relay().fetchFavoriteEventsIDs());
+      setReadRelays(relay().getReadRelays());
     }
   });
 
   createEffect(async () => {
     if (guestPublicKey()) {
       relay().userPubKey = guestPublicKey();
+      setAuthMode("guest");
       await relay().fetchAndSetRelays();
-      setReadRelays(relay().getReadRelays());
+      await relay().fetchUserMetadata();
       relay().following = await relay().fetchContacts();
+      setFavoriteEventIDs(await relay().fetchFavoriteEventsIDs());
+      setReadRelays(relay().getReadRelays());
     }
   });
 

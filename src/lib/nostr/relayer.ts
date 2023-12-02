@@ -25,6 +25,7 @@ class Relayer {
   public readonly ANCHORS_EVENT_RTAG_IDENTIFIER = "anchors-event";
 
   public userPubKey?: string;
+  public userMetadata?: IUserMetadata;
   public following: string[] = [];
 
   private relays: RelayList = { r: [], w: [], rw: [] };
@@ -270,7 +271,8 @@ class Relayer {
       return null;
     }
 
-    return JSON.parse(metadataEvents[0].content);
+    this.userMetadata = JSON.parse(metadataEvents[0].content);
+    return this.userMetadata!;
   }
 
   public async addEventToFavorites(eventID: string): Promise<PubResult<string[]>> {
