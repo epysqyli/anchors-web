@@ -129,7 +129,7 @@ const Menu: VoidComponent = (): JSX.Element => {
             />
           </A>
 
-          <div class='mx-auto 2xl:w-5/6 mt-5 mb-12 px-3 xl:px-1 h-[30%]'>
+          <div class='mx-auto xl:w-5/6 mt-5 mb-12 px-3 xl:px-1 h-[30%]'>
             <RelaySelector />
           </div>
         </div>
