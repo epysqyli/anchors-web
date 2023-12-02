@@ -1,36 +1,22 @@
 import Popup from "./Popup";
+import { A } from "solid-start";
 import { VsSave } from "solid-icons/vs";
 import EventAuthor from "../feed/EventAuthor";
 import { RelayContext } from "~/contexts/relay";
 import OverlayContext from "~/contexts/overlay";
-import { IUserMetadata } from "~/interfaces/IUserMetadata";
-import {
-  Accessor,
-  Component,
-  JSX,
-  Setter,
-  Show,
-  createEffect,
-  createSignal,
-  onMount,
-  useContext
-} from "solid-js";
-import LoadingFallback from "../feed/LoadingFallback";
-import { useIsNarrow } from "~/hooks/useMediaQuery";
 import LoadingPoints from "../feed/LoadingPoints";
-import { A } from "solid-start";
+import { useIsNarrow } from "~/hooks/useMediaQuery";
+import LoadingFallback from "../feed/LoadingFallback";
+import { JSX, Show, VoidComponent, createEffect, createSignal, onMount, useContext } from "solid-js";
 
-interface Props {
-  initialLoad: Accessor<boolean>;
-  setInitialLoad: Setter<boolean>;
-}
-
-const UserIdentity: Component<Props> = (props): JSX.Element => {
+const UserIdentity: VoidComponent = (): JSX.Element => {
   const overlay = useContext(OverlayContext);
-  const { relay, authMode, guestPublicKey } = useContext(RelayContext);
-  const [userMetadata, setUserMetadata] = createSignal<IUserMetadata>();
-  const [inputPublicKey, setInputPublicKey] = createSignal<string>("");
+  const { relay, authMode, guestPublicKey, setupDone } = useContext(RelayContext);
+
+  const [show, setShow] = createSignal<boolean>(false);
+  const [initialLoad, setInitialLoad] = createSignal(false);
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
+  const [inputPublicKey, setInputPublicKey] = createSignal<string>("");
 
   const handleSubmit = (e: Event): void => {
     e.preventDefault();
@@ -87,7 +73,7 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
 
   const undefinedMetadataSuggestions: JSX.Element = (
     <div class='text-left mx-auto w-5/6 xl:w-4/5 mt-10'>
-      <p>No user account was found, you can either:</p>
+      <p>No user metadata information was found your public key, in order to fix this you can either:</p>
       <ul class='list-disc mt-3 pl-5'>
         <li class='underline underline-offset-4 mb-2'>
           <A href='/settings/user-metadata'>add user metadata to your nostr identity</A>
@@ -102,57 +88,54 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
   onMount(async () => {
     setIsLoading(true);
 
-    if (!props.initialLoad()) {
+    if (localStorage.getItem("anchors_initial_load") == "false") {
       setIsLoading(false);
       return;
+    } else {
+      setInitialLoad(true);
     }
 
-    guestPublicKey.set(localStorage.getItem(guestPublicKey.localStorageKey) ?? "");
-
-    if (authMode.get() == "private") {
-      const userMetadataResult = await relay.fetchUserMetadata();
-      if (userMetadataResult) {
-        setUserMetadata(userMetadataResult!);
-      }
+    if (!relay.userPubKey) {
+      guestPublicKey.set(localStorage.getItem(guestPublicKey.localStorageKey) ?? "");
     }
 
     setIsLoading(false);
   });
 
   createEffect(() => {
-    if (props.initialLoad() && !overlay.showOverlay()) {
+    if (show() && !overlay.showOverlay()) {
       overlay.toggleOverlay();
+    }
+  });
+
+  createEffect(() => {
+    if (initialLoad() && setupDone()) {
+      setShow(true);
     }
   });
 
   const setInitialLoadToFalse = (): void => {
     localStorage.setItem("anchors_initial_load", "false");
-    props.setInitialLoad(false);
   };
 
   return (
     <>
       <Show when={useIsNarrow() != undefined && useIsNarrow()}>
         <div class='absolute top-0 left-0 z-10'>
-          <Popup
-            autoClose={false}
-            show={props.initialLoad}
-            setShow={props.setInitialLoad}
-            onCloseFunc={setInitialLoadToFalse}
-          >
+          <Popup autoClose={false} show={show} setShow={setShow} onCloseFunc={setInitialLoadToFalse}>
             <Show when={!isLoading()} fallback={<LoadingPoints />}>
               <div class='h-screen w-screen pt-20 bg-slate-800 bg-opacity-95'>
                 {authMode.get() == "private" ? (
                   <div class='h-full'>
                     <EventAuthor
-                      about={userMetadata()?.about ?? ""}
+                      about={relay.userMetadata?.about ?? ""}
                       layout='v'
-                      name={userMetadata()?.name ?? ""}
-                      picture={userMetadata()?.picture ?? ""}
+                      name={relay.userMetadata?.name ?? ""}
+                      picture={relay.userMetadata?.picture ?? ""}
                       pubKey={relay.userPubKey!}
                     />
                     <p class='text-lg mt-5 font-bold'>Welcome to Anchors</p>
-                    {userMetadata() == undefined ? undefinedMetadataSuggestions : <></>}
+                    {relay.userMetadata != undefined ? undefinedMetadataSuggestions : <></>}
                   </div>
                 ) : (
                   guestModeTemplate
@@ -167,8 +150,8 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
         <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/2'>
           <Popup
             autoClose={false}
-            show={props.initialLoad}
-            setShow={props.setInitialLoad}
+            show={show}
+            setShow={setShow}
             onCloseFunc={setInitialLoadToFalse}
             largeHeight
           >
@@ -177,14 +160,14 @@ const UserIdentity: Component<Props> = (props): JSX.Element => {
                 {authMode.get() == "private" ? (
                   <div>
                     <EventAuthor
-                      about={userMetadata()?.about ?? ""}
+                      about={relay.userMetadata?.about ?? ""}
                       layout='v'
-                      name={userMetadata()?.name ?? ""}
-                      picture={userMetadata()?.picture ?? ""}
+                      name={relay.userMetadata?.name ?? ""}
+                      picture={relay.userMetadata?.picture ?? ""}
                       pubKey={relay.userPubKey!}
                     />
                     <p class='text-lg mt-5 font-bold'>Welcome to Anchors</p>
-                    {userMetadata() == undefined ? undefinedMetadataSuggestions : <></>}
+                    {relay.userMetadata == undefined ? undefinedMetadataSuggestions : <></>}
                   </div>
                 ) : (
                   guestModeTemplate

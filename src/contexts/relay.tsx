@@ -3,15 +3,16 @@ import Relayer from "~/lib/nostr/relayer";
 import type { Accessor, Setter } from "solid-js";
 import { Component, JSX, createContext, createEffect, createSignal, onMount } from "solid-js";
 
-type AuthMode = "guest" | "public" | "private";
+type AuthMode = "guest" | "private";
 const LOCAL_STORAGE_GUEST_PK = "anchors-guest-public-key";
 
-const [relay] = createSignal<Relayer>(new Relayer(''));
+const [relay] = createSignal<Relayer>(new Relayer(""));
+const [setupDone, setSetupDone] = createSignal<boolean>(false);
+const [authMode, setAuthMode] = createSignal<AuthMode>("guest");
 const [getReadRelays, setReadRelays] = createSignal<string[]>([]);
 const [getAnchorsMode, setAnchorsMode] = createSignal<boolean>(true);
 const [guestPublicKey, setGuestPublicKey] = createSignal<string>("");
 const [favoriteEventIDs, setFavoriteEventIDs] = createSignal<string[]>([]);
-const [authMode, setAuthMode] = createSignal<AuthMode>("guest");
 
 await relay().fetchAndSetRelays();
 setReadRelays(relay().getReadRelays());
@@ -23,6 +24,7 @@ interface IRelayContext {
   authMode: { get: Accessor<AuthMode>; set: Setter<AuthMode> };
   guestPublicKey: { get: Accessor<string>; set: Setter<string>; localStorageKey: string };
   favoriteEventIDs: { get: Accessor<string[]>; set: Setter<string[]> };
+  setupDone: Accessor<boolean>;
 }
 
 const RelayContext = createContext<IRelayContext>({
@@ -31,7 +33,8 @@ const RelayContext = createContext<IRelayContext>({
   anchorsMode: { get: getAnchorsMode, set: setAnchorsMode },
   authMode: { get: authMode, set: setAuthMode },
   guestPublicKey: { get: guestPublicKey, set: setGuestPublicKey, localStorageKey: LOCAL_STORAGE_GUEST_PK },
-  favoriteEventIDs: { get: favoriteEventIDs, set: setFavoriteEventIDs }
+  favoriteEventIDs: { get: favoriteEventIDs, set: setFavoriteEventIDs },
+  setupDone: setupDone
 });
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
@@ -50,10 +53,13 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
       setFavoriteEventIDs(await relay().fetchFavoriteEventsIDs());
       setReadRelays(relay().getReadRelays());
     }
+
+    setSetupDone(true);
   });
 
   createEffect(async () => {
     if (guestPublicKey()) {
+      setSetupDone(false);
       relay().userPubKey = guestPublicKey();
       setAuthMode("guest");
       await relay().fetchAndSetRelays();
@@ -61,6 +67,7 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
       relay().following = await relay().fetchContacts();
       setFavoriteEventIDs(await relay().fetchFavoriteEventsIDs());
       setReadRelays(relay().getReadRelays());
+      setSetupDone(true);
     }
   });
 
@@ -68,6 +75,7 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
     <RelayContext.Provider
       value={{
         relay: relay(),
+        setupDone: setupDone,
         readRelays: { get: getReadRelays, set: setReadRelays },
         anchorsMode: { get: getAnchorsMode, set: setAnchorsMode },
         authMode: { get: authMode, set: setAuthMode },
