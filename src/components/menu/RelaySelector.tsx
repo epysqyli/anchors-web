@@ -9,8 +9,9 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
   const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const isCurrentRelay = (address: string): boolean => searchParams.relayAddress == address;
-  const baseStyle = "my-1 py-1 pl-1 block rounded mx-auto text-base";
+  const baseStyle = "my-1 py-1 block rounded mx-auto text-base xl:text-sm text-center";
   const selectedStyle = "bg-slate-500 xl:bg-neutral-800 bg-opacity-80 text-neutral-300";
+  const nonSelectedStyle = "text-neutral-500 hover:text-neutral-400 hover:bg-slate-500 hover:bg-opacity-25";
 
   const [inputFieldRelayAddress, setInputFieldRelayAddress] = createSignal<string>("");
 
@@ -39,11 +40,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
       >
         <div class='overflow-y-scroll overflow-x-hidden xl:custom-scrollbar px-1 max-h-4/5'>
           <A
-            class={`${baseStyle} ${
-              isCurrentRelay("all")
-                ? selectedStyle + " text-right pr-3"
-                : "text-neutral-500 hover:text-neutral-400 hover:bg-slate-500 hover:bg-opacity-25 text-right pr-3"
-            }`}
+            class={`${baseStyle} ${isCurrentRelay("all") ? selectedStyle : nonSelectedStyle}`}
             href={`/?following=${searchParams.following}&relayAddress=all`}
           >
             All relays
@@ -52,11 +49,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
           <For each={readRelays.get()}>
             {(address) => (
               <A
-                class={`${baseStyle} ${
-                  isCurrentRelay(address)
-                    ? selectedStyle
-                    : "text-neutral-500 hover:text-neutral-400 hover:bg-slate-500 hover:bg-opacity-25"
-                }`}
+                class={`${baseStyle} ${isCurrentRelay(address) ? selectedStyle : nonSelectedStyle}`}
                 href={`/?following=${searchParams.following}&relayAddress=${encodeURIComponent(address)}`}
               >
                 {address}
