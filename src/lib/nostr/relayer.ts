@@ -182,8 +182,9 @@ class Relayer {
 
     if (relayListEvents.length != 0) {
       const relays = relayListEvents.map((evt) => evt.tags).flat();
+      const sortedRelays: string[][] = relays.sort((a, _) => a.length == 2 ? -1 : 1);
 
-      relays.forEach((relay) => {
+      sortedRelays.forEach((relay) => {
         switch (relay.length) {
           case 2:
             if (!this.relays.rw.includes(relay[1])) {
@@ -194,13 +195,13 @@ class Relayer {
           case 3:
             switch (relay[2]) {
               case "read":
-                if (!this.relays.r.includes(relay[1])) {
+                if (!this.relays.rw.includes(relay[1]) && !this.relays.r.includes(relay[1])) {                  
                   this.relays.r.push(relay[1]);
                 }
                 break;
 
               case "write":
-                if (!this.relays.w.includes(relay[1])) {
+                if (!this.relays.rw.includes(relay[1]) && !this.relays.w.includes(relay[1])) {
                   this.relays.w.push(relay[1]);
                 }
                 break;
