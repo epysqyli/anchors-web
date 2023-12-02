@@ -1,0 +1,335 @@
+{
+  "/events/:id": [
+    {
+      "type": "script",
+      "href": "/assets/_id_-eed587da.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/EventWrapper-662ef2bc.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/open-library-7291d1eb.js"
+    }
+  ],
+  "/favorite-posts": [
+    {
+      "type": "script",
+      "href": "/assets/favorite-posts-c829479f.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    }
+  ],
+  "/": [
+    {
+      "type": "script",
+      "href": "/assets/index-817bd0f2.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/feed-896c596e.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-6d4bb87f.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/EventWrapper-662ef2bc.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/open-library-7291d1eb.js"
+    }
+  ],
+  "/my-posts": [
+    {
+      "type": "script",
+      "href": "/assets/my-posts-4b72c1b1.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-6d4bb87f.js"
+    }
+  ],
+  "/refs/:refUrl": [
+    {
+      "type": "script",
+      "href": "/assets/_refUrl_-2adb89d0.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/feed-896c596e.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-6d4bb87f.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/EventWrapper-662ef2bc.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/open-library-7291d1eb.js"
+    }
+  ],
+  "/search": [
+    {
+      "type": "script",
+      "href": "/assets/search-2fed0c37.js"
+    }
+  ],
+  "/settings/": [
+    {
+      "type": "script",
+      "href": "/assets/index-877b1436.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    }
+  ],
+  "/settings/manage-following": [
+    {
+      "type": "script",
+      "href": "/assets/manage-following-3c2a323b.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    }
+  ],
+  "/settings/manage-relays": [
+    {
+      "type": "script",
+      "href": "/assets/manage-relays-03b3b0ab.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    }
+  ],
+  "/settings/update-guest-public-key": [
+    {
+      "type": "script",
+      "href": "/assets/update-guest-public-key-5e8dd04a.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    }
+  ],
+  "/settings/user-metadata": [
+    {
+      "type": "script",
+      "href": "/assets/user-metadata-817205ae.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-6d4bb87f.js"
+    }
+  ],
+  "/tags/:tag": [
+    {
+      "type": "script",
+      "href": "/assets/_tag_-5f988c23.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/feed-896c596e.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-6d4bb87f.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/EventWrapper-662ef2bc.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/open-library-7291d1eb.js"
+    }
+  ],
+  "/users/:id": [
+    {
+      "type": "script",
+      "href": "/assets/_id_-f661fe84.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/feed-896c596e.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-6d4bb87f.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/EventWrapper-662ef2bc.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/open-library-7291d1eb.js"
+    }
+  ],
+  "/what-is-anchors": [
+    {
+      "type": "script",
+      "href": "/assets/what-is-anchors-143cae40.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    }
+  ],
+  "/write": [
+    {
+      "type": "script",
+      "href": "/assets/write-78bc3082.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    },
+    {
+      "type": "script",
+      "href": "/assets/open-library-7291d1eb.js"
+    },
+    {
+      "type": "script",
+      "href": "/assets/index-419528e1.js"
+    }
+  ],
+  "entry-client": [
+    {
+      "type": "script",
+      "href": "/assets/entry-client-aec7b634.js"
+    },
+    {
+      "type": "style",
+      "href": "/assets/entry-client-63a1bb34.css"
+    }
+  ],
+  "index.html": []
+}
