@@ -160,7 +160,7 @@ const Write: Component<{}> = () => {
 
   return (
     <>
-      <div class='grid grid-cols-1 xl:grid-cols-7 gap-x-2 h-[100dvh] xl:h-full mx-auto'>
+      <div class='grid grid-cols-1 xl:grid-cols-7 gap-x-2 h-[100dvh] xl:h-full mx-auto xl:pr-2'>
         <div
           class={`${showRefMenu() ? "hidden" : ""} flex flex-col justify-between py-10 xl:col-span-4 
                                                        rounded-md bg-slate-600 bg-opacity-10`}
