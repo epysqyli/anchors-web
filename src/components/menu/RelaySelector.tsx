@@ -33,8 +33,11 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <div class='h-5/6 bg-slate-700 bg-opacity-25 rounded p-1 xl:p-0 xl:bg-transparent'>
-        <div class='overflow-y-scroll overflow-x-hidden xl:custom-scrollbar px-1 h-4/5'>
+      <div
+        class='h-5/6 xl:h-full bg-slate-700 bg-opacity-25 rounded p-1 xl:p-0 
+                xl:bg-neutral-700 xl:bg-opacity-25 flex flex-col justify-between'
+      >
+        <div class='overflow-y-scroll overflow-x-hidden xl:custom-scrollbar px-1 max-h-4/5'>
           <A
             class={`${baseStyle} ${
               isCurrentRelay("all")
@@ -62,7 +65,7 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
           </For>
         </div>
 
-        <div class='flex items-center justify-between text-sm mt-5'>
+        <div class='flex items-center justify-between text-sm xl:px-1 h-1/5 mt-5'>
           <input
             onchange={handleChange}
             type='text'

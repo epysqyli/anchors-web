@@ -53,23 +53,23 @@ const Menu: VoidComponent = (): JSX.Element => {
             </div>
 
             <A onClick={menuToggleCtx.toggleMobileMenu} href='/write'>
-              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
-                <div class='group-hover:scale-95'>write</div>
+              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-4 my-1'>
                 <FiEdit size={26} class='md:group-hover:animate-pulse' />
+                <div class='group-hover:scale-95'>write</div>
               </div>
             </A>
 
             <A onClick={menuToggleCtx.toggleMobileMenu} href='/favorite-posts'>
-              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
-                <div class='group-hover:scale-95'>favorite posts</div>
+              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-4 my-1'>
                 <BsBookmarks size={26} class='md:group-hover:animate-pulse' />
+                <div class='group-hover:scale-95'>favorite posts</div>
               </div>
             </A>
 
             <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
-              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-3 my-1'>
-                <div class='group-hover:scale-95'>profile</div>
+              <div class='flex items-center justify-between px-10 mx-auto rounded bg-slate-700 text-slate-300 py-4 my-1'>
                 <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
+                <div class='group-hover:scale-95'>profile</div>
               </div>
             </A>
 
@@ -94,31 +94,30 @@ const Menu: VoidComponent = (): JSX.Element => {
             <AnchorsModeSelector />
           </div>
 
-          <div class='mx-auto 2xl:w-5/6 mt-5 mb-12 px-3 h-[30%]'>
+          <div class='mx-auto 2xl:w-5/6 mt-5 mb-12 px-3'>
             <div class='flex justify-around my-5'>
               <FollowingSelector />
             </div>
-            <RelaySelector />
           </div>
 
           <A onClick={menuToggleCtx.toggleMobileMenu} href='/write'>
             <div class={active("/write") ? selectedFlexActionStyle : flexActionStyle}>
-              <div class='group-hover:scale-95'>write</div>
               <FiEdit size={26} class='md:group-hover:animate-pulse' />
+              <div class='group-hover:scale-95'>write</div>
             </div>
           </A>
 
           <A onClick={menuToggleCtx.toggleMobileMenu} href='/favorite-posts'>
             <div class={active("/favorite-posts") ? selectedFlexActionStyle : flexActionStyle}>
-              <div class='group-hover:scale-95'>favorite posts</div>
               <BsBookmarks size={26} class='md:group-hover:animate-pulse' />
+              <div class='group-hover:scale-95'>favorite posts</div>
             </div>
           </A>
 
           <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
             <div class={active("/settings") ? selectedFlexActionStyle : flexActionStyle}>
-              <div class='group-hover:scale-95'>profile</div>
               <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
+              <div class='group-hover:scale-95'>profile</div>
             </div>
           </A>
 
@@ -129,6 +128,10 @@ const Menu: VoidComponent = (): JSX.Element => {
               class='text-neutral-400 group-hover:text-neutral-200 group-active:scale-90'
             />
           </A>
+
+          <div class='mx-auto 2xl:w-5/6 mt-5 mb-12 px-3 xl:px-1 h-[30%]'>
+            <RelaySelector />
+          </div>
         </div>
       </Show>
     </>
