@@ -75,7 +75,6 @@ class Relayer {
     // });
   }
 
-  /** it absolutely needs to be awaited */
   public async deleteAllRelayListEvents(): Promise<PubResult<Event>> {
     const relayListEvents: Event[] = await this.currentPool.list(this.getAllRelays(), [
       {
@@ -92,9 +91,17 @@ class Relayer {
     };
 
     const signedEvent = await window.nostr.signEvent(deletionEvent);
-    this.pub(signedEvent, this.getAllRelays());
+    const pub = this.pub(signedEvent, this.getAllRelays());
 
-    return { error: false, data: signedEvent };
+    return await new Promise<PubResult<Event>>((res) => {
+      pub.on("ok", () => {
+        res({ error: false, data: signedEvent });
+      });
+
+      pub.on("failed", () => {
+        res({ error: true, data: signedEvent });
+      });
+    });
   }
 
   public async reactToEvent(
@@ -202,9 +209,13 @@ class Relayer {
       }
     ]);
 
+    this.relays.r = [];
+    this.relays.w = [];
+    this.relays.rw = [];
+
     if (relayListEvents.length != 0) {
       const relays = relayListEvents.map((evt) => evt.tags).flat();
-      const sortedRelays: string[][] = relays.sort((a, _) => a.length == 2 ? -1 : 1);
+      const sortedRelays: string[][] = relays.sort((a, _) => (a.length == 2 ? -1 : 1));
 
       sortedRelays.forEach((relay) => {
         switch (relay.length) {
@@ -217,7 +228,7 @@ class Relayer {
           case 3:
             switch (relay[2]) {
               case "read":
-                if (!this.relays.rw.includes(relay[1]) && !this.relays.r.includes(relay[1])) {                  
+                if (!this.relays.rw.includes(relay[1]) && !this.relays.r.includes(relay[1])) {
                   this.relays.r.push(relay[1]);
                 }
                 break;
