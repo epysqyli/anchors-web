@@ -9,14 +9,18 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
   const [readingRelays, setReadingRelays] = createSignal<string[]>([], { equals: false });
   const [writingRelays, setWritingRelays] = createSignal<string[]>([], { equals: false });
   const [readingAndWritingRelays, setReadingAndWritingRelays] = createSignal<string[]>([], { equals: false });
+  const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   createEffect(async () => {
+    setIsLoading(true);
     setupDone();
 
     const relays = await relay.fetchAndSetRelays();
     setWritingRelays(relays.w);
     setReadingRelays(relays.r);
     setReadingAndWritingRelays(relays.rw);
+
+    setIsLoading(false);
   });
 
   const displayError = (e: Event): void => {
@@ -124,6 +128,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
       <div class='mx-auto xl:w-5/6 xl:p-3 h-4/5'>
         <div class='xl:grid xl:grid-cols-3 gap-x-3 h-full overflow-y-scroll px-5 xl:px-0 xl:custom-scrollbar relative snap-mandatory snap-y xl:snap-none'>
           <RelayForm
+            isLoading={isLoading}
             listType='r'
             relayList={readingRelays}
             handleDeletion={handleDeletion}
@@ -131,6 +136,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
           />
 
           <RelayForm
+            isLoading={isLoading}
             listType='w'
             relayList={writingRelays}
             handleDeletion={handleDeletion}
@@ -138,6 +144,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
           />
 
           <RelayForm
+            isLoading={isLoading}
             listType='rw'
             relayList={readingAndWritingRelays}
             handleDeletion={handleDeletion}

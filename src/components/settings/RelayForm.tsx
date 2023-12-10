@@ -1,13 +1,14 @@
-import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import { TbPlus } from "solid-icons/tb";
-import { Accessor, Component, For, JSX, useContext } from "solid-js";
 import { RelayContext } from "~/contexts/relay";
+import { RiSystemCloseCircleFill } from "solid-icons/ri";
+import { Accessor, Component, For, JSX, Show, useContext } from "solid-js";
 
 interface Props {
   listType: "r" | "w" | "rw";
+  isLoading: Accessor<boolean>;
   relayList: Accessor<string[]>;
-  handleDeletion(relayType: "r" | "w" | "rw", relayAddress: string): Promise<void>;
   handleSubmit(e: Event): Promise<void>;
+  handleDeletion(relayType: "r" | "w" | "rw", relayAddress: string): Promise<void>;
 }
 
 const RelayForm: Component<Props> = (props): JSX.Element => {
@@ -19,24 +20,37 @@ const RelayForm: Component<Props> = (props): JSX.Element => {
         {{ r: "Read From", w: "Write To", rw: "Read & Write" }[props.listType]}
       </h2>
 
-      <div class='grow py-5 overflow-y-scroll xl:custom-scrollbar h-[1vh]'>
-        <For each={props.relayList()}>
-          {(relayAddress) => (
-            <div class='flex items-center justify-between w-5/6 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
-              <div class='text-slate-300'>{relayAddress}</div>
-              {authMode.get() == "private" ? (
-                <div
-                  onClick={() => props.handleDeletion(props.listType, relayAddress)}
-                  class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 cursor-pointer hover:scale-105 active:scale-95'
-                >
-                  <RiSystemCloseCircleFill size={30} />
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
-          )}
-        </For>
+      <div class='grow py-5 overflow-y-scroll xl:custom-scrollbar h-[1vh'>
+        <Show
+          when={!props.isLoading()}
+          fallback={
+            <>
+              <div class='bg-slate-600 h-[10%] my-2 w-4/5 animate-pulse rounded-md mx-auto'></div>
+              <div class='bg-slate-600 h-[10%] my-2 w-4/5 animate-pulse rounded-md mx-auto'></div>
+              <div class='bg-slate-600 h-[10%] my-2 w-4/5 animate-pulse rounded-md mx-auto'></div>
+              <div class='bg-slate-600 h-[10%] my-2 w-4/5 animate-pulse rounded-md mx-auto'></div>
+              <div class='bg-slate-600 h-[10%] my-2 w-4/5 animate-pulse rounded-md mx-auto'></div>
+            </>
+          }
+        >
+          <For each={props.relayList()}>
+            {(relayAddress) => (
+              <div class='flex items-center justify-between w-5/6 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
+                <div class='text-slate-300'>{relayAddress}</div>
+                {authMode.get() == "private" ? (
+                  <div
+                    onClick={() => props.handleDeletion(props.listType, relayAddress)}
+                    class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 cursor-pointer hover:scale-105 active:scale-95'
+                  >
+                    <RiSystemCloseCircleFill size={30} />
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            )}
+          </For>
+        </Show>
       </div>
 
       {authMode.get() == "private" ? (
