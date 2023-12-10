@@ -1,0 +1,62 @@
+import { RiSystemCloseCircleFill } from "solid-icons/ri";
+import { TbPlus } from "solid-icons/tb";
+import { Accessor, Component, For, JSX, useContext } from "solid-js";
+import { RelayContext } from "~/contexts/relay";
+
+interface Props {
+  listType: "r" | "w" | "rw";
+  relayList: Accessor<string[]>;
+  handleDeletion(relayType: "r" | "w" | "rw", relayAddress: string): Promise<void>;
+  handleSubmit(e: Event): Promise<void>;
+}
+
+const RelayForm: Component<Props> = (props): JSX.Element => {
+  const { authMode } = useContext(RelayContext);
+
+  return (
+    <div class='flex flex-col justify-between col-span-1 bg-slate-700 bg-opacity-50 rounded pb-1 h-full mb-3 xl:mb-0 snap-start'>
+      <h2 class='text-center uppercase tracking-tight py-3 text-slate-300 text-lg font-bold bg-slate-600 rounded mb-3'>
+        {{ r: "Read From", w: "Write To", rw: "Read & Write" }[props.listType]}
+      </h2>
+
+      <div class='grow py-5 overflow-y-scroll xl:custom-scrollbar h-[1vh]'>
+        <For each={props.relayList()}>
+          {(relayAddress) => (
+            <div class='flex items-center justify-between w-5/6 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
+              <div class='text-slate-300'>{relayAddress}</div>
+              {authMode.get() == "private" ? (
+                <div
+                  onClick={() => props.handleDeletion(props.listType, relayAddress)}
+                  class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 cursor-pointer hover:scale-105 active:scale-95'
+                >
+                  <RiSystemCloseCircleFill size={30} />
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          )}
+        </For>
+      </div>
+
+      {authMode.get() == "private" ? (
+        <form onSubmit={props.handleSubmit} class='flex items-center justify-around py-2 px-1'>
+          <input
+            id='reading'
+            type='text'
+            name={props.listType}
+            pattern='^wss.*'
+            class='block w-4/5 py-2 rounded focus:outline-none bg-slate-500 bg-opacity-75 text-center caret-slate-200 text-slate-200'
+          />
+          <button class='block h-full text-green-400 text-opacity-50 hover:text-opacity-100 transition-all hover:scale-105 active:scale-95'>
+            <TbPlus size={42} stroke-width={1.5} class='mx-auto' />
+          </button>
+        </form>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
+};
+
+export default RelayForm;

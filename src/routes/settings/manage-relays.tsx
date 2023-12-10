@@ -1,12 +1,11 @@
-import { TbPlus } from "solid-icons/tb";
 import { RelayContext } from "~/contexts/relay";
 import { EventTemplate, Kind, Pub } from "nostr-tools";
-import { RiSystemCloseCircleFill } from "solid-icons/ri";
+import RelayForm from "~/components/settings/RelayForm";
 import { isRelayReachable } from "~/lib/nostr/nostr-utils";
-import { For, JSX, VoidComponent, createEffect, createSignal, useContext } from "solid-js";
+import { JSX, VoidComponent, createEffect, createSignal, useContext } from "solid-js";
 
 const ManageRelays: VoidComponent = (): JSX.Element => {
-  const { relay, readRelays, authMode, setupDone } = useContext(RelayContext);
+  const { relay, readRelays, setupDone } = useContext(RelayContext);
   const [readingRelays, setReadingRelays] = createSignal<string[]>([], { equals: false });
   const [writingRelays, setWritingRelays] = createSignal<string[]>([], { equals: false });
   const [readingAndWritingRelays, setReadingAndWritingRelays] = createSignal<string[]>([], { equals: false });
@@ -124,137 +123,26 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
       <div class='mx-auto xl:w-5/6 xl:p-3 h-4/5'>
         <div class='xl:grid xl:grid-cols-3 gap-x-3 h-full overflow-y-scroll px-5 xl:px-0 xl:custom-scrollbar relative snap-mandatory snap-y xl:snap-none'>
-          <div class='flex flex-col justify-between col-span-1 bg-slate-700 bg-opacity-50 rounded pb-1 h-full mb-3 xl:mb-0 snap-start'>
-            <h2 class='text-center uppercase tracking-tight py-3 text-slate-300 text-lg font-bold bg-slate-600 rounded mb-3'>
-              Read From
-            </h2>
+          <RelayForm
+            listType='r'
+            relayList={readingRelays}
+            handleDeletion={handleDeletion}
+            handleSubmit={handleSubmit}
+          />
 
-            <div class='grow py-5 overflow-y-scroll xl:custom-scrollbar h-[1vh]'>
-              <For each={readingRelays()}>
-                {(relayAddress) => (
-                  <div class='flex items-center justify-between w-5/6 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
-                    <div class='text-slate-300'>{relayAddress}</div>
-                    {authMode.get() == "private" ? (
-                      <div
-                        onClick={() => handleDeletion("r", relayAddress)}
-                        class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 cursor-pointer hover:scale-105 active:scale-95'
-                      >
-                        <RiSystemCloseCircleFill size={30} />
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                )}
-              </For>
-            </div>
+          <RelayForm
+            listType='w'
+            relayList={writingRelays}
+            handleDeletion={handleDeletion}
+            handleSubmit={handleSubmit}
+          />
 
-            {authMode.get() == "private" ? (
-              <form onSubmit={handleSubmit} class='flex items-center justify-around py-2 px-1'>
-                <input
-                  id='reading'
-                  type='text'
-                  name='r'
-                  pattern='^wss.*'
-                  oninvalid={displayError}
-                  class='block w-4/5 py-2 rounded focus:outline-none bg-slate-500 bg-opacity-75 text-center caret-slate-200 text-slate-200'
-                />
-                <button class='block h-full text-green-400 text-opacity-50 hover:text-opacity-100 transition-all hover:scale-105 active:scale-95'>
-                  <TbPlus size={42} stroke-width={1.5} class='mx-auto' />
-                </button>
-              </form>
-            ) : (
-              <></>
-            )}
-          </div>
-
-          <div class='flex flex-col justify-between col-span-1 bg-slate-700 bg-opacity-50 rounded pb-1 h-full mb-3 xl:mb-0 snap-start'>
-            <h2 class='text-center uppercase tracking-tight py-3 text-slate-300 text-lg font-bold bg-slate-600 rounded mb-3'>
-              Write To
-            </h2>
-
-            <div class='grow py-5 overflow-y-scroll xl:custom-scrollbar h-[1vh]'>
-              <For each={writingRelays()}>
-                {(relayAddress) => (
-                  <div class='flex items-center justify-between w-5/6 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
-                    <div class='text-slate-300'>{relayAddress}</div>
-                    {authMode.get() == "private" ? (
-                      <div
-                        onClick={() => handleDeletion("w", relayAddress)}
-                        class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 cursor-pointer hover:scale-105 active:scale-95'
-                      >
-                        <RiSystemCloseCircleFill size={30} />
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                )}
-              </For>
-            </div>
-
-            {authMode.get() == "private" ? (
-              <form onSubmit={handleSubmit} class='flex items-center justify-around py-2 px-1'>
-                <input
-                  id='reading'
-                  type='text'
-                  name='w'
-                  pattern='^wss.*'
-                  oninvalid={displayError}
-                  class='block w-4/5 py-2 rounded focus:outline-none bg-slate-500 bg-opacity-75 text-center caret-slate-200 text-slate-200'
-                />
-                <button class='block h-full text-green-400 text-opacity-50 hover:text-opacity-100 transition-all hover:scale-105 active:scale-95'>
-                  <TbPlus size={42} stroke-width={1.5} class='mx-auto' />
-                </button>
-              </form>
-            ) : (
-              <></>
-            )}
-          </div>
-
-          <div class='flex flex-col justify-between col-span-1 bg-slate-700 bg-opacity-50 rounded pb-1 h-full mb-3 xl:mb-0 snap-start'>
-            <h2 class='text-center uppercase tracking-tight py-3 text-slate-300 text-lg font-bold bg-slate-600 rounded mb-3'>
-              Read & Write
-            </h2>
-
-            <div class='grow py-5 overflow-y-scroll xl:custom-scrollbar h-[1vh]'>
-              <For each={readingAndWritingRelays()}>
-                {(relayAddress) => (
-                  <div class='flex items-center justify-between w-5/6 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
-                    <div class='text-slate-300'>{relayAddress}</div>
-                    {authMode.get() == "private" ? (
-                      <div
-                        onClick={() => handleDeletion("rw", relayAddress)}
-                        class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 cursor-pointer hover:scale-105 active:scale-95'
-                      >
-                        <RiSystemCloseCircleFill size={30} />
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                )}
-              </For>
-            </div>
-
-            {authMode.get() == "private" ? (
-              <form onSubmit={handleSubmit} class='flex items-center justify-around py-2 px-1'>
-                <input
-                  id='reading'
-                  type='text'
-                  name='rw'
-                  pattern='^wss.*'
-                  oninvalid={displayError}
-                  class='block w-4/5 py-2 rounded focus:outline-none bg-slate-500 bg-opacity-75 text-center caret-slate-200 text-slate-200'
-                />
-                <button class='block h-full text-green-400 text-opacity-50 hover:text-opacity-100 transition-all hover:scale-105 active:scale-95'>
-                  <TbPlus size={42} stroke-width={1.5} class='mx-auto' />
-                </button>
-              </form>
-            ) : (
-              <></>
-            )}
-          </div>
+          <RelayForm
+            listType='rw'
+            relayList={readingAndWritingRelays}
+            handleDeletion={handleDeletion}
+            handleSubmit={handleSubmit}
+          />
         </div>
       </div>
     </>

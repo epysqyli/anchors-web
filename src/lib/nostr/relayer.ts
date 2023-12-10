@@ -75,6 +75,7 @@ class Relayer {
     // });
   }
 
+  /** it absolutely needs to be awaited */
   public async deleteAllRelayListEvents(): Promise<PubResult<Event>> {
     const relayListEvents: Event[] = await this.currentPool.list(this.getAllRelays(), [
       {
