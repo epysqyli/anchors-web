@@ -1,4 +1,4 @@
-import { Event, Filter, Kind } from "nostr-tools";
+import { Event, Filter, Kind, relayInit } from "nostr-tools";
 import { Accessor, Setter } from "solid-js";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
 import { IReaction, IReactionFields, Reaction } from "~/interfaces/IReaction";
@@ -25,7 +25,8 @@ const makeDefaultEnrichedEvent = (evt: Event): IEnrichedEvent => {
     about: "",
     picture: "",
     positive: { count: 0, events: [] },
-    negative: { count: 0, events: [] }
+    negative: { count: 0, events: [] },
+    isRepost: false
   };
 };
 
@@ -109,6 +110,18 @@ const handleReaction = async (
   }
 };
 
+const isRelayReachable = async (relayUrl: string): Promise<boolean> => {
+  const relay = relayInit(relayUrl);
+
+  try {
+    await relay.connect();
+  } catch (error) {
+    return false;
+  }
+
+  return true;
+};
+
 export {
   createMetadataFilter,
   sortByCreatedAt,
@@ -117,5 +130,6 @@ export {
   parseDate,
   makeDefaultEnrichedEvent,
   sortByCreatedAtReverse,
-  handleReaction
+  handleReaction,
+  isRelayReachable
 };
