@@ -494,9 +494,22 @@ class Relayer {
       await this.currentPool.list(readFromRelays, [{ ...filter, kinds: [Kind.Metadata] }])
     ).filter(this.isEventValid);
 
-    const metadataEvents: IUserMetadataWithPubkey[] = events.map((evt) => {
+    const metadataEvents: IUserMetadataWithPubkey[] = [];
+    const metadataEventsAuthors: string[] = [];
+
+    events.forEach((evt) => {
       const metadata: IUserMetadata = JSON.parse(evt.content);
-      return { name: metadata.name, picture: metadata.picture, about: metadata.about, pubkey: evt.pubkey };
+
+      if (!metadataEventsAuthors.includes(evt.pubkey)) {
+        metadataEvents.push({
+          name: metadata.name,
+          picture: metadata.picture,
+          about: metadata.about,
+          pubkey: evt.pubkey
+        });
+      }
+
+      metadataEventsAuthors.push(evt.pubkey);
     });
 
     return metadataEvents;
