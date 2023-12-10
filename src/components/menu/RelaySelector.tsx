@@ -2,10 +2,10 @@ import { RelayContext } from "~/contexts/relay";
 import { A, useSearchParams } from "solid-start";
 import { FiArrowRightCircle } from "solid-icons/fi";
 import { FeedSearchParams } from "~/types/FeedSearchParams";
-import { For, JSX, VoidComponent, createEffect, createSignal, useContext } from "solid-js";
+import { For, JSX, Show, VoidComponent, createEffect, createSignal, onMount, useContext } from "solid-js";
 
 const RelaySelector: VoidComponent = (): JSX.Element => {
-  const { readRelays } = useContext(RelayContext);
+  const { readRelays, setupDone } = useContext(RelayContext);
   const [searchParams] = useSearchParams<FeedSearchParams>();
 
   const isCurrentRelay = (address: string): boolean => searchParams.relayAddress == address;
@@ -14,10 +14,16 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
   const nonSelectedStyle = "text-neutral-500 hover:text-neutral-400 hover:bg-slate-500 hover:bg-opacity-25";
 
   const [inputFieldRelayAddress, setInputFieldRelayAddress] = createSignal<string>("");
+  const [isLoading, setIsLoading] = createSignal<boolean>(true);
 
   const handleChange = (e: Event): void => {
     setInputFieldRelayAddress((e.currentTarget as HTMLInputElement).value);
   };
+
+  onMount(() => {
+    setupDone();
+    setIsLoading(false);
+  });
 
   createEffect(() => {
     const relayAddressFromQueryParams = searchParams.relayAddress;
@@ -34,51 +40,61 @@ const RelaySelector: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <div
-        class='h-5/6 xl:h-full bg-slate-700 bg-opacity-25 rounded p-1 xl:p-0 
-                xl:bg-neutral-700 xl:bg-opacity-25 flex flex-col justify-between'
+      <Show
+        when={!isLoading()}
+        fallback={
+          <div class='h-[30dvh] xl:h-full bg-slate-800 bg-opacity-25 rounded py-2 xl:bg-neutral-700 xl:bg-opacity-25'>
+            <div class='bg-slate-700 xl:bg-neutral-800 h-1/6 my-1 w-11/12 xl:w-4/5 animate-pulse rounded-md mx-auto'></div>
+            <div class='bg-slate-700 xl:bg-neutral-800 h-1/6 my-1 w-11/12 xl:w-4/5 animate-pulse rounded-md mx-auto'></div>
+            <div class='bg-slate-700 xl:bg-neutral-800 h-1/6 my-1 w-11/12 xl:w-4/5 animate-pulse rounded-md mx-auto'></div>
+            <div class='bg-slate-700 xl:bg-neutral-800 h-1/6 my-1 w-11/12 xl:w-4/5 animate-pulse rounded-md mx-auto'></div>
+            <div class='bg-slate-700 xl:bg-neutral-800 h-1/6 my-1 w-11/12 xl:w-4/5 animate-pulse rounded-md mx-auto'></div>
+          </div>
+        }
       >
-        <div class='overflow-y-scroll overflow-x-hidden xl:custom-scrollbar px-1 max-h-4/5'>
-          <A
-            class={`${baseStyle} ${isCurrentRelay("all") ? selectedStyle : nonSelectedStyle}`}
-            href={`/?following=${searchParams.following}&relayAddress=all`}
-          >
-            All relays
-          </A>
+        <div class='h-5/6 xl:h-full bg-slate-700 bg-opacity-25 rounded p-1 xl:p-0 xl:bg-neutral-700 xl:bg-opacity-25 flex flex-col justify-between'>
+          <div class='overflow-y-scroll overflow-x-hidden xl:custom-scrollbar px-1 max-h-4/5'>
+            <A
+              class={`${baseStyle} ${isCurrentRelay("all") ? selectedStyle : nonSelectedStyle}`}
+              href={`/?following=${searchParams.following}&relayAddress=all`}
+            >
+              All relays
+            </A>
 
-          <For each={readRelays.get()}>
-            {(address) => (
-              <A
-                class={`${baseStyle} ${isCurrentRelay(address) ? selectedStyle : nonSelectedStyle}`}
-                href={`/?following=${searchParams.following}&relayAddress=${encodeURIComponent(address)}`}
-              >
-                {address}
-              </A>
-            )}
-          </For>
-        </div>
+            <For each={readRelays.get()}>
+              {(address) => (
+                <A
+                  class={`${baseStyle} ${isCurrentRelay(address) ? selectedStyle : nonSelectedStyle}`}
+                  href={`/?following=${searchParams.following}&relayAddress=${encodeURIComponent(address)}`}
+                >
+                  {address}
+                </A>
+              )}
+            </For>
+          </div>
 
-        <div class='flex items-center justify-between text-sm xl:px-1 h-1/5 mt-5'>
-          <input
-            onchange={handleChange}
-            type='text'
-            placeholder='Enter a relay address'
-            class='block w-4/5 rounded focus:outline-none px-3 py-2 bg-slate-600 xl:bg-neutral-800 text-neutral-200 caret-neutral-400'
-          />
-
-          <A
-            href={`/?following=${searchParams.following}&relayAddress=${encodeURIComponent(
-              inputFieldRelayAddress() == "" ? "all" : inputFieldRelayAddress()
-            )}`}
-            class='w-1/5 group'
-          >
-            <FiArrowRightCircle
-              class='mx-auto text-neutral-400 hover:text-neutral-200 group-active:scale-95'
-              size={28}
+          <div class='flex items-center justify-between text-sm xl:px-1 h-1/5 mt-5'>
+            <input
+              onchange={handleChange}
+              type='text'
+              placeholder='Enter a relay address'
+              class='block w-4/5 rounded focus:outline-none px-3 py-2 bg-slate-600 xl:bg-neutral-800 text-neutral-200 caret-neutral-400'
             />
-          </A>
+
+            <A
+              href={`/?following=${searchParams.following}&relayAddress=${encodeURIComponent(
+                inputFieldRelayAddress() == "" ? "all" : inputFieldRelayAddress()
+              )}`}
+              class='w-1/5 group'
+            >
+              <FiArrowRightCircle
+                class='mx-auto text-neutral-400 hover:text-neutral-200 group-active:scale-95'
+                size={28}
+              />
+            </A>
+          </div>
         </div>
-      </div>
+      </Show>
     </>
   );
 };
