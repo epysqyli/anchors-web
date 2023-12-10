@@ -20,7 +20,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
   const displayError = (e: Event): void => {
     // @ts-ignore
-    e.currentTarget.setCustomValidity("Enter a valid websocket URL");
+    e.currentTarget.setCustomValidity("Enter a valid and secure websocket URL that starts with wss://");
   };
 
   const buildRelayEventTags = (): string[][] => {
@@ -171,7 +171,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
                       <input
                         type='text'
                         name={relays[0]}
-                        pattern='^ws.*'
+                        pattern='^wss.*'
                         oninvalid={displayError}
                         class='block w-4/5 py-2 rounded focus:outline-none bg-slate-500 bg-opacity-75
                              text-center caret-slate-200 text-slate-200'
