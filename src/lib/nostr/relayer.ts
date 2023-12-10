@@ -75,6 +75,27 @@ class Relayer {
     // });
   }
 
+  public async deleteAllRelayListEvents(): Promise<PubResult<Event>> {
+    const relayListEvents: Event[] = await this.currentPool.list(this.getAllRelays(), [
+      {
+        kinds: [Kind.RelayList],
+        authors: [this.userPubKey!]
+      }
+    ]);
+
+    const deletionEvent: EventTemplate = {
+      kind: Kind.EventDeletion,
+      tags: relayListEvents.map((evt) => ["e", evt.id]),
+      created_at: Math.floor(Date.now() / 1000),
+      content: ""
+    };
+
+    const signedEvent = await window.nostr.signEvent(deletionEvent);
+    this.pub(signedEvent, this.getAllRelays());
+
+    return { error: false, data: signedEvent };
+  }
+
   public async reactToEvent(
     eventID: string,
     eventPubkey: string,
