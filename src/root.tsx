@@ -4,12 +4,13 @@ import "./root.css";
 import { Routes } from "@solidjs/router";
 import WideLayout from "./layouts/WideLayout";
 import NarrowLayout from "./layouts/NarrowLayout";
-import { RelayProvider } from "./contexts/relay";
 import { Event, EventTemplate } from "nostr-tools";
-import { Component, Show, Suspense } from "solid-js";
 import { useIsNarrow } from "./hooks/useMediaQuery";
 import { ErrorBoundary } from "solid-start/error-boundary";
 import UserIdentity from "./components/shared/UserIdentity";
+import RootFallback from "./components/shared/RootFallback";
+import { RelayContext, RelayProvider } from "./contexts/relay";
+import { Component, Show, Suspense, useContext } from "solid-js";
 import { Body, FileRoutes, Head, Html, Meta, Scripts, Title } from "solid-start";
 
 declare global {
@@ -22,6 +23,8 @@ declare global {
 }
 
 const Root: Component<{}> = () => {
+  const { setupDone } = useContext(RelayContext);
+
   return (
     <Html lang='en'>
       <Head>
@@ -36,24 +39,26 @@ const Root: Component<{}> = () => {
         <Suspense>
           <ErrorBoundary>
             <RelayProvider>
-              <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
-                <NarrowLayout>
-                  <Routes>
-                    <FileRoutes />
-                  </Routes>
+              <Show when={setupDone()} fallback={<RootFallback />}>
+                <Show when={useIsNarrow() !== undefined && useIsNarrow()}>
+                  <NarrowLayout>
+                    <Routes>
+                      <FileRoutes />
+                    </Routes>
 
-                  <UserIdentity />
-                </NarrowLayout>
-              </Show>
+                    <UserIdentity />
+                  </NarrowLayout>
+                </Show>
 
-              <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
-                <WideLayout>
-                  <Routes>
-                    <FileRoutes />
-                  </Routes>
+                <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
+                  <WideLayout>
+                    <Routes>
+                      <FileRoutes />
+                    </Routes>
 
-                  <UserIdentity />
-                </WideLayout>
+                    <UserIdentity />
+                  </WideLayout>
+                </Show>
               </Show>
             </RelayProvider>
           </ErrorBoundary>
