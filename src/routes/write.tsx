@@ -108,6 +108,8 @@ const Write: Component<{}> = () => {
       setPopupMsg("Post correctly published! Find it in your 'my posts' section");
       localStorage.removeItem(LOCAL_STORAGE_CONTENT_KEY);
       localStorage.removeItem(LOCAL_STORAGE_REFTAGS_KEY);
+      setNostrEvent({ content: "", created_at: 0, kind: Kind.Text, tags: [] });
+      setRefTags([]);
     });
 
     pubResult.on("failed", () => {
@@ -217,7 +219,7 @@ const Write: Component<{}> = () => {
         <div class='absolute top-0 left-0 z-10'>
           <Popup autoClose={false} show={showPopup} setShow={setShowPopup}>
             <div class='h-screen w-screen pt-20 bg-slate-800 bg-opacity-95'>
-              <div class="w-4/5 mx-auto">{popupMsg()}</div>
+              <div class='w-4/5 mx-auto'>{popupMsg()}</div>
             </div>
           </Popup>
         </div>
