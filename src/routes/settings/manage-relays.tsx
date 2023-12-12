@@ -105,7 +105,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
     return await new Promise<boolean>((res) => {
       pub.on("ok", async () => {
-        readRelays.set(readingRelays());
+        readRelays.set([...readingRelays(), ...readingAndWritingRelays()]);
         res(true);
       });
 
