@@ -198,9 +198,9 @@ class Relayer {
   }
 
   public async fetchAndSetRelays(): Promise<RelayList> {
-    if (this.isRelayListEmpty()) {
-      this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
-    }
+    this.relays.r = [];
+    this.relays.w = [];
+    this.relays.rw = [];
 
     const relayListEvents: Event[] = await this.currentPool.list(this.getReadRelays(), [
       {
@@ -209,9 +209,9 @@ class Relayer {
       }
     ]);
 
-    this.relays.r = [];
-    this.relays.w = [];
-    this.relays.rw = [];
+    if (this.isRelayListEmpty()) {
+      this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
+    }
 
     if (relayListEvents.length != 0) {
       const relays = relayListEvents.map((evt) => evt.tags).flat();

@@ -1,9 +1,9 @@
 import "websocket-polyfill";
 import Relayer from "~/lib/nostr/relayer";
-import type { Accessor, Setter } from "solid-js";
+import { AuthMode } from "~/types/AuthMode";
+import IRelayContext from "~/interfaces/RelayContext";
 import { Component, JSX, createContext, createEffect, createSignal, onMount } from "solid-js";
 
-type AuthMode = "guest" | "private";
 const LOCAL_STORAGE_GUEST_PK = "anchors-guest-public-key";
 
 const [relay] = createSignal<Relayer>(new Relayer(""));
@@ -13,19 +13,6 @@ const [getReadRelays, setReadRelays] = createSignal<string[]>([]);
 const [getAnchorsMode, setAnchorsMode] = createSignal<boolean>(true);
 const [guestPublicKey, setGuestPublicKey] = createSignal<string>("");
 const [favoriteEventIDs, setFavoriteEventIDs] = createSignal<string[]>([]);
-
-await relay().fetchAndSetRelays();
-setReadRelays(relay().getReadRelays());
-
-interface IRelayContext {
-  relay: Relayer;
-  readRelays: { get: Accessor<string[]>; set: Setter<string[]> };
-  anchorsMode: { get: Accessor<boolean>; set: Setter<boolean> };
-  authMode: { get: Accessor<AuthMode>; set: Setter<AuthMode> };
-  guestPublicKey: { get: Accessor<string>; set: Setter<string>; localStorageKey: string };
-  favoriteEventIDs: { get: Accessor<string[]>; set: Setter<string[]> };
-  setupDone: Accessor<boolean>;
-}
 
 const RelayContext = createContext<IRelayContext>({
   relay: relay(),
@@ -43,6 +30,9 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
     try {
       userPublicKey = await window.nostr.getPublicKey();
     } catch (error) {}
+
+    await relay().fetchAndSetRelays();
+    setReadRelays(relay().getReadRelays());
 
     if (userPublicKey) {
       relay().userPubKey = userPublicKey;
