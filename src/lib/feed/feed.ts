@@ -113,14 +113,15 @@ const fetchAndSetEvents = async (
   setIsLoading(false);
 
   const intervalID = setInterval(async () => {
-    let fetchSinceTimestamp = getFetchSinceTimestamp(enrichedEvents(), newEnrichedEvents());
-
-    let newEvents: EventWithRepostInfo[] = [];
-    newEvents = await relay.fetchTextEvents(
-      getFetchOptions(fetchParams, isAnchorsMode(), fetchSinceTimestamp)
+    const newEvents: EventWithRepostInfo[] = await relay.fetchTextEvents(
+      getFetchOptions(
+        fetchParams,
+        isAnchorsMode(),
+        getFetchSinceTimestamp(enrichedEvents(), newEnrichedEvents())
+      )
     );
 
-    if (newEvents.length !== 0) {
+    if (newEvents.length > 0) {
       const newUniqueEvents = getNewUniqueEvents(events(), newEvents);
       setEvents([...events(), ...newUniqueEvents]);
 
