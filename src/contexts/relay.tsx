@@ -31,9 +31,6 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
       userPublicKey = await window.nostr.getPublicKey();
     } catch (error) {}
 
-    await relay().fetchAndSetRelays();
-    setReadRelays(relay().getReadRelays());
-
     if (userPublicKey) {
       relay().userPubKey = userPublicKey;
       setAuthMode("private");
@@ -41,6 +38,9 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
       await relay().fetchUserMetadata();
       relay().following = await relay().fetchContacts();
       setFavoriteEventIDs(await relay().fetchFavoriteEventsIDs());
+      setReadRelays(relay().getReadRelays());
+    } else {
+      await relay().fetchAndSetRelays();
       setReadRelays(relay().getReadRelays());
     }
 
