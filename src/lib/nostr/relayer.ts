@@ -91,17 +91,18 @@ class Relayer {
     };
 
     const signedEvent = await window.nostr.signEvent(deletionEvent);
-    const pub = this.pub(signedEvent, this.getAllRelays());
+    this.pub(signedEvent, this.getAllRelays());
 
-    return await new Promise<PubResult<Event>>((res) => {
-      pub.on("ok", () => {
-        res({ error: false, data: signedEvent });
-      });
+    return { error: false, data: signedEvent };
+    // return await new Promise<PubResult<Event>>((res) => {
+    //   pub.on("ok", () => {
+    //     res({ error: false, data: signedEvent });
+    //   });
 
-      pub.on("failed", () => {
-        res({ error: true, data: signedEvent });
-      });
-    });
+    //   pub.on("failed", () => {
+    //     res({ error: true, data: signedEvent });
+    //   });
+    // });
   }
 
   public async reactToEvent(
@@ -200,18 +201,14 @@ class Relayer {
   public async fetchAndSetRelays(): Promise<RelayList> {
     this.relays.r = [];
     this.relays.w = [];
-    this.relays.rw = [];
+    this.relays.rw = [import.meta.env.VITE_DEFAULT_RELAY];
 
-    const relayListEvents: Event[] = await this.currentPool.list(this.getReadRelays(), [
+    const relayListEvents: Event[] = await this.currentPool.list(this.getAllRelays(), [
       {
         kinds: [Kind.RelayList],
         authors: [this.userPubKey!]
       }
     ]);
-
-    if (this.isRelayListEmpty()) {
-      this.relays.rw.push(import.meta.env.VITE_DEFAULT_RELAY);
-    }
 
     if (relayListEvents.length != 0) {
       const relays = relayListEvents.map((evt) => evt.tags).flat();
@@ -666,14 +663,6 @@ class Relayer {
 
   public getAllRelays(): string[] {
     return [...this.relays.r, ...this.relays.w, ...this.relays.rw];
-  }
-
-  private isRelayListEmpty(): boolean {
-    if (this.relays.r.length + this.relays.w.length + this.relays.rw.length == 0) {
-      return true;
-    }
-
-    return false;
   }
 
   private isEventValid(event: Event): boolean {
