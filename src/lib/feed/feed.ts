@@ -123,7 +123,7 @@ const fetchAndSetEvents = async (
     if (newEvents.length !== 0) {
       const newUniqueEvents = getNewUniqueEvents(events(), newEvents);
       setEvents([...events(), ...newUniqueEvents]);
-      
+
       const newEventsAuthors = getNewEventsAuthors(events(), newUniqueEvents);
       if (newEventsAuthors.length !== 0) {
         const metaFilter: Filter = { authors: [...new Set(newEventsAuthors)] };
@@ -143,22 +143,18 @@ const fetchAndSetEvents = async (
 
       const newEventsCount = newEnrichedEvents().length + newUniqueEvents.length;
 
+      let newEventsToSet: IEnrichedEvent[] = [
+        ...newEnrichedEvents(),
+        ...relay.buildEnrichedEvents(newUniqueEvents, metaEvents(), reactions())
+      ];
+
       if (newEventsCount >= fetchParams.maxEventsCount) {
-        const newEventsToSet = [
-          ...newEnrichedEvents(),
-          ...relay.buildEnrichedEvents(newUniqueEvents, metaEvents(), reactions())
-        ]
+        newEventsToSet = newEventsToSet
           .sort(sortByCreatedAtReverse)
           .slice(newEventsCount - fetchParams.maxEventsCount, newEventsCount);
-
-        setNewEnrichedEvents(newEventsToSet);
-      } else {
-        setNewEnrichedEvents([
-          ...newEnrichedEvents(),
-          ...relay.buildEnrichedEvents(newUniqueEvents, metaEvents(), reactions())
-        ]);
       }
 
+      setNewEnrichedEvents(newEventsToSet);
       setShowPopup(true);
     }
   }, relay.FETCH_INTERVAL_MS);
