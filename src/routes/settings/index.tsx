@@ -36,7 +36,7 @@ const Settings: VoidComponent = () => {
           </SettingsLink>
 
           {authMode.get() != "private" ? (
-            <SettingsLink href='/settings/update-guest-public-key' content='update guest public key'>
+            <SettingsLink href='/settings/update-guest-public-key' content='set or update public key'>
               <RiOthersKey2Line class='mx-auto' size={60} />
             </SettingsLink>
           ) : (

@@ -4,7 +4,7 @@ import { VsSave } from "solid-icons/vs";
 import { RelayContext } from "~/contexts/relay";
 import { JSX, VoidComponent, createSignal, useContext } from "solid-js";
 
-const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
+const UpdatePublicKey: VoidComponent = (): JSX.Element => {
   const { guestPublicKey } = useContext(RelayContext);
 
   const [inputPublicKey, setInputPublicKey] = createSignal<string>("");
@@ -30,7 +30,7 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
   return (
     <>
       <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
-        Update your guest public key
+        Set or change your public key
       </h1>
 
       <div class='xl:w-4/5 2xl:w-3/5 mx-auto h-4/5 overflow-y-scroll xl:custom-scrollbar px-10'>
@@ -55,7 +55,7 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
               class='w-5/6 rounded focus:outline-none bg-slate-600 py-3 px-5 text-slate-200
           placeholder:text-base placeholder:text-center caret-slate-200 text-center'
               placeholder={
-                guestPublicKey.get() ? "update your guest public key" : "enter your guest public key"
+                guestPublicKey.get() ? "update your public key" : "enter your public key"
               }
             />
             <button class='w-1/6 text-slate-300 group'>
@@ -63,15 +63,15 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
             </button>
           </form>
 
-          <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>No guest public key mode</h3>
+          <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>No public key mode</h3>
           <p class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'>
-            Not having set a guest public key means that a very limited experience of Anchors is available, as
+            Not having set a  public key means that a very limited experience of Anchors is available, as
             no personal preferences whatsoever are taken into account.
           </p>
 
-          <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>Guest public key mode</h3>
+          <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>Public key mode</h3>
           <p class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'>
-            Setting a guest public, on the other hand, allows a personalized experience with no interactions:
+            Setting a  public, on the other hand, allows a personalized experience with no interactions:
             followers and relays are available, but since the private key is not available, no new posts can
             be written, nor reactions or comments sent, as events cannot be signed (see
             <A
@@ -103,4 +103,4 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
   );
 };
 
-export default UpdateGuestPublicKey;
+export default UpdatePublicKey;

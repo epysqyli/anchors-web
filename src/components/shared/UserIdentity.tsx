@@ -45,13 +45,13 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
         <div class='text-base text-left break-words w-3/4 mx-auto mt-10'>
           {guestPublicKey.get() ? (
             <>
-              <p>Your already set guest public key is:</p>
+              <p>Your already set public key is:</p>
               <p class='font-bold mt-5 mx-auto'>{guestPublicKey.get()}</p>
             </>
           ) : (
             <>
               <p class='text-base'>
-                You can set a guest public key to use a limited version of the app where no new events can be
+                You can set a public key to use a limited version of the app where no new events can be
                 signed, (meaning that no new posts can be written, no reactions sent etc etc), but where
                 following and relay lists are available
               </p>
@@ -69,7 +69,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
               class='w-5/6 rounded focus:outline-none bg-slate-600 py-2 px-5
                        placeholder:text-base placeholder:text-center'
               placeholder={
-                guestPublicKey.get() ? "update your guest public key" : "enter your guest public key"
+                guestPublicKey.get() ? "update your public key" : "enter your public key"
               }
             />
             <button class='w-1/6 text-slate-300 group'>
