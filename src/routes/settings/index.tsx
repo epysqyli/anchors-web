@@ -14,7 +14,7 @@ const Settings: VoidComponent = () => {
       </h1>
 
       <div class='overflow-y-scroll xl:custom-scrollbar h-3/4 w-11/12 xl:h-5/6 xl:w-5/6 mx-auto'>
-        <div class='grid grid-cols-2 xl:grid-cols-3 xl:w-4/5 mx-auto px-5 gap-x-5 gap-y-2 xl:gap-y-10 xl:mt-20'>
+        <div class='grid grid-cols-2 xl:w-3/5 mx-auto px-5 gap-x-5 gap-y-2 xl:gap-y-10 xl:mt-20'>
           <SettingsLink href='user-metadata' content='update your profile info'>
             <RiBusinessProfileLine class='mx-auto' size={62} />
           </SettingsLink>
