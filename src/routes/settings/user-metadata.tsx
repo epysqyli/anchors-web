@@ -33,7 +33,7 @@ const UserMetadata: VoidComponent = () => {
     };
 
     const signedEvent = await window.nostr.signEvent(nostrEvent);
-    const pubResult = relay.pub(signedEvent);
+    const pubResult = relay.pub(signedEvent, relay.getAllRelays());
 
     pubResult.on("ok", () => {
       setIsActionSuccessful(true);
