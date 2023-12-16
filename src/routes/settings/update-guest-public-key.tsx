@@ -1,4 +1,5 @@
 import { A } from "solid-start";
+import { nip19 } from "nostr-tools";
 import { VsSave } from "solid-icons/vs";
 import { RelayContext } from "~/contexts/relay";
 import { JSX, VoidComponent, createSignal, useContext } from "solid-js";
@@ -10,8 +11,16 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
 
   const handleSubmit = (e: Event): void => {
     e.preventDefault();
-    localStorage.setItem(guestPublicKey.localStorageKey, inputPublicKey());
-    guestPublicKey.set(inputPublicKey());
+    let publicKey: string = inputPublicKey();
+
+    if (inputPublicKey().startsWith('npub')) {
+      const decodeResult = nip19.decode(inputPublicKey());
+      publicKey = decodeResult.data as string;
+    }
+
+    localStorage.setItem(guestPublicKey.localStorageKey, publicKey);
+    guestPublicKey.set(publicKey);
+    setInputPublicKey("");
   };
 
   const handleChange = (e: Event): void => {
@@ -32,14 +41,15 @@ const UpdateGuestPublicKey: VoidComponent = (): JSX.Element => {
               <p class='mt-2 font-bold break-all'>{guestPublicKey.get()}</p>
             </div>
           ) : (
-            <p>You have not yet set a guest publc key</p>
+            <p>You have not yet set a guest public key</p>
           )}
 
           <form onsubmit={handleSubmit} class='flex items-center justify-between my-16 mx-auto'>
             <input
               onchange={handleChange}
               type='text'
-              minlength={64}
+              value={inputPublicKey()}
+              minlength={63}
               maxLength={64}
               required
               class='w-5/6 rounded focus:outline-none bg-slate-600 py-3 px-5 text-slate-200

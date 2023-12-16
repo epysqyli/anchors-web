@@ -1,5 +1,6 @@
 import Popup from "./Popup";
 import { A } from "solid-start";
+import { nip19 } from "nostr-tools";
 import { VsSave } from "solid-icons/vs";
 import EventAuthor from "../feed/EventAuthor";
 import { RelayContext } from "~/contexts/relay";
@@ -20,8 +21,16 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
 
   const handleSubmit = (e: Event): void => {
     e.preventDefault();
-    localStorage.setItem(guestPublicKey.localStorageKey, inputPublicKey());
-    guestPublicKey.set(inputPublicKey());
+    let publicKey: string = inputPublicKey();
+
+    if (inputPublicKey().startsWith('npub')) {
+      const decodeResult = nip19.decode(inputPublicKey());
+      publicKey = decodeResult.data as string;
+    }
+
+    localStorage.setItem(guestPublicKey.localStorageKey, publicKey);
+    guestPublicKey.set(publicKey);
+    setInputPublicKey("");
   };
 
   const handleChange = (e: Event): void => {
@@ -53,7 +62,8 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
             <input
               onchange={handleChange}
               type='text'
-              minlength={64}
+              value={inputPublicKey()}
+              minlength={63}
               maxLength={64}
               required
               class='w-5/6 rounded focus:outline-none bg-slate-600 py-2 px-5
