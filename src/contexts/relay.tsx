@@ -26,7 +26,7 @@ const RelayContext = createContext<IRelayContext>({
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
   onMount(async () => {
-    let userPublicKey: string = "";
+    let userPublicKey: string = localStorage.getItem(LOCAL_STORAGE_GUEST_PK) ?? "";
     try {
       userPublicKey = await window.nostr.getPublicKey();
     } catch (error) {}
