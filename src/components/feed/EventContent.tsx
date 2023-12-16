@@ -39,14 +39,14 @@ const EventContent: Component<Props> = (props): JSX.Element => {
                   {props.reposter()?.name ?? "npub"}
                 </span>
               </div>
-              <div class='h-[90%] pr-5 py-3 pl-2 bg-slate-800 bg-opacity-40 rounded-md  overflow-y-scroll'>
+              <div class='h-[90%] pr-5 py-3 pl-2 bg-slate-800 bg-opacity-40 rounded-md whitespace-pre-line overflow-y-scroll'>
                 {props.event.content}
               </div>
             </div>
           </Show>
 
           <Show when={!props.event.isRepost}>
-            <div class='pr-5 py-3 pl-2 bg-slate-800 bg-opacity-40 rounded-md h-full'>
+            <div class='pr-5 py-3 pl-2 bg-slate-800 bg-opacity-40 whitespace-pre-line rounded-md h-full'>
               {props.event.content}
             </div>
           </Show>
