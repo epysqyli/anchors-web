@@ -16,7 +16,7 @@ const SettingsLink: Component<Props> = (props): JSX.Element => {
       <div class='mb-5 xl:mb-10 mx-auto text-slate-300 group-hover:text-slate-50 group-active:scale-95'>
         {props.children}
       </div>
-      <div class='text-center'>{props.content}</div>
+      <div class='text-center text-base w-4/5 mx-auto'>{props.content}</div>
     </A>
   );
 };
