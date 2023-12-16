@@ -26,7 +26,8 @@ const RelayContext = createContext<IRelayContext>({
 
 const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
   onMount(async () => {
-    let userPublicKey: string = localStorage.getItem(LOCAL_STORAGE_GUEST_PK) ?? "";
+    let userPublicKey: string = "";
+
     try {
       userPublicKey = await window.nostr.getPublicKey();
     } catch (error) {}
@@ -40,8 +41,13 @@ const RelayProvider: Component<{ children: JSX.Element }> = (props) => {
       setFavoriteEventIDs(await relay().fetchFavoriteEventsIDs());
       setReadRelays(relay().getReadRelays());
     } else {
-      await relay().fetchAndSetRelays();
-      setReadRelays(relay().getReadRelays());
+      userPublicKey = localStorage.getItem(LOCAL_STORAGE_GUEST_PK) ?? "";
+      if (userPublicKey) {
+        setGuestPublicKey(userPublicKey);
+      } else {
+        await relay().fetchAndSetRelays();
+        setReadRelays(relay().getReadRelays());
+      }
     }
 
     setSetupDone(true);
