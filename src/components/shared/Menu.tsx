@@ -16,12 +16,12 @@ const Menu: VoidComponent = (): JSX.Element => {
 
   const menuToggleCtx = useContext(menuTogglerContext);
 
-  const actionStyle = `text-neutral-300 w-5/6 2xl:w-4/5 2xl:w-3/4 mx-auto my-3 select-none
+  const actionStyle = `text-neutral-300 text-base w-5/6 2xl:w-4/5 2xl:w-3/4 mx-auto my-3 select-none
                        md:bg-neutral-700 md:bg-opacity-25 md:px-5 md:py-5 p-4 transition cursor-pointer 
                        group active:scale-90 hover:bg-neutral-700 rounded`;
 
   const flexActionStyle = actionStyle + " flex items-center justify-between";
-  const selectedFlexActionStyle = flexActionStyle + " md:border-orange-200 md:bg-neutral-500";
+  const selectedFlexActionStyle = flexActionStyle + " md:bg-neutral-400";
 
   const active = (path: string): boolean => {
     if (path == `${location.pathname}${location.search}`) {
