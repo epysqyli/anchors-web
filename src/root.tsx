@@ -11,7 +11,7 @@ import UserIdentity from "./components/shared/UserIdentity";
 import RootFallback from "./components/shared/RootFallback";
 import { RelayContext, RelayProvider } from "./contexts/relay";
 import { Component, Show, Suspense, useContext } from "solid-js";
-import { Body, FileRoutes, Head, Html, Meta, Scripts, Title } from "solid-start";
+import { Body, FileRoutes, Head, Html, Link, Meta, Scripts, Title } from "solid-start";
 
 declare global {
   interface Window {
@@ -32,6 +32,7 @@ const Root: Component<{}> = () => {
         <Meta charset='utf-8' />
         <Meta name='viewport' content='width=device-width, initial-scale=1' />
         <Meta name='theme-color' content='#1e293b' />
+        <Link rel="icon" type="image/png" href="favicon.png"></Link>
         <script src='serviceWorkerInit.ts' />
       </Head>
 
