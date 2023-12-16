@@ -37,8 +37,8 @@ const UpdatePublicKey: VoidComponent = (): JSX.Element => {
         <div class='text-lg text-slate-300'>
           {guestPublicKey.get() ? (
             <div>
-              <p>Your current guest public key is:</p>
-              <p class='mt-2 font-bold break-all'>{guestPublicKey.get()}</p>
+              <p>Your current public key is:</p>
+              <p class='mt-2 font-bold break-all'>{nip19.npubEncode(guestPublicKey.get())}</p>
             </div>
           ) : (
             <p>You have not yet set a guest public key</p>

@@ -46,7 +46,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
           {guestPublicKey.get() ? (
             <>
               <p>Your already set public key is:</p>
-              <p class='font-bold mt-5 mx-auto'>{guestPublicKey.get()}</p>
+              <p class='font-bold mt-5 mx-auto'>{nip19.npubEncode(guestPublicKey.get())}</p>
             </>
           ) : (
             <>
