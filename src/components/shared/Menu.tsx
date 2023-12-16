@@ -16,12 +16,12 @@ const Menu: VoidComponent = (): JSX.Element => {
 
   const menuToggleCtx = useContext(menuTogglerContext);
 
-  const actionStyle = `text-neutral-300 text-base w-5/6 2xl:w-4/5 2xl:w-3/4 mx-auto my-3 select-none
-                       md:bg-neutral-700 md:bg-opacity-25 md:px-5 md:py-5 p-4 transition cursor-pointer 
-                       group active:scale-90 hover:bg-neutral-700 rounded`;
+  const actionStyle = `flex items-center justify-between w-5/6 2xl:w-4/5 2xl:w-3/4 mx-auto my-3 px-5 py-5 p-4 
+                       text-neutral-300 text-base select-none bg-opacity-25 transition 
+                       cursor-pointer group active:scale-95 rounded`;
 
-  const flexActionStyle = actionStyle + " flex items-center justify-between";
-  const selectedFlexActionStyle = flexActionStyle + " md:bg-neutral-400";
+  const notSelectedActionStyle = `${actionStyle} bg-neutral-700 hover:bg-neutral-500 hover:bg-opacity-25`;
+  const activeActionStyle = `${actionStyle} bg-neutral-400`;
 
   const active = (path: string): boolean => {
     if (path == `${location.pathname}${location.search}`) {
@@ -101,21 +101,21 @@ const Menu: VoidComponent = (): JSX.Element => {
           </div>
 
           <A onClick={menuToggleCtx.toggleMobileMenu} href='/write'>
-            <div class={active("/write") ? selectedFlexActionStyle : flexActionStyle}>
+            <div class={active("/write") ? activeActionStyle : notSelectedActionStyle}>
               <FiEdit size={26} class='md:group-hover:animate-pulse' />
               <div class='group-hover:scale-95'>write</div>
             </div>
           </A>
 
           <A onClick={menuToggleCtx.toggleMobileMenu} href='/favorite-posts'>
-            <div class={active("/favorite-posts") ? selectedFlexActionStyle : flexActionStyle}>
+            <div class={active("/favorite-posts") ? activeActionStyle : notSelectedActionStyle}>
               <BsBookmarks size={26} class='md:group-hover:animate-pulse' />
               <div class='group-hover:scale-95'>favorite posts</div>
             </div>
           </A>
 
           <A onClick={menuToggleCtx.toggleMobileMenu} href='/settings'>
-            <div class={active("/settings") ? selectedFlexActionStyle : flexActionStyle}>
+            <div class={active("/settings") ? activeActionStyle : notSelectedActionStyle}>
               <IoSettingsOutline size={26} class='md:group-hover:animate-pulse' />
               <div class='group-hover:scale-95'>profile</div>
             </div>
