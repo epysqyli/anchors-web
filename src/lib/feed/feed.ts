@@ -96,12 +96,12 @@ const fetchAndSetEvents = async (
   setIsLoading(true);
   setEvents(await relay.fetchTextEvents(getFetchOptions(fetchParams, isAnchorsMode())));
 
-  let metaFilter: Filter = { authors: [...new Set(events().map((evt) => evt.pubkey))] };
-  if (fetchParams.searchParams?.following == "on") {
-    metaFilter = { authors: relay.following };
-  }
+  const authors: string[] =
+    fetchParams.searchParams?.following == "on"
+      ? relay.following
+      : [...new Set(events().map((evt) => evt.pubkey))];
 
-  setMetaEvents(await relay.fetchEventsMetadata(metaFilter, fetchParams.specificRelays));
+  setMetaEvents(await relay.fetchEventsMetadata(authors, fetchParams.specificRelays));
 
   const reactionsFilter: Filter[] = events().map((evt) => {
     return { kinds: [Kind.Reaction], "#e": [evt.id] };
@@ -127,8 +127,7 @@ const fetchAndSetEvents = async (
 
       const newEventsAuthors = getNewEventsAuthors(events(), newUniqueEvents);
       if (newEventsAuthors.length !== 0) {
-        const metaFilter: Filter = { authors: [...new Set(newEventsAuthors)] };
-        const recentMetaEvents: IUserMetadataWithPubkey[] = await relay.fetchEventsMetadata(metaFilter);
+        const recentMetaEvents = await relay.fetchEventsMetadata([...new Set(newEventsAuthors)]);
         setMetaEvents([...metaEvents(), ...recentMetaEvents]);
       }
 
@@ -190,7 +189,7 @@ const fetchAndSetOlderEvents = async (
   }
 
   const olderMetaEvents = await relay.fetchEventsMetadata(
-    { authors: olderEvents.map((evt) => evt.pubkey) },
+    olderEvents.map((evt) => evt.pubkey),
     fetchParams.specificRelays
   );
 

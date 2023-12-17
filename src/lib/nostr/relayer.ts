@@ -384,7 +384,7 @@ class Relayer {
       isAnchorsMode: anchorsMode
     });
 
-    const metaEvents = await this.fetchEventsMetadata({ authors: textEvents.map((evt) => evt.pubkey) });
+    const metaEvents = await this.fetchEventsMetadata(textEvents.map((evt) => evt.pubkey));
 
     const favoriteEvents: EventWithMetadata[] = [];
 
@@ -479,16 +479,16 @@ class Relayer {
   }
 
   public async fetchEventsMetadata(
-    filter: Filter,
+    authors: string[],
     specificRelays?: string[]
   ): Promise<IUserMetadataWithPubkey[]> {
-    let readFromRelays = this.getReadRelays();
+    let readFromRelays = this.getAllRelays();
     if (specificRelays != undefined && specificRelays.length != 0) {
       readFromRelays = specificRelays;
     }
 
     const events = (
-      await this.currentPool.list(readFromRelays, [{ ...filter, kinds: [Kind.Metadata] }])
+      await this.currentPool.list(readFromRelays, [{ authors: authors, kinds: [Kind.Metadata] }])
     ).filter(this.isEventValid);
 
     const metadataEvents: IUserMetadataWithPubkey[] = [];
@@ -558,10 +558,7 @@ class Relayer {
 
     const filter = { "#e": [rootEventID], kinds: [Kind.Text] };
     const comments = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
-
-    const metadata = await this.fetchEventsMetadata({
-      authors: [...new Set(comments.map((evt) => evt.pubkey))]
-    });
+    const metadata = await this.fetchEventsMetadata([...new Set(comments.map((evt) => evt.pubkey))]);
 
     const reactionsFilter: Filter[] = comments.map((evt) => {
       return { kinds: [Kind.Reaction], "#e": [evt.id] };

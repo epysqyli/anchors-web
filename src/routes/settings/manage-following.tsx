@@ -22,7 +22,7 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
     }
 
     if (followPubkeys.length !== 0) {
-      const usersMetadata = await relay.fetchEventsMetadata({ authors: followPubkeys });
+      const usersMetadata = await relay.fetchEventsMetadata(followPubkeys);
       const userMetadataPubkeys = usersMetadata.map((m) => m.pubkey);
       const missingUsers = followPubkeys.filter((pk) => !userMetadataPubkeys.includes(pk));
       missingUsers.forEach((pk) => {

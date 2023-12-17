@@ -23,7 +23,7 @@ const EventByID: VoidComponent = (): JSX.Element => {
       fetchRepostEvents: true
     });
 
-    const metadata = await relay.fetchEventsMetadata({ authors: events.map((evt) => evt.pubkey) });
+    const metadata = await relay.fetchEventsMetadata(events.map((evt) => evt.pubkey));
     const reactions = await relay.fetchEventsReactions([
       { kinds: [Kind.Reaction], "#e": events.map((evt) => evt.id) }
     ]);
