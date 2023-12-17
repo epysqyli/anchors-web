@@ -24,9 +24,7 @@ const EventByID: VoidComponent = (): JSX.Element => {
     });
 
     const metadata = await relay.fetchEventsMetadata(events.map((evt) => evt.pubkey));
-    const reactions = await relay.fetchEventsReactions([
-      { kinds: [Kind.Reaction], "#e": events.map((evt) => evt.id) }
-    ]);
+    const reactions = await relay.fetchEventsReactions(events.map((evt) => evt.id));
 
     setEvents(relay.buildEnrichedEvents(events, metadata, reactions));
     setIsLoading(false);

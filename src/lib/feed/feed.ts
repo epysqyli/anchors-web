@@ -96,12 +96,12 @@ const fetchAndSetEvents = async (
       : [...new Set(events().map((evt) => evt.pubkey))];
 
   setMetaEvents(await relay.fetchEventsMetadata(authors, fetchParams.specificRelays));
-
-  const reactionsFilter: Filter[] = events().map((evt) => {
-    return { kinds: [Kind.Reaction], "#e": [evt.id] };
-  });
-
-  setReactions(await relay.fetchEventsReactions(reactionsFilter, fetchParams.specificRelays));
+  setReactions(
+    await relay.fetchEventsReactions(
+      events().map((evt) => evt.id),
+      fetchParams.specificRelays
+    )
+  );
   setEnrichedEvents(relay.buildEnrichedEvents(events(), metaEvents(), reactions()));
 
   setIsLoading(false);
@@ -125,10 +125,7 @@ const fetchAndSetEvents = async (
 
       setMetaEvents([...metaEvents(), ...recentMetaEvents]);
 
-      const recentReactions: IReactionWithEventID[] = await relay.fetchEventsReactions(
-        newUniqueEvents.map((evt) => ({ kinds: [Kind.Reaction], "#e": [evt.id] }))
-      );
-
+      const recentReactions = await relay.fetchEventsReactions(newUniqueEvents.map((evt) => evt.id));
       const newReactions: IReactionWithEventID[] = recentReactions.filter(
         (re) => !reactions().find((r) => r.eventID === re.eventID)
       );
@@ -188,7 +185,7 @@ const fetchAndSetOlderEvents = async (
   );
 
   const olderEventsReactions = await relay.fetchEventsReactions(
-    [{ kinds: [Kind.Reaction], "#e": olderEvents.map((evt) => evt.id) }],
+    olderEvents.map((evt) => evt.id),
     fetchParams.specificRelays
   );
 

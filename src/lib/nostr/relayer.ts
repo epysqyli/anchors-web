@@ -513,18 +513,19 @@ class Relayer {
   }
 
   public async fetchEventsReactions(
-    filter: Filter[],
+    eventIDs: string[],
     specificRelays?: string[]
   ): Promise<IReactionWithEventID[]> {
+    const filters: Filter[] = eventIDs.map((evtID) => ({ kinds: [Kind.Reaction], "#e": [evtID] }));
+
     let readFromRelays = this.getReadRelays();
     if (specificRelays != undefined && specificRelays.length != 0) {
       readFromRelays = specificRelays;
     }
 
-    const events = (await this.currentPool.list(readFromRelays, filter)).filter(this.isEventValid);
-    const eventdIDs = filter.flatMap((f) => f["#e"]);
+    const events = (await this.currentPool.list(readFromRelays, filters)).filter(this.isEventValid);
 
-    return eventdIDs.map((evtID) => {
+    return eventIDs.map((evtID) => {
       const reactionEvents = events.filter((re) => {
         const reactionEventIDTag = re.tags.find((t) => t[0] == "e");
         return reactionEventIDTag && reactionEventIDTag[1] == evtID;
@@ -559,12 +560,7 @@ class Relayer {
     const filter = { "#e": [rootEventID], kinds: [Kind.Text] };
     const comments = (await this.currentPool.list(readFromRelays, [filter])).filter(this.isEventValid);
     const metadata = await this.fetchEventsMetadata([...new Set(comments.map((evt) => evt.pubkey))]);
-
-    const reactionsFilter: Filter[] = comments.map((evt) => {
-      return { kinds: [Kind.Reaction], "#e": [evt.id] };
-    });
-
-    const reactions = await this.fetchEventsReactions(reactionsFilter, specificRelays);
+    const reactions = await this.fetchEventsReactions(comments.map((evt) => evt.id), specificRelays);
 
     const commentsWithRepostInfo: EventWithRepostInfo[] = comments.map((cmt) => {
       return { ...cmt, isRepost: false };
