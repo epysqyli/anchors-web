@@ -88,20 +88,23 @@ const fetchAndSetEvents = async (
   fetchParams: FetchParams
 ): Promise<NodeJS.Timer> => {
   setIsLoading(true);
+
   setEvents(await relay.fetchTextEvents(getFetchOptions(fetchParams, isAnchorsMode())));
 
-  const authors: string[] =
-    fetchParams.searchParams?.following == "on"
-      ? relay.following
-      : [...new Set(events().map((evt) => evt.pubkey))];
+  setMetaEvents(
+    await relay.fetchEventsMetadata(
+      [...new Set(events().map((evt) => evt.pubkey))],
+      fetchParams.specificRelays
+    )
+  );
 
-  setMetaEvents(await relay.fetchEventsMetadata(authors, fetchParams.specificRelays));
   setReactions(
     await relay.fetchEventsReactions(
       events().map((evt) => evt.id),
       fetchParams.specificRelays
     )
   );
+
   setEnrichedEvents(relay.buildEnrichedEvents(events(), metaEvents(), reactions()));
 
   setIsLoading(false);
