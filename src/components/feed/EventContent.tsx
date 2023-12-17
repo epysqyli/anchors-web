@@ -29,7 +29,7 @@ const EventContent: Component<Props> = (props): JSX.Element => {
         <div
           class={`${
             props.refTagsLength ? "h-3/5" : "h-4/5"
-          } text-neutral-300 mx-auto overflow-auto tracking-tight break-words rounded`}
+          } text-neutral-300 mx-auto tracking-tight break-words rounded`}
         >
           <Show when={props.event.isRepost}>
             <div class='h-full w-full'>
@@ -46,7 +46,7 @@ const EventContent: Component<Props> = (props): JSX.Element => {
           </Show>
 
           <Show when={!props.event.isRepost}>
-            <div class='pr-5 py-3 pl-2 bg-slate-800 bg-opacity-40 whitespace-pre-line rounded-md h-full'>
+            <div class='pr-5 py-3 pl-2 bg-slate-800 bg-opacity-40 overflow-y-scroll whitespace-pre-line rounded-md h-full'>
               {props.event.content}
             </div>
           </Show>
