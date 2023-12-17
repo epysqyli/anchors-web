@@ -29,12 +29,6 @@ const getNewUniqueEvents = (
   return newEvents.filter((newEvt) => uniqueNewEventsIDs.includes(newEvt.id));
 };
 
-const getNewEventsAuthors = (currentEvents: Event[], newEvents: Event[]): string[] => {
-  const newEventsAuthors: string[] = newEvents.map((e) => e.pubkey);
-  const oldEventsAuthors: string[] = currentEvents.map((e) => e.pubkey);
-  return newEventsAuthors.filter((newPk) => !oldEventsAuthors.includes(newPk));
-};
-
 const getFetchSinceTimestamp = (currentEvents: Event[], newEvents: Event[]): number => {
   let fetchSinceTimestamp = Math.floor(Date.now() / 1000);
 
@@ -125,11 +119,11 @@ const fetchAndSetEvents = async (
       const newUniqueEvents = getNewUniqueEvents(events(), newEvents);
       setEvents([...events(), ...newUniqueEvents]);
 
-      const newEventsAuthors = getNewEventsAuthors(events(), newUniqueEvents);
-      if (newEventsAuthors.length !== 0) {
-        const recentMetaEvents = await relay.fetchEventsMetadata([...new Set(newEventsAuthors)]);
-        setMetaEvents([...metaEvents(), ...recentMetaEvents]);
-      }
+      const recentMetaEvents = await relay.fetchEventsMetadata([
+        ...new Set(newUniqueEvents.map((evt) => evt.pubkey))
+      ]);
+
+      setMetaEvents([...metaEvents(), ...recentMetaEvents]);
 
       const recentReactions: IReactionWithEventID[] = await relay.fetchEventsReactions(
         newUniqueEvents.map((evt) => ({ kinds: [Kind.Reaction], "#e": [evt.id] }))
