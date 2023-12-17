@@ -196,8 +196,8 @@ const EventWrapper: Component<Props> = (props) => {
 
           <div class='h-[10%] flex items-center justify-around gap-x-3'>
             <div class='text-sm text-slate-400 w-1/3 text-center'>
-              <p>{new Date(props.event.created_at).toTimeString().split(" ")[0]}</p>
-              <p>{new Date(props.event.created_at).toDateString()}</p>
+              <p>{new Date(props.event.created_at * 1000).toTimeString().split(" ")[0]}</p>
+              <p>{new Date(props.event.created_at * 1000).toDateString()}</p>
             </div>
             <EventAnchor nostrEventID={props.event.id} />
             {authMode.get() == "private" ? <RepostAction enrichedEvent={props.event} /> : <></>}
