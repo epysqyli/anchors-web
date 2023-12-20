@@ -6,7 +6,7 @@ const EventAuthor: Component<IUserMetadata & { pubKey: string; layout: "h" | "v"
   const [imageSrcFails, setImageSrcFails] = createSignal<boolean>(false);
 
   const containerStyle =
-    props.layout == "v" ? "rounded-md" : "flex justify-center items-center gap-x-2 xl:gap-x-5 rounded-md";
+    props.layout == "v" ? "rounded-md" : "flex justify-center items-center gap-x-2 md:gap-x-5 rounded-md";
   const imgStyle = props.layout == "v" ? "mx-auto mb-3 rounded-full h-12" : "h-8 rounded-full";
 
   return (

@@ -9,12 +9,12 @@ const Settings: VoidComponent = () => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 md:py-10'>
         Manage your nostr profile
       </h1>
 
-      <div class='overflow-y-scroll xl:custom-scrollbar h-3/4 w-11/12 xl:h-5/6 xl:w-5/6 mx-auto'>
-        <div class='grid grid-cols-2 xl:w-3/5 mx-auto px-5 gap-x-5 gap-y-2 xl:gap-y-10 xl:mt-20'>
+      <div class='overflow-y-scroll md:custom-scrollbar h-3/4 w-11/12 md:h-5/6 md:w-5/6 mx-auto'>
+        <div class='grid grid-cols-2 md:w-4/5 lg:w-3/4 xl:w-3/5 mx-auto px-5 gap-x-5 gap-y-2 md:gap-y-10 md:mt-20'>
           {authMode.get() == "private" ? (
             <SettingsLink href='user-metadata' content='update your profile info'>
               <RiBusinessProfileLine class='mx-auto' size={62} />

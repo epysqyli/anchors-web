@@ -16,7 +16,7 @@ const Menu: VoidComponent = (): JSX.Element => {
 
   const menuToggleCtx = useContext(menuTogglerContext);
 
-  const actionStyle = `flex items-center justify-between w-5/6 2xl:w-4/5 2xl:w-3/4 mx-auto my-3 px-5 py-5 p-4 
+  const actionStyle = `flex items-center justify-between w-5/6 2md:w-4/5 2md:w-3/4 mx-auto my-3 px-5 py-5 p-4 
                        text-neutral-300 text-base select-none bg-opacity-25 transition 
                        cursor-pointer group active:scale-95 rounded`;
 
@@ -89,12 +89,12 @@ const Menu: VoidComponent = (): JSX.Element => {
       </Show>
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
-        <div class='relative rounded-md text-lg overflow-y-auto bg-neutral-700 h-full pt-10 xl:custom-scrollbar bg-opacity-50'>
+        <div class='relative rounded-md text-lg overflow-y-auto bg-neutral-700 h-full pt-10 md:custom-scrollbar bg-opacity-50'>
           <div class='my-5 group w-fit mx-auto'>
             <AnchorsModeSelector />
           </div>
 
-          <div class='mx-auto 2xl:w-5/6 mt-5 mb-12 px-3'>
+          <div class='mx-auto 2md:w-5/6 mt-5 mb-12 px-3'>
             <div class='flex justify-around my-5'>
               <FollowingSelector />
             </div>
@@ -129,7 +129,7 @@ const Menu: VoidComponent = (): JSX.Element => {
             />
           </A>
 
-          <div class='mx-auto xl:w-5/6 mt-5 mb-12 px-3 xl:px-1 h-[30%]'>
+          <div class='mx-auto md:w-5/6 mt-5 mb-12 px-3 md:px-1 h-[30%]'>
             <RelaySelector />
           </div>
         </div>

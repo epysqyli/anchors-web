@@ -29,11 +29,11 @@ const UpdatePublicKey: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 md:py-10'>
         Set or change your public key
       </h1>
 
-      <div class='xl:w-4/5 2xl:w-3/5 mx-auto h-4/5 overflow-y-scroll xl:custom-scrollbar px-10'>
+      <div class='md:w-4/5 2md:w-3/5 mx-auto h-4/5 overflow-y-scroll md:custom-scrollbar px-10'>
         <div class='text-lg text-slate-300'>
           {guestPublicKey.get() ? (
             <div>
@@ -64,13 +64,13 @@ const UpdatePublicKey: VoidComponent = (): JSX.Element => {
           </form>
 
           <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>No public key mode</h3>
-          <p class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'>
+          <p class='mb-5 text-justify tracking-tight md:tracking-normal text-base'>
             Not having set a  public key means that a very limited experience of Anchors is available, as
             no personal preferences whatsoever are taken into account.
           </p>
 
           <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>Public key mode</h3>
-          <p class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'>
+          <p class='mb-5 text-justify tracking-tight md:tracking-normal text-base'>
             Setting a  public, on the other hand, allows a personalized experience with no interactions:
             followers and relays are available, but since the private key is not available, no new posts can
             be written, nor reactions or comments sent, as events cannot be signed (see
@@ -85,7 +85,7 @@ const UpdatePublicKey: VoidComponent = (): JSX.Element => {
           </p>
 
           <h3 class='text-xl mt-5 mb-2 underline underline-offset-4'>Private key mode</h3>
-          <p class='mb-5 text-justify tracking-tight xl:tracking-normal text-base'>
+          <p class='mb-5 text-justify tracking-tight md:tracking-normal text-base'>
             In order to have the full Nostr experience, a private key is needed. Since saving it directly on
             the client is not secure, there exists several browser extensions that allow targeted access to
             the private key. I personally recommend{" "}

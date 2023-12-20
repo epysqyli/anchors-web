@@ -117,12 +117,12 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 md:py-10'>
         Manage relays you connect to
       </h1>
 
-      <div class='mx-auto xl:w-5/6 xl:p-3 h-4/5'>
-        <div class='xl:grid xl:grid-cols-3 gap-x-3 h-full overflow-y-scroll px-5 xl:px-0 xl:custom-scrollbar relative snap-mandatory snap-y xl:snap-none'>
+      <div class='mx-auto md:w-5/6 md:p-3 h-4/5'>
+        <div class='md:grid md:grid-cols-3 gap-x-3 h-full overflow-y-scroll px-5 md:px-0 md:custom-scrollbar relative snap-mandatory snap-y md:snap-none'>
           <RelayForm
             isLoading={isLoading}
             listType='r'

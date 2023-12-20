@@ -55,7 +55,7 @@ const EventContent: Component<Props> = (props): JSX.Element => {
 
       <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
         <Show when={props.event.isRepost}>
-          <div class='col-span-4 xl:col-span-4 h-full overflow-y-hidden'>
+          <div class='col-span-4 md:col-span-4 h-full overflow-y-hidden'>
             <div class='h-[9%] relative bg-slate-500 bg-opacity-30 rounded-md mb-[1%]'>
               <div
                 class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
@@ -72,7 +72,7 @@ const EventContent: Component<Props> = (props): JSX.Element => {
               class='w-full bg-neutral-900 bg-opacity-30 rounded-md mx-auto text-slate-300
                    tracking-tighter py-10 break-words whitespace-pre-line h-[90%]'
             >
-              <p class='w-5/6 px-5 mx-auto overflow-y-scroll xl:custom-scrollbar h-full'>
+              <p class='w-5/6 px-5 mx-auto overflow-y-scroll md:custom-scrollbar h-full'>
                 {props.event.content}
               </p>
             </div>
@@ -80,10 +80,10 @@ const EventContent: Component<Props> = (props): JSX.Element => {
         </Show>
 
         <Show when={!props.event.isRepost}>
-          <div class='col-span-4 xl:col-span-4 bg-neutral-900 bg-opacity-30 rounded-md h-full overflow-y-hidden py-10'>
+          <div class='col-span-4 md:col-span-4 bg-neutral-900 bg-opacity-30 rounded-md h-full overflow-y-hidden py-10'>
             <p
               class='w-5/6 px-5 mx-auto text-slate-300 tracking-tighter break-words
-                  whitespace-pre-line overflow-y-scroll xl:custom-scrollbar h-full'
+                  whitespace-pre-line overflow-y-scroll md:custom-scrollbar h-full'
             >
               {props.event.content}
             </p>

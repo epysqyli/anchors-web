@@ -82,7 +82,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
   );
 
   const undefinedMetadataSuggestions: JSX.Element = (
-    <div class='text-left mx-auto w-5/6 xl:w-4/5 mt-10'>
+    <div class='text-left mx-auto w-5/6 md:w-4/5 mt-10'>
       <p>No user metadata information was found your public key, in order to fix this you can either:</p>
       <ul class='list-disc mt-3 pl-5'>
         <li class='underline underline-offset-4 mb-2'>
@@ -157,7 +157,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
       </Show>
 
       <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
-        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/2'>
+        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 md:w-1/2'>
           <Popup
             autoClose={false}
             show={show}

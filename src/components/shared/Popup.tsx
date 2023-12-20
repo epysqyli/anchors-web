@@ -65,7 +65,7 @@ const Popup: Component<Props> = (props) => {
       return (
         <div
           onClick={closePopup}
-          class='absolute top-5 -right-[95vw] xl:-top-2 xl:-right-2 text-white
+          class='absolute top-5 -right-[95vw] md:-top-2 md:-right-2 text-white
                  cursor-pointer hover:scale-105 active:scale-95 z-20'
         >
           <RiSystemCloseCircleFill size={28} />

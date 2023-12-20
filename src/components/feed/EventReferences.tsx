@@ -24,12 +24,12 @@ const EventReferences: Component<Props> = (props): JSX.Element => {
 
       <Show when={useIsNarrow() !== undefined && !useIsNarrow()}>
         <></>
-        <div class='col-span-1 xl:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-neutral-900 bg-opacity-40'>
+        <div class='col-span-1 md:col-span-2 h-full overflow-auto no-scrollbar rounded-md bg-neutral-900 bg-opacity-40'>
           <div class='text-center text-base text-slate-200 bg-slate-700 w-fit px-10 mx-auto my-5 py-2 rounded-md'>
             {props.eventRefTags().length == 1 ? "1 reference" : `${props.eventRefTags().length} references`}
           </div>
 
-          <div class='h-[90%] overflow-auto no-scrollbar py-5 px-2 xl:px-12 mx-auto'>
+          <div class='h-[90%] overflow-auto no-scrollbar py-5 px-2 md:px-12 mx-auto'>
             <For each={props.eventRefTags()}>
               {(tag) => (
                 <Motion.div animate={{ opacity: [0.2, 1], scale: [0.5, 1] }}>

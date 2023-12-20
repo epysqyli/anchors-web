@@ -68,12 +68,12 @@ const UserMetadata: VoidComponent = () => {
 
   return (
     <>
-      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 xl:py-10'>
+      <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold py-5 md:py-10'>
         Update your profile info
       </h1>
 
       <Show when={!isLoading()} fallback={<LoadingFallback />}>
-        <form onSubmit={handleSubmit} class='mx-auto w-11/12 xl:w-2/5'>
+        <form onSubmit={handleSubmit} class='mx-auto w-11/12 md:w-2/5'>
           <div class='py-3 px-5 mb-10'>
             <label class='text-slate-200 text-lg select-none text-center block mb-3 p-2 rounded bg-slate-600 w-1/3'>
               name
@@ -137,7 +137,7 @@ const UserMetadata: VoidComponent = () => {
         </form>
       </Show>
 
-      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
+      <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 md:w-1/3'>
         <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
           <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
             {isActionSuccessful() ? (

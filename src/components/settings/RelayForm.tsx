@@ -15,12 +15,12 @@ const RelayForm: Component<Props> = (props): JSX.Element => {
   const { authMode } = useContext(RelayContext);
 
   return (
-    <div class='flex flex-col justify-between col-span-1 bg-slate-700 bg-opacity-50 rounded pb-1 h-full mb-3 xl:mb-0 snap-start'>
+    <div class='flex flex-col justify-between col-span-1 bg-slate-700 bg-opacity-50 rounded pb-1 h-full mb-3 md:mb-0 snap-start'>
       <h2 class='text-center uppercase tracking-tight py-3 text-slate-300 text-lg font-bold bg-slate-600 rounded mb-3'>
         {{ r: "Read From", w: "Write To", rw: "Read & Write" }[props.listType]}
       </h2>
 
-      <div class='grow py-5 overflow-y-scroll xl:custom-scrollbar h-[1vh'>
+      <div class='grow py-5 overflow-y-scroll md:custom-scrollbar h-[1vh]'>
         <Show
           when={!props.isLoading()}
           fallback={
@@ -35,7 +35,7 @@ const RelayForm: Component<Props> = (props): JSX.Element => {
         >
           <For each={props.relayList()}>
             {(relayAddress) => (
-              <div class='flex items-center justify-between w-5/6 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
+              <div class='flex items-center justify-between w-11/12 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
                 <div class='text-slate-300'>{relayAddress}</div>
                 {authMode.get() == "private" ? (
                   <div

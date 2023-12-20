@@ -24,8 +24,8 @@ const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
         onMouseEnter={toggleSwitchMsg}
         onMouseLeave={toggleSwitchMsg}
         class='text-slate-100 w-fit mx-auto cursor-pointer transition
-                   border-2 xl:border-neutral-600 active:bg-slate-500 xl:hover:bg-neutral-500
-                   hover:border-neutral-700 rounded-full p-3 xl:active:bg-neutral-700'
+                   border-2 md:border-neutral-600 active:bg-slate-500 md:hover:bg-neutral-500
+                   hover:border-neutral-700 rounded-full p-3 md:active:bg-neutral-700'
       >
         {anchorsMode.get() ? (
           <Motion.div animate={{ scale: [0.7, 1] }}>
@@ -40,12 +40,12 @@ const AnchorsModeSelector: VoidComponent = (): JSX.Element => {
 
       <div
         class='mt-5 rounded px-2 py-1 text-sm select-none text-neutral-400 bg-slate-600
-                 xl:bg-neutral-600 bg-opacity-40 transition'
+                 md:bg-neutral-600 bg-opacity-40 transition'
       >
         {showSwitchMsg() ? (
           <span>switch to {anchorsMode.get() ? "all nostr" : "only anchors"} posts</span>
         ) : (
-          <span class=''>currently showing {anchorsMode.get() ? "anchors" : "all"} posts</span>
+          <span class=''>showing {anchorsMode.get() ? "anchors" : "all"} posts</span>
         )}
       </div>
     </>

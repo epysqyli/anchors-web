@@ -162,24 +162,24 @@ const Write: Component<{}> = () => {
 
   return (
     <>
-      <div class='grid grid-cols-1 xl:grid-cols-7 gap-x-2 h-[100dvh] xl:h-full mx-auto xl:pr-2'>
+      <div class='grid grid-cols-1 md:grid-cols-7 gap-x-2 h-[100dvh] md:h-full mx-auto md:pr-2'>
         <div
-          class={`${showRefMenu() ? "hidden" : ""} flex flex-col justify-between py-10 xl:col-span-4 
+          class={`${showRefMenu() ? "hidden" : ""} flex flex-col justify-between py-10 md:col-span-4 
                                                        rounded-md bg-slate-600 bg-opacity-10`}
         >
           <h1 class='text-slate-100 text-center text-2xl md:text-4xl font-bold'>Write a new idea</h1>
 
           <textarea
             placeholder='Time to connect the dots'
-            class='block w-4/5 2xl:w-2/3 placeholder:text-center placeholder:text-lg text-lg
+            class='block w-4/5 2md:w-2/3 placeholder:text-center placeholder:text-lg text-lg
                        focus:outline-none bg-transparent mx-auto text-slate-300
-                       caret-orange-200 resize-none xl:custom-scrollbar px-5 py-2'
+                       caret-orange-200 resize-none md:custom-scrollbar px-5 py-2'
             rows={14}
             onInput={updateContent}
             value={nostrEvent().content}
           ></textarea>
 
-          <div class='flex items-center justify-around xl:block'>
+          <div class='flex items-center justify-around md:block'>
             <div
               onClick={signAndPublishNostrEvent}
               class='text-orange-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
@@ -191,7 +191,7 @@ const Write: Component<{}> = () => {
             </div>
             <div
               onClick={toggleBetweenWriteAndRefs}
-              class='xl:hidden relative text-slate-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
+              class='md:hidden relative text-slate-300 mx-auto py-12 group cursor-pointer hover:bg-slate-600 rounded-md w-4/5'
             >
               <VsReferences
                 size={40}
@@ -203,8 +203,8 @@ const Write: Component<{}> = () => {
         </div>
 
         <div
-          class={`${showRefMenu() ? "" : "hidden"} xl:block xl:col-span-3 rounded-md bg-slate-800 
-                                                       bg-opacity-80 h-full xl:py-4 overflow-y-auto 2xl:px-10`}
+          class={`${showRefMenu() ? "" : "hidden"} md:block md:col-span-3 rounded-md bg-slate-800 
+                                                       bg-opacity-80 h-full md:py-4 overflow-y-auto 2md:px-10`}
         >
           <RefTagsSearchPanel
             tags={refTags()}
@@ -226,7 +226,7 @@ const Write: Component<{}> = () => {
       </Show>
 
       <Show when={useIsNarrow() != undefined && !useIsNarrow()}>
-        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 xl:w-1/3'>
+        <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 md:w-1/3'>
           <Popup autoClose={true} show={showPopup} setShow={setShowPopup}>
             <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>{popupMsg()}</div>
           </Popup>
