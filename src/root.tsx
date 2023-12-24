@@ -33,7 +33,6 @@ const Root: Component<{}> = () => {
         <Meta name='viewport' content='width=device-width, initial-scale=1' />
         <Meta name='theme-color' content='#1e293b' />
         <Link rel="icon" type="image/png" href="favicon.png"></Link>
-        <script src='serviceWorkerInit.ts' />
       </Head>
 
       <Body class='h-screen bg-gray-900 md:custom-scrollbar'>
