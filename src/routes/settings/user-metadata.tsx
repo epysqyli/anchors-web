@@ -7,6 +7,7 @@ import { IUserMetadata } from "~/interfaces/IUserMetadata";
 import { RiSystemCheckboxCircleFill } from "solid-icons/ri";
 import LoadingFallback from "~/components/feed/LoadingFallback";
 import { Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
+import AuthWrapper from "~/components/shared/AuthWrapper";
 
 const UserMetadata: VoidComponent = () => {
   const { relay, authMode } = useContext(RelayContext);
@@ -108,7 +109,7 @@ const UserMetadata: VoidComponent = () => {
                 picture
               </label>
               <img
-                src={content().picture ?? ''}
+                src={content().picture ?? ""}
                 onError={() => setImageSrcFails(true)}
                 loading='lazy'
                 class='h-10 rounded-full'
@@ -117,23 +118,21 @@ const UserMetadata: VoidComponent = () => {
             <input
               type='text'
               name='picture'
-              value={content().picture ?? ''}
+              value={content().picture ?? ""}
               onChange={handleChange}
               placeholder='url pointing to an avatar image'
               class='p-3 rounded text-center text-lg text-slate-200 caret-slate-200 bg-neutral-600 focus:outline-none w-full'
             />
           </div>
 
-          {authMode.get() == "private" ? (
+          <AuthWrapper>
             <button class='block w-fit px-10 mt-16 mx-auto py-5 rounded-md bg-slate-600 group'>
               <FiSave
                 class='text-slate-100 mx-auto group-hover:scale-110 group-active:scale-90 transition-transform'
                 size={38}
               />
             </button>
-          ) : (
-            <></>
-          )}
+          </AuthWrapper>
         </form>
       </Show>
 

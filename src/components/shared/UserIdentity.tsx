@@ -9,6 +9,7 @@ import LoadingPoints from "../feed/LoadingPoints";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import LoadingFallback from "../feed/LoadingFallback";
 import { JSX, Show, VoidComponent, createEffect, createSignal, onMount, useContext } from "solid-js";
+import AuthWrapper from "./AuthWrapper";
 
 const UserIdentity: VoidComponent = (): JSX.Element => {
   const overlay = useContext(OverlayContext);
@@ -23,7 +24,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
     e.preventDefault();
     let publicKey: string = inputPublicKey();
 
-    if (inputPublicKey().startsWith('npub')) {
+    if (inputPublicKey().startsWith("npub")) {
       const decodeResult = nip19.decode(inputPublicKey());
       publicKey = decodeResult.data as string;
     }
@@ -68,9 +69,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
               required
               class='w-5/6 rounded focus:outline-none bg-slate-600 py-2 px-5
                        placeholder:text-base placeholder:text-center'
-              placeholder={
-                guestPublicKey.get() ? "update your public key" : "enter your public key"
-              }
+              placeholder={guestPublicKey.get() ? "update your public key" : "enter your public key"}
             />
             <button class='w-1/6 text-slate-300 group'>
               <VsSave class='mx-auto hover:text-slte-200 group-active:scale-95' size={30} />
@@ -135,7 +134,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
           <Popup autoClose={false} show={show} setShow={setShow} onCloseFunc={setInitialLoadToFalse}>
             <Show when={!isLoading()} fallback={<LoadingPoints />}>
               <div class='h-screen w-screen pt-20 bg-slate-800 bg-opacity-95'>
-                {authMode.get() == "private" ? (
+                <AuthWrapper fallback={guestModeTemplate}>
                   <div class='h-full'>
                     <EventAuthor
                       about={relay.userMetadata?.about ?? ""}
@@ -147,9 +146,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
                     <p class='text-lg mt-5 font-bold'>Welcome to Anchors</p>
                     {relay.userMetadata != undefined ? undefinedMetadataSuggestions : <></>}
                   </div>
-                ) : (
-                  guestModeTemplate
-                )}
+                </AuthWrapper>
               </div>
             </Show>
           </Popup>
@@ -167,7 +164,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
           >
             <Show when={!isLoading()} fallback={<LoadingFallback />}>
               <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
-                {authMode.get() == "private" ? (
+                <AuthWrapper fallback={guestModeTemplate}>
                   <div>
                     <EventAuthor
                       about={relay.userMetadata?.about ?? ""}
@@ -179,9 +176,7 @@ const UserIdentity: VoidComponent = (): JSX.Element => {
                     <p class='text-lg mt-5 font-bold'>Welcome to Anchors</p>
                     {relay.userMetadata == undefined ? undefinedMetadataSuggestions : <></>}
                   </div>
-                ) : (
-                  guestModeTemplate
-                )}
+                </AuthWrapper>
               </div>
             </Show>
           </Popup>

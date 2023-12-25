@@ -23,6 +23,7 @@ import { fetchBook } from "~/lib/external-services/open-library";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
 import EventComments, { CommentTree } from "~/lib/nostr/event-comments";
 import { Accessor, Component, Show, createContext, createSignal, onMount, useContext } from "solid-js";
+import AuthWrapper from "../shared/AuthWrapper";
 
 interface Props {
   event: IEnrichedEvent;
@@ -191,7 +192,7 @@ const EventWrapper: Component<Props> = (props) => {
               openCommentsPopup={openCommentsPopup}
             />
 
-            {authMode.get() == "private" ? <FavoriteEventAction eventID={props.event.id} /> : <></>}
+            <AuthWrapper><FavoriteEventAction eventID={props.event.id} /></AuthWrapper>
           </div>
 
           <div class='h-[10%] flex items-center justify-around gap-x-3'>
@@ -200,7 +201,7 @@ const EventWrapper: Component<Props> = (props) => {
               <p>{new Date(props.event.created_at * 1000).toDateString()}</p>
             </div>
             <EventAnchor nostrEventID={props.event.id} />
-            {authMode.get() == "private" ? <RepostAction enrichedEvent={props.event} /> : <></>}
+            <AuthWrapper><RepostAction enrichedEvent={props.event} /></AuthWrapper>
           </div>
         </div>
         <div class='h-[10dvh]'></div>
@@ -273,8 +274,8 @@ const EventWrapper: Component<Props> = (props) => {
               openCommentsPopup={openCommentsPopup}
             />
 
-            {authMode.get() == "private" ? <FavoriteEventAction eventID={props.event.id} /> : <></>}
-            {authMode.get() == "private" ? <RepostAction enrichedEvent={props.event} /> : <></>}
+            <AuthWrapper><FavoriteEventAction eventID={props.event.id} /></AuthWrapper>
+            <AuthWrapper><RepostAction enrichedEvent={props.event} /></AuthWrapper>
             <EventAnchor nostrEventID={props.event.id} />
           </div>
         </div>

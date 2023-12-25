@@ -8,6 +8,7 @@ import { IReaction, Reaction } from "~/interfaces/IReaction";
 import { VsArrowSmallDown, VsArrowSmallUp } from "solid-icons/vs";
 import { handleReaction, parseDate } from "~/lib/nostr/nostr-utils";
 import { Accessor, Component, For, JSX, Setter, Show, createSignal, useContext } from "solid-js";
+import AuthWrapper from "../shared/AuthWrapper";
 
 interface Props {
   commentTree: CommentTree;
@@ -103,7 +104,25 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
             <></>
           )}
 
-          {authMode.get() == "private" ? (
+          <AuthWrapper
+            fallback={
+              <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
+                <div class='flex items-center  rounded-md'>
+                  <span class='text-sm ml-1'>{reactions().positive.count}</span>
+                  <VsArrowSmallUp size={26} />
+                </div>
+
+                <div class='flex items-center  rounded-md'>
+                  <span class='text-sm ml-1'>{reactions().negative.count}</span>
+                  <VsArrowSmallDown size={26} />
+                </div>
+
+                <div onClick={setReplyEvent} class=' rounded-md px-2 py-1'>
+                  <FiMail />
+                </div>
+              </div>
+            }
+          >
             <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
               <div
                 onClick={() => reactToEvent("+")}
@@ -128,23 +147,7 @@ const CommentThread: Component<Props> = (props): JSX.Element => {
                 <FiMail />
               </div>
             </div>
-          ) : (
-            <div class='flex justify-end items-center gap-x-3 px-2 py-1 mt-1 rounded-md w-fit ml-auto bg-slate-600'>
-              <div class='flex items-center  rounded-md'>
-                <span class='text-sm ml-1'>{reactions().positive.count}</span>
-                <VsArrowSmallUp size={26} />
-              </div>
-
-              <div class='flex items-center  rounded-md'>
-                <span class='text-sm ml-1'>{reactions().negative.count}</span>
-                <VsArrowSmallDown size={26} />
-              </div>
-
-              <div onClick={setReplyEvent} class=' rounded-md px-2 py-1'>
-                <FiMail />
-              </div>
-            </div>
-          )}
+          </AuthWrapper>
         </div>
       </div>
 

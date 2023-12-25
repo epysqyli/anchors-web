@@ -4,6 +4,7 @@ import { BsPlus } from "solid-icons/bs";
 import { RelayContext } from "~/contexts/relay";
 import EventAuthor from "~/components/feed/EventAuthor";
 import { TbUserMinus, TbUserPlus } from "solid-icons/tb";
+import AuthWrapper from "~/components/shared/AuthWrapper";
 import LoadingPoints from "~/components/feed/LoadingPoints";
 import { IUserMetadataWithPubkey } from "~/interfaces/IUserMetadata";
 import { For, JSX, Show, VoidComponent, createSignal, onMount, useContext } from "solid-js";
@@ -96,7 +97,7 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
 
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
         <div class='h-4/5 w-11/12 md:w-5/6 mx-auto p-3 overflow-y-auto md:custom-scrollbar grid grid-cols-1 md:grid-cols-3 gap-5'>
-          {authMode.get() == "private" ? (
+          <AuthWrapper>
             <form
               onsubmit={handleSubmit}
               class='col-span-1 border border-opacity-20 border-slate-200 rounded-md text-slate-300 p-5 flex flex-col justify-between'
@@ -120,9 +121,7 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
                 <BsPlus class='text-slate-300 mx-auto group-hover:scale-90 group-active:scale-75' size={36} />
               </button>
             </form>
-          ) : (
-            <></>
-          )}
+          </AuthWrapper>
 
           <For each={following()}>
             {(flw) => (

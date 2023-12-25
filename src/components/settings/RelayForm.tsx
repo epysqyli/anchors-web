@@ -2,6 +2,7 @@ import { TbPlus } from "solid-icons/tb";
 import { RelayContext } from "~/contexts/relay";
 import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import { Accessor, Component, For, JSX, Show, useContext } from "solid-js";
+import AuthWrapper from "../shared/AuthWrapper";
 
 interface Props {
   listType: "r" | "w" | "rw";
@@ -37,23 +38,21 @@ const RelayForm: Component<Props> = (props): JSX.Element => {
             {(relayAddress) => (
               <div class='flex items-center justify-between w-11/12 mx-auto my-1 py-2 px-2 bg-slate-600 hover:bg-slate-400 hover:bg-opacity-25 rounded bg-opacity-25'>
                 <div class='text-slate-300'>{relayAddress}</div>
-                {authMode.get() == "private" ? (
+                <AuthWrapper>
                   <div
                     onClick={() => props.handleDeletion(props.listType, relayAddress)}
                     class='text-red-400 text-opacity-40 hover:text-red-400 hover:text-opacity-100 cursor-pointer hover:scale-105 active:scale-95'
                   >
                     <RiSystemCloseCircleFill size={30} />
                   </div>
-                ) : (
-                  <></>
-                )}
+                </AuthWrapper>
               </div>
             )}
           </For>
         </Show>
       </div>
 
-      {authMode.get() == "private" ? (
+      <AuthWrapper>
         <form onSubmit={props.handleSubmit} class='flex items-center justify-around py-2 px-1'>
           <input
             id='reading'
@@ -66,9 +65,7 @@ const RelayForm: Component<Props> = (props): JSX.Element => {
             <TbPlus size={42} stroke-width={1.5} class='mx-auto' />
           </button>
         </form>
-      ) : (
-        <></>
-      )}
+      </AuthWrapper>
     </div>
   );
 };

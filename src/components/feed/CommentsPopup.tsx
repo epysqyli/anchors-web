@@ -2,6 +2,7 @@ import WriteComment from "./WriteComment";
 import { VsLoading } from "solid-icons/vs";
 import CommentThread from "./CommentThread";
 import { RelayContext } from "~/contexts/relay";
+import AuthWrapper from "../shared/AuthWrapper";
 import { CommentsContext } from "./EventWrapper";
 import { useIsNarrow } from "~/hooks/useMediaQuery";
 import IEnrichedEvent from "~/interfaces/IEnrichedEvent";
@@ -43,13 +44,11 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
               </Show>
             </div>
 
-            {authMode.get() == "private" ? (
+            <AuthWrapper>
               <div class='h-1/5'>
                 <WriteComment replyEvent={replyEvent} setReplyEvent={setReplyEvent} />
               </div>
-            ) : (
-              <></>
-            )}
+            </AuthWrapper>
           </div>
         </div>
       </Show>
@@ -82,13 +81,11 @@ const CommmentsPopup: Component<Props> = (props): JSX.Element => {
               </Show>
             </div>
 
-            {authMode.get() == "private" ? (
+            <AuthWrapper>
               <div class='h-1/5'>
                 <WriteComment replyEvent={replyEvent} setReplyEvent={setReplyEvent} />
               </div>
-            ) : (
-              <></>
-            )}
+            </AuthWrapper>
           </div>
         </div>
       </Show>

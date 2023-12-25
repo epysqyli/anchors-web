@@ -4,6 +4,7 @@ import { CgRemove } from "solid-icons/cg";
 import { Component, JSX, useContext } from "solid-js";
 import { RelayContext } from "~/contexts/relay";
 import { parseDate, shrinkContent } from "~/lib/nostr/nostr-utils";
+import AuthWrapper from "../shared/AuthWrapper";
 
 interface Props {
   nostrEvent: Event;
@@ -24,13 +25,11 @@ const UserNostrEvent: Component<Props> = (props): JSX.Element => {
     >
       <div class='flex items-center justify-around'>
         <div class='px-2 py-1 text-center rounded-md'>{parseDate(props.nostrEvent.created_at)}</div>
-        {authMode.get() == "private" ? (
+        <AuthWrapper>
           <div onClick={deleteEvent} class='text-neutral-400 cursor-pointer group hover:text-red-400'>
             <CgRemove size={28} class='transition-all mx-auto group-hover:scale-105 group-active:scale-90' />
           </div>
-        ) : (
-          <></>
-        )}
+        </AuthWrapper>
       </div>
 
       <div class='w-4/5 my-10 mx-auto text-center break-words'>{shrinkContent(props.nostrEvent.content)}</div>
