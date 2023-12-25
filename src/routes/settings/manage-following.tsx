@@ -81,7 +81,7 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
       const usersMetadata = await relay.fetchEventsMetadata([pubkeyToAdd]);
 
       if (usersMetadata.length == 0) {
-        setFollowing([...following(), { pubkey: pubkeyToAdd, name: '', about: '', picture: '' }]);
+        setFollowing([...following(), { pubkey: pubkeyToAdd, name: "", about: "", picture: "" }]);
       } else {
         setFollowing([...following(), ...usersMetadata]);
       }
@@ -96,29 +96,33 @@ const ManageFollowing: VoidComponent = (): JSX.Element => {
 
       <Show when={!isLoading()} fallback={<LoadingPoints />}>
         <div class='h-4/5 w-11/12 md:w-5/6 mx-auto p-3 overflow-y-auto md:custom-scrollbar grid grid-cols-1 md:grid-cols-3 gap-5'>
-          <form
-            onsubmit={handleSubmit}
-            class='col-span-1 border border-opacity-20 border-slate-200 rounded-md text-slate-300 p-5 flex flex-col justify-between'
-          >
-            <input
-              class='focus:outline-none bg-slate-600 px-1 py-2 rounded-md text-center caret-slate-300 text-slate-300'
-              placeholder='Add npub manually'
-              type='text'
-              spellcheck={false}
-              minlength={63}
-              maxLength={64}
-              required
-            />
-            <div class='py-10 md:py-5 px-2 mx-auto text-justify text tracking-tight'>
-              <p>Make sure to also add the relay(s) where this user is known to post events.</p>
-              <A href='/settings/manage-relays' class='underline text-center block mt-2'>
-                Go to my relays
-              </A>
-            </div>
-            <button class='group bg-slate-700 hover:bg-slate-800 transition rounded-md w-2/3 mx-auto'>
-              <BsPlus class='text-slate-300 mx-auto group-hover:scale-90 group-active:scale-75' size={36} />
-            </button>
-          </form>
+          {authMode.get() == "private" ? (
+            <form
+              onsubmit={handleSubmit}
+              class='col-span-1 border border-opacity-20 border-slate-200 rounded-md text-slate-300 p-5 flex flex-col justify-between'
+            >
+              <input
+                class='focus:outline-none bg-slate-600 px-1 py-2 rounded-md text-center caret-slate-300 text-slate-300'
+                placeholder='Add npub manually'
+                type='text'
+                spellcheck={false}
+                minlength={63}
+                maxLength={64}
+                required
+              />
+              <div class='py-10 md:py-5 px-2 mx-auto text-justify text tracking-tight'>
+                <p>Make sure to also add the relay(s) where this user is known to post events.</p>
+                <A href='/settings/manage-relays' class='underline text-center block mt-2'>
+                  Go to my relays
+                </A>
+              </div>
+              <button class='group bg-slate-700 hover:bg-slate-800 transition rounded-md w-2/3 mx-auto'>
+                <BsPlus class='text-slate-300 mx-auto group-hover:scale-90 group-active:scale-75' size={36} />
+              </button>
+            </form>
+          ) : (
+            <></>
+          )}
 
           <For each={following()}>
             {(flw) => (
