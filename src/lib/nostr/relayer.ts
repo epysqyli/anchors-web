@@ -270,6 +270,27 @@ class Relayer {
     return userReadFromRelays;
   }
 
+  public async deleteOldContactEvents(): Promise<PubResult<Event>> {
+    const contactEvents: Event[] = await this.currentPool.list(this.getAllRelays(), [
+      {
+        kinds: [Kind.Contacts],
+        authors: [this.userPubKey!]
+      }
+    ]);
+
+    const deletionEvent: EventTemplate = {
+      kind: Kind.EventDeletion,
+      tags: contactEvents.map((evt) => ["e", evt.id]),
+      created_at: Math.floor(Date.now() / 1000),
+      content: ""
+    };
+
+    const signedEvent = await window.nostr.signEvent(deletionEvent);
+    this.pub(signedEvent, this.getAllRelays());
+
+    return { error: false, data: signedEvent };
+  }
+
   public async followUser(newFollowing: string[]): Promise<PubResult<Event>> {
     const followEvent: EventTemplate = {
       content: "",
@@ -278,6 +299,7 @@ class Relayer {
       tags: newFollowing.map((pk) => ["p", pk])
     };
 
+    await this.deleteOldContactEvents();
     const signedEvent = await window.nostr.signEvent(followEvent);
     const pub = this.pub(signedEvent);
 
