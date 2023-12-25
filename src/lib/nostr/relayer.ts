@@ -75,17 +75,17 @@ class Relayer {
     // });
   }
 
-  public async deleteAllRelayListEvents(): Promise<PubResult<Event>> {
-    const relayListEvents: Event[] = await this.currentPool.list(this.getAllRelays(), [
+  public async deleteAllEvents(eventKind: number): Promise<PubResult<Event>> {
+    const eventsToDelete: Event[] = await this.currentPool.list(this.getAllRelays(), [
       {
-        kinds: [Kind.RelayList],
+        kinds: [eventKind],
         authors: [this.userPubKey!]
       }
     ]);
 
     const deletionEvent: EventTemplate = {
       kind: Kind.EventDeletion,
-      tags: relayListEvents.map((evt) => ["e", evt.id]),
+      tags: eventsToDelete.map((evt) => ["e", evt.id]),
       created_at: Math.floor(Date.now() / 1000),
       content: ""
     };
@@ -94,15 +94,6 @@ class Relayer {
     this.pub(signedEvent, this.getAllRelays());
 
     return { error: false, data: signedEvent };
-    // return await new Promise<PubResult<Event>>((res) => {
-    //   pub.on("ok", () => {
-    //     res({ error: false, data: signedEvent });
-    //   });
-
-    //   pub.on("failed", () => {
-    //     res({ error: true, data: signedEvent });
-    //   });
-    // });
   }
 
   public async reactToEvent(
@@ -270,27 +261,6 @@ class Relayer {
     return userReadFromRelays;
   }
 
-  public async deleteOldContactEvents(): Promise<PubResult<Event>> {
-    const contactEvents: Event[] = await this.currentPool.list(this.getAllRelays(), [
-      {
-        kinds: [Kind.Contacts],
-        authors: [this.userPubKey!]
-      }
-    ]);
-
-    const deletionEvent: EventTemplate = {
-      kind: Kind.EventDeletion,
-      tags: contactEvents.map((evt) => ["e", evt.id]),
-      created_at: Math.floor(Date.now() / 1000),
-      content: ""
-    };
-
-    const signedEvent = await window.nostr.signEvent(deletionEvent);
-    this.pub(signedEvent, this.getAllRelays());
-
-    return { error: false, data: signedEvent };
-  }
-
   public async followUser(newFollowing: string[]): Promise<PubResult<Event>> {
     const followEvent: EventTemplate = {
       content: "",
@@ -299,7 +269,7 @@ class Relayer {
       tags: newFollowing.map((pk) => ["p", pk])
     };
 
-    await this.deleteOldContactEvents();
+    await this.deleteAllEvents(Kind.Contacts);
     const signedEvent = await window.nostr.signEvent(followEvent);
     const pub = this.pub(signedEvent);
 

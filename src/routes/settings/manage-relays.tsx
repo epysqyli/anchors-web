@@ -99,7 +99,7 @@ const ManageRelays: VoidComponent = (): JSX.Element => {
       tags: buildRelayEventTags()
     };
 
-    await relay.deleteAllRelayListEvents();
+    await relay.deleteAllEvents(Kind.RelayList);
     const signedEvent = await window.nostr.signEvent(relayListEvent);
     const pub: Pub = relay.pub(signedEvent, relay.getAllRelays());
 
